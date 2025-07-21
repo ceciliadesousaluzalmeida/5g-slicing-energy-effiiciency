@@ -14,7 +14,7 @@ class ABOState:
     def __lt__(self, other):
         return self.g_cost < other.g_cost
 
-def run_abo_full_batch(G, slices, node_capacity_base, link_latency, link_capacity_base):
+def run_abo_full_batch(G, slices, node_capacity_base, link_latency, link_capacity_base, csv_path = None):
     abo_results = []
 
     for i, (vnf_chain, vl_chain) in enumerate(slices):
@@ -80,4 +80,9 @@ def run_abo_full_batch(G, slices, node_capacity_base, link_latency, link_capacit
 
     summary = [{"slice": i+1, "accepted": r is not None, "g_cost": r.g_cost if r else None} for i, r in enumerate(abo_results)]
     df_results = pd.DataFrame(summary)
+
+    if csv_path:
+        df_results.to_csv(csv_path, index=False)
+
+        
     return df_results, abo_results
