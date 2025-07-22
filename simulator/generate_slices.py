@@ -1,7 +1,7 @@
 vnf_profiles = {
-    "firewall": {"cpu": 2, "throughput": 100},
-    "dpi": {"cpu": 3, "throughput": 80},
-    "nat": {"cpu": 1, "throughput": 120}
+    "vnf1": {"cpu": 2, "throughput": 100},
+    "vnf2": {"cpu": 3, "throughput": 80},
+    "vnf3": {"cpu": 1, "throughput": 120}
 }
 
 def generate_random_slices(G, vnf_profiles, num_slices):
