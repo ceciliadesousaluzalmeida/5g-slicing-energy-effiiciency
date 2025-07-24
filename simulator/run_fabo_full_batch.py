@@ -2,7 +2,6 @@ from queue import PriorityQueue
 import pandas as pd
 import networkx as nx
 from tqdm import tqdm
-import time
 
 class FABOState:
     def __init__(self, placed_vnfs=None, routed_vls=None, g_cost=0, node_capacity=None, link_capacity=None):
@@ -27,6 +26,7 @@ def run_fabo_full_batch(G, slices, node_capacity_base, link_latency, link_capaci
             print(f"[Warning] Slice {i+1} skipped: no node has enough CPU to host the smallest VNF.")
             fabo_results.append(None)
             continue
+
         def fabo_heuristic(state):
             return sum(vl["bandwidth"] for vl in vl_chain if (vl["from"], vl["to"]) not in state.routed_vls)
 
@@ -42,56 +42,64 @@ def run_fabo_full_batch(G, slices, node_capacity_base, link_latency, link_capaci
                 n: 1 - state.node_capacity[n] / total_capacity[n] if total_capacity[n] > 0 else 1
                 for n in G.nodes
             }
-            candidate_nodes = sorted(G.nodes, key=lambda n: cpu_used_ratio[n])[:5]  # limit to top 5 fair nodes
+            candidate_nodes = sorted(G.nodes, key=lambda n: cpu_used_ratio[n])[:5]
 
             for node in candidate_nodes:
-                print(f"Trying to place {next_vnf} on node {node} (CPU available: {state.node_capacity[node]}, CPU needed: {vnf_obj['cpu']})")
-                if state.node_capacity[node] >= vnf_obj["cpu"]:
-                    new_placed = state.placed_vnfs.copy()
-                    new_placed[next_vnf] = node
-                    new_routed = state.routed_vls.copy()
-                    new_node_capacity = state.node_capacity.copy()
-                    new_link_capacity = state.link_capacity.copy()
-                    g_cost = state.g_cost
+                if state.node_capacity[node] < vnf_obj["cpu"]:
+                    continue
 
-                    for vl in vl_chain:
-                        src, dst = vl["from"], vl["to"]
-                        if src in new_placed and dst in new_placed and (src, dst) not in new_routed:
-                            src_node = new_placed[src]
-                            dst_node = new_placed[dst]
-                            try:
-                                path = nx.shortest_path(G, src_node, dst_node, weight="latency")
-                                path_latency = sum(link_latency[(path[i], path[i+1])] for i in range(len(path)-1))
-                                if path_latency > vl["latency"]:
-                                    print(f"Path latency exceeded: {path_latency} > {vl['latency']} for VL ({src}, {dst})")
-                                    continue
-                                for i in range(len(path)-1):
-                                    u, v = path[i], path[i+1]
-                                    if new_link_capacity[(u, v)] < vl["bandwidth"]:
-                                        print(f"Insufficient bandwidth on link ({u}, {v}): {new_link_capacity[(u, v)]} < {vl['bandwidth']}")
-                                        break
-                                else:
-                                    penalty = sum(
-                                        1 + (1 - new_link_capacity[(path[i], path[i+1])] / link_capacity_base[(path[i], path[i+1])])
-                                        for i in range(len(path)-1)
-                                    )
-                                    for i in range(len(path)-1):
-                                        new_link_capacity[(path[i], path[i+1])] -= vl["bandwidth"]
-                                    new_routed[(src, dst)] = path
-                                    g_cost += vl["bandwidth"] * penalty
-                            except nx.NetworkXNoPath:
-                                print(f"No path found between {src_node} and {dst_node} for VL ({src}, {dst})")
+                already_on_node = any(
+                    placed_node == node and
+                    vnf_obj["slice"] == placed_vnf["slice"]
+                    for placed_vnf_id, placed_node in state.placed_vnfs.items()
+                    for placed_vnf in vnf_chain
+                    if placed_vnf["id"] == placed_vnf_id
+                )
+                if already_on_node:
+                    continue
+
+                new_placed = state.placed_vnfs.copy()
+                new_placed[next_vnf] = node
+                new_routed = state.routed_vls.copy()
+                new_node_capacity = state.node_capacity.copy()
+                new_link_capacity = state.link_capacity.copy()
+                g_cost = state.g_cost
+
+                for vl in vl_chain:
+                    src, dst = vl["from"], vl["to"]
+                    if src in new_placed and dst in new_placed and (src, dst) not in new_routed:
+                        src_node = new_placed[src]
+                        dst_node = new_placed[dst]
+                        try:
+                            path = nx.shortest_path(G, src_node, dst_node, weight="latency")
+                            path_latency = sum(link_latency[(path[i], path[i+1])] for i in range(len(path)-1))
+                            if path_latency > vl["latency"]:
                                 continue
+                            for i in range(len(path)-1):
+                                u, v = path[i], path[i+1]
+                                if new_link_capacity[(u, v)] < vl["bandwidth"]:
+                                    break
+                            else:
+                                penalty = sum(
+                                    1 + (1 - new_link_capacity[(path[i], path[i+1])] / link_capacity_base[(path[i], path[i+1])])
+                                    for i in range(len(path)-1)
+                                )
+                                for i in range(len(path)-1):
+                                    new_link_capacity[(path[i], path[i+1])] -= vl["bandwidth"]
+                                new_routed[(src, dst)] = path
+                                g_cost += vl["bandwidth"] * penalty
+                        except nx.NetworkXNoPath:
+                            continue
 
-                    new_node_capacity[node] -= vnf_obj["cpu"]
-                    new_state = FABOState(
-                        placed_vnfs=new_placed,
-                        routed_vls=new_routed,
-                        g_cost=g_cost,
-                        node_capacity=new_node_capacity,
-                        link_capacity=new_link_capacity
-                    )
-                    expansions.append(new_state)
+                new_node_capacity[node] -= vnf_obj["cpu"]
+                new_state = FABOState(
+                    placed_vnfs=new_placed,
+                    routed_vls=new_routed,
+                    g_cost=g_cost,
+                    node_capacity=new_node_capacity,
+                    link_capacity=new_link_capacity
+                )
+                expansions.append(new_state)
 
             return expansions
 
@@ -105,10 +113,9 @@ def run_fabo_full_batch(G, slices, node_capacity_base, link_latency, link_capaci
             )
             queue = PriorityQueue()
             queue.put((0, initial_state))
-            iterations = 0
+
             while not queue.empty():
                 _, state = queue.get()
-                iterations += 1
                 if state.is_goal(vnf_chain, vl_chain):
                     return state
                 for new_state in expand_state(state):
@@ -117,10 +124,6 @@ def run_fabo_full_batch(G, slices, node_capacity_base, link_latency, link_capaci
             return None
 
         result = run()
-        if result is None:
-            print(f"Slice {i+1} rejected.")
-        else:
-            print(f"Slice {i+1} accepted with cost {result.g_cost:.2f}.")
         fabo_results.append(result)
 
     summary = [{"slice": i+1, "accepted": r is not None, "g_cost": r.g_cost if r else None} for i, r in enumerate(fabo_results)]

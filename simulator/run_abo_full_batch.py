@@ -14,7 +14,7 @@ class ABOState:
     def __lt__(self, other):
         return self.g_cost < other.g_cost
 
-def run_abo_full_batch(G, slices, node_capacity_base, link_latency, link_capacity_base, csv_path = None):
+def run_abo_full_batch(G, slices, node_capacity_base, link_latency, link_capacity_base, csv_path=None):
     abo_results = []
 
     for i, (vnf_chain, vl_chain) in enumerate(slices):
@@ -33,32 +33,51 @@ def run_abo_full_batch(G, slices, node_capacity_base, link_latency, link_capacit
             vnf_obj = next(v for v in vnf_chain if v["id"] == next_vnf)
 
             for node in G.nodes:
-                if node_capacity[node] >= vnf_obj["cpu"]:
-                    new_placed = state.placed_vnfs.copy()
-                    new_placed[next_vnf] = node
-                    new_routed = state.routed_vls.copy()
-                    g_cost = state.g_cost
+               
+                if node_capacity[node] < vnf_obj["cpu"]:
+                    continue
 
-                    for vl in vl_chain:
-                        src, dst = vl["from"], vl["to"]
-                        if src in new_placed and dst in new_placed and (src, dst) not in new_routed:
-                            src_node = new_placed[src]
-                            dst_node = new_placed[dst]
-                            try:
-                                path = nx.shortest_path(G, src_node, dst_node, weight="latency")
-                                path_latency = sum(link_latency[(path[i], path[i+1])] for i in range(len(path)-1))
-                                if path_latency > vl["latency"]:
-                                    continue
-                                if all(link_capacity[(path[i], path[i+1])] >= vl["bandwidth"] for i in range(len(path)-1)):
-                                    for i in range(len(path)-1):
-                                        link_capacity[(path[i], path[i+1])] -= vl["bandwidth"]
-                                    new_routed[(src, dst)] = path
-                                    g_cost += vl["bandwidth"]
-                            except nx.NetworkXNoPath:
+                already_on_node = any(
+                    placed_node == node and
+                    vnf_obj["slice"] == placed_vnf["slice"]
+                    for placed_vnf_id, placed_node in state.placed_vnfs.items()
+                    for placed_vnf in vnf_chain
+                    if placed_vnf["id"] == placed_vnf_id
+                )
+
+                if already_on_node:
+                    continue
+
+                new_placed = state.placed_vnfs.copy()
+                new_placed[next_vnf] = node
+                new_routed = state.routed_vls.copy()
+                g_cost = state.g_cost
+
+                for vl in vl_chain:
+                    src, dst = vl["from"], vl["to"]
+                    if src in new_placed and dst in new_placed and (src, dst) not in new_routed:
+                        src_node = new_placed[src]
+                        dst_node = new_placed[dst]
+                        try:
+                            path = nx.shortest_path(G, src_node, dst_node, weight="latency")
+                            path_latency = sum(link_latency[(path[i], path[i+1])] for i in range(len(path)-1))
+                            
+                            print(f"Attempting to route VL ({src}, {dst}) from node {src_node} to {dst_node}")
+                            print(f"→ Path: {path}, latency: {path_latency}ms, max allowed: {vl['latency']}ms")
+
+
+                            if path_latency > vl["latency"]:
                                 continue
+                            if all(link_capacity[(path[i], path[i+1])] >= vl["bandwidth"] for i in range(len(path)-1)):
+                                for i in range(len(path)-1):
+                                    link_capacity[(path[i], path[i+1])] -= vl["bandwidth"]
+                                new_routed[(src, dst)] = path
+                                g_cost += vl["bandwidth"]
+                        except nx.NetworkXNoPath:
+                            continue
 
-                    new_state = ABOState(new_placed, new_routed, g_cost)
-                    expansions.append(new_state)
+                new_state = ABOState(new_placed, new_routed, g_cost)
+                expansions.append(new_state)
             return expansions
 
         def run():
@@ -73,6 +92,16 @@ def run_abo_full_batch(G, slices, node_capacity_base, link_latency, link_capacit
                 for new_state in expand_state(state):
                     f_score = new_state.g_cost + abo_heuristic(new_state)
                     queue.put((f_score, new_state))
+
+            print(f"[Slice {i+1}] Rejected: no valid placement found.")
+            print("Remaining node capacities:")
+            for n in G.nodes:
+                print(f"  Node {n}: {node_capacity[n]} CPU units available")
+
+            print("Remaining link capacities:")
+            for (u, v) in G.edges:
+                cap = link_capacity.get((u, v), 'N/A')
+                print(f"  Link ({u}, {v}): {cap} Mbps available")
             return None
 
         result = run()
@@ -84,5 +113,4 @@ def run_abo_full_batch(G, slices, node_capacity_base, link_latency, link_capacit
     if csv_path:
         df_results.to_csv(csv_path, index=False)
 
-        
     return df_results, abo_results
