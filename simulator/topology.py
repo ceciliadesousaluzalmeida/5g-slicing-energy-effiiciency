@@ -13,17 +13,32 @@ def generate_complete_graph(num_nodes, seed=42):
     return G
 
 def draw_graph(G): 
-    pos = nx.circular_layout(G)
+    pos = nx.spring_layout(G, seed=42)
 
-    plt.figure(figsize=(10, 10))
-    nx.draw(G, pos, node_size=300, node_color="lightgreen", with_labels=True, arrows=False)
+    node_labels = {
+        node: f"{node}\n{G.nodes[node]['cpu']} CPU"
+        for node in G.nodes
+    }
+
+    plt.figure(figsize=(10, 8))
+    nx.draw(G, pos,labels=node_labels, node_color="lightgreen", node_size=800, edge_color='gray', font_weight='bold', with_labels=True, arrows=False)
+
+    edge_labels = {
+        (u, v): f"{G[u][v]['latency']:.3f} ms\n{G[u][v]['bandwidth']} Mbps"
+        for u, v in G.edges
+    }
+
+    nx.draw_networkx_edge_labels(G, pos, edge_labels=edge_labels, font_color='blue')
+
     plt.title("Complete Graph")
     plt.axis("off")
     plt.show()
 
 
+import networkx as nx
+import random
+
 def topologie_finlande():
-        
     G = nx.Graph()
 
     for node in range(1, 13):
@@ -51,10 +66,9 @@ def topologie_finlande():
         (10, 12, 34)
     ]
 
-
-    for u, v, latency in edges:
-        G.add_edge(u, v, latency=latency, bandwidth=1000) 
+    for u, v, distance_km in edges:
+        latency_ms = round(distance_km * 0.005, 3)
+        capacity = random.randint(50, 150)
+        G.add_edge(u, v, latency=latency_ms, bandwidth=capacity, capacity=capacity)
 
     return G
-
-

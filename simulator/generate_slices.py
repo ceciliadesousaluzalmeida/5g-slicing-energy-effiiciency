@@ -1,21 +1,35 @@
-vnf_profiles = {
-    "vnf1": {"cpu": 2, "throughput": 100},
-    "vnf2": {"cpu": 3, "throughput": 80},
-    "vnf3": {"cpu": 1, "throughput": 120}
-}
+import random
 
-def generate_random_slices(G, vnf_profiles, num_slices):
-    import random
+vnf_profiles = [
+    {"cpu": 2, "throughput": 80},
+    {"cpu": 4, "throughput": 100},
+    {"cpu": 6, "throughput": 120},
+    {"cpu": 8, "throughput": 150}
+]
+
+def generate_random_slices(G, vnf_profiles, num_slices, num_vnfs_per_slice=3):
     slices = []
     for i in range(num_slices):
-        profile = random.choice(list(vnf_profiles.keys()))
-        vnf = vnf_profiles[profile]
-        src, dst = random.sample(list(G.nodes), 2)
-        vnfs = [{"id": f"vnf{i}_{j}", "cpu": vnf["cpu"], "slice": i} for j in range(3)]
-        vls = [
-            {"from": vnfs[0]["id"], "to": vnfs[1]["id"], "bandwidth": vnf["throughput"], "latency": 300},
-            {"from": vnfs[1]["id"], "to": vnfs[2]["id"], "bandwidth": vnf["throughput"], "latency": 300}
-        ]
+        vnfs = []
+        vls = []
+
+        for j in range(num_vnfs_per_slice):
+            profile = random.choice(vnf_profiles)
+            vnf_id = f"vnf{i}_{j}"
+            vnfs.append({
+                "id": vnf_id,
+                "cpu": profile["cpu"],
+                "throughput": profile["throughput"],
+                "slice": i
+            })
+
+        for j in range(num_vnfs_per_slice - 1):
+            vls.append({
+                "from": vnfs[j]["id"],
+                "to": vnfs[j + 1]["id"],
+                "bandwidth": vnfs[j]["throughput"],
+                "latency": random.randint(20, 100) 
+            })
+
         slices.append((vnfs, vls))
     return slices
-
