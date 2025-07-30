@@ -42,7 +42,7 @@ def topologie_finlande():
     G = nx.Graph()
 
     for node in range(1, 13):
-        G.add_node(node, cpu=100, memory=100)
+        G.add_node(node, cpu=10, memory=10)
 
     edges = [
         (1, 2, 37),
@@ -67,7 +67,7 @@ def topologie_finlande():
     ]
 
     for u, v, distance_km in edges:
-        latency_ms = round(distance_km * 0.005, 3)
+        latency_ms = round(distance_km * 0.5, 3)
         capacity = random.randint(50, 150)
         G.add_edge(u, v, latency=latency_ms, bandwidth=capacity, capacity=capacity)
 

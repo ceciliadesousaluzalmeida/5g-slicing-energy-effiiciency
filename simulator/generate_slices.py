@@ -1,10 +1,10 @@
 import random
 
 vnf_profiles = [
-    {"cpu": 2, "throughput": 80},
-    {"cpu": 4, "throughput": 100},
-    {"cpu": 6, "throughput": 120},
-    {"cpu": 8, "throughput": 150}
+    {"cpu": 2, "throughput": 140},
+    {"cpu": 4, "throughput": 150},
+    {"cpu": 6, "throughput": 160},
+    {"cpu": 8, "throughput": 175}
 ]
 
 def generate_random_slices(G, vnf_profiles, num_slices, num_vnfs_per_slice=3):
@@ -28,7 +28,7 @@ def generate_random_slices(G, vnf_profiles, num_slices, num_vnfs_per_slice=3):
                 "from": vnfs[j]["id"],
                 "to": vnfs[j + 1]["id"],
                 "bandwidth": vnfs[j]["throughput"],
-                "latency": random.randint(20, 100) 
+                "latency": random.randint(120, 250) 
             })
 
         slices.append((vnfs, vls))

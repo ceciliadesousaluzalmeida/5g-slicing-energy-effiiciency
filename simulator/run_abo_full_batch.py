@@ -28,13 +28,16 @@ def run_abo_full_batch(G, slices, node_capacity_base, link_latency, link_capacit
             expansions = []
             next_vnf = next((v["id"] for v in vnf_chain if v["id"] not in state.placed_vnfs), None)
             if next_vnf is None:
+                print("✅ All VNFs have been placed.")
                 return expansions
 
             vnf_obj = next(v for v in vnf_chain if v["id"] == next_vnf)
 
             for node in G.nodes:
-               
+                print(f"\n🔍 Trying to place {next_vnf} on Node {node}")
+
                 if node_capacity[node] < vnf_obj["cpu"]:
+                    print("❌ Not enough CPU")
                     continue
 
                 already_on_node = any(
@@ -44,40 +47,54 @@ def run_abo_full_batch(G, slices, node_capacity_base, link_latency, link_capacit
                     for placed_vnf in vnf_chain
                     if placed_vnf["id"] == placed_vnf_id
                 )
-
                 if already_on_node:
+                    print("❌ A VNF from the same slice is already placed on this node")
                     continue
 
                 new_placed = state.placed_vnfs.copy()
                 new_placed[next_vnf] = node
                 new_routed = state.routed_vls.copy()
                 g_cost = state.g_cost
+                routing_success = True
 
                 for vl in vl_chain:
                     src, dst = vl["from"], vl["to"]
                     if src in new_placed and dst in new_placed and (src, dst) not in new_routed:
                         src_node = new_placed[src]
                         dst_node = new_placed[dst]
+
                         try:
                             path = nx.shortest_path(G, src_node, dst_node, weight="latency")
-                            path_latency = sum(link_latency[(path[i], path[i+1])] for i in range(len(path)-1))
-                            
-                            print(f"Attempting to route VL ({src}, {dst}) from node {src_node} to {dst_node}")
-                            print(f"→ Path: {path}, latency: {path_latency}ms, max allowed: {vl['latency']}ms")
-
+                            path_latency = sum(link_latency.get((path[i], path[i+1]), 9999) for i in range(len(path)-1))
+                            print(f"→ Routing VL {src} → {dst}: path {path}, latency = {path_latency:.2f} ms (max allowed: {vl['latency']} ms)")
 
                             if path_latency > vl["latency"]:
-                                continue
-                            if all(link_capacity[(path[i], path[i+1])] >= vl["bandwidth"] for i in range(len(path)-1)):
-                                for i in range(len(path)-1):
-                                    link_capacity[(path[i], path[i+1])] -= vl["bandwidth"]
-                                new_routed[(src, dst)] = path
-                                g_cost += vl["bandwidth"]
-                        except nx.NetworkXNoPath:
-                            continue
+                                print("❌ Latency constraint violated")
+                                routing_success = False
+                                break
 
-                new_state = ABOState(new_placed, new_routed, g_cost)
-                expansions.append(new_state)
+                            if any(link_capacity.get((path[i], path[i+1]), 0) < vl["bandwidth"] for i in range(len(path)-1)):
+                                print("❌ Insufficient bandwidth on path")
+                                routing_success = False
+                                break
+
+                            for i in range(len(path)-1):
+                                link_capacity[(path[i], path[i+1])] -= vl["bandwidth"]
+
+                            new_routed[(src, dst)] = path
+                            g_cost += vl["bandwidth"]
+
+                        except nx.NetworkXNoPath:
+                            print(f"❌ No path found between {src_node} and {dst_node}")
+                            routing_success = False
+                            break
+
+                if routing_success:
+                    print(f"✅ Successfully placed {next_vnf} on Node {node} and routed all links")
+                    new_state = ABOState(new_placed, new_routed, g_cost)
+                    expansions.append(new_state)
+
+            print(f"🌱 {len(expansions)} states generated from {next_vnf}")
             return expansions
 
         def run():
@@ -93,7 +110,7 @@ def run_abo_full_batch(G, slices, node_capacity_base, link_latency, link_capacit
                     f_score = new_state.g_cost + abo_heuristic(new_state)
                     queue.put((f_score, new_state))
 
-            print(f"[Slice {i+1}] Rejected: no valid placement found.")
+            print(f"[Slice {i+1}] ❌ Rejected: no valid placement found.")
             print("Remaining node capacities:")
             for n in G.nodes:
                 print(f"  Node {n}: {node_capacity[n]} CPU units available")
