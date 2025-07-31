@@ -22,7 +22,20 @@ def run_abo_full_batch(G, slices, node_capacity_base, link_latency, link_capacit
         link_capacity = link_capacity_base.copy()
 
         def abo_heuristic(state):
-            return sum(vl["bandwidth"] for vl in vl_chain if (vl["from"], vl["to"]) not in state.routed_vls)
+                total_estimated_latency = 0
+                for vl in vl_chain:
+                    src = vl["from"]
+                    dst = vl["to"]
+                    if (src, dst) in state.routed_vls:
+                        continue
+                    src_node = state.placed_vnfs.get(src)
+                    dst_node = state.placed_vnfs.get(dst)
+                    if src_node is not None and dst_node is not None:
+                        try:
+                            total_estimated_latency += nx.shortest_path_length(G, src_node, dst_node, weight="latency")
+                        except nx.NetworkXNoPath:
+                            total_estimated_latency += 9999
+                return total_estimated_latency
 
         def expand_state(state):
             expansions = []

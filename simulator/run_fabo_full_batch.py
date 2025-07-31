@@ -99,7 +99,20 @@ def run_fabo_full_batch(G, slices, node_capacity_base, link_latency, link_capaci
 
     for i, (vnf_chain, vl_chain) in enumerate(tqdm(slices, desc="Running FABO", unit="slice")):
         def fabo_heuristic(state):
-            return sum(vl["bandwidth"] for vl in vl_chain if (vl["from"], vl["to"]) not in state.routed_vls)
+                total_estimated_latency = 0
+                for vl in vl_chain:
+                    src = vl["from"]
+                    dst = vl["to"]
+                    if (src, dst) in state.routed_vls:
+                        continue
+                    src_node = state.placed_vnfs.get(src)
+                    dst_node = state.placed_vnfs.get(dst)
+                    if src_node is not None and dst_node is not None:
+                        try:
+                            total_estimated_latency += nx.shortest_path_length(G, src_node, dst_node, weight="latency")
+                        except nx.NetworkXNoPath:
+                            total_estimated_latency += 9999
+                return total_estimated_latency
 
         def run():
             initial_state = FABOState(
@@ -131,3 +144,6 @@ def run_fabo_full_batch(G, slices, node_capacity_base, link_latency, link_capaci
         df_results.to_csv(csv_path, index=False)
 
     return df_results, fabo_results
+
+
+

@@ -164,6 +164,7 @@ def run_astar(G, slices, node_capacity_base, link_capacity_base, csv_path=None):
                     if already_placed:
                         print("❌ Node already hosts a VNF from this slice")
                         continue
+                    
 
                     new_placed = state.placed_vnfs.copy()
                     new_placed[next_vnf] = node
