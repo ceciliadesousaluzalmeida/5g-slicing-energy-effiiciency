@@ -1,137 +1,111 @@
-from pathlib import Path
 import networkx as nx
-from queue import PriorityQueue
-from copy import deepcopy
 import pandas as pd
+from copy import deepcopy
 
-class AStarBestFitState:
-    def __init__(self, placed_vnfs=None, routed_vls=None, g_cost=0, node_capacity=None, link_capacity=None):
-        self.placed_vnfs = placed_vnfs or {}
-        self.routed_vls = routed_vls or {}
-        self.g_cost = g_cost
-        self.node_capacity = node_capacity or {}
-        self.link_capacity = link_capacity or {}
-
-    def is_goal(self, vnf_chain, vl_chain):
-        return len(self.placed_vnfs) == len(vnf_chain) and len(self.routed_vls) == len(vl_chain)
-
-    def __lt__(self, other):
-        return self.g_cost < other.g_cost
-
-def run_astar_best_fit(G, slices, node_capacity_base, link_capacity_base, link_latency, csv_path=None):
+def run_best_fit(G, slices, node_capacity_base, link_capacity_base, link_latency, csv_path=None):
     results = []
+    full_results = []
+
+    node_capacity_global = deepcopy(node_capacity_base)
+    link_capacity_global = deepcopy(link_capacity_base)
 
     for i, (vnf_chain, vl_chain) in enumerate(slices):
-        def heuristic(state):
-            total_estimated_latency = 0
-            for vl in vl_chain:
-                    src = vl["from"]
-                    dst = vl["to"]
-                    if (src, dst) in state.routed_vls:
-                        continue
-                    src_node = state.placed_vnfs.get(src)
-                    dst_node = state.placed_vnfs.get(dst)
-                    if src_node is not None and dst_node is not None:
-                        try:
-                            total_estimated_latency += nx.shortest_path_length(G, src_node, dst_node, weight="latency")
-                        except nx.NetworkXNoPath:
-                            total_estimated_latency += 9999
-            return total_estimated_latency
+        print(f"\n🔄 Processing Slice {i + 1}")
+        placed_vnfs = {}
+        routed_vls = {}
+        g_cost = 0
+        success = True
 
-        def expand_state(state):
-            expansions = []
-            next_vnf = next((v["id"] for v in vnf_chain if v["id"] not in state.placed_vnfs), None)
-            if not next_vnf:
-                return expansions
+        for vnf in vnf_chain:
+            vnf_id = vnf["id"]
+            cpu_needed = vnf["cpu"]
+            slice_id = vnf["slice"]
 
-            vnf_obj = next(v for v in vnf_chain if v["id"] == next_vnf)
-
-            # Best Fit: sort by remaining CPU (smallest positive first)
             candidate_nodes = sorted(
-                [n for n in G.nodes if state.node_capacity[n] >= vnf_obj["cpu"]],
-                key=lambda n: state.node_capacity[n]
+                [n for n in G.nodes if node_capacity_global[n] >= cpu_needed],
+                key=lambda n: (node_capacity_global[n] - cpu_needed, n)
             )
 
+            placed = False
             for node in candidate_nodes:
-                # Avoid placing two VNFs from same slice on same node
-                same_slice = any(
-                    placed_node == node and vnf_obj["slice"] == placed_vnf["slice"]
-                    for placed_vnf_id, placed_node in state.placed_vnfs.items()
-                    for placed_vnf in vnf_chain
-                    if placed_vnf["id"] == placed_vnf_id
-                )
-                if same_slice:
+                if any(
+                    placed_node == node and slice_id == other_vnf["slice"]
+                    for other_id, placed_node in placed_vnfs.items()
+                    for other_vnf in vnf_chain if other_vnf["id"] == other_id
+                ):
                     continue
 
-                new_placed = state.placed_vnfs.copy()
-                new_placed[next_vnf] = node
-                new_routed = state.routed_vls.copy()
-                new_node_capacity = deepcopy(state.node_capacity)
-                new_link_capacity = deepcopy(state.link_capacity)
-                g_cost = state.g_cost
-                success = True
+                temp_placed = placed_vnfs.copy()
+                temp_placed[vnf_id] = node
+                temp_routed = routed_vls.copy()
+                temp_link_capacity = deepcopy(link_capacity_global)
+                temp_g_cost = g_cost
+                routing_ok = True
 
                 for vl in vl_chain:
                     src, dst = vl["from"], vl["to"]
-                    if src in new_placed and dst in new_placed and (src, dst) not in new_routed:
-                        src_node, dst_node = new_placed[src], new_placed[dst]
+                    if src in temp_placed and dst in temp_placed and (src, dst) not in temp_routed:
+                        src_node = temp_placed[src]
+                        dst_node = temp_placed[dst]
+
                         try:
                             path = nx.shortest_path(G, src_node, dst_node, weight="latency")
-                            for u, v in zip(path[:-1], path[1:]):
-                                cap = new_link_capacity.get((u, v)) or new_link_capacity.get((v, u))
-                                if cap is None or cap < vl["bandwidth"]:
-                                    success = False
-                                    break
-                            if not success:
+                            latency = sum(link_latency.get((u, v), link_latency.get((v, u), 0))
+                                          for u, v in zip(path[:-1], path[1:]))
+                            if latency > vl["latency"]:
+                                routing_ok = False
                                 break
                             for u, v in zip(path[:-1], path[1:]):
-                                if (u, v) in new_link_capacity:
-                                    new_link_capacity[(u, v)] -= vl["bandwidth"]
+                                cap = temp_link_capacity.get((u, v), temp_link_capacity.get((v, u), 0))
+                                if cap < vl["bandwidth"]:
+                                    routing_ok = False
+                                    break
+                            if not routing_ok:
+                                break
+                            for u, v in zip(path[:-1], path[1:]):
+                                if (u, v) in temp_link_capacity:
+                                    temp_link_capacity[(u, v)] -= vl["bandwidth"]
                                 else:
-                                    new_link_capacity[(v, u)] -= vl["bandwidth"]
-                            new_routed[(src, dst)] = path
-                            g_cost += sum(link_latency.get((u, v), link_latency.get((v, u), 0)) for u, v in zip(path[:-1], path[1:]))
+                                    temp_link_capacity[(v, u)] -= vl["bandwidth"]
+                            temp_routed[(src, dst)] = path
+                            temp_g_cost += latency
                         except nx.NetworkXNoPath:
-                            success = False
+                            routing_ok = False
                             break
 
-                if success:
-                    new_node_capacity[node] -= vnf_obj["cpu"]
-                    new_state = AStarBestFitState(new_placed, new_routed, g_cost, new_node_capacity, new_link_capacity)
-                    expansions.append(new_state)
+                if routing_ok:
+                    placed_vnfs = temp_placed
+                    routed_vls = temp_routed
+                    link_capacity_global = temp_link_capacity
+                    node_capacity_global[node] -= cpu_needed
+                    g_cost = temp_g_cost
+                    placed = True
+                    break
 
-            return expansions
+            if not placed:
+                print(f"❌ Failed to place VNF {vnf_id}")
+                success = False
+                break
 
-        def run():
-            initial_state = AStarBestFitState(
-                placed_vnfs={},
-                routed_vls={},
-                g_cost=0,
-                node_capacity=deepcopy(node_capacity_base),
-                link_capacity=deepcopy(link_capacity_base)
+        results.append({
+            "slice": i + 1,
+            "accepted": success,
+            "g_cost": g_cost if success else None
+        })
+
+        if success:
+            full_results.append(
+                type("BestFitResult", (), {
+                    "placed_vnfs": placed_vnfs,
+                    "routed_vls": routed_vls,
+                    "g_cost": g_cost
+                })()
             )
-            queue = PriorityQueue()
-            queue.put((0, initial_state))
+        else:
+            full_results.append(None)
 
-            while not queue.empty():
-                _, state = queue.get()
-                if state.is_goal(vnf_chain, vl_chain):
-                    return state
-                for new_state in expand_state(state):
-                    f_score = new_state.g_cost + heuristic(new_state)
-                    queue.put((f_score, new_state))
-            return None
-
-        result = run()
-        results.append(result)
-
-    df = pd.DataFrame([{
-        "slice": i + 1,
-        "accepted": r is not None,
-        "g_cost": r.g_cost if r else None
-    } for i, r in enumerate(results)])
-
+    df = pd.DataFrame(results)
     if csv_path:
         df.to_csv(csv_path, index=False)
 
-    return df, results
+    return df, full_results

@@ -1,5 +1,3 @@
-from pathlib import Path
-
 import networkx as nx
 from copy import deepcopy
 import pandas as pd
@@ -12,34 +10,33 @@ class FFState:
     def is_goal(self, vnf_chain, vl_chain):
         return len(self.placed_vnfs) == len(vnf_chain) and len(self.routed_vls) == len(vl_chain)
 
+
 def run_first_fit(G, slices, node_capacity_base, link_capacity_base, link_latency, csv_path=None):
     results = []
+    node_capacity_global = deepcopy(node_capacity_base)
+    link_capacity_global = deepcopy(link_capacity_base)
 
     for i, (vnf_chain, vl_chain) in enumerate(slices):
         print(f"🔄 Starting Slice {i+1}")
-        node_capacity = deepcopy(node_capacity_base)
-        link_capacity = deepcopy(link_capacity_base)
         placed_vnfs = {}
         routed_vls = {}
-
         success = True
 
         for vnf in vnf_chain:
             vnf_id = vnf["id"]
             placed = False
 
-            for node in G.nodes:
-                if node_capacity[node] < vnf["cpu"]:
+            for node in sorted(G.nodes):
+                if node_capacity_global[node] < vnf["cpu"]:
                     continue
 
-                # Prevent multiple VNFs of the same slice on the same node
                 if any(node == placed_node and vnf["slice"] == other_vnf["slice"]
                        for other_vnf_id, placed_node in placed_vnfs.items()
                        for other_vnf in vnf_chain if other_vnf["id"] == other_vnf_id):
                     continue
 
                 placed_vnfs[vnf_id] = node
-                node_capacity[node] -= vnf["cpu"]
+                node_capacity_global[node] -= vnf["cpu"]
                 placed = True
                 print(f"✅ Placed {vnf_id} on Node {node}")
                 break
@@ -49,7 +46,6 @@ def run_first_fit(G, slices, node_capacity_base, link_capacity_base, link_latenc
                 success = False
                 break
 
-            # Attempt routing after each placement
             for vl in vl_chain:
                 src, dst = vl["from"], vl["to"]
                 if src in placed_vnfs and dst in placed_vnfs and (src, dst) not in routed_vls:
@@ -62,12 +58,12 @@ def run_first_fit(G, slices, node_capacity_base, link_capacity_base, link_latenc
                             print(f"❌ Latency too high for VL {src}->{dst}")
                             success = False
                             break
-                        if any(link_capacity.get((path[i], path[i+1]), 0) < vl["bandwidth"] for i in range(len(path)-1)):
+                        if any(link_capacity_global.get((path[i], path[i+1]), 0) < vl["bandwidth"] for i in range(len(path)-1)):
                             print(f"❌ Not enough bandwidth for VL {src}->{dst}")
                             success = False
                             break
                         for i in range(len(path)-1):
-                            link_capacity[(path[i], path[i+1])] -= vl["bandwidth"]
+                            link_capacity_global[(path[i], path[i+1])] -= vl["bandwidth"]
                         routed_vls[(src, dst)] = path
                         print(f"→ Routed VL {src}->{dst} via {path}")
                     except nx.NetworkXNoPath:
@@ -91,4 +87,3 @@ def run_first_fit(G, slices, node_capacity_base, link_capacity_base, link_latenc
     if csv_path:
         df.to_csv(csv_path, index=False)
     return df, results
-

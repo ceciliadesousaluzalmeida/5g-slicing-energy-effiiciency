@@ -75,3 +75,125 @@ def compute_energy_per_node(results, slices, node_capacity, a=5, b=2):
 
     total_energy = sum(node_energy.values())
     return node_energy, total_energy
+
+
+
+def compute_energy(placed_vnfs: dict, routed_vls: dict, slices: list) -> float:
+    """
+    Computes the total energy consumption based on CPU usage and routing hops.
+    
+    Parameters:
+    - placed_vnfs: dict mapping VNF ids to node ids where they were placed
+    - routed_vls: dict mapping (src_vnf_id, dst_vnf_id) to list of edges used in routing
+    - slices: list of tuples (vnf_chain, vl_chain), where:
+        - vnf_chain is a list of VNFs with attributes: {"id": ..., "cpu": ...}
+        - vl_chain is a list of VLs with attributes: {"from": ..., "to": ...}
+    
+    Returns:
+    - energy_total: float, the sum of CPU usage and total number of hops used in routing
+    """
+    
+    # Map VNF id to its CPU requirement
+    vnf_cpu_map = {
+        vnf["id"]: vnf["cpu"]
+        for vnf_chain, _ in slices
+        for vnf in vnf_chain
+    }
+
+    # Compute total CPU energy (sum of CPU used for all placed VNFs)
+    energy_cpu = sum(
+        vnf_cpu_map[vnf_id] for vnf_id in placed_vnfs if vnf_id in vnf_cpu_map
+    )
+
+    # Compute routing energy as total number of hops (edges used)
+    energy_routing = sum(len(path) for path in routed_vls.values())
+
+    # Total energy = CPU + Routing (can be weighted if needed)
+    energy_total = energy_cpu + energy_routing
+
+    return energy_total
+
+
+def compute_routing_energy_weighted(G, routed_vls: dict) -> float:
+    routing_energy = 0.0
+
+    for path in routed_vls.values():
+        # Se o path for uma lista de nós, converte para lista de arestas
+        if all(isinstance(node, int) for node in path):
+            path = list(zip(path[:-1], path[1:]))
+
+        for u, v in path:
+            if G.has_edge(u, v):
+                latency = G[u][v].get("latency", 1)
+                bandwidth = G[u][v].get("bandwidth", 1)
+            elif G.has_edge(v, u):
+                latency = G[v][u].get("latency", 1)
+                bandwidth = G[v][u].get("bandwidth", 1)
+            else:
+                continue
+
+            if bandwidth == 0:
+                continue
+
+            routing_energy += latency / bandwidth
+
+    return routing_energy
+
+
+
+def compute_total_energy(cpu_allocations: dict, routed_vls: dict, slices: list, G) -> float:
+    """
+    Computes total energy: CPU + routing energy
+    """
+    vnf_cpu_map = {
+        vnf["id"]: vnf["cpu"]
+        for vnf_chain, _ in slices
+        for vnf in vnf_chain
+    }
+
+    cpu_energy = sum(
+        vnf_cpu_map[vnf_id] for vnf_id in cpu_allocations if vnf_id in vnf_cpu_map
+    )
+
+    routing_energy = compute_routing_energy_weighted(G, routed_vls)
+
+    return cpu_energy + routing_energy
+
+
+
+
+def compute_total_energy_with_routing(
+    result,
+    slices,
+    node_capacity,
+    G,
+    a=5,
+    b=2
+) -> float:
+    if not result:
+        return None
+
+    # CPU energy
+    node_energy = {node: 0 for node in node_capacity}
+    slice_id = None
+
+    for idx, (vnf_chain, _) in enumerate(slices):
+        if all(vnf["id"] in result.placed_vnfs for vnf in vnf_chain):
+            slice_id = idx
+            break
+
+    if slice_id is None:
+        return None
+
+    for vnf_id, node in result.placed_vnfs.items():
+        vnf_index = int(vnf_id.split('_')[1])
+        cpu = slices[slice_id][0][vnf_index]["cpu"]
+        node_energy[node] += cpu
+
+    energy_cpu = sum(a + b * usage for usage in node_energy.values() if usage > 0)
+
+    # Routing energy
+    energy_routing = compute_routing_energy_weighted(G, result.routed_vls)
+
+    return energy_cpu + energy_routing
+

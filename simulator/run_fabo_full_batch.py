@@ -1,7 +1,8 @@
-from queue import PriorityQueue
 import networkx as nx
 import pandas as pd
+from queue import PriorityQueue
 from tqdm import tqdm
+from copy import deepcopy
 
 class FABOState:
     def __init__(self, placed_vnfs=None, routed_vls=None, g_cost=0, node_capacity=None, link_capacity=None):
@@ -19,9 +20,11 @@ class FABOState:
 
 def run_fabo_full_batch(G, slices, node_capacity_base, link_latency, link_capacity_base, csv_path=None):
     fabo_results = []
-    total_capacity = node_capacity_base.copy()
+    node_capacity_global = deepcopy(node_capacity_base)
+    link_capacity_global = deepcopy(link_capacity_base)
+    total_capacity = deepcopy(node_capacity_base)
 
-    def expand_state(state, vnf_chain, vl_chain, total_capacity):
+    def expand_state(state, vnf_chain, vl_chain):
         expansions = []
         next_vnf = next((v["id"] for v in vnf_chain if v["id"] not in state.placed_vnfs), None)
         if next_vnf is None:
@@ -33,7 +36,7 @@ def run_fabo_full_batch(G, slices, node_capacity_base, link_latency, link_capaci
             n: 1 - state.node_capacity[n] / total_capacity[n] if total_capacity[n] > 0 else 1
             for n in G.nodes
         }
-        candidate_nodes = sorted(G.nodes, key=lambda n: cpu_used_ratio[n])[:5]
+        candidate_nodes = sorted(G.nodes, key=lambda n: cpu_used_ratio[n])
 
         for node in candidate_nodes:
             if state.node_capacity[node] < vnf_obj["cpu"]:
@@ -50,8 +53,8 @@ def run_fabo_full_batch(G, slices, node_capacity_base, link_latency, link_capaci
             new_placed = state.placed_vnfs.copy()
             new_placed[next_vnf] = node
             new_routed = state.routed_vls.copy()
-            new_node_capacity = state.node_capacity.copy()
-            new_link_capacity = state.link_capacity.copy()
+            new_node_capacity = deepcopy(state.node_capacity)
+            new_link_capacity = deepcopy(state.link_capacity)
             g_cost = state.g_cost
 
             routing_success = True
@@ -62,13 +65,13 @@ def run_fabo_full_batch(G, slices, node_capacity_base, link_latency, link_capaci
                     dst_node = new_placed[dst]
                     try:
                         path = nx.shortest_path(G, src_node, dst_node, weight="latency")
-                        path_latency = sum(link_latency[(path[i], path[i+1])] for i in range(len(path)-1))
+                        path_latency = sum(link_latency.get((path[i], path[i+1]), 9999) for i in range(len(path)-1))
                         if path_latency > vl["latency"]:
                             routing_success = False
                             break
-                        if all(new_link_capacity[(path[i], path[i+1])] >= vl["bandwidth"] for i in range(len(path)-1)):
+                        if all(new_link_capacity.get((path[i], path[i+1]), 0) >= vl["bandwidth"] for i in range(len(path)-1)):
                             penalty = sum(
-                                1 + (1 - new_link_capacity[(path[i], path[i+1])] / link_capacity_base[(path[i], path[i+1])])
+                                1 + (1 - new_link_capacity.get((path[i], path[i+1]), 0) / link_capacity_base.get((path[i], path[i+1]), 1))
                                 for i in range(len(path)-1)
                             )
                             for i in range(len(path)-1):
@@ -99,28 +102,28 @@ def run_fabo_full_batch(G, slices, node_capacity_base, link_latency, link_capaci
 
     for i, (vnf_chain, vl_chain) in enumerate(tqdm(slices, desc="Running FABO", unit="slice")):
         def fabo_heuristic(state):
-                total_estimated_latency = 0
-                for vl in vl_chain:
-                    src = vl["from"]
-                    dst = vl["to"]
-                    if (src, dst) in state.routed_vls:
-                        continue
-                    src_node = state.placed_vnfs.get(src)
-                    dst_node = state.placed_vnfs.get(dst)
-                    if src_node is not None and dst_node is not None:
-                        try:
-                            total_estimated_latency += nx.shortest_path_length(G, src_node, dst_node, weight="latency")
-                        except nx.NetworkXNoPath:
-                            total_estimated_latency += 9999
-                return total_estimated_latency
+            total_estimated_latency = 0
+            for vl in vl_chain:
+                src = vl["from"]
+                dst = vl["to"]
+                if (src, dst) in state.routed_vls:
+                    continue
+                src_node = state.placed_vnfs.get(src)
+                dst_node = state.placed_vnfs.get(dst)
+                if src_node is not None and dst_node is not None:
+                    try:
+                        total_estimated_latency += nx.shortest_path_length(G, src_node, dst_node, weight="latency")
+                    except nx.NetworkXNoPath:
+                        total_estimated_latency += 9999
+            return total_estimated_latency
 
         def run():
             initial_state = FABOState(
                 placed_vnfs={},
                 routed_vls={},
                 g_cost=0,
-                node_capacity=node_capacity_base.copy(),
-                link_capacity=link_capacity_base.copy()
+                node_capacity=deepcopy(node_capacity_global),
+                link_capacity=deepcopy(link_capacity_global)
             )
             queue = PriorityQueue()
             queue.put((0, initial_state))
@@ -129,13 +132,23 @@ def run_fabo_full_batch(G, slices, node_capacity_base, link_latency, link_capaci
                 _, state = queue.get()
                 if state.is_goal(vnf_chain, vl_chain):
                     return state
-                for new_state in expand_state(state, vnf_chain, vl_chain, total_capacity):
+                for new_state in expand_state(state, vnf_chain, vl_chain):
                     f_score = new_state.g_cost + fabo_heuristic(new_state)
                     queue.put((f_score, new_state))
             return None
 
         result = run()
         fabo_results.append(result)
+
+        if result:
+            for vnf_id, node in result.placed_vnfs.items():
+                cpu = next(v["cpu"] for v in vnf_chain if v["id"] == vnf_id)
+                node_capacity_global[node] -= cpu
+
+            for (src, dst), path in result.routed_vls.items():
+                vl = next(v for v in vl_chain if v["from"] == src and v["to"] == dst)
+                for i in range(len(path)-1):
+                    link_capacity_global[(path[i], path[i+1])] -= vl["bandwidth"]
 
     summary = [{"slice": i+1, "accepted": r is not None, "g_cost": r.g_cost if r else None} for i, r in enumerate(fabo_results)]
     df_results = pd.DataFrame(summary)
@@ -144,6 +157,3 @@ def run_fabo_full_batch(G, slices, node_capacity_base, link_latency, link_capaci
         df_results.to_csv(csv_path, index=False)
 
     return df_results, fabo_results
-
-
-
