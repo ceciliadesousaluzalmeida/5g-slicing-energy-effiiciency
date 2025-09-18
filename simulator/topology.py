@@ -68,7 +68,13 @@ def topologie_finlande():
 
     for u, v, distance_km in edges:
         latency_ms = round(distance_km * 0.5, 3)
-        capacity = random.randint(50, 150)
+        
+        # Escolha uma dessas:
+        # capacity = random.randint(200, 300)
+        capacity = max(100, 400 - distance_km * 2)
+        #capacity = 250
+
         G.add_edge(u, v, latency=latency_ms, bandwidth=capacity, capacity=capacity)
 
     return G
+
