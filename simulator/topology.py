@@ -37,12 +37,18 @@ def draw_graph(G):
 
 import networkx as nx
 import random
+import networkx as nx
 
 def topologie_finlande():
     G = nx.Graph()
 
+    # Heterogeneous CPU capacities
+    core_nodes = {1, 6, 11}
     for node in range(1, 13):
-        G.add_node(node, cpu=10, memory=10)
+        if node in core_nodes:
+            G.add_node(node, cpu=64, memory=64)
+        else:
+            G.add_node(node, cpu=16, memory=16)
 
     edges = [
         (1, 2, 37),
@@ -67,14 +73,14 @@ def topologie_finlande():
     ]
 
     for u, v, distance_km in edges:
-        latency_ms = round(distance_km * 0.5, 3)
-        
-        # Escolha uma dessas:
-        # capacity = random.randint(200, 300)
-        capacity = max(100, 400 - distance_km * 2)
-        #capacity = 250
-
+        latency_ms = max(1, round(distance_km * 0.005, 3))  # realistic optical latency
+        # More generous bandwidth capacity
+        if distance_km < 50:
+            capacity = 1000  # ~100 Gbps
+        elif distance_km < 150:
+            capacity = 500   # ~50 Gbps
+        else:
+            capacity = 250   # ~25 Gbps
         G.add_edge(u, v, latency=latency_ms, bandwidth=capacity, capacity=capacity)
 
     return G
-
