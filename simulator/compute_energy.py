@@ -197,3 +197,55 @@ def compute_total_energy_with_routing(
 
     return energy_cpu + energy_routing
 
+
+# All comments in English
+# All comments in English
+def compute_energy_new(result_list, slices, node_capacity_base, link_capacity_base):
+    """
+    Generic normalized energy model:
+    - Node energy = 1 (if active) + utilization fraction
+    - Link energy = utilization fraction
+    Works with slices = list of (vnfs, vls).
+    """
+    node_usage = {n: 0 for n in node_capacity_base}
+    link_usage = {e: 0 for e in link_capacity_base}
+
+    for state in result_list:
+        if state is None:
+            continue
+
+        # VNFs: placed_vnfs = {vnf_id: node_id}
+        for vnf_id, node in getattr(state, "placed_vnfs", {}).items():
+            # find vnf info
+            for vnfs, _ in slices:
+                for v in vnfs:
+                    if v["id"] == vnf_id:
+                        node_usage[node] += v["cpu"]
+
+        # VLs: routed_vls = {vl_id: path_edges}
+        for vl_id, path in getattr(state, "routed_vls", {}).items():
+            # find vl info
+            for _, vls in slices:
+                for vl in vls:
+                    # identify by from->to string
+                    if f"{vl['from']}->{vl['to']}" == vl_id:
+                        bw_req = vl["bandwidth"]
+                        for e in path:
+                            link_usage[e] += bw_req
+
+    # Normalized node energy
+    total_energy = 0.0
+    for n, used in node_usage.items():
+        cap = node_capacity_base[n]
+        if used > 0:
+            total_energy += 1.0
+            total_energy += used / cap
+
+    # Normalized link energy
+    for e, used in link_usage.items():
+        cap = link_capacity_base[e]
+        if used > 0:
+            total_energy += 1.0
+            total_energy += used / cap
+
+    return total_energy
