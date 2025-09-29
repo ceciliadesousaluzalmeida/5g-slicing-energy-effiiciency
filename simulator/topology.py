@@ -84,3 +84,29 @@ def topologie_finlande():
         G.add_edge(u, v, latency=latency_ms, bandwidth=capacity, capacity=capacity)
 
     return G
+
+
+
+import networkx as nx
+
+def topology_bayern():
+    
+    G = nx.Graph()
+
+    # Add nodes with default CPU capacity
+    for n in range(1, 7):
+        G.add_node(n, cpu=10)  # you can adjust CPU capacity here
+
+    # Add edges with default bandwidth and latency
+    edges = [
+        (1, 2), (1, 3),
+        (2, 3), (2, 4),
+        (3, 4), (3, 5),
+        (4, 5), (4, 6),
+        (5, 6)
+    ]
+
+    for (u, v) in edges:
+        G.add_edge(u, v, bandwidth=100, latency=1)
+
+    return G

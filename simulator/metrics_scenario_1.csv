@@ -1,6 +1,0 @@
-Method,Slices Accepted,Total Energy,Total Bandwidth,Total Latency,Energy with Routing,Normalized Energy
-A*,5,102,765,5,122.007,7.21875
-ABO,5,82,765,5,122.00500000000001,3.21875
-FABO,5,122,765,5,122.009,11.96875
-First Fit,5,82,765,5,122.00500000000001,3.21875
-Best-fit,5,87,765,7,122.01599999999999,5.25
