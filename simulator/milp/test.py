@@ -2,7 +2,7 @@
 # All comments in English
 
 from formulation import MILPInstance
-from solver_scipy import solve_lp
+from simulator.milp.solver_pulp import solve_lp
 
 def build_tiny_instance():
     # 2 nodes, 1 link, 1 slice with 1 VNF

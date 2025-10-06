@@ -38,4 +38,4 @@ def build_instance_from_topology(G, slices):
         sid = f"s{s_id}"
         Ls[sid] = max(v["latency"] for v in vnfs)
 
-    return MILPInstance(N, E, S, V_of_s, CPU_i, CPUcap, BW_s, BWcap, Lat, Ls)
+    return MILPInstance(G, slices)
