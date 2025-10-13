@@ -1,0 +1,29 @@
+Experiment timestamp: 2025-10-13 11:00:56.124448
+Number of slices: 10
+Number of VNFs: 30
+
+=== Summary ===
+ slice  accepted  g_cost
+     1      True       2
+     2      True       2
+     3      True       2
+     4      True       2
+     5      True       2
+     6      True       2
+     7      True       2
+     8      True       2
+     9      True       2
+    10      True       2
+
+=== MILP ===
+  slice  num_vnfs status  objective
+Slice_0         3      2    24.8825
+Slice_1         3      2    24.8825
+Slice_2         3      2    24.8825
+Slice_3         3      2    24.8825
+Slice_4         3      2    24.8825
+Slice_5         3      2    24.8825
+Slice_6         3      2    24.8825
+Slice_7         3      2    24.8825
+Slice_8         3      2    24.8825
+Slice_9         3      2    24.8825
