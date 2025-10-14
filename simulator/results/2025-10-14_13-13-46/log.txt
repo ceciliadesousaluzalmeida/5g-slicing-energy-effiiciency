@@ -1,0 +1,116 @@
+Experiment timestamp: 2025-10-14 13:13:46.886877
+Number of slices: 20
+Number of VNFs: 60
+
+=== Summary ===
+ slice  accepted  g_cost
+     1      True       2
+     2      True       2
+     3      True       2
+     4      True       2
+     5      True       2
+     6      True       2
+     7      True       2
+     8      True       2
+     9      True       2
+    10      True       2
+    11      True       2
+    12      True       2
+    13      True       2
+    14      True       2
+    15      True       2
+    16      True       2
+    17      True       2
+    18      True       4
+    19      True       2
+    20      True       5 slice  accepted  g_cost
+     1      True     327
+     2      True     282
+     3      True     327
+     4      True     322
+     5      True     352
+     6      True     322
+     7      True     282
+     8      True     302
+     9      True     292
+    10      True     322
+    11      True     292
+    12      True     292
+    13      True     327
+    14      True     312
+    15      True     317
+    16      True     292
+    17      True     294
+    18      True     304
+    19      True     294
+    20      True     324 slice  accepted  g_cost
+     1      True  325.00
+     2      True  280.00
+     3      True  325.00
+     4      True  320.00
+     5      True  350.00
+     6      True  320.00
+     7      True  280.00
+     8      True  300.00
+     9      True  309.60
+    10      True  344.00
+    11      True  312.40
+    12      True  332.10
+    13      True  419.00
+    14      True  615.80
+    15      True  486.85
+    16      True  584.20
+    17      True  861.80
+    18     False     NaN
+    19      True 1053.50
+    20     False     NaN slice  accepted  g_cost
+     1      True     3.0
+     2      True     3.0
+     3      True     2.0
+     4      True     3.0
+     5      True     5.0
+     6      True     2.0
+     7      True     4.0
+     8      True     2.0
+     9      True     2.0
+    10      True     3.0
+    11      True     5.0
+    12      True     5.0
+    13      True     5.0
+    14      True     5.0
+    15      True     5.0
+    16      True     5.0
+    17     False     NaN
+    18     False     NaN
+    19     False     NaN
+    20     False     NaN slice  accepted
+     1      True
+     2      True
+     3      True
+     4      True
+     5      True
+     6      True
+     7      True
+     8      True
+     9      True
+    10      True
+    11      True
+    12      True
+    13      True
+    14      True
+    15      True
+    16      True
+    17      True
+    18      True
+    19      True
+    20      True       Method  Slices Accepted  Total Bandwidth  Total Latency  Total Energy
+           A*               20           6910.0           45.0      22.87500
+          ABO               20           7330.0           48.0      23.06250
+         FABO               18           6540.0           43.0      22.56250
+    First Fit               20          10250.0           67.0      22.59375
+     Best-fit               16           9065.0           59.0      22.21875
+MILP (Gurobi)               20            325.0           92.0      21.21875
+
+=== MILP ===
+status  objective  num_slices  num_vnfs
+     2   44.60875          20        60

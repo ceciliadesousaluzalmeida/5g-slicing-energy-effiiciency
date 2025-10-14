@@ -157,16 +157,36 @@ def solve_gurobi(instance, msg=False, time_limit=None):
                 name=f"latency_s{s}_{i}_to_{j}"
             )
 
-    # --- Solve ---
+       # --- Solve ---
     m.optimize()
+
+    # --- Handle infeasible or unsolved models ---
+    if m.status not in [GRB.OPTIMAL, GRB.SUBOPTIMAL]:
+        print(f"[MILP] No feasible solution found or model not solved. Status: {m.status} ({m.Status})")
+        # Optionally: export IIS for infeasible models
+        if m.status == GRB.INFEASIBLE:
+            try:
+                m.computeIIS()
+                m.write("model_infeasible.ilp")
+                print("[MILP] IIS written to model_infeasible.ilp")
+            except Exception as e:
+                print(f"[MILP] Could not write IIS: {e}")
+        return GurobiSolveResult(
+            status_code=int(m.status),
+            status_str=str(m.Status),
+            objective=None,
+            values={}
+        )
 
     # --- Collect solution ---
     values = {}
-    for key, var in v.items(): values[("v",) + key] = var.X
+    for key, var in v.items():
+        values[("v",) + key] = var.X
     for n in N:
         values[("u", n)] = u[n].X
         values[("z", n)] = z[n].X
-    for key, var in f.items(): values[("f",) + key] = var.X
+    for key, var in f.items():
+        values[("f",) + key] = var.X
     for e in E:
         values[("rho", e)] = rho[e].X
         values[("w", e)] = w[e].X
@@ -176,7 +196,7 @@ def solve_gurobi(instance, msg=False, time_limit=None):
     res = GurobiSolveResult(
         status_code=status_code,
         status_str=str(status_str),
-        objective=m.objVal if m.status == GRB.OPTIMAL else None,
+        objective=m.objVal if m.status in [GRB.OPTIMAL, GRB.SUBOPTIMAL] else None,
         values=values
     )
     return res

@@ -1,4 +1,5 @@
-from typing import List, Dict, Tuple
+from collections import defaultdict
+from typing import Dict, Tuple, List, Any
 
 def compute_energy_per_slice(
     results: List, 
@@ -28,33 +29,110 @@ def compute_energy_per_slice(
     return slice_energy, slice_cpu_usage
 
 
-def compute_total_bandwidth(results: List, slices: List[Tuple[List, List]]) -> List[int]:
-    total_bandwidth = []
+def _is_milp_result(res: Any) -> bool:
+    # Heurísticas não têm .values com chaves ("f", e, s, (i,j))
+    return hasattr(res, "values") and isinstance(res.values, dict)
+
+def _extract_milp_f_matrix(milp_res, instance) -> Dict[int, Dict[Tuple[int,int], float]]:
+    """
+    Build, for each slice s, the aggregated per-edge usage:
+    F_s_e[e] = sum_{(i,j) in chain(s)} f[(e, s, (i, j))]
+    """
+    F_s_e: Dict[int, Dict[Tuple[int,int], float]] = {s: defaultdict(float) for s in instance.S}
+    for key, val in milp_res.values.items():
+        # key format for f: ("f", e, s, (i,j))
+        if not (isinstance(key, tuple) and len(key) == 4 and key[0] == "f"):
+            continue
+        e, s, ij = key[1], key[2], key[3]
+        if val > 1e-9:
+            F_s_e[s][e] += val  # val is 0/1 here
+    return F_s_e
+
+def compute_milp_bandwidth_latency(milp_res, instance):
+    """
+    Compute total bandwidth and latency usage for MILP results.
+    Based on variables f[(e,s,(i,j))] from Gurobi.
+    """
+    values = milp_res.values
+    per_link_bw = {e: 0.0 for e in instance.E}
+    per_slice_bw = {s: 0.0 for s in instance.S}
+    per_slice_lat = {s: 0.0 for s in instance.S}
+
+    for key, val in values.items():
+        # Only handle f variables that are active
+        if not (isinstance(key, tuple) and len(key) == 4 and key[0] == "f"):
+            continue
+        e, s, (i, j) = key[1], key[2], key[3]
+        if val > 0.5:
+            bw = instance.BW_s[s]
+            per_link_bw[e] += bw
+            per_slice_bw[s] += bw
+            per_slice_lat[s] += instance.lat_e[e]
+
+    total_bw = sum(per_link_bw.values())
+    total_lat = sum(per_slice_lat.values())
+
+    return total_bw, total_lat, per_slice_bw, per_slice_lat
+
+
+
+def compute_total_bandwidth(results: List, slices: List[Tuple[List, List]], instance=None, link_capacity: Dict[Tuple[int,int], float]=None) -> List[float]:
+    """
+    Backward-compatible wrapper:
+      - For MILP results: returns bandwidth footprint per slice (traffic * hops)
+      - For heuristics: sums bandwidth * path_length across VLs
+    """
+    totals: List[float] = []
+    # If this is a single MILP result covering all slices:
+    if len(results) == 1 and _is_milp_result(results[0]) and instance is not None:
+        bw_fp, _, _ = compute_milp_bandwidth_latency(results[0], instance)
+        # Ensure ordering by slice index the same as 'slices' list
+        for s_idx in range(len(slices)):
+            totals.append(bw_fp.get(s_idx, None))
+        return totals
+
+    # Heuristic path-based fallback (A*, ABO, FABO)
     for slice_id, result in enumerate(results):
-        if result:
-            used = 0
-            vl_chain = slices[slice_id][1]
-            for vl in vl_chain:
-                if (vl["from"], vl["to"]) in result.routed_vls:
-                    used += vl["bandwidth"]
-            total_bandwidth.append(used)
-        else:
-            total_bandwidth.append(None)
-    return total_bandwidth
+        if not result:
+            totals.append(None)
+            continue
+        used = 0.0
+        vl_chain = slices[slice_id][1]
+        # Sum bandwidth * number of hops for each routed VL
+        for vl in vl_chain:
+            path = result.routed_vls.get((vl["from"], vl["to"])) if hasattr(result, "routed_vls") else None
+            if path:
+                used += vl["bandwidth"] * max(0, len(path) - 1)  # bandwidth-footprint for this VL
+        totals.append(used)
+    return totals
 
+def compute_total_latency(results: List, link_latency: Dict[Tuple[int, int], float], instance=None) -> List[float]:
+    """
+    Backward-compatible wrapper:
+      - For MILP results: sums lat_e[e] * F_s_e[e] across all VLs of the slice
+      - For heuristics: sum of per-link latencies along each routed VL path
+    """
+    totals: List[float] = []
+    if len(results) == 1 and _is_milp_result(results[0]) and instance is not None:
+        _, lat, _ = compute_milp_bandwidth_latency(results[0], instance)
+        for s_idx in range(len(instance.S)):
+            totals.append(lat.get(s_idx, None))
+        return totals
 
-def compute_total_latency(results: List, link_latency: Dict[Tuple[int, int], float]) -> List[int]:
-    total_latency = []
-    for result in results:
-        if result:
-            slice_latency = 0
-            for path in result.routed_vls.values():
-                slice_latency += sum(link_latency[(min(path[i], path[i+1]), max(path[i], path[i+1]))] for i in range(len(path)-1))
-            total_latency.append(slice_latency)
-        else:
-            total_latency.append(None)
-    return total_latency
-
+    # Heuristic path-based fallback
+    for res in results:
+        if not res:
+            totals.append(None)
+            continue
+        s_lat = 0.0
+        if hasattr(res, "routed_vls"):
+            for path in res.routed_vls.values():
+                for i in range(len(path) - 1):
+                    u, v = path[i], path[i+1]
+                    key = (u, v) if (u, v) in link_latency else (v, u)
+                    s_lat += link_latency.get(key, 0.0)
+        totals.append(s_lat)
+    return totals
 
 def compute_energy_per_node(results, slices, node_capacity, a=5, b=2):
     node_energy = {node: 0 for node in node_capacity}

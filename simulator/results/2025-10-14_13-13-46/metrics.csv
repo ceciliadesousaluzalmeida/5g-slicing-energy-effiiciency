@@ -1,0 +1,7 @@
+Method,Slices Accepted,Total Bandwidth,Total Latency,Total Energy
+A*,20,6910.0,45.0,22.875
+ABO,20,7330.0,48.0,23.0625
+FABO,18,6540.0,43.0,22.5625
+First Fit,20,10250.0,67.0,22.59375
+Best-fit,16,9065.0,59.0,22.21875
+MILP (Gurobi),20,325.0,92.0,21.21875
