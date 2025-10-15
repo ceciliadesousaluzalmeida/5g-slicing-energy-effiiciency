@@ -1,30 +1,22 @@
-import random
-
-def generate_random_slices(G, vnf_profiles, num_slices, num_vnfs_per_slice):
+def generate_random_slices(G, vnf_profiles, num_slices, num_vnfs_per_slice, entry=None, exit_=None):
+    """
+    Generate slices with entry/exit nodes fixed (2 -> 9).
+    Each slice carries its source/destination for routing.
+    """
     slices = []
-    for i in range(num_slices):
+    for s in range(num_slices):
         vnfs = []
-        vls = []
+        for i in range(num_vnfs_per_slice):
+            vnf = dict(vnf_profiles[i])
+            vnf["id"] = f"vnf{s}_{i}"
+            vnf["slice"] = s
+            vnfs.append(vnf)
 
-        for j in range(num_vnfs_per_slice):
-            profile = random.choice(vnf_profiles)
-            vnf_id = f"vnf{i}_{j}"
-            vnfs.append({
-                "id": vnf_id,
-                "cpu": profile["cpu"],
-                "throughput": profile["throughput"],
-                "latency": profile["latency"],
-                "slice": i
-            })
+        vlinks = [
+            {"from": vnfs[i]["id"], "to": vnfs[i+1]["id"],
+             "bandwidth": vnfs[i]["throughput"], "latency": vnfs[i]["latency"]}
+            for i in range(num_vnfs_per_slice - 1)
+        ]
 
-        for j in range(num_vnfs_per_slice - 1):
-            
-            vls.append({
-                "from": vnfs[j]["id"],
-                "to": vnfs[j + 1]["id"],
-                "bandwidth": vnfs[j]["throughput"],
-                "latency": vnfs[j]["latency"]
-            })
-
-        slices.append((vnfs, vls))
+        slices.append((vnfs, vlinks, entry, exit_))
     return slices

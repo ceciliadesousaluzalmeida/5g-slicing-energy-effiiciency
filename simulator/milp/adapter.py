@@ -1,63 +1,87 @@
+# All comments in English
 
 class MILPResultAdapterGurobi:
-    def __init__(self, gurobi_result, instance):
-        vals = gurobi_result.values
+    """
+    Adapter to make the MILP (Gurobi) results compatible with heuristic-style plotting.
+    Reconstructs:
+      - placed_vnfs: {vnf_id -> node}
+      - routed_vls: {(src_vnf, dst_vnf) -> path(list of nodes)}
+    Also includes entry/exit legs if present in the MILP model.
+    """
+
+    def __init__(self, solve_result, instance):
+        self.solve_result = solve_result
+        self.instance = instance
         self.placed_vnfs = {}
         self.routed_vls = {}
 
-        # --- VNFs placement (argmax rule) ---
-        for s in instance.S:
-            for i in instance.V_of_s[s]:
-                best_n, best_v = None, -1
-                for n in instance.N:
-                    vval = float(vals.get(("v", i, n), 0.0) or 0.0)
-                    if vval > best_v:
-                        best_v, best_n = vval, n
-                if best_n is not None:
-                    self.placed_vnfs[i] = best_n
+        if not solve_result or not solve_result.values:
+            print("[WARN][MILPAdapter] Empty MILP result — nothing to adapt.")
+            return
 
-        # --- Virtual Links routing reconstruction ---
-        for s in instance.S:
-            vnf_ids = instance.V_of_s[s]
-            for q in range(len(vnf_ids) - 1):
-                i, j = vnf_ids[q], vnf_ids[q + 1]
-                edges = []
-                for e in instance.E:
-                    if (vals.get(("f", e, s, (i, j)), 0.0) or 0.0) > 0.5:
-                        edges.append(e)
+        self._parse_vnfs()
+        self._parse_routes()
 
-                # Try to reconstruct a node path from the set of edges
-                path_nodes = None
-                if edges:
-                    from collections import defaultdict
-                    adj = defaultdict(list)
-                    for u, v in edges:
-                        adj[u].append(v)
-                        adj[v].append(u)
+    # ---------------------------------------------------------------------
+    def _parse_vnfs(self):
+        """Extract placement decisions v[i,n] = 1."""
+        vals = self.solve_result.values
+        for key, val in vals.items():
+            if key[0] == "v" and val > 0.5:
+                _, vnf_id, node = key
+                self.placed_vnfs[vnf_id] = node
 
-                    # Detect endpoints (degree = 1) or fallback to first edge
-                    endpoints = [x for x in adj if len(adj[x]) == 1]
-                    start = endpoints[0] if endpoints else edges[0][0]
+    # ---------------------------------------------------------------------
+    def _parse_routes(self):
+        """
+        Reconstruct all routed virtual links (VLs) and entry/exit legs
+        from f[(e,s,(i,j))], f_entry[(e,s)], and f_exit[(e,s)].
+        """
+        vals = self.solve_result.values
+        inst = self.instance
 
-                    # Simple depth-first traversal to reconstruct the order
-                    visited = set()
-                    order = [start]
-                    cur = start
-                    while True:
-                        nxts = [x for x in adj[cur] if (cur, x) not in visited and (x, cur) not in visited]
-                        if not nxts:
-                            break
-                        nxt = nxts[0]
-                        visited.add((cur, nxt))
-                        visited.add((nxt, cur))
-                        order.append(nxt)
-                        cur = nxt
-                    path_nodes = order
+        # --- 1️⃣ Core VLs between VNFs ---
+        for key, val in vals.items():
+            if not key or val <= 0.5:
+                continue
+            if key[0] == "f" and len(key) == 4:
+                _, e, s, (i, j) = key
+                self._add_edge_to_path((i, j), e)
 
-                # Save under both key forms (by slice and by VNF pair)
-                key_milp = (s, (i, j))
-                self.routed_vls[key_milp] = path_nodes if path_nodes else edges
-                self.routed_vls[(i, j)] = path_nodes if path_nodes else edges
+        # --- 2️⃣ ENTRY→first VNF ---
+        for key, val in vals.items():
+            if not key or val <= 0.5:
+                continue
+            if key[0] == "f_entry" and len(key) == 3:
+                _, e, s = key
+                entry_node = (inst.entry_of_s[s] if hasattr(inst, "entry_of_s") and s in inst.entry_of_s
+                              else getattr(inst, "entry_node", None))
+                first_vnf = inst.V_of_s[s][0]
+                self._add_edge_to_path(("ENTRY", first_vnf), e)
 
+        # --- 3️⃣ Last VNF→EXIT ---
+        for key, val in vals.items():
+            if not key or val <= 0.5:
+                continue
+            if key[0] == "f_exit" and len(key) == 3:
+                _, e, s = key
+                exit_node = (inst.exit_of_s[s] if hasattr(inst, "exit_of_s") and s in inst.exit_of_s
+                             else getattr(inst, "exit_node", None))
+                last_vnf = inst.V_of_s[s][-1]
+                self._add_edge_to_path((last_vnf, "EXIT"), e)
+
+    # ---------------------------------------------------------------------
+    def _add_edge_to_path(self, key, edge):
+        """
+        Build path progressively per VL key, preserving order.
+        """
+        if key not in self.routed_vls:
+            self.routed_vls[key] = []
+        # avoid duplicates
+        if not self.routed_vls[key] or self.routed_vls[key][-1] != edge[0]:
+            self.routed_vls[key].append(edge[0])
+        self.routed_vls[key].append(edge[1])
+
+    # ---------------------------------------------------------------------
     def __repr__(self):
-        return f"<MILPResultAdapterGurobi placed={len(self.placed_vnfs)} vls={len(self.routed_vls)}>"
+        return f"<MILPResultAdapterGurobi | {len(self.placed_vnfs)} VNFs, {len(self.routed_vls)} VLs>"

@@ -1,126 +1,189 @@
+# All comments in English
 import networkx as nx
-from copy import deepcopy
 import pandas as pd
+from copy import deepcopy
 
 class FFState:
-    def __init__(self, placed_vnfs=None, routed_vls=None):
+    def __init__(self, placed_vnfs=None, routed_vls=None, g_cost=0.0):
         self.placed_vnfs = placed_vnfs or {}
         self.routed_vls = routed_vls or {}
+        self.g_cost = g_cost
 
-    def is_goal(self, vnf_chain, vl_chain):
-        return len(self.placed_vnfs) == len(vnf_chain) and len(self.routed_vls) == len(vl_chain)
+    def is_goal(self, vnf_chain, vl_chain, entry=None, exit_=None):
+        base_done = (len(self.placed_vnfs) == len(vnf_chain)
+                     and len(self.routed_vls) >= len(vl_chain))
+        if not base_done:
+            return False
+        if entry is None and exit_ is None:
+            return True
+        first_id, last_id = vnf_chain[0]["id"], vnf_chain[-1]["id"]
+        return (("ENTRY", first_id) in self.routed_vls) and ((last_id, "EXIT") in self.routed_vls)
 
 
 def run_first_fit(G, slices, node_capacity_base, link_capacity_base, link_latency, csv_path=None):
     results = []
+    full_results = []
+
     node_capacity_global = deepcopy(node_capacity_base)
     link_capacity_global = deepcopy(link_capacity_base)
 
-    for i, (vnf_chain, vl_chain) in enumerate(slices, start=1):
+    # --------------- helper: feasible shortest path ---------------
+    def shortest_path_with_capacity(G, u, v, link_capacity, bandwidth):
+        try:
+            path = nx.shortest_path(G, u, v, weight="latency")
+        except nx.NetworkXNoPath:
+            return None, None
+        for a, b in zip(path[:-1], path[1:]):
+            cap = link_capacity.get((a, b), link_capacity.get((b, a), 0))
+            if cap < bandwidth:
+                return None, None
+        latency = sum(link_latency.get((a, b), link_latency.get((b, a), 1.0))
+                      for a, b in zip(path[:-1], path[1:]))
+        return path, latency
+
+    # --------------- main loop over slices ---------------
+    for i, slice_data in enumerate(slices, start=1):
+        if len(slice_data) == 2:
+            vnf_chain, vl_chain = slice_data
+            entry, exit_ = None, None
+        else:
+            vnf_chain, vl_chain, entry, exit_ = slice_data
+
         print(f"\n[INFO][FF] === Solving slice {i} with {len(vnf_chain)} VNFs and {len(vl_chain)} VLs ===")
+
         placed_vnfs = {}
         routed_vls = {}
+        g_cost = 0.0
+        success = True
 
-        # Work on local copies first
         local_node_capacity = deepcopy(node_capacity_global)
         local_link_capacity = deepcopy(link_capacity_global)
-        success = True
 
         for vnf in vnf_chain:
             vnf_id = vnf["id"]
-            vnf_cpu = vnf["cpu"]
-            placed = False
+            cpu_need = vnf["cpu"]
+            slice_id = vnf["slice"]
 
+            placed = False
             for node in sorted(G.nodes):
                 avail_cpu = local_node_capacity.get(node, 0)
 
-                # CPU check
-                if avail_cpu < vnf_cpu:
-                    print(f"[DEBUG][FF] Skip node {node} for {vnf_id}: required={vnf_cpu}, available={avail_cpu}")
+                if avail_cpu < cpu_need:
+                    print(f"[DEBUG][FF] Skip node {node} for {vnf_id}: required={cpu_need}, available={avail_cpu}")
                     continue
 
                 # Anti-affinity
-                if any(node == placed_node and vnf["slice"] == other_vnf["slice"]
-                       for other_vnf_id, placed_node in placed_vnfs.items()
-                       for other_vnf in vnf_chain if other_vnf["id"] == other_vnf_id):
+                if any(node == placed_node and slice_id == next(v["slice"] for v in vnf_chain if v["id"] == other_id)
+                       for other_id, placed_node in placed_vnfs.items()):
                     print(f"[DEBUG][FF] Anti-affinity: {vnf_id} cannot be placed on node {node}.")
                     continue
 
-                # Place VNF
-                placed_vnfs[vnf_id] = node
-                local_node_capacity[node] -= vnf_cpu
+                temp_placed = placed_vnfs.copy()
+                temp_routed = routed_vls.copy()
+                temp_node_capacity = deepcopy(local_node_capacity)
+                temp_link_capacity = deepcopy(local_link_capacity)
+                temp_g_cost = g_cost
+                routing_ok = True
+
+                temp_node_capacity[node] -= cpu_need
+                temp_placed[vnf_id] = node
+
+                # Try to route internal VLs
+                for vl in vl_chain:
+                    src, dst = vl["from"], vl["to"]
+                    if src in temp_placed and dst in temp_placed and (src, dst) not in temp_routed:
+                        src_node, dst_node = temp_placed[src], temp_placed[dst]
+                        path, lat = shortest_path_with_capacity(G, src_node, dst_node,
+                                                                temp_link_capacity, vl["bandwidth"])
+                        if path is None:
+                            print(f"[DEBUG][FF] No feasible path for VL {src}->{dst}.")
+                            routing_ok = False
+                            break
+                        for u, v in zip(path[:-1], path[1:]):
+                            bw = vl["bandwidth"]
+                            if (u, v) in temp_link_capacity:
+                                temp_link_capacity[(u, v)] -= bw
+                            else:
+                                temp_link_capacity[(v, u)] -= bw
+                        temp_routed[(src, dst)] = path
+                        temp_g_cost += lat
+
+                if not routing_ok:
+                    continue
+
+                # ENTRY → first and last → EXIT if defined
+                if entry is not None and exit_ is not None and vnf_chain:
+                    first_id, last_id = vnf_chain[0]["id"], vnf_chain[-1]["id"]
+
+                    if ("ENTRY", first_id) not in temp_routed and first_id in temp_placed:
+                        path, lat = shortest_path_with_capacity(G, entry, temp_placed[first_id],
+                                                                temp_link_capacity,
+                                                                vl_chain[0]["bandwidth"] if vl_chain else 0)
+                        if path is None:
+                            routing_ok = False
+                        else:
+                            for u, v in zip(path[:-1], path[1:]):
+                                bw = vl_chain[0]["bandwidth"] if vl_chain else 0
+                                if (u, v) in temp_link_capacity:
+                                    temp_link_capacity[(u, v)] -= bw
+                                else:
+                                    temp_link_capacity[(v, u)] -= bw
+                            temp_routed[("ENTRY", first_id)] = path
+                            temp_g_cost += lat
+
+                    if not routing_ok:
+                        continue
+
+                    if (last_id, "EXIT") not in temp_routed and last_id in temp_placed:
+                        path, lat = shortest_path_with_capacity(G, temp_placed[last_id], exit_,
+                                                                temp_link_capacity,
+                                                                vl_chain[-1]["bandwidth"] if vl_chain else 0)
+                        if path is None:
+                            routing_ok = False
+                        else:
+                            for u, v in zip(path[:-1], path[1:]):
+                                bw = vl_chain[-1]["bandwidth"] if vl_chain else 0
+                                if (u, v) in temp_link_capacity:
+                                    temp_link_capacity[(u, v)] -= bw
+                                else:
+                                    temp_link_capacity[(v, u)] -= bw
+                            temp_routed[(last_id, "EXIT")] = path
+                            temp_g_cost += lat
+
+                if not routing_ok:
+                    continue
+
+                # Commit placement and routing
+                placed_vnfs = temp_placed
+                routed_vls = temp_routed
+                local_node_capacity = temp_node_capacity
+                local_link_capacity = temp_link_capacity
+                g_cost = temp_g_cost
                 placed = True
+
                 print(f"[INFO][FF] Placed {vnf_id} on node {node} "
-                      f"(use={vnf_cpu}, remaining={local_node_capacity[node]}).")
+                      f"(use={cpu_need}, remaining={local_node_capacity[node]}).")
                 break
 
             if not placed:
-                print(f"[WARN][FF] Could not place {vnf_id}, slice {i} rejected.")
+                print(f"[WARN][FF] Failed to place VNF {vnf_id}, slice {i} rejected.")
                 success = False
                 break
 
-            # Try to route VLs made feasible by this placement
-            for vl in vl_chain:
-                src, dst = vl["from"], vl["to"]
-                if src in placed_vnfs and dst in placed_vnfs and (src, dst) not in routed_vls:
-                    src_node = placed_vnfs[src]
-                    dst_node = placed_vnfs[dst]
-                    try:
-                        path = nx.shortest_path(G, src_node, dst_node, weight="latency")
-                        total_latency = sum(link_latency.get((path[j], path[j+1]), 9999) for j in range(len(path)-1))
-
-                        if total_latency > vl["latency"]:
-                            print(f"[DEBUG][FF] Latency SLA failed for VL {src}->{dst}: "
-                                  f"{total_latency} > {vl['latency']}")
-                            success = False
-                            break
-
-                        if any(local_link_capacity.get((path[j], path[j+1]), 0) < vl["bandwidth"] and
-                               local_link_capacity.get((path[j+1], path[j]), 0) < vl["bandwidth"]
-                               for j in range(len(path)-1)):
-                            print(f"[DEBUG][FF] Bandwidth SLA failed for VL {src}->{dst}.")
-                            success = False
-                            break
-
-                        # Deduct bandwidth locally
-                        for j in range(len(path)-1):
-                            u, v = path[j], path[j+1]
-                            if (u, v) in local_link_capacity:
-                                local_link_capacity[(u, v)] -= vl["bandwidth"]
-                            elif (v, u) in local_link_capacity:
-                                local_link_capacity[(v, u)] -= vl["bandwidth"]
-
-                        routed_vls[(src, dst)] = path
-                        print(f"[INFO][FF] Routed VL {src}->{dst} via {path} "
-                              f"(latency={total_latency}, bw={vl['bandwidth']}).")
-
-                    except nx.NetworkXNoPath:
-                        print(f"[DEBUG][FF] No path available for VL {src}->{dst}.")
-                        success = False
-                        break
-
-            if not success:
-                break
-
         if success:
-            # Commit resources globally
             node_capacity_global = local_node_capacity
             link_capacity_global = local_link_capacity
-            results.append(FFState(placed_vnfs, routed_vls))
+            results.append({"slice": i, "accepted": True, "g_cost": g_cost})
+            full_results.append(FFState(placed_vnfs, routed_vls, g_cost))
             print(f"[SUMMARY][FF] Slice {i} accepted. "
                   f"Remaining min_node_cpu={min(node_capacity_global.values())}, "
                   f"links_low_bw={sum(1 for v in link_capacity_global.values() if v <= 0)}")
         else:
-            results.append(None)
+            results.append({"slice": i, "accepted": False, "g_cost": None})
+            full_results.append(None)
             print(f"[SUMMARY][FF] Slice {i} rejected.")
 
-    # Build summary table
-    summary = [{
-        "slice": i,
-        "accepted": r is not None
-    } for i, r in enumerate(results, start=1)]
-    df = pd.DataFrame(summary)
-
+    df = pd.DataFrame(results)
     if csv_path:
         try:
             df.to_csv(csv_path, index=False)
@@ -128,4 +191,4 @@ def run_first_fit(G, slices, node_capacity_base, link_capacity_base, link_latenc
         except Exception as e:
             print(f"[WARN][FF] Could not write CSV: {e}")
 
-    return df, results
+    return df, full_results
