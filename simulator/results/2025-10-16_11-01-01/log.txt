@@ -1,0 +1,46 @@
+Experiment timestamp: 2025-10-16 11:01:06.128740
+Number of slices: 6
+Number of VNFs: 18
+
+=== Summary ===
+ slice  accepted  g_cost
+     1      True     3.0
+     2      True     3.0
+     3      True     3.0
+     4      True     4.0
+     5      True     4.0
+     6      True     4.0 slice  accepted  g_cost
+     1      True     3.0
+     2      True     3.0
+     3      True     3.0
+     4      True     4.0
+     5      True     4.0
+     6      True     4.0 slice  accepted  g_cost
+     1      True     3.0
+     2      True     3.0
+     3      True     3.0
+     4      True     4.0
+     5      True     4.0
+     6      True     4.0 slice  accepted  g_cost
+     1      True     6.0
+     2      True     7.0
+     3      True     5.0
+     4      True     5.0
+     5      True     6.0
+     6     False     NaN slice  accepted  g_cost
+     1      True     7.0
+     2      True     6.0
+     3      True     6.0
+     4      True     6.0
+     5      True     6.0
+     6      True     5.0       Method  Slices Accepted  Total Bandwidth  Total Latency  Total Energy
+           A*                6           2040.0           21.0       20.7175
+          ABO                6           2040.0           21.0       20.7175
+         FABO                6           2040.0           21.0       20.7175
+    First Fit                6           2320.0           36.0       22.5125
+     Best Fit                5           2180.0           29.0       25.4000
+MILP (Gurobi)                6           2175.0           15.0       20.5375
+
+=== MILP ===
+ slice  accepted  g_cost
+     6      True 21.7225

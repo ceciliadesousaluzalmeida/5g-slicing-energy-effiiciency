@@ -1,7 +1,0 @@
-Method,Slices Accepted,Total Bandwidth,Total Latency,Total Energy
-A*,3,190.0,3.0,9.2
-ABO,3,190.0,3.0,8.2
-FABO,3,190.0,3.0,9.2
-First Fit,3,190.0,3.0,8.2
-Best-fit,3,190.0,3.0,7.199999999999999
-MILP,3,,,0.21333333333333335

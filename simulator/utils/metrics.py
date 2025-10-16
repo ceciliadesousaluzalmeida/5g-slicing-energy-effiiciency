@@ -275,15 +275,12 @@ def compute_total_energy_with_routing(
 
     return energy_cpu + energy_routing
 
-
-# All comments in English
-# All comments in English
 def compute_energy_new(result_list, slices, node_capacity_base, link_capacity_base):
     """
     Generic normalized energy model:
     - Node energy = 1 (if active) + utilization fraction
     - Link energy = utilization fraction
-    Works with slices = list of (vnfs, vls).
+    Works with slices = list of (vnfs, vls) or (vnfs, vls, entry, exit_).
     """
     node_usage = {n: 0 for n in node_capacity_base}
     link_usage = {e: 0 for e in link_capacity_base}
@@ -292,34 +289,46 @@ def compute_energy_new(result_list, slices, node_capacity_base, link_capacity_ba
         if state is None:
             continue
 
-        # VNFs: placed_vnfs = {vnf_id: node_id}
+        # --- VNFs: placed_vnfs = {vnf_id: node_id} ---
         for vnf_id, node in getattr(state, "placed_vnfs", {}).items():
-            # find vnf info
-            for vnfs, _ in slices:
+            for slice_data in slices:
+                # Support both 2-tuple and 4-tuple slice structures
+                vnfs = slice_data[0] if len(slice_data) >= 1 else []
                 for v in vnfs:
                     if v["id"] == vnf_id:
                         node_usage[node] += v["cpu"]
 
-        # VLs: routed_vls = {vl_id: path_edges}
-        for vl_id, path in getattr(state, "routed_vls", {}).items():
-            # find vl info
-            for _, vls in slices:
+        # --- VLs: routed_vls = {vl_id or (src,to): path_edges} ---
+        for vl_key, path in getattr(state, "routed_vls", {}).items():
+            for slice_data in slices:
+                vls = slice_data[1] if len(slice_data) >= 2 else []
                 for vl in vls:
-                    # identify by from->to string
-                    if f"{vl['from']}->{vl['to']}" == vl_id:
+                    # Support both string and tuple identifiers
+                    if (
+                        isinstance(vl_key, tuple)
+                        and len(vl_key) == 2
+                        and vl_key == (vl["from"], vl["to"])
+                    ) or (
+                        isinstance(vl_key, str)
+                        and vl_key == f"{vl['from']}->{vl['to']}"
+                    ):
                         bw_req = vl["bandwidth"]
-                        for e in path:
-                            link_usage[e] += bw_req
+                        # Add bandwidth usage on each edge
+                        for i in range(len(path) - 1):
+                            e = (path[i], path[i + 1])
+                            e = e if e in link_capacity_base else (e[1], e[0])
+                            if e in link_usage:
+                                link_usage[e] += bw_req
 
-    # Normalized node energy
+    # --- Normalized node energy ---
     total_energy = 0.0
     for n, used in node_usage.items():
         cap = node_capacity_base[n]
         if used > 0:
-            total_energy += 1.0
-            total_energy += used / cap
+            total_energy += 1.0  # base activation
+            total_energy += used / cap  # proportional usage
 
-    # Normalized link energy
+    # --- Normalized link energy ---
     for e, used in link_usage.items():
         cap = link_capacity_base[e]
         if used > 0:
@@ -327,3 +336,245 @@ def compute_energy_new(result_list, slices, node_capacity_base, link_capacity_ba
             total_energy += used / cap
 
     return total_energy
+
+
+
+def _is_vl_routed(result, slice_idx, src, dst):
+    """
+    Check if a VL (src->dst) is routed in 'result', accepting different key styles:
+    - (src, dst)
+    - (dst, src)                # reversed order
+    - (slice_idx, (src, dst))
+    - (slice_idx, (dst, src))
+    Accepts either a path (list of nodes) or a list of edges (u,v).
+    Works with both CBC and Gurobi adapters.
+    """
+    if not result or not getattr(result, "routed_vls", None):
+        return False
+
+    # direct heuristic keys
+    if (src, dst) in result.routed_vls:
+        val = result.routed_vls[(src, dst)]
+        return bool(val)
+    if (dst, src) in result.routed_vls:
+        val = result.routed_vls[(dst, src)]
+        return bool(val)
+
+    # MILP adapter style
+    key1 = (slice_idx, (src, dst))
+    key2 = (slice_idx, (dst, src))
+    if key1 in result.routed_vls:
+        return bool(result.routed_vls[key1])
+    if key2 in result.routed_vls:
+        return bool(result.routed_vls[key2])
+
+    return False
+
+
+
+def count_accepted_slices(results, slices, eps=1e-6, verbose=False):
+    """
+    Count accepted slices:
+      - All VNFs placed
+      - All VLs routed
+
+    Works with:
+      - slices = [(vnf_chain, vl_chain)] or [(vnf_chain, vl_chain, entry, exit_)]
+      - heuristics & MILP-iterative: list with one result per slice (or None)
+      - MILP aggregated adapter: single result with routed_vls possibly keyed by (s_idx,(src,dst))
+      - MILP raw: single result with .values (fallback support)
+    """
+    if not results:
+        return 0
+
+    # --- Helpers ---------------------------------------------------------
+
+    def _get_vnfs_vls(slice_data):
+        """Return (vnfs, vls) for 2- or 4-tuple slice formats."""
+        if isinstance(slice_data, (list, tuple)):
+            if len(slice_data) >= 2:
+                return slice_data[0], slice_data[1]
+            elif len(slice_data) == 1:
+                return slice_data[0], []
+        return [], []
+
+    def _is_entry_exit_leg(key):
+        """Detect ENTRY/EXIT special legs (we ignore them for acceptance criteria)."""
+        if isinstance(key, tuple):
+            return (len(key) == 2) and ("ENTRY" in key or "EXIT" in key)
+        if isinstance(key, str):
+            return key.startswith("ENTRY->") or key.endswith("->EXIT")
+        return False
+
+    def _vl_present(routed_vls, s_idx, src, dst):
+        """
+        Check multiple key conventions in routed_vls:
+         - (src, dst), (dst, src)
+         - (s_idx, (src, dst)), (s_idx, (dst, src))
+         - "src->dst"
+        ENTRY/EXIT legs are ignored.
+        """
+        # direct tuple keys
+        if (src, dst) in routed_vls or (dst, src) in routed_vls:
+            return True
+
+        # per-slice keyed tuples
+        key1 = (s_idx, (src, dst))
+        key2 = (s_idx, (dst, src))
+        if key1 in routed_vls or key2 in routed_vls:
+            return True
+
+        # string keys
+        key_s = f"{src}->{dst}"
+        key_s_rev = f"{dst}->{src}"
+        if key_s in routed_vls or key_s_rev in routed_vls:
+            return True
+
+        return False
+
+    # --------------------------------------------------------------------
+    # Detect result flavor
+    r0 = results[0]
+
+    # Case C: MILP raw (.values)
+    if hasattr(r0, "values") and isinstance(r0.values, dict):
+        var_dict = r0.values
+        accepted = 0
+        for s_idx in range(len(slices)):
+            vnfs, vls = _get_vnfs_vls(slices[s_idx])
+
+            # VNFs placed?
+            vnfs_ok = True
+            for v in vnfs:
+                i = v["id"]
+                assigned = any(
+                    isinstance(k, tuple) and len(k) >= 3 and k[0] == "v" and k[1] == i and val > 0.5
+                    for k, val in var_dict.items()
+                )
+                if not assigned:
+                    vnfs_ok = False
+                    if verbose:
+                        print(f"[MILP raw] slice {s_idx}: VNF {i} not allocated")
+                    break
+
+            # VLs routed?
+            vls_ok = True
+            if vnfs_ok:
+                for vl in vls:
+                    src, dst = vl["from"], vl["to"]
+                    routed = any(
+                        isinstance(k, tuple)
+                        and len(k) >= 4
+                        and k[0] == "f"
+                        and k[2] == s_idx
+                        and set(k[3]) == {src, dst}
+                        and val > 0.5
+                        for k, val in var_dict.items()
+                    )
+                    if not routed:
+                        vls_ok = False
+                        if verbose:
+                            print(f"[MILP raw] slice {s_idx}: VL ({src}->{dst}) not routed")
+                        break
+
+            if vnfs_ok and vls_ok:
+                accepted += 1
+                if verbose:
+                    print(f"[MILP raw] slice {s_idx}: ACCEPTED ✓")
+
+        if verbose:
+            print(f"Total slices accepted (MILP raw): {accepted}/{len(slices)}")
+        return accepted
+
+    # Case B: MILP aggregated adapter (single result), where routed_vls keys may include s_idx
+    is_milp_aggregated = (
+        len(results) == 1
+        and hasattr(r0, "routed_vls")
+        and isinstance(getattr(r0, "routed_vls", {}), dict)
+        and any(
+            (isinstance(k, tuple) and len(k) >= 2 and isinstance(k[0], int))  # e.g., (s_idx, (src,dst))
+            or (isinstance(k, tuple) and len(k) == 2)                          # or plain (src,dst)
+            or isinstance(k, str)                                              # or "src->dst"
+            for k in r0.routed_vls.keys()
+        )
+    )
+
+    if is_milp_aggregated:
+        accepted = 0
+        placed_vnfs = getattr(r0, "placed_vnfs", {})
+        routed_vls = {
+            k: v for k, v in getattr(r0, "routed_vls", {}).items()
+            if not _is_entry_exit_leg(k)  # ignore ENTRY/EXIT legs
+        }
+
+        for s_idx in range(len(slices)):
+            vnfs, vls = _get_vnfs_vls(slices[s_idx])
+
+            vnfs_ok = all(v["id"] in placed_vnfs for v in vnfs)
+            if not vnfs_ok and verbose:
+                missing = [v["id"] for v in vnfs if v["id"] not in placed_vnfs]
+                print(f"[MILP adapter] slice {s_idx}: missing VNFs {missing}")
+
+            vls_ok = True
+            if vnfs_ok:
+                for vl in vls:
+                    src, dst = vl["from"], vl["to"]
+                    if not _vl_present(routed_vls, s_idx, src, dst):
+                        vls_ok = False
+                        if verbose:
+                            print(f"[MILP adapter] slice {s_idx}: VL ({src}->{dst}) not routed")
+                        break
+
+            if vnfs_ok and vls_ok:
+                accepted += 1
+                if verbose:
+                    print(f"[MILP adapter] slice {s_idx}: ACCEPTED ✓")
+
+        if verbose:
+            print(f"Total slices accepted (MILP adapter): {accepted}/{len(slices)}")
+        return accepted
+
+    # Case A: heurísticas e MILP iterativo (um resultado por slice)
+    accepted = 0
+    # results pode ser menor que len(slices) se parou no meio; por isso iteramos sobre índices
+    for s_idx in range(len(slices)):
+        result = results[s_idx] if s_idx < len(results) else None
+        if not result or not hasattr(result, "placed_vnfs") or not hasattr(result, "routed_vls"):
+            if verbose:
+                print(f"[Heuristic/Iter MILP] slice {s_idx}: no result or missing attributes")
+            continue
+
+        vnfs, vls = _get_vnfs_vls(slices[s_idx])
+
+        # VNFs
+        vnfs_ok = all(v["id"] in result.placed_vnfs for v in vnfs)
+        if not vnfs_ok:
+            if verbose:
+                missing = [v["id"] for v in vnfs if v["id"] not in result.placed_vnfs]
+                print(f"[Heuristic/Iter MILP] slice {s_idx}: missing VNFs {missing}")
+            continue
+
+        # VLs (ignora ENTRY/EXIT)
+        routed_vls = {
+            k: v for k, v in getattr(result, "routed_vls", {}).items()
+            if not _is_entry_exit_leg(k)
+        }
+        vls_ok = all(
+            _vl_present(routed_vls, s_idx, vl["from"], vl["to"])
+            for vl in vls
+        )
+        if not vls_ok and verbose:
+            missing = [
+                (vl["from"], vl["to"]) for vl in vls
+                if not _vl_present(routed_vls, s_idx, vl["from"], vl["to"])
+            ]
+            print(f"[Heuristic/Iter MILP] slice {s_idx}: missing VLs {missing}")
+
+        if vnfs_ok and vls_ok:
+            accepted += 1
+            if verbose:
+                print(f"[Heuristic/Iter MILP] slice {s_idx}: ACCEPTED ✓")
+
+    if verbose:
+        print(f"Total slices accepted (heuristics/iterative): {accepted}/{len(slices)}")
+    return accepted
