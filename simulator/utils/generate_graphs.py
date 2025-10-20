@@ -55,98 +55,53 @@ def plot_solution_heuristic(G, result, title="Heuristic Solution", pos=None):
     plt.title(title)
     plt.show()
 
-def plot_all_routes(G, results, title="All Routed Paths (All Slices)"):
-    import matplotlib.pyplot as plt
-    import networkx as nx
-    import random
+def plot_all_routes(G, results, title="All Routes", results_dir="./results"):
+    """
+    Plot all routed paths from a list of heuristic results and save the figure in results_dir.
+    """
+    # --- Ensure directory exists ---
+    os.makedirs(results_dir, exist_ok=True)
 
-    # --- Layout ---
-    pos = nx.spring_layout(G, seed=42, k=0.8)
-    plt.figure(figsize=(12, 9))
-
-    # === Base topology (black background) ===
-    nx.draw_networkx_nodes(
-        G,
-        pos,
-        node_color="white",
-        edgecolors="black",
-        node_size=850,
-        linewidths=1.8,
-        alpha=1.0,
-    )
-    nx.draw_networkx_edges(
-        G,
-        pos,
-        edge_color="black",
-        width=1.2,
-        style="solid",
-        alpha=0.4,
-    )
-    nx.draw_networkx_labels(G, pos, font_size=9, font_weight="bold", font_color="black")
-
-    # === Color palette (strong contrast) ===
-    cmap = (
-        list(plt.cm.tab10.colors)
-        + list(plt.cm.Set2.colors)
-        + list(plt.cm.Dark2.colors)
-        + list(plt.cm.Paired.colors)
+    pos = nx.spring_layout(G, seed=42)
+    plt.figure(figsize=(10, 8))
+    
+    # Base graph (black background network)
+    nx.draw(
+        G, pos,
+        node_color="lightgray", edge_color="black",
+        node_size=800, width=0.5, with_labels=True,
+        font_size=9
     )
 
-    # === Plot each slice route ===
+    colors = plt.cm.tab20.colors
     color_idx = 0
-    used_labels = set()
-    label_offset_factor = 0.05
 
     for s_idx, res in enumerate(results):
         if not res or not hasattr(res, "routed_vls"):
             continue
-
         for (src, dst), path in res.routed_vls.items():
             edges_in_path = [(path[i], path[i + 1]) for i in range(len(path) - 1)]
-            color = cmap[color_idx % len(cmap)]
+            color = colors[color_idx % len(colors)]
+            nx.draw_networkx_edges(G, pos, edgelist=edges_in_path,
+                                   edge_color=[color], width=2.5, alpha=0.8)
+            mid = path[len(path) // 2]
+            plt.text(
+                pos[mid][0], pos[mid][1] + 0.03,
+                f"S{s_idx + 1}:{src}->{dst}",
+                color=color, fontsize=7, ha='center'
+            )
             color_idx += 1
 
-            # Draw route edges over black background
-            nx.draw_networkx_edges(
-                G,
-                pos,
-                edgelist=edges_in_path,
-                edge_color=[color],
-                width=3.0,
-                alpha=0.9,
-            )
-
-            # --- Label positioning ---
-            mid_idx = len(path) // 2
-            mid_node = path[mid_idx]
-            x, y = pos[mid_node]
-            offset_x = random.uniform(-0.04, 0.04)
-            offset_y = label_offset_factor * ((color_idx % 5) - 2)
-            label_text = f"S{s_idx + 1}: {src}->{dst}"
-
-            if label_text not in used_labels:
-                plt.text(
-                    x + offset_x,
-                    y + offset_y,
-                    label_text,
-                    color=color,
-                    fontsize=8,
-                    fontweight="bold",
-                    bbox=dict(
-                        facecolor="white",
-                        alpha=0.8,
-                        edgecolor="none",
-                        boxstyle="round,pad=0.15",
-                    ),
-                )
-                used_labels.add(label_text)
-
-            print(f"[Slice {s_idx+1}] Path {src}->{dst}: {path}")
-
-    plt.title(title, fontsize=14, fontweight="bold", pad=15)
-    plt.axis("off")
+    plt.title(title)
     plt.tight_layout()
-    plt.show()
+
+    # --- Save figure ---
+    filename = title.lower().replace(" ", "_") + ".png"
+    output_path = os.path.join(results_dir, filename)
+    plt.savefig(output_path, dpi=300)
+    plt.close()
+
+    print(f"[INFO] Saved route plot to {output_path}")
 
 
 def plot_cpu_usage(G, slices, method_results, results_dir):

@@ -2,11 +2,11 @@ from types import SimpleNamespace
 
 def create_instance(G, slices):
     """
-    Build a MILP-compatible instance from graph G and slices.
+    Build a MILP-compatible instance with per-VL (i->j) bandwidth and latency.
     Supports slices of forms:
       (vnf_chain, vl_chain)
       (vnf_chain, vl_chain, entry)
-      (vnf_chain, vl_chain, entry, exit_)
+    EXIT was removed.
     """
     instance = SimpleNamespace()
 
@@ -25,56 +25,49 @@ def create_instance(G, slices):
     # --- Slice-level attributes ---
     instance.V_of_s = {}
     instance.CPU_i = {}
-    instance.BW_s = {}
-    instance.L_s = {}
-
-    # Optional per-slice entry/exit dictionaries
+    instance.BW_sij = {}   # bandwidth per (s, i, j)
+    instance.L_sij = {}    # latency per (s, i, j)
+    instance.BW_entry = {} # bandwidth from ENTRY->first VNF
+    instance.L_entry = {}  # latency from ENTRY->first VNF
     instance.entry_of_s = {}
-    instance.exit_of_s = {}
 
+    # --- Build per-slice data ---
     for s_idx, slice_data in enumerate(slices):
-        # Normalize tuple forms
         if len(slice_data) == 2:
             vnf_chain, vl_chain = slice_data
             entry = None
-            exit_ = None
         elif len(slice_data) == 3:
             vnf_chain, vl_chain, entry = slice_data
-            exit_ = None
-        elif len(slice_data) == 4:
-            vnf_chain, vl_chain, entry, exit_ = slice_data
         else:
             raise ValueError(f"Unexpected slice structure ({len(slice_data)} elements): {slice_data}")
 
-        # Register VNFs
+        # Register VNF list
         vnf_ids = [vnf["id"] for vnf in vnf_chain]
         instance.V_of_s[s_idx] = vnf_ids
 
-        # CPU requirements
+        # CPU per VNF
         for vnf in vnf_chain:
             instance.CPU_i[vnf["id"]] = vnf["cpu"]
 
-        # Average bandwidth and max latency for the slice
-        if vl_chain:
-            bw_avg = sum(vl["bandwidth"] for vl in vl_chain) / len(vl_chain)
-            lat_max = max(vl["latency"] for vl in vl_chain)
-        else:
-            bw_avg = 0.0
-            lat_max = 0.0
+        # Per-VL attributes
+        for q in range(len(vnf_ids) - 1):
+            i, j = vnf_ids[q], vnf_ids[q + 1]
+            vl = vl_chain[q]
+            instance.BW_sij[(s_idx, i, j)] = float(vl["bandwidth"])
+            instance.L_sij[(s_idx, i, j)] = float(vl["latency"])
 
-        instance.BW_s[s_idx] = bw_avg
-        instance.L_s[s_idx] = lat_max
-
-        # Optional ENTRY/EXIT registration
+        # ENTRY (optional)
         if entry is not None:
             instance.entry_of_s[s_idx] = entry
-        if exit_ is not None:
-            instance.exit_of_s[s_idx] = exit_
+            if vl_chain:
+                instance.BW_entry[s_idx] = float(vl_chain[0]["bandwidth"])
+                instance.L_entry[s_idx] = float(vl_chain[0]["latency"])
+            else:
+                instance.BW_entry[s_idx] = 0.0
+                instance.L_entry[s_idx] = 0.0
 
-    # Default ENTRY/EXIT (if none provided at all)
+    # Default ENTRY node if none given
     if not instance.entry_of_s:
         instance.entry_node = 2
-    if not instance.exit_of_s:
-        instance.exit_node = None
 
     return instance

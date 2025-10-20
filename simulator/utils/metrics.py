@@ -48,31 +48,58 @@ def _extract_milp_f_matrix(milp_res, instance) -> Dict[int, Dict[Tuple[int,int],
             F_s_e[s][e] += val  # val is 0/1 here
     return F_s_e
 
+    
 def compute_milp_bandwidth_latency(milp_res, instance):
     """
-    Compute total bandwidth and latency usage for MILP results.
-    Based on variables f[(e,s,(i,j))] from Gurobi.
+    Compute total bandwidth and latency from MILP results (Gurobi).
+    Compatible with new instance format (no BW_s, uses per-link VL data).
     """
-    values = milp_res.values
+    var_dict = getattr(milp_res, "values", {})
+
     per_link_bw = {e: 0.0 for e in instance.E}
+    per_link_lat = {e: 0.0 for e in instance.E}
     per_slice_bw = {s: 0.0 for s in instance.S}
     per_slice_lat = {s: 0.0 for s in instance.S}
 
-    for key, val in values.items():
-        # Only handle f variables that are active
-        if not (isinstance(key, tuple) and len(key) == 4 and key[0] == "f"):
+    # --- iterate over f[(e, s, (i,j))] variables ---
+    for key, val in var_dict.items():
+        if not isinstance(key, tuple):
             continue
-        e, s, (i, j) = key[1], key[2], key[3]
-        if val > 0.5:
-            bw = instance.BW_s[s]
+        if key[0] == "f" and val > 0.5:
+            _, e, s, (i, j) = key
+            # Bandwidth: use VL-specific bandwidth if available
+            bw = 0.0
+            if hasattr(instance, "BW_sij"):
+                bw = instance.BW_sij.get((s, i, j), 0.0)
+            elif hasattr(instance, "BW_s"):
+                bw = instance.BW_s.get(s, 0.0)
+            # Latency: per edge latency × flow usage
+            lat = instance.lat_e.get(e, instance.lat_e.get((e[1], e[0]), 0.0))
             per_link_bw[e] += bw
             per_slice_bw[s] += bw
-            per_slice_lat[s] += instance.lat_e[e]
+            per_link_lat[e] += lat
+            per_slice_lat[s] += lat
+
+    # Optional: entry flows
+    if hasattr(instance, "entry_of_s"):
+        for key, val in var_dict.items():
+            if key[0] == "f_entry" and val > 0.5:
+                _, e, s = key
+                bw = 0.0
+                if hasattr(instance, "BW_entry"):
+                    bw = instance.BW_entry.get(s, 0.0)
+                elif hasattr(instance, "BW_s"):
+                    bw = instance.BW_s.get(s, 0.0)
+                lat = instance.lat_e.get(e, instance.lat_e.get((e[1], e[0]), 0.0))
+                per_link_bw[e] += bw
+                per_slice_bw[s] += bw
+                per_link_lat[e] += lat
+                per_slice_lat[s] += lat
 
     total_bw = sum(per_link_bw.values())
-    total_lat = sum(per_slice_lat.values())
+    total_lat = sum(per_link_lat.values())
 
-    return total_bw, total_lat, per_slice_bw, per_slice_lat
+    return total_bw, total_lat, per_link_bw, per_link_lat
 
 
 

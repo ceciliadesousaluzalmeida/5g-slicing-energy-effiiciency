@@ -1,0 +1,76 @@
+Experiment timestamp: 2025-10-20 10:52:19.290015
+Number of slices: 12
+Number of VNFs: 36
+
+=== Summary ===
+ slice  accepted  g_cost
+     1      True     2.0
+     2      True     2.0
+     3      True     2.0
+     4      True     2.0
+     5      True     2.0
+     6      True     2.0
+     7      True     2.0
+     8      True     2.0
+     9      True     2.0
+    10      True     2.0
+    11      True     2.0
+    12      True     3.0 slice  accepted  g_cost
+     1      True     3.0
+     2      True     3.0
+     3      True     3.0
+     4      True     3.0
+     5      True     3.0
+     6      True     3.0
+     7      True     3.0
+     8      True     3.0
+     9      True     4.0
+    10      True     4.0
+    11      True     4.0
+    12      True     5.0 slice  accepted  g_cost
+     1      True     3.0
+     2      True     3.0
+     3      True     3.0
+     4      True     3.0
+     5      True     3.0
+     6      True     3.0
+     7      True     3.0
+     8      True     4.0
+     9      True     4.0
+    10      True     4.0
+    11      True     4.0
+    12      True     5.0 slice  accepted  g_cost
+     1      True     4.0
+     2      True     5.0
+     3      True     4.0
+     4      True     5.0
+     5      True     4.0
+     6      True     5.0
+     7      True     4.0
+     8      True     5.0
+     9      True     4.0
+    10      True     5.0
+    11      True     4.0
+    12      True     5.0 slice  accepted  g_cost
+     1      True     5.0
+     2      True     5.0
+     3      True     4.0
+     4      True     4.0
+     5      True     5.0
+     6      True     5.0
+     7      True     6.0
+     8      True     5.0
+     9      True     5.0
+    10      True     6.0
+    11      True     6.0
+    12      True     6.0       Method  Slices Accepted  Total Bandwidth  Total Latency  Total Energy
+           A*               12           1130.0           25.0      28.22875
+          ABO               12           1230.0           41.0      35.22875
+         FABO               12           1280.0           42.0      36.23500
+    First Fit               12           1700.0           62.0      30.64625
+     Best Fit               12           1440.0           54.0      36.88000
+MILP (Gurobi)                0              0.0            0.0       0.00000
+
+=== MILP ===
+ slice  accepted g_cost
+    12      True   None
