@@ -12,9 +12,9 @@ def sanity_check_milp_gurobi(res, instance, slices, eps=1e-6):
         print("Objective value: None (no optimal solution)")
     print(f"Status: {res.status_str}")
 
-    var_dict = getattr(res, "values", {})  # expected: dict with ('v', i, n), ('f', e, s, (i,j)), etc.
+    var_dict = getattr(res, "values", {})
 
-    # --- Helper to extract vnfs and vls from flexible slice tuples ---
+    # --- Helper: extract vnfs and vls from flexible slice tuples ---
     def _get_vnfs_vls(slice_data):
         if isinstance(slice_data, (list, tuple)):
             if len(slice_data) >= 2:
@@ -26,9 +26,7 @@ def sanity_check_milp_gurobi(res, instance, slices, eps=1e-6):
     # --- CPU usage per node ---
     cpu_used = {n: 0 for n in instance.N}
     for key, value in var_dict.items():
-        if not isinstance(key, tuple):
-            continue
-        if key[0] == "v" and value > 0.5:
+        if isinstance(key, tuple) and key[0] == "v" and value > 0.5:
             _, i, n = key
             cpu_used[n] += instance.CPU_i[i]
 
@@ -59,14 +57,12 @@ def sanity_check_milp_gurobi(res, instance, slices, eps=1e-6):
                 print(f"  VNF {i} ✗ NOT allocated")
                 ok = False
 
-        # --- VLs ---
+        # --- VLs (internal) ---
         for vl in vls:
             i, j = vl["from"], vl["to"]
             used_edges = []
             for key, value in var_dict.items():
-                if not isinstance(key, tuple):
-                    continue
-                if key[0] == "f" and value > 0.5:
+                if isinstance(key, tuple) and key[0] == "f" and value > 0.5:
                     _, e, s_idx, (src, dst) = key
                     if s_idx == s and {src, dst} == {i, j}:
                         used_edges.append(e)
@@ -76,13 +72,32 @@ def sanity_check_milp_gurobi(res, instance, slices, eps=1e-6):
                 print(f"  VL ({i}->{j}) ✗ NOT routed")
                 ok = False
 
-        # --- Entry/Exit edges (optional) ---
+        # --- ENTRY and EXIT routes (NEW) ---
         entry = getattr(instance, "entry_node", None)
         exit_ = getattr(instance, "exit_node", None)
-        if entry is not None:
-            print(f"  ENTRY node: {entry}")
-        if exit_ is not None:
-            print(f"  EXIT node: {exit_}")
+
+        used_entry_edges = [
+            e for key, val in var_dict.items()
+            if isinstance(key, tuple) and key[0] == "f_entry"
+            and key[2] == s and val > 0.5
+            for e in [key[1]]
+        ]
+        used_exit_edges = [
+            e for key, val in var_dict.items()
+            if isinstance(key, tuple) and key[0] == "f_exit"
+            and key[2] == s and val > 0.5
+            for e in [key[1]]
+        ]
+
+        if used_entry_edges:
+            print(f"  ENTRY→first path ✓ uses edges {used_entry_edges}")
+        elif entry is not None:
+            print(f"  ENTRY→first path ✗ not routed")
+
+        if used_exit_edges:
+            print(f"  last→EXIT path ✓ uses edges {used_exit_edges}")
+        elif exit_ is not None:
+            print(f"  last→EXIT path ✗ not routed")
 
         # --- Status per slice ---
         if ok:

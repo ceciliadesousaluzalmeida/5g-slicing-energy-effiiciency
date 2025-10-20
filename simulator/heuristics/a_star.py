@@ -1,6 +1,3 @@
-# a_star.py
-# All comments in English
-
 from copy import deepcopy
 import pandas as pd
 import networkx as nx
@@ -10,25 +7,16 @@ from queue import PriorityQueue
 class AStarState:
     def __init__(self, placed_vnfs=None, routed_vls=None, g_cost=0,
                  node_capacity=None, link_capacity=None):
-        # placed_vnfs: dict[vnf_id -> node]
-        # routed_vls:  dict[(src_vnf_id, dst_vnf_id) -> path(list of nodes)]
-        #              may include special keys: ("ENTRY", first_vnf_id), (last_vnf_id, "EXIT")
         self.placed_vnfs   = placed_vnfs or {}
         self.routed_vls    = routed_vls or {}
         self.g_cost        = g_cost
         self.node_capacity = node_capacity or {}
         self.link_capacity = link_capacity or {}
 
-    def is_goal(self, vnf_chain, vl_chain, entry=None, exit_=None):
-        base_done = (len(self.placed_vnfs) == len(vnf_chain)
-                     and len([1 for vl in vl_chain if (vl["from"], vl["to"]) in self.routed_vls]) == len(vl_chain))
-        if not base_done:
-            return False
-        if entry is None and exit_ is None:
-            return True
-        first_id = vnf_chain[0]["id"]
-        last_id  = vnf_chain[-1]["id"]
-        return (("ENTRY", first_id) in self.routed_vls) and ((last_id, "EXIT") in self.routed_vls)
+    def is_goal(self, vnf_chain, vl_chain, entry=None):
+        """Goal: all VNFs placed and all VLs routed."""
+        return (len(self.placed_vnfs) == len(vnf_chain) and
+                len([1 for vl in vl_chain if (vl["from"], vl["to"]) in self.routed_vls]) == len(vl_chain))
 
     def __lt__(self, other):
         return self.g_cost < other.g_cost
@@ -76,7 +64,7 @@ def run_astar(G, slices, node_capacity_base, link_capacity_base, csv_path=None):
     link_capacity_global = deepcopy(link_capacity_base)
 
     # ---------- Heuristic ----------
-    def heuristic_for_slice(state, vnf_chain, vl_chain, entry=None, exit_=None):
+    def heuristic_for_slice(state, vnf_chain, vl_chain, entry=None):
         h = 0.0
         for vl in vl_chain:
             key = (vl["from"], vl["to"])
@@ -90,27 +78,18 @@ def run_astar(G, slices, node_capacity_base, link_capacity_base, csv_path=None):
                 except nx.NetworkXNoPath:
                     h += 10_000.0
 
-        if entry is not None and exit_ is not None and vnf_chain:
+        if entry is not None and vnf_chain:
             first_id = vnf_chain[0]["id"]
-            last_id  = vnf_chain[-1]["id"]
-            if ("ENTRY", first_id) not in state.routed_vls:
-                first_node = state.placed_vnfs.get(first_id)
-                if first_node is not None:
-                    try:
-                        h += nx.shortest_path_length(G, entry, first_node, weight="latency")
-                    except nx.NetworkXNoPath:
-                        h += 10_000.0
-            if (last_id, "EXIT") not in state.routed_vls:
-                last_node = state.placed_vnfs.get(last_id)
-                if last_node is not None:
-                    try:
-                        h += nx.shortest_path_length(G, last_node, exit_, weight="latency")
-                    except nx.NetworkXNoPath:
-                        h += 10_000.0
+            first_node = state.placed_vnfs.get(first_id)
+            if first_node is not None and ("ENTRY", first_id) not in state.routed_vls:
+                try:
+                    h += nx.shortest_path_length(G, entry, first_node, weight="latency")
+                except nx.NetworkXNoPath:
+                    h += 10_000.0
         return float(h)
 
     # ---------- Expand ----------
-    def expand_state(state, vnf_chain, vl_chain, entry=None, exit_=None):
+    def expand_state(state, vnf_chain, vl_chain, entry=None):
         expansions = []
         unplaced_ids = [v["id"] for v in vnf_chain if v["id"] not in state.placed_vnfs]
         if not unplaced_ids:
@@ -124,7 +103,6 @@ def run_astar(G, slices, node_capacity_base, link_capacity_base, csv_path=None):
             avail_cpu = state.node_capacity.get(node, 0)
             cpu_need  = vnf_obj["cpu"]
             if avail_cpu < cpu_need:
-                print(f"[DEBUG][A*] Skip node {node} for {vnf_obj['id']}: need CPU={cpu_need}, available={avail_cpu}")
                 continue
 
             same_slice_on_node = any(
@@ -132,7 +110,6 @@ def run_astar(G, slices, node_capacity_base, link_capacity_base, csv_path=None):
                 for pid, n_ in state.placed_vnfs.items() if n_ == node
             )
             if same_slice_on_node:
-                print(f"[DEBUG][A*] Anti-affinity: {vnf_obj['id']} cannot share node {node}.")
                 continue
 
             new_placed = state.placed_vnfs.copy()
@@ -143,7 +120,6 @@ def run_astar(G, slices, node_capacity_base, link_capacity_base, csv_path=None):
 
             new_node_capacity[node] -= cpu_need
             new_placed[next_vnf_id] = node
-            print(f"[INFO][A*] Placed {next_vnf_id} on node {node} (CPU used={cpu_need}, remaining={new_node_capacity[node]}).")
 
             routing_ok = True
             for vl in vl_chain:
@@ -157,64 +133,34 @@ def run_astar(G, slices, node_capacity_base, link_capacity_base, csv_path=None):
                 path, lat = shortest_path_with_capacity(G, src_node, dst_node, new_link_capacity, vl["bandwidth"])
                 if path is None:
                     routing_ok = False
-                    print(f"[DEBUG][A*] No feasible path for VL {key}.")
                     break
                 for u, v in zip(path[:-1], path[1:]):
                     _dec_link_cap(new_link_capacity, u, v, vl["bandwidth"])
                 new_routed[key] = path
                 new_cost += lat
-                print(f"[INFO][A*] Routed VL {key}: {path} (lat={lat}).")
 
-            if not routing_ok:
-                print(f"[DEBUG][A*] Routing failed for {next_vnf_id} on node {node}.")
-                continue
-
-            if entry is not None and exit_ is not None and vnf_chain:
+            # connect ENTRY -> first VNF if applicable
+            if routing_ok and entry is not None and vnf_chain:
                 first_id = vnf_chain[0]["id"]
-                last_id  = vnf_chain[-1]["id"]
-
                 if ("ENTRY", first_id) not in new_routed:
                     first_node = new_placed.get(first_id)
                     if first_node is not None:
                         bw_first = vl_chain[0]["bandwidth"] if vl_chain else 0.0
                         path, lat = shortest_path_with_capacity(G, entry, first_node, new_link_capacity, bw_first)
                         if path is None:
-                            print(f"[DEBUG][A*] No path ENTRY->{first_id}.")
                             routing_ok = False
                         else:
                             for u, v in zip(path[:-1], path[1:]):
                                 _dec_link_cap(new_link_capacity, u, v, bw_first)
                             new_routed[("ENTRY", first_id)] = path
                             new_cost += lat
-                            print(f"[INFO][A*] Routed ENTRY->{first_id}: {path}")
 
-                if not routing_ok:
-                    continue
-
-                if (last_id, "EXIT") not in new_routed:
-                    last_node = new_placed.get(last_id)
-                    if last_node is not None:
-                        bw_last = vl_chain[-1]["bandwidth"] if vl_chain else 0.0
-                        path, lat = shortest_path_with_capacity(G, last_node, exit_, new_link_capacity, bw_last)
-                        if path is None:
-                            print(f"[DEBUG][A*] No path {last_id}->EXIT.")
-                            routing_ok = False
-                        else:
-                            for u, v in zip(path[:-1], path[1:]):
-                                _dec_link_cap(new_link_capacity, u, v, bw_last)
-                            new_routed[(last_id, "EXIT")] = path
-                            new_cost += lat
-                            print(f"[INFO][A*] Routed {last_id}->EXIT: {path}")
-
-            if not routing_ok:
-                print(f"[DEBUG][A*] Discarding state for {next_vnf_id} on node {node}.")
-                continue
-
-            expansions.append(AStarState(new_placed, new_routed, new_cost, new_node_capacity, new_link_capacity))
+            if routing_ok:
+                expansions.append(AStarState(new_placed, new_routed, new_cost, new_node_capacity, new_link_capacity))
         return expansions
 
     # ---------- Solve one slice ----------
-    def solve_one_slice(vnf_chain, vl_chain, entry=None, exit_=None):
+    def solve_one_slice(vnf_chain, vl_chain, entry=None):
         init_state = AStarState({}, {}, 0.0,
                                 deepcopy(node_capacity_global),
                                 deepcopy(link_capacity_global))
@@ -227,12 +173,12 @@ def run_astar(G, slices, node_capacity_base, link_capacity_base, csv_path=None):
             _, _, state = pq.get()
             visited += 1
 
-            if state.is_goal(vnf_chain, vl_chain, entry, exit_):
+            if state.is_goal(vnf_chain, vl_chain, entry):
                 print(f"[INFO][A*] Solution found after {visited} expansions.")
                 return state
 
-            for child in expand_state(state, vnf_chain, vl_chain, entry, exit_):
-                h = heuristic_for_slice(child, vnf_chain, vl_chain, entry, exit_)
+            for child in expand_state(state, vnf_chain, vl_chain, entry):
+                h = heuristic_for_slice(child, vnf_chain, vl_chain, entry)
                 counter += 1
                 pq.put((child.g_cost + h, counter, child))
 
@@ -243,12 +189,14 @@ def run_astar(G, slices, node_capacity_base, link_capacity_base, csv_path=None):
     for i, slice_data in enumerate(slices, start=1):
         if len(slice_data) == 2:
             vnf_chain, vl_chain = slice_data
-            entry, exit_ = None, None
+            entry = None
+        elif len(slice_data) == 3:
+            vnf_chain, vl_chain, entry = slice_data
         else:
-            vnf_chain, vl_chain, entry, exit_ = slice_data
+            raise ValueError(f"Unexpected slice format: {slice_data}")
 
         print(f"\n[INFO][A*] === Solving slice {i} (VNFs={len(vnf_chain)}, VLs={len(vl_chain)}) ===")
-        result_state = solve_one_slice(vnf_chain, vl_chain, entry, exit_)
+        result_state = solve_one_slice(vnf_chain, vl_chain, entry)
         astar_results.append(result_state)
 
         if result_state is None:
@@ -259,26 +207,20 @@ def run_astar(G, slices, node_capacity_base, link_capacity_base, csv_path=None):
         for vnf_id, node in result_state.placed_vnfs.items():
             vnf_cpu = next(v["cpu"] for v in vnf_chain if v["id"] == vnf_id)
             node_capacity_global[node] -= vnf_cpu
-            print(f"[COMMIT][A*] Node {node} CPU now {node_capacity_global[node]} after {vnf_id}.")
 
         # Commit bandwidth
         for (src, dst), path in result_state.routed_vls.items():
-            if src == "ENTRY" or dst == "EXIT":
+            if src == "ENTRY":
                 continue
             bw = next(vl["bandwidth"] for vl in vl_chain if vl["from"] == src and vl["to"] == dst)
             for u, v in zip(path[:-1], path[1:]):
                 _dec_link_cap(link_capacity_global, u, v, bw)
-            print(f"[COMMIT][A*] Bandwidth committed for VL {src}->{dst}.")
 
         print(f"[SUMMARY][A*] Slice {i} accepted.\n")
 
-    summary = []
-    for idx, res in enumerate(astar_results, start=1):
-        summary.append({
-            "slice": idx,
-            "accepted": res is not None,
-            "g_cost": (res.g_cost if res else None)
-        })
+    summary = [{"slice": idx, "accepted": res is not None, "g_cost": (res.g_cost if res else None)}
+               for idx, res in enumerate(astar_results, start=1)]
+
     df_results = pd.DataFrame(summary)
     if csv_path:
         df_results.to_csv(csv_path, index=False)

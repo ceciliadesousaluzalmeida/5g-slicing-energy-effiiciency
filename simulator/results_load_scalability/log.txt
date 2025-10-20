@@ -1,0 +1,66 @@
+Experiment timestamp: 2025-10-20 08:57:56.767487
+Number of slices: 10
+Number of VNFs: 30
+
+=== Summary ===
+ slice  accepted  g_cost
+     1      True     2.0
+     2      True     2.0
+     3      True     2.0
+     4      True     2.0
+     5      True     2.0
+     6      True     2.0
+     7      True     2.0
+     8      True     2.0
+     9      True     2.0
+    10      True     2.0 slice  accepted  g_cost
+     1      True     3.0
+     2      True     3.0
+     3      True     3.0
+     4      True     3.0
+     5      True     3.0
+     6      True     3.0
+     7      True     3.0
+     8      True     3.0
+     9      True     4.0
+    10      True     4.0 slice  accepted  g_cost
+     1      True     3.0
+     2      True     3.0
+     3      True     3.0
+     4      True     3.0
+     5      True     3.0
+     6      True     3.0
+     7      True     3.0
+     8      True     4.0
+     9      True     4.0
+    10      True     4.0 slice  accepted  g_cost
+     1      True     4.0
+     2      True     5.0
+     3      True     4.0
+     4      True     5.0
+     5      True     4.0
+     6      True     5.0
+     7      True     4.0
+     8      True     5.0
+     9      True     4.0
+    10      True     5.0 slice  accepted  g_cost
+     1      True     5.0
+     2      True     5.0
+     3      True     4.0
+     4      True     4.0
+     5      True     5.0
+     6      True     5.0
+     7      True     6.0
+     8      True     5.0
+     9      True     5.0
+    10      True     6.0       Method  Slices Accepted  Total Bandwidth  Total Latency  Total Energy
+           A*               10            900.0           20.0      24.88750
+          ABO               10           1000.0           32.0      27.86750
+         FABO               10           1050.0           33.0      29.83000
+    First Fit               10           1340.0           50.0      27.16875
+     Best Fit               10           1260.0           45.0      35.11000
+MILP (Gurobi)               10           1800.0           40.0      15.95000
+
+=== MILP ===
+ slice  accepted  g_cost
+    10      True    15.9

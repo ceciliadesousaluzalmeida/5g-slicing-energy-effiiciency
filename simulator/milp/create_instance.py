@@ -1,10 +1,12 @@
-# === Build MILP instance that supports (vnf_chain, vl_chain) or (vnf_chain, vl_chain, entry, exit_) ===
 from types import SimpleNamespace
 
 def create_instance(G, slices):
     """
-    Build a minimal MILP-compatible instance object from graph G and slices.
-    Supports slices with or without ENTRY/EXIT info.
+    Build a MILP-compatible instance from graph G and slices.
+    Supports slices of forms:
+      (vnf_chain, vl_chain)
+      (vnf_chain, vl_chain, entry)
+      (vnf_chain, vl_chain, entry, exit_)
     """
     instance = SimpleNamespace()
 
@@ -20,7 +22,7 @@ def create_instance(G, slices):
     # --- Node capacities ---
     instance.CPU_cap = {n: G.nodes[n].get("cpu", 100.0) for n in G.nodes}
 
-    # --- Slice data structures ---
+    # --- Slice-level attributes ---
     instance.V_of_s = {}
     instance.CPU_i = {}
     instance.BW_s = {}
@@ -31,17 +33,18 @@ def create_instance(G, slices):
     instance.exit_of_s = {}
 
     for s_idx, slice_data in enumerate(slices):
-        # Accept either 2-tuple or 4-tuple
+        # Normalize tuple forms
         if len(slice_data) == 2:
             vnf_chain, vl_chain = slice_data
             entry = None
             exit_ = None
+        elif len(slice_data) == 3:
+            vnf_chain, vl_chain, entry = slice_data
+            exit_ = None
         elif len(slice_data) == 4:
             vnf_chain, vl_chain, entry, exit_ = slice_data
-            instance.entry_of_s[s_idx] = entry
-            instance.exit_of_s[s_idx] = exit_
         else:
-            raise ValueError(f"Unexpected slice structure: {len(slice_data)} elements")
+            raise ValueError(f"Unexpected slice structure ({len(slice_data)} elements): {slice_data}")
 
         # Register VNFs
         vnf_ids = [vnf["id"] for vnf in vnf_chain]
@@ -51,7 +54,7 @@ def create_instance(G, slices):
         for vnf in vnf_chain:
             instance.CPU_i[vnf["id"]] = vnf["cpu"]
 
-        # Bandwidth = média dos VLs (ou 0 se não houver)
+        # Average bandwidth and max latency for the slice
         if vl_chain:
             bw_avg = sum(vl["bandwidth"] for vl in vl_chain) / len(vl_chain)
             lat_max = max(vl["latency"] for vl in vl_chain)
@@ -62,8 +65,16 @@ def create_instance(G, slices):
         instance.BW_s[s_idx] = bw_avg
         instance.L_s[s_idx] = lat_max
 
-    # Caso não haja ENTRY/EXIT por slice, define globais padrão
-    instance.entry_node = 2
-    instance.exit_node = 9
+        # Optional ENTRY/EXIT registration
+        if entry is not None:
+            instance.entry_of_s[s_idx] = entry
+        if exit_ is not None:
+            instance.exit_of_s[s_idx] = exit_
+
+    # Default ENTRY/EXIT (if none provided at all)
+    if not instance.entry_of_s:
+        instance.entry_node = 2
+    if not instance.exit_of_s:
+        instance.exit_node = None
 
     return instance

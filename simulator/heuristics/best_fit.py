@@ -9,15 +9,10 @@ class BFState:
         self.routed_vls = routed_vls or {}
         self.g_cost = g_cost
 
-    def is_goal(self, vnf_chain, vl_chain, entry=None, exit_=None):
-        base_done = (len(self.placed_vnfs) == len(vnf_chain)
-                     and len(self.routed_vls) >= len(vl_chain))
-        if not base_done:
-            return False
-        if entry is None and exit_ is None:
-            return True
-        first_id, last_id = vnf_chain[0]["id"], vnf_chain[-1]["id"]
-        return (("ENTRY", first_id) in self.routed_vls) and ((last_id, "EXIT") in self.routed_vls)
+    def is_goal(self, vnf_chain, vl_chain, entry=None):
+        """Goal: all VNFs placed and all VLs routed."""
+        return (len(self.placed_vnfs) == len(vnf_chain) and
+                len(self.routed_vls) >= len(vl_chain))
 
 
 def run_best_fit(G, slices, node_capacity_base, link_capacity_base, link_latency, csv_path=None):
@@ -45,9 +40,11 @@ def run_best_fit(G, slices, node_capacity_base, link_capacity_base, link_latency
     for i, slice_data in enumerate(slices, start=1):
         if len(slice_data) == 2:
             vnf_chain, vl_chain = slice_data
-            entry, exit_ = None, None
+            entry = None
+        elif len(slice_data) == 3:
+            vnf_chain, vl_chain, entry = slice_data
         else:
-            vnf_chain, vl_chain, entry, exit_ = slice_data
+            raise ValueError(f"Unexpected slice format: {slice_data}")
 
         print(f"\n[INFO][BF] === Solving slice {i} with {len(vnf_chain)} VNFs and {len(vl_chain)} VLs ===")
 
@@ -75,7 +72,6 @@ def run_best_fit(G, slices, node_capacity_base, link_capacity_base, link_latency
                 # Anti-affinity check
                 if any(placed_node == node and slice_id == next(v["slice"] for v in vnf_chain if v["id"] == other_id)
                        for other_id, placed_node in placed_vnfs.items()):
-                    print(f"[DEBUG][BF] Anti-affinity: {vnf_id} cannot go on node {node}.")
                     continue
 
                 temp_placed = placed_vnfs.copy()
@@ -97,7 +93,6 @@ def run_best_fit(G, slices, node_capacity_base, link_capacity_base, link_latency
                         path, lat = shortest_path_with_capacity(G, src_node, dst_node,
                                                                 temp_link_capacity, vl["bandwidth"])
                         if path is None:
-                            print(f"[DEBUG][BF] No feasible path for VL {src}->{dst}.")
                             routing_ok = False
                             break
                         for u, v in zip(path[:-1], path[1:]):
@@ -112,10 +107,9 @@ def run_best_fit(G, slices, node_capacity_base, link_capacity_base, link_latency
                 if not routing_ok:
                     continue
 
-                # ENTRY → first and last → EXIT if defined
-                if entry is not None and exit_ is not None and vnf_chain:
-                    first_id, last_id = vnf_chain[0]["id"], vnf_chain[-1]["id"]
-
+                # ENTRY → first VNF if defined
+                if entry is not None and vnf_chain:
+                    first_id = vnf_chain[0]["id"]
                     if ("ENTRY", first_id) not in temp_routed and first_id in temp_placed:
                         path, lat = shortest_path_with_capacity(G, entry, temp_placed[first_id],
                                                                 temp_link_capacity,
@@ -130,25 +124,6 @@ def run_best_fit(G, slices, node_capacity_base, link_capacity_base, link_latency
                                 else:
                                     temp_link_capacity[(v, u)] -= bw
                             temp_routed[("ENTRY", first_id)] = path
-                            temp_g_cost += lat
-
-                    if not routing_ok:
-                        continue
-
-                    if (last_id, "EXIT") not in temp_routed and last_id in temp_placed:
-                        path, lat = shortest_path_with_capacity(G, temp_placed[last_id], exit_,
-                                                                temp_link_capacity,
-                                                                vl_chain[-1]["bandwidth"] if vl_chain else 0)
-                        if path is None:
-                            routing_ok = False
-                        else:
-                            for u, v in zip(path[:-1], path[1:]):
-                                bw = vl_chain[-1]["bandwidth"] if vl_chain else 0
-                                if (u, v) in temp_link_capacity:
-                                    temp_link_capacity[(u, v)] -= bw
-                                else:
-                                    temp_link_capacity[(v, u)] -= bw
-                            temp_routed[(last_id, "EXIT")] = path
                             temp_g_cost += lat
 
                 if not routing_ok:

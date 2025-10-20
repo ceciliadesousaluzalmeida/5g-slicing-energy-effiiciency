@@ -9,15 +9,10 @@ class FFState:
         self.routed_vls = routed_vls or {}
         self.g_cost = g_cost
 
-    def is_goal(self, vnf_chain, vl_chain, entry=None, exit_=None):
-        base_done = (len(self.placed_vnfs) == len(vnf_chain)
-                     and len(self.routed_vls) >= len(vl_chain))
-        if not base_done:
-            return False
-        if entry is None and exit_ is None:
-            return True
-        first_id, last_id = vnf_chain[0]["id"], vnf_chain[-1]["id"]
-        return (("ENTRY", first_id) in self.routed_vls) and ((last_id, "EXIT") in self.routed_vls)
+    def is_goal(self, vnf_chain, vl_chain, entry=None):
+        """Goal: all VNFs placed and all VLs routed."""
+        return (len(self.placed_vnfs) == len(vnf_chain)
+                and len(self.routed_vls) >= len(vl_chain))
 
 
 def run_first_fit(G, slices, node_capacity_base, link_capacity_base, link_latency, csv_path=None):
@@ -45,9 +40,11 @@ def run_first_fit(G, slices, node_capacity_base, link_capacity_base, link_latenc
     for i, slice_data in enumerate(slices, start=1):
         if len(slice_data) == 2:
             vnf_chain, vl_chain = slice_data
-            entry, exit_ = None, None
+            entry = None
+        elif len(slice_data) == 3:
+            vnf_chain, vl_chain, entry = slice_data
         else:
-            vnf_chain, vl_chain, entry, exit_ = slice_data
+            raise ValueError(f"Unexpected slice format: {slice_data}")
 
         print(f"\n[INFO][FF] === Solving slice {i} with {len(vnf_chain)} VNFs and {len(vl_chain)} VLs ===")
 
@@ -67,15 +64,12 @@ def run_first_fit(G, slices, node_capacity_base, link_capacity_base, link_latenc
             placed = False
             for node in sorted(G.nodes):
                 avail_cpu = local_node_capacity.get(node, 0)
-
                 if avail_cpu < cpu_need:
-                    print(f"[DEBUG][FF] Skip node {node} for {vnf_id}: required={cpu_need}, available={avail_cpu}")
                     continue
 
-                # Anti-affinity
+                # Anti-affinity: same slice cannot share node
                 if any(node == placed_node and slice_id == next(v["slice"] for v in vnf_chain if v["id"] == other_id)
                        for other_id, placed_node in placed_vnfs.items()):
-                    print(f"[DEBUG][FF] Anti-affinity: {vnf_id} cannot be placed on node {node}.")
                     continue
 
                 temp_placed = placed_vnfs.copy()
@@ -88,7 +82,7 @@ def run_first_fit(G, slices, node_capacity_base, link_capacity_base, link_latenc
                 temp_node_capacity[node] -= cpu_need
                 temp_placed[vnf_id] = node
 
-                # Try to route internal VLs
+                # Route internal VLs
                 for vl in vl_chain:
                     src, dst = vl["from"], vl["to"]
                     if src in temp_placed and dst in temp_placed and (src, dst) not in temp_routed:
@@ -96,7 +90,6 @@ def run_first_fit(G, slices, node_capacity_base, link_capacity_base, link_latenc
                         path, lat = shortest_path_with_capacity(G, src_node, dst_node,
                                                                 temp_link_capacity, vl["bandwidth"])
                         if path is None:
-                            print(f"[DEBUG][FF] No feasible path for VL {src}->{dst}.")
                             routing_ok = False
                             break
                         for u, v in zip(path[:-1], path[1:]):
@@ -111,10 +104,9 @@ def run_first_fit(G, slices, node_capacity_base, link_capacity_base, link_latenc
                 if not routing_ok:
                     continue
 
-                # ENTRY → first and last → EXIT if defined
-                if entry is not None and exit_ is not None and vnf_chain:
-                    first_id, last_id = vnf_chain[0]["id"], vnf_chain[-1]["id"]
-
+                # ENTRY → first VNF if defined
+                if entry is not None and vnf_chain:
+                    first_id = vnf_chain[0]["id"]
                     if ("ENTRY", first_id) not in temp_routed and first_id in temp_placed:
                         path, lat = shortest_path_with_capacity(G, entry, temp_placed[first_id],
                                                                 temp_link_capacity,
@@ -131,36 +123,16 @@ def run_first_fit(G, slices, node_capacity_base, link_capacity_base, link_latenc
                             temp_routed[("ENTRY", first_id)] = path
                             temp_g_cost += lat
 
-                    if not routing_ok:
-                        continue
-
-                    if (last_id, "EXIT") not in temp_routed and last_id in temp_placed:
-                        path, lat = shortest_path_with_capacity(G, temp_placed[last_id], exit_,
-                                                                temp_link_capacity,
-                                                                vl_chain[-1]["bandwidth"] if vl_chain else 0)
-                        if path is None:
-                            routing_ok = False
-                        else:
-                            for u, v in zip(path[:-1], path[1:]):
-                                bw = vl_chain[-1]["bandwidth"] if vl_chain else 0
-                                if (u, v) in temp_link_capacity:
-                                    temp_link_capacity[(u, v)] -= bw
-                                else:
-                                    temp_link_capacity[(v, u)] -= bw
-                            temp_routed[(last_id, "EXIT")] = path
-                            temp_g_cost += lat
-
                 if not routing_ok:
                     continue
 
-                # Commit placement and routing
+                # Commit local placement
                 placed_vnfs = temp_placed
                 routed_vls = temp_routed
                 local_node_capacity = temp_node_capacity
                 local_link_capacity = temp_link_capacity
                 g_cost = temp_g_cost
                 placed = True
-
                 print(f"[INFO][FF] Placed {vnf_id} on node {node} "
                       f"(use={cpu_need}, remaining={local_node_capacity[node]}).")
                 break

@@ -1,4 +1,4 @@
-def generate_random_slices(G, vnf_profiles, num_slices, num_vnfs_per_slice, entry=None, exit_=None):
+def generate_random_slices(G, vnf_profiles, num_slices, num_vnfs_per_slice, entry=None):
     """
     Generate slices with entry/exit nodes fixed (2 -> 9).
     Each slice carries its source/destination for routing.
@@ -18,5 +18,5 @@ def generate_random_slices(G, vnf_profiles, num_slices, num_vnfs_per_slice, entr
             for i in range(num_vnfs_per_slice - 1)
         ]
 
-        slices.append((vnfs, vlinks, entry, exit_))
+        slices.append((vnfs, vlinks, entry))
     return slices
