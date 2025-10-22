@@ -10,6 +10,6 @@ from .metrics import (compute_energy,
                      compute_total_energy_with_routing,
                      compute_total_latency,
                      count_accepted_slices)
-from .topology import topologie_finlande, topology_bayern, draw_graph
+from .topology import topologie_finlande, topology_bayern, draw_graph, topology_brazil
 from .generate_graphs import plot_solution_heuristic, plot_all_routes, plot_cpu_usage
 from .create_folder import create_simulation_folder

@@ -110,3 +110,50 @@ def topology_bayern():
         G.add_edge(u, v, bandwidth=100, latency=1)
 
     return G
+
+
+
+
+import networkx as nx
+
+def topology_brazil(path="utils/topologies/topology_brazil.gml"):
+    """
+    Load the RNP Brazil topology (Topology Zoo) and return a simplified, enriched NetworkX graph.
+
+    - Removes non-internal nodes (e.g., RedCLARA, Internet Comercial)
+    - Converts edge attributes to bandwidth (Mbps) and latency (ms)
+    - Assigns CPU capacities to nodes (scaled by node degree)
+    """
+
+    # --- Load the topology file ---
+    G = nx.parse_gml(open(path, encoding="utf-8").read())
+
+    # --- Keep only internal nodes ---
+    internal_nodes = [n for n, data in G.nodes(data=True) if data.get("Internal", 1) == 1]
+    G = G.subgraph(internal_nodes).copy()
+
+    # --- Normalize edge attributes ---
+    for (u, v, data) in G.edges(data=True):
+        bw_raw = data.get("LinkSpeedRaw", 1e9)  # default 1 Gbps if missing
+        data["bandwidth"] = bw_raw / 1e6        # convert to Mbps
+        data["latency"] = 5.0                   # approximate latency (ms)
+
+    # --- Assign CPU capacity based on node degree ---
+    degrees = dict(G.degree())
+    max_deg = max(degrees.values()) if degrees else 1
+    for n in G.nodes:
+        # Scale CPU between 50 and 200 units depending on degree
+        degree_ratio = degrees[n] / max_deg
+        G.nodes[n]["cpu"] = int(50 + 150 * degree_ratio)
+
+    # --- Relabel nodes to integers ---
+    mapping = {n: i for i, n in enumerate(G.nodes())}
+    G = nx.relabel_nodes(G, mapping)
+
+    # --- Print summary ---
+    print(f"Loaded RNP Brazil topology with {G.number_of_nodes()} nodes and {G.number_of_edges()} links.")
+    print("Average node CPU:", round(sum(nx.get_node_attributes(G, 'cpu').values()) / G.number_of_nodes(), 2))
+    print("Average link bandwidth (Mbps):", round(sum(nx.get_edge_attributes(G, 'bandwidth').values()) / G.number_of_edges(), 2))
+
+    return G
+

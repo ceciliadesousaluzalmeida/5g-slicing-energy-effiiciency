@@ -1,50 +1,37 @@
 \ Model SlicePlacementEnergy_copy
 \ LP format - for model browsing. Use MPS format to capture full model detail.
-\ Signature: 0x9c490d09769d0bd4
+\ Signature: 0xf0b564ae3589b2ce
 Minimize
  
 Subject To
- CPU_cap_6: 2 v_vnf0_0_6 + 4 v_vnf0_1_6 + 6 v_vnf0_2_6 + 8 v_vnf0_3_6
-   + 2 v_vnf1_0_6 + 4 v_vnf1_1_6 + 6 v_vnf1_2_6 + 8 v_vnf1_3_6
-   + 2 v_vnf2_0_6 + 4 v_vnf2_1_6 + 6 v_vnf2_2_6 + 8 v_vnf2_3_6
-   + 2 v_vnf3_0_6 + 4 v_vnf3_1_6 + 6 v_vnf3_2_6 + 8 v_vnf3_3_6
-   + 2 v_vnf4_0_6 + 4 v_vnf4_1_6 + 6 v_vnf4_2_6 + 8 v_vnf4_3_6
-   + 2 v_vnf5_0_6 + 4 v_vnf5_1_6 + 6 v_vnf5_2_6 + 8 v_vnf5_3_6
-   + 2 v_vnf6_0_6 + 4 v_vnf6_1_6 + 6 v_vnf6_2_6 + 8 v_vnf6_3_6
-   + 2 v_vnf7_0_6 + 4 v_vnf7_1_6 + 6 v_vnf7_2_6 + 8 v_vnf7_3_6
-   + 2 v_vnf8_0_6 + 4 v_vnf8_1_6 + 6 v_vnf8_2_6 + 8 v_vnf8_3_6
-   + 2 v_vnf9_0_6 + 4 v_vnf9_1_6 + 6 v_vnf9_2_6 + 8 v_vnf9_3_6
-   + 2 v_vnf10_0_6 + 4 v_vnf10_1_6 + 6 v_vnf10_2_6 + 8 v_vnf10_3_6
-   + 2 v_vnf11_0_6 + 4 v_vnf11_1_6 + 6 v_vnf11_2_6 + 8 v_vnf11_3_6
-   + 2 v_vnf12_0_6 + 4 v_vnf12_1_6 + 6 v_vnf12_2_6 + 8 v_vnf12_3_6
-   + 2 v_vnf13_0_6 + 4 v_vnf13_1_6 + 6 v_vnf13_2_6 + 8 v_vnf13_3_6
-   + 2 v_vnf14_0_6 + 4 v_vnf14_1_6 + 6 v_vnf14_2_6 + 8 v_vnf14_3_6
-   + 2 v_vnf15_0_6 + 4 v_vnf15_1_6 + 6 v_vnf15_2_6 + 8 v_vnf15_3_6
-   + 2 v_vnf16_0_6 + 4 v_vnf16_1_6 + 6 v_vnf16_2_6 + 8 v_vnf16_3_6
-   + 2 v_vnf17_0_6 + 4 v_vnf17_1_6 + 6 v_vnf17_2_6 + 8 v_vnf17_3_6
-   + 2 v_vnf18_0_6 + 4 v_vnf18_1_6 + 6 v_vnf18_2_6 + 8 v_vnf18_3_6
-   + 2 v_vnf19_0_6 + 4 v_vnf19_1_6 + 6 v_vnf19_2_6 + 8 v_vnf19_3_6 <= 64
- flow_s0_vnf0_0_to_vnf0_1_n6: - v_vnf0_0_6 + v_vnf0_1_6
-   - f_5_6_s0_vnf0_0_to_vnf0_1 + f_6_7_s0_vnf0_0_to_vnf0_1
-   - f_2_6_s0_vnf0_0_to_vnf0_1 = 0
- flow_s0_vnf0_1_to_vnf0_2_n6: - v_vnf0_1_6 + v_vnf0_2_6
-   - f_5_6_s0_vnf0_1_to_vnf0_2 + f_6_7_s0_vnf0_1_to_vnf0_2
-   - f_2_6_s0_vnf0_1_to_vnf0_2 = 0
- flow_s2_vnf2_0_to_vnf2_1_n6: - v_vnf2_0_6 + v_vnf2_1_6
-   - f_5_6_s2_vnf2_0_to_vnf2_1 + f_6_7_s2_vnf2_0_to_vnf2_1
-   - f_2_6_s2_vnf2_0_to_vnf2_1 = 0
- flow_s2_vnf2_1_to_vnf2_2_n6: - v_vnf2_1_6 + v_vnf2_2_6
-   - f_5_6_s2_vnf2_1_to_vnf2_2 + f_6_7_s2_vnf2_1_to_vnf2_2
-   - f_2_6_s2_vnf2_1_to_vnf2_2 = 0
+ CPU_cap_6: 2 v_vnf0_0_6 + 4 v_vnf0_1_6 + 6 v_vnf0_2_6 + 2 v_vnf1_0_6
+   + 4 v_vnf1_1_6 + 6 v_vnf1_2_6 + 2 v_vnf2_0_6 + 4 v_vnf2_1_6
+   + 6 v_vnf2_2_6 + 2 v_vnf3_0_6 + 4 v_vnf3_1_6 + 6 v_vnf3_2_6
+   + 2 v_vnf4_0_6 + 4 v_vnf4_1_6 + 6 v_vnf4_2_6 + 2 v_vnf5_0_6
+   + 4 v_vnf5_1_6 + 6 v_vnf5_2_6 + 2 v_vnf6_0_6 + 4 v_vnf6_1_6
+   + 6 v_vnf6_2_6 + 2 v_vnf7_0_6 + 4 v_vnf7_1_6 + 6 v_vnf7_2_6
+   + 2 v_vnf8_0_6 + 4 v_vnf8_1_6 + 6 v_vnf8_2_6 + 2 v_vnf9_0_6
+   + 4 v_vnf9_1_6 + 6 v_vnf9_2_6 + 2 v_vnf10_0_6 + 4 v_vnf10_1_6
+   + 6 v_vnf10_2_6 + 2 v_vnf11_0_6 + 4 v_vnf11_1_6 + 6 v_vnf11_2_6
+   + 2 v_vnf12_0_6 + 4 v_vnf12_1_6 + 6 v_vnf12_2_6 + 2 v_vnf13_0_6
+   + 4 v_vnf13_1_6 + 6 v_vnf13_2_6 + 2 v_vnf14_0_6 + 4 v_vnf14_1_6
+   + 6 v_vnf14_2_6 + 2 v_vnf15_0_6 + 4 v_vnf15_1_6 + 6 v_vnf15_2_6
+   + 2 v_vnf16_0_6 + 4 v_vnf16_1_6 + 6 v_vnf16_2_6 + 2 v_vnf17_0_6
+   + 4 v_vnf17_1_6 + 6 v_vnf17_2_6 + 2 v_vnf18_0_6 + 4 v_vnf18_1_6
+   + 6 v_vnf18_2_6 + 2 v_vnf19_0_6 + 4 v_vnf19_1_6 + 6 v_vnf19_2_6 <= 64
+ antico_s9_n6: v_vnf9_0_6 + v_vnf9_1_6 + v_vnf9_2_6 <= 1
+ flow_s1_vnf1_0_to_vnf1_1_n6: - v_vnf1_0_6 + v_vnf1_1_6
+   - f_5_6_s1_vnf1_0_to_vnf1_1 + f_6_7_s1_vnf1_0_to_vnf1_1
+   - f_2_6_s1_vnf1_0_to_vnf1_1 = 0
+ flow_s1_vnf1_1_to_vnf1_2_n6: - v_vnf1_1_6 + v_vnf1_2_6
+   - f_5_6_s1_vnf1_1_to_vnf1_2 + f_6_7_s1_vnf1_1_to_vnf1_2
+   - f_2_6_s1_vnf1_1_to_vnf1_2 = 0
  flow_s3_vnf3_0_to_vnf3_1_n6: - v_vnf3_0_6 + v_vnf3_1_6
    - f_5_6_s3_vnf3_0_to_vnf3_1 + f_6_7_s3_vnf3_0_to_vnf3_1
    - f_2_6_s3_vnf3_0_to_vnf3_1 = 0
  flow_s3_vnf3_1_to_vnf3_2_n6: - v_vnf3_1_6 + v_vnf3_2_6
    - f_5_6_s3_vnf3_1_to_vnf3_2 + f_6_7_s3_vnf3_1_to_vnf3_2
    - f_2_6_s3_vnf3_1_to_vnf3_2 = 0
- flow_s3_vnf3_2_to_vnf3_3_n6: - v_vnf3_2_6 + v_vnf3_3_6
-   - f_5_6_s3_vnf3_2_to_vnf3_3 + f_6_7_s3_vnf3_2_to_vnf3_3
-   - f_2_6_s3_vnf3_2_to_vnf3_3 = 0
  flow_s4_vnf4_0_to_vnf4_1_n6: - v_vnf4_0_6 + v_vnf4_1_6
    - f_5_6_s4_vnf4_0_to_vnf4_1 + f_6_7_s4_vnf4_0_to_vnf4_1
    - f_2_6_s4_vnf4_0_to_vnf4_1 = 0
@@ -57,117 +44,87 @@ Subject To
  flow_s5_vnf5_1_to_vnf5_2_n6: - v_vnf5_1_6 + v_vnf5_2_6
    - f_5_6_s5_vnf5_1_to_vnf5_2 + f_6_7_s5_vnf5_1_to_vnf5_2
    - f_2_6_s5_vnf5_1_to_vnf5_2 = 0
- flow_s5_vnf5_2_to_vnf5_3_n6: - v_vnf5_2_6 + v_vnf5_3_6
-   - f_5_6_s5_vnf5_2_to_vnf5_3 + f_6_7_s5_vnf5_2_to_vnf5_3
-   - f_2_6_s5_vnf5_2_to_vnf5_3 = 0
  flow_s6_vnf6_0_to_vnf6_1_n6: - v_vnf6_0_6 + v_vnf6_1_6
    - f_5_6_s6_vnf6_0_to_vnf6_1 + f_6_7_s6_vnf6_0_to_vnf6_1
    - f_2_6_s6_vnf6_0_to_vnf6_1 = 0
  flow_s6_vnf6_1_to_vnf6_2_n6: - v_vnf6_1_6 + v_vnf6_2_6
    - f_5_6_s6_vnf6_1_to_vnf6_2 + f_6_7_s6_vnf6_1_to_vnf6_2
    - f_2_6_s6_vnf6_1_to_vnf6_2 = 0
- flow_s6_vnf6_2_to_vnf6_3_n6: - v_vnf6_2_6 + v_vnf6_3_6
-   - f_5_6_s6_vnf6_2_to_vnf6_3 + f_6_7_s6_vnf6_2_to_vnf6_3
-   - f_2_6_s6_vnf6_2_to_vnf6_3 = 0
  flow_s7_vnf7_0_to_vnf7_1_n6: - v_vnf7_0_6 + v_vnf7_1_6
    - f_5_6_s7_vnf7_0_to_vnf7_1 + f_6_7_s7_vnf7_0_to_vnf7_1
    - f_2_6_s7_vnf7_0_to_vnf7_1 = 0
  flow_s7_vnf7_1_to_vnf7_2_n6: - v_vnf7_1_6 + v_vnf7_2_6
    - f_5_6_s7_vnf7_1_to_vnf7_2 + f_6_7_s7_vnf7_1_to_vnf7_2
    - f_2_6_s7_vnf7_1_to_vnf7_2 = 0
- flow_s7_vnf7_2_to_vnf7_3_n6: - v_vnf7_2_6 + v_vnf7_3_6
-   - f_5_6_s7_vnf7_2_to_vnf7_3 + f_6_7_s7_vnf7_2_to_vnf7_3
-   - f_2_6_s7_vnf7_2_to_vnf7_3 = 0
  flow_s8_vnf8_0_to_vnf8_1_n6: - v_vnf8_0_6 + v_vnf8_1_6
    - f_5_6_s8_vnf8_0_to_vnf8_1 + f_6_7_s8_vnf8_0_to_vnf8_1
    - f_2_6_s8_vnf8_0_to_vnf8_1 = 0
+ flow_s8_vnf8_1_to_vnf8_2_n6: - v_vnf8_1_6 + v_vnf8_2_6
+   - f_5_6_s8_vnf8_1_to_vnf8_2 + f_6_7_s8_vnf8_1_to_vnf8_2
+   - f_2_6_s8_vnf8_1_to_vnf8_2 = 0
  flow_s9_vnf9_0_to_vnf9_1_n6: - v_vnf9_0_6 + v_vnf9_1_6
    - f_5_6_s9_vnf9_0_to_vnf9_1 + f_6_7_s9_vnf9_0_to_vnf9_1
    - f_2_6_s9_vnf9_0_to_vnf9_1 = 0
  flow_s9_vnf9_1_to_vnf9_2_n6: - v_vnf9_1_6 + v_vnf9_2_6
    - f_5_6_s9_vnf9_1_to_vnf9_2 + f_6_7_s9_vnf9_1_to_vnf9_2
    - f_2_6_s9_vnf9_1_to_vnf9_2 = 0
- flow_s9_vnf9_2_to_vnf9_3_n6: - v_vnf9_2_6 + v_vnf9_3_6
-   - f_5_6_s9_vnf9_2_to_vnf9_3 + f_6_7_s9_vnf9_2_to_vnf9_3
-   - f_2_6_s9_vnf9_2_to_vnf9_3 = 0
  flow_s10_vnf10_0_to_vnf10_1_n6: - v_vnf10_0_6 + v_vnf10_1_6
    - f_5_6_s10_vnf10_0_to_vnf10_1 + f_6_7_s10_vnf10_0_to_vnf10_1
    - f_2_6_s10_vnf10_0_to_vnf10_1 = 0
  flow_s10_vnf10_1_to_vnf10_2_n6: - v_vnf10_1_6 + v_vnf10_2_6
    - f_5_6_s10_vnf10_1_to_vnf10_2 + f_6_7_s10_vnf10_1_to_vnf10_2
    - f_2_6_s10_vnf10_1_to_vnf10_2 = 0
- flow_s10_vnf10_2_to_vnf10_3_n6: - v_vnf10_2_6 + v_vnf10_3_6
-   - f_5_6_s10_vnf10_2_to_vnf10_3 + f_6_7_s10_vnf10_2_to_vnf10_3
-   - f_2_6_s10_vnf10_2_to_vnf10_3 = 0
  flow_s11_vnf11_0_to_vnf11_1_n6: - v_vnf11_0_6 + v_vnf11_1_6
    - f_5_6_s11_vnf11_0_to_vnf11_1 + f_6_7_s11_vnf11_0_to_vnf11_1
    - f_2_6_s11_vnf11_0_to_vnf11_1 = 0
  flow_s11_vnf11_1_to_vnf11_2_n6: - v_vnf11_1_6 + v_vnf11_2_6
    - f_5_6_s11_vnf11_1_to_vnf11_2 + f_6_7_s11_vnf11_1_to_vnf11_2
    - f_2_6_s11_vnf11_1_to_vnf11_2 = 0
- flow_s11_vnf11_2_to_vnf11_3_n6: - v_vnf11_2_6 + v_vnf11_3_6
-   - f_5_6_s11_vnf11_2_to_vnf11_3 + f_6_7_s11_vnf11_2_to_vnf11_3
-   - f_2_6_s11_vnf11_2_to_vnf11_3 = 0
  flow_s12_vnf12_0_to_vnf12_1_n6: - v_vnf12_0_6 + v_vnf12_1_6
    - f_5_6_s12_vnf12_0_to_vnf12_1 + f_6_7_s12_vnf12_0_to_vnf12_1
    - f_2_6_s12_vnf12_0_to_vnf12_1 = 0
  flow_s12_vnf12_1_to_vnf12_2_n6: - v_vnf12_1_6 + v_vnf12_2_6
    - f_5_6_s12_vnf12_1_to_vnf12_2 + f_6_7_s12_vnf12_1_to_vnf12_2
    - f_2_6_s12_vnf12_1_to_vnf12_2 = 0
- flow_s12_vnf12_2_to_vnf12_3_n6: - v_vnf12_2_6 + v_vnf12_3_6
-   - f_5_6_s12_vnf12_2_to_vnf12_3 + f_6_7_s12_vnf12_2_to_vnf12_3
-   - f_2_6_s12_vnf12_2_to_vnf12_3 = 0
  flow_s13_vnf13_0_to_vnf13_1_n6: - v_vnf13_0_6 + v_vnf13_1_6
    - f_5_6_s13_vnf13_0_to_vnf13_1 + f_6_7_s13_vnf13_0_to_vnf13_1
    - f_2_6_s13_vnf13_0_to_vnf13_1 = 0
+ flow_s13_vnf13_1_to_vnf13_2_n6: - v_vnf13_1_6 + v_vnf13_2_6
+   - f_5_6_s13_vnf13_1_to_vnf13_2 + f_6_7_s13_vnf13_1_to_vnf13_2
+   - f_2_6_s13_vnf13_1_to_vnf13_2 = 0
  flow_s14_vnf14_0_to_vnf14_1_n6: - v_vnf14_0_6 + v_vnf14_1_6
    - f_5_6_s14_vnf14_0_to_vnf14_1 + f_6_7_s14_vnf14_0_to_vnf14_1
    - f_2_6_s14_vnf14_0_to_vnf14_1 = 0
  flow_s14_vnf14_1_to_vnf14_2_n6: - v_vnf14_1_6 + v_vnf14_2_6
    - f_5_6_s14_vnf14_1_to_vnf14_2 + f_6_7_s14_vnf14_1_to_vnf14_2
    - f_2_6_s14_vnf14_1_to_vnf14_2 = 0
- flow_s14_vnf14_2_to_vnf14_3_n6: - v_vnf14_2_6 + v_vnf14_3_6
-   - f_5_6_s14_vnf14_2_to_vnf14_3 + f_6_7_s14_vnf14_2_to_vnf14_3
-   - f_2_6_s14_vnf14_2_to_vnf14_3 = 0
  flow_s15_vnf15_0_to_vnf15_1_n6: - v_vnf15_0_6 + v_vnf15_1_6
    - f_5_6_s15_vnf15_0_to_vnf15_1 + f_6_7_s15_vnf15_0_to_vnf15_1
    - f_2_6_s15_vnf15_0_to_vnf15_1 = 0
  flow_s15_vnf15_1_to_vnf15_2_n6: - v_vnf15_1_6 + v_vnf15_2_6
    - f_5_6_s15_vnf15_1_to_vnf15_2 + f_6_7_s15_vnf15_1_to_vnf15_2
    - f_2_6_s15_vnf15_1_to_vnf15_2 = 0
- flow_s15_vnf15_2_to_vnf15_3_n6: - v_vnf15_2_6 + v_vnf15_3_6
-   - f_5_6_s15_vnf15_2_to_vnf15_3 + f_6_7_s15_vnf15_2_to_vnf15_3
-   - f_2_6_s15_vnf15_2_to_vnf15_3 = 0
  flow_s16_vnf16_0_to_vnf16_1_n6: - v_vnf16_0_6 + v_vnf16_1_6
    - f_5_6_s16_vnf16_0_to_vnf16_1 + f_6_7_s16_vnf16_0_to_vnf16_1
    - f_2_6_s16_vnf16_0_to_vnf16_1 = 0
- flow_s16_vnf16_1_to_vnf16_2_n6: - v_vnf16_1_6 + v_vnf16_2_6
-   - f_5_6_s16_vnf16_1_to_vnf16_2 + f_6_7_s16_vnf16_1_to_vnf16_2
-   - f_2_6_s16_vnf16_1_to_vnf16_2 = 0
- flow_s16_vnf16_2_to_vnf16_3_n6: - v_vnf16_2_6 + v_vnf16_3_6
-   - f_5_6_s16_vnf16_2_to_vnf16_3 + f_6_7_s16_vnf16_2_to_vnf16_3
-   - f_2_6_s16_vnf16_2_to_vnf16_3 = 0
  flow_s17_vnf17_0_to_vnf17_1_n6: - v_vnf17_0_6 + v_vnf17_1_6
    - f_5_6_s17_vnf17_0_to_vnf17_1 + f_6_7_s17_vnf17_0_to_vnf17_1
    - f_2_6_s17_vnf17_0_to_vnf17_1 = 0
+ flow_s17_vnf17_1_to_vnf17_2_n6: - v_vnf17_1_6 + v_vnf17_2_6
+   - f_5_6_s17_vnf17_1_to_vnf17_2 + f_6_7_s17_vnf17_1_to_vnf17_2
+   - f_2_6_s17_vnf17_1_to_vnf17_2 = 0
  flow_s18_vnf18_0_to_vnf18_1_n6: - v_vnf18_0_6 + v_vnf18_1_6
    - f_5_6_s18_vnf18_0_to_vnf18_1 + f_6_7_s18_vnf18_0_to_vnf18_1
    - f_2_6_s18_vnf18_0_to_vnf18_1 = 0
  flow_s18_vnf18_1_to_vnf18_2_n6: - v_vnf18_1_6 + v_vnf18_2_6
    - f_5_6_s18_vnf18_1_to_vnf18_2 + f_6_7_s18_vnf18_1_to_vnf18_2
    - f_2_6_s18_vnf18_1_to_vnf18_2 = 0
- flow_s18_vnf18_2_to_vnf18_3_n6: - v_vnf18_2_6 + v_vnf18_3_6
-   - f_5_6_s18_vnf18_2_to_vnf18_3 + f_6_7_s18_vnf18_2_to_vnf18_3
-   - f_2_6_s18_vnf18_2_to_vnf18_3 = 0
  flow_s19_vnf19_0_to_vnf19_1_n6: - v_vnf19_0_6 + v_vnf19_1_6
    - f_5_6_s19_vnf19_0_to_vnf19_1 + f_6_7_s19_vnf19_0_to_vnf19_1
    - f_2_6_s19_vnf19_0_to_vnf19_1 = 0
  flow_s19_vnf19_1_to_vnf19_2_n6: - v_vnf19_1_6 + v_vnf19_2_6
    - f_5_6_s19_vnf19_1_to_vnf19_2 + f_6_7_s19_vnf19_1_to_vnf19_2
    - f_2_6_s19_vnf19_1_to_vnf19_2 = 0
- flow_s19_vnf19_2_to_vnf19_3_n6: - v_vnf19_2_6 + v_vnf19_3_6
-   - f_5_6_s19_vnf19_2_to_vnf19_3 + f_6_7_s19_vnf19_2_to_vnf19_3
-   - f_2_6_s19_vnf19_2_to_vnf19_3 = 0
  flow_entry_s0_n6: v_vnf0_0_6 - f_entry_5_6_s0 + f_entry_6_7_s0
    - f_entry_2_6_s0 = 1
  flow_entry_s1_n6: v_vnf1_0_6 - f_entry_5_6_s1 + f_entry_6_7_s1
@@ -209,36 +166,26 @@ Subject To
  flow_entry_s19_n6: v_vnf19_0_6 - f_entry_5_6_s19 + f_entry_6_7_s19
    - f_entry_2_6_s19 = 1
  rho_def_(6,_7): 40 f_6_7_s0_vnf0_0_to_vnf0_1
-   + 50 f_6_7_s0_vnf0_1_to_vnf0_2 + 60 f_6_7_s0_vnf0_2_to_vnf0_3
-   + 40 f_6_7_s1_vnf1_0_to_vnf1_1 + 50 f_6_7_s1_vnf1_1_to_vnf1_2
-   + 60 f_6_7_s1_vnf1_2_to_vnf1_3 + 40 f_6_7_s2_vnf2_0_to_vnf2_1
-   + 50 f_6_7_s2_vnf2_1_to_vnf2_2 + 60 f_6_7_s2_vnf2_2_to_vnf2_3
-   + 40 f_6_7_s3_vnf3_0_to_vnf3_1 + 50 f_6_7_s3_vnf3_1_to_vnf3_2
-   + 60 f_6_7_s3_vnf3_2_to_vnf3_3 + 40 f_6_7_s4_vnf4_0_to_vnf4_1
-   + 50 f_6_7_s4_vnf4_1_to_vnf4_2 + 60 f_6_7_s4_vnf4_2_to_vnf4_3
-   + 40 f_6_7_s5_vnf5_0_to_vnf5_1 + 50 f_6_7_s5_vnf5_1_to_vnf5_2
-   + 60 f_6_7_s5_vnf5_2_to_vnf5_3 + 40 f_6_7_s6_vnf6_0_to_vnf6_1
-   + 50 f_6_7_s6_vnf6_1_to_vnf6_2 + 60 f_6_7_s6_vnf6_2_to_vnf6_3
-   + 40 f_6_7_s7_vnf7_0_to_vnf7_1 + 50 f_6_7_s7_vnf7_1_to_vnf7_2
-   + 60 f_6_7_s7_vnf7_2_to_vnf7_3 + 40 f_6_7_s8_vnf8_0_to_vnf8_1
-   + 50 f_6_7_s8_vnf8_1_to_vnf8_2 + 60 f_6_7_s8_vnf8_2_to_vnf8_3
-   + 40 f_6_7_s9_vnf9_0_to_vnf9_1 + 50 f_6_7_s9_vnf9_1_to_vnf9_2
-   + 60 f_6_7_s9_vnf9_2_to_vnf9_3 + 40 f_6_7_s10_vnf10_0_to_vnf10_1
-   + 50 f_6_7_s10_vnf10_1_to_vnf10_2 + 60 f_6_7_s10_vnf10_2_to_vnf10_3
-   + 40 f_6_7_s11_vnf11_0_to_vnf11_1 + 50 f_6_7_s11_vnf11_1_to_vnf11_2
-   + 60 f_6_7_s11_vnf11_2_to_vnf11_3 + 40 f_6_7_s12_vnf12_0_to_vnf12_1
-   + 50 f_6_7_s12_vnf12_1_to_vnf12_2 + 60 f_6_7_s12_vnf12_2_to_vnf12_3
-   + 40 f_6_7_s13_vnf13_0_to_vnf13_1 + 50 f_6_7_s13_vnf13_1_to_vnf13_2
-   + 60 f_6_7_s13_vnf13_2_to_vnf13_3 + 40 f_6_7_s14_vnf14_0_to_vnf14_1
-   + 50 f_6_7_s14_vnf14_1_to_vnf14_2 + 60 f_6_7_s14_vnf14_2_to_vnf14_3
-   + 40 f_6_7_s15_vnf15_0_to_vnf15_1 + 50 f_6_7_s15_vnf15_1_to_vnf15_2
-   + 60 f_6_7_s15_vnf15_2_to_vnf15_3 + 40 f_6_7_s16_vnf16_0_to_vnf16_1
-   + 50 f_6_7_s16_vnf16_1_to_vnf16_2 + 60 f_6_7_s16_vnf16_2_to_vnf16_3
-   + 40 f_6_7_s17_vnf17_0_to_vnf17_1 + 50 f_6_7_s17_vnf17_1_to_vnf17_2
-   + 60 f_6_7_s17_vnf17_2_to_vnf17_3 + 40 f_6_7_s18_vnf18_0_to_vnf18_1
-   + 50 f_6_7_s18_vnf18_1_to_vnf18_2 + 60 f_6_7_s18_vnf18_2_to_vnf18_3
-   + 40 f_6_7_s19_vnf19_0_to_vnf19_1 + 50 f_6_7_s19_vnf19_1_to_vnf19_2
-   + 60 f_6_7_s19_vnf19_2_to_vnf19_3 + 40 f_entry_6_7_s0
+   + 50 f_6_7_s0_vnf0_1_to_vnf0_2 + 40 f_6_7_s1_vnf1_0_to_vnf1_1
+   + 50 f_6_7_s1_vnf1_1_to_vnf1_2 + 40 f_6_7_s2_vnf2_0_to_vnf2_1
+   + 50 f_6_7_s2_vnf2_1_to_vnf2_2 + 40 f_6_7_s3_vnf3_0_to_vnf3_1
+   + 50 f_6_7_s3_vnf3_1_to_vnf3_2 + 40 f_6_7_s4_vnf4_0_to_vnf4_1
+   + 50 f_6_7_s4_vnf4_1_to_vnf4_2 + 40 f_6_7_s5_vnf5_0_to_vnf5_1
+   + 50 f_6_7_s5_vnf5_1_to_vnf5_2 + 40 f_6_7_s6_vnf6_0_to_vnf6_1
+   + 50 f_6_7_s6_vnf6_1_to_vnf6_2 + 40 f_6_7_s7_vnf7_0_to_vnf7_1
+   + 50 f_6_7_s7_vnf7_1_to_vnf7_2 + 40 f_6_7_s8_vnf8_0_to_vnf8_1
+   + 50 f_6_7_s8_vnf8_1_to_vnf8_2 + 40 f_6_7_s9_vnf9_0_to_vnf9_1
+   + 50 f_6_7_s9_vnf9_1_to_vnf9_2 + 40 f_6_7_s10_vnf10_0_to_vnf10_1
+   + 50 f_6_7_s10_vnf10_1_to_vnf10_2 + 40 f_6_7_s11_vnf11_0_to_vnf11_1
+   + 50 f_6_7_s11_vnf11_1_to_vnf11_2 + 40 f_6_7_s12_vnf12_0_to_vnf12_1
+   + 50 f_6_7_s12_vnf12_1_to_vnf12_2 + 40 f_6_7_s13_vnf13_0_to_vnf13_1
+   + 50 f_6_7_s13_vnf13_1_to_vnf13_2 + 40 f_6_7_s14_vnf14_0_to_vnf14_1
+   + 50 f_6_7_s14_vnf14_1_to_vnf14_2 + 40 f_6_7_s15_vnf15_0_to_vnf15_1
+   + 50 f_6_7_s15_vnf15_1_to_vnf15_2 + 40 f_6_7_s16_vnf16_0_to_vnf16_1
+   + 50 f_6_7_s16_vnf16_1_to_vnf16_2 + 40 f_6_7_s17_vnf17_0_to_vnf17_1
+   + 50 f_6_7_s17_vnf17_1_to_vnf17_2 + 40 f_6_7_s18_vnf18_0_to_vnf18_1
+   + 50 f_6_7_s18_vnf18_1_to_vnf18_2 + 40 f_6_7_s19_vnf19_0_to_vnf19_1
+   + 50 f_6_7_s19_vnf19_1_to_vnf19_2 + 40 f_entry_6_7_s0
    + 40 f_entry_6_7_s1 + 40 f_entry_6_7_s2 + 40 f_entry_6_7_s3
    + 40 f_entry_6_7_s4 + 40 f_entry_6_7_s5 + 40 f_entry_6_7_s6
    + 40 f_entry_6_7_s7 + 40 f_entry_6_7_s8 + 40 f_entry_6_7_s9
@@ -247,22 +194,9 @@ Subject To
    + 40 f_entry_6_7_s16 + 40 f_entry_6_7_s17 + 40 f_entry_6_7_s18
    + 40 f_entry_6_7_s19 - 500 rho_6_7 <= 0
 Bounds
- f_6_7_s0_vnf0_0_to_vnf0_1 free
- f_6_7_s2_vnf2_0_to_vnf2_1 free
- f_6_7_s2_vnf2_1_to_vnf2_2 free
- f_6_7_s3_vnf3_0_to_vnf3_1 free
- f_6_7_s5_vnf5_0_to_vnf5_1 free
- f_6_7_s6_vnf6_0_to_vnf6_1 free
- f_6_7_s7_vnf7_0_to_vnf7_1 free
+ f_6_7_s4_vnf4_0_to_vnf4_1 free
+ f_6_7_s8_vnf8_0_to_vnf8_1 free
  f_6_7_s9_vnf9_0_to_vnf9_1 free
- f_6_7_s10_vnf10_0_to_vnf10_1 free
- f_6_7_s11_vnf11_0_to_vnf11_1 free
- f_6_7_s12_vnf12_0_to_vnf12_1 free
- f_6_7_s14_vnf14_0_to_vnf14_1 free
- f_6_7_s15_vnf15_0_to_vnf15_1 free
- f_6_7_s16_vnf16_0_to_vnf16_1 free
- f_6_7_s18_vnf18_0_to_vnf18_1 free
- f_6_7_s19_vnf19_0_to_vnf19_1 free
  f_entry_6_7_s0 free
  f_entry_6_7_s1 free
  f_entry_6_7_s2 free
@@ -285,18 +219,14 @@ Bounds
  f_entry_6_7_s19 free
  -infinity <= rho_6_7 <= 1
 Binaries
- v_vnf0_0_6 v_vnf0_1_6 v_vnf0_2_6 v_vnf0_3_6 v_vnf1_0_6 v_vnf1_1_6
- v_vnf1_2_6 v_vnf1_3_6 v_vnf2_0_6 v_vnf2_1_6 v_vnf2_2_6 v_vnf2_3_6
- v_vnf3_0_6 v_vnf3_1_6 v_vnf3_2_6 v_vnf3_3_6 v_vnf4_0_6 v_vnf4_1_6
- v_vnf4_2_6 v_vnf4_3_6 v_vnf5_0_6 v_vnf5_1_6 v_vnf5_2_6 v_vnf5_3_6
- v_vnf6_0_6 v_vnf6_1_6 v_vnf6_2_6 v_vnf6_3_6 v_vnf7_0_6 v_vnf7_1_6
- v_vnf7_2_6 v_vnf7_3_6 v_vnf8_0_6 v_vnf8_1_6 v_vnf8_2_6 v_vnf8_3_6
- v_vnf9_0_6 v_vnf9_1_6 v_vnf9_2_6 v_vnf9_3_6 v_vnf10_0_6 v_vnf10_1_6
- v_vnf10_2_6 v_vnf10_3_6 v_vnf11_0_6 v_vnf11_1_6 v_vnf11_2_6 v_vnf11_3_6
- v_vnf12_0_6 v_vnf12_1_6 v_vnf12_2_6 v_vnf12_3_6 v_vnf13_0_6 v_vnf13_1_6
- v_vnf13_2_6 v_vnf13_3_6 v_vnf14_0_6 v_vnf14_1_6 v_vnf14_2_6 v_vnf14_3_6
- v_vnf15_0_6 v_vnf15_1_6 v_vnf15_2_6 v_vnf15_3_6 v_vnf16_0_6 v_vnf16_1_6
- v_vnf16_2_6 v_vnf16_3_6 v_vnf17_0_6 v_vnf17_1_6 v_vnf17_2_6 v_vnf17_3_6
- v_vnf18_0_6 v_vnf18_1_6 v_vnf18_2_6 v_vnf18_3_6 v_vnf19_0_6 v_vnf19_1_6
- v_vnf19_2_6 v_vnf19_3_6
+ v_vnf0_0_6 v_vnf0_1_6 v_vnf0_2_6 v_vnf1_0_6 v_vnf1_1_6 v_vnf1_2_6
+ v_vnf2_0_6 v_vnf2_1_6 v_vnf2_2_6 v_vnf3_0_6 v_vnf3_1_6 v_vnf3_2_6
+ v_vnf4_0_6 v_vnf4_1_6 v_vnf4_2_6 v_vnf5_0_6 v_vnf5_1_6 v_vnf5_2_6
+ v_vnf6_0_6 v_vnf6_1_6 v_vnf6_2_6 v_vnf7_0_6 v_vnf7_1_6 v_vnf7_2_6
+ v_vnf8_0_6 v_vnf8_1_6 v_vnf8_2_6 v_vnf9_0_6 v_vnf9_1_6 v_vnf9_2_6
+ v_vnf10_0_6 v_vnf10_1_6 v_vnf10_2_6 v_vnf11_0_6 v_vnf11_1_6 v_vnf11_2_6
+ v_vnf12_0_6 v_vnf12_1_6 v_vnf12_2_6 v_vnf13_0_6 v_vnf13_1_6 v_vnf13_2_6
+ v_vnf14_0_6 v_vnf14_1_6 v_vnf14_2_6 v_vnf15_0_6 v_vnf15_1_6 v_vnf15_2_6
+ v_vnf16_0_6 v_vnf16_1_6 v_vnf16_2_6 v_vnf17_0_6 v_vnf17_1_6 v_vnf17_2_6
+ v_vnf18_0_6 v_vnf18_1_6 v_vnf18_2_6 v_vnf19_0_6 v_vnf19_1_6 v_vnf19_2_6
 End
