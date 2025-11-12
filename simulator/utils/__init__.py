@@ -12,4 +12,4 @@ from .metrics import (compute_energy,
                      count_accepted_slices)
 from .topology import topologie_finlande, topology_bayern, draw_graph, topology_brazil
 from .generate_graphs import plot_solution_heuristic, plot_all_routes, plot_cpu_usage
-from .create_folder import create_simulation_folder
+from .create_folder import create_esimulation_folder

@@ -1,0 +1,53 @@
+Experiment timestamp: 2025-11-12 08:24:06.732868
+Number of slices: 6
+Number of VNFs: 18
+
+=== Summary ===
+ slice  accepted  g_cost
+     1      True     2.0
+     2      True     2.0
+     3      True     2.0
+     4      True     2.0
+     5      True     2.0
+     6      True     2.0 slice  accepted  g_cost
+     1      True     3.0
+     2      True     3.0
+     3      True     3.0
+     4      True     3.0
+     5      True     3.0
+     6      True     3.0 slice  accepted  g_cost
+     1      True     3.0
+     2      True     3.0
+     3      True     3.0
+     4      True     3.0
+     5      True     3.0
+     6      True     3.0 slice  accepted  nodes_used  links_used  energy
+     1      True           3           2    0.43
+     2      True           3           2    0.43
+     3      True           3           2    0.43
+     4      True           3           2    0.43
+     5      True           3           2    0.43
+     6      True           3           2    0.43 slice  accepted  g_cost
+     1      True     4.0
+     2      True     5.0
+     3      True     4.0
+     4      True     5.0
+     5      True     4.0
+     6      True     5.0 slice  accepted  g_cost
+     1      True     5.0
+     2      True     5.0
+     3      True     4.0
+     4      True     4.0
+     5      True     5.0
+     6      True     5.0         Method  Slices Accepted  Total Bandwidth  Total Latency  Total Energy
+             A*                6            540.0           12.0       19.3050
+            ABO                6            540.0           18.0       17.0175
+           FABO                6            540.0           18.0       18.0175
+A* Energy Aware                6            540.0           12.0       19.3050
+      First Fit                6            730.0           28.0       16.3775
+       Best Fit                6            810.0           27.0       24.3000
+  MILP (Gurobi)                6            800.0           18.0       10.5500
+
+=== MILP ===
+ slice  accepted  g_cost
+     6      True   10.55
