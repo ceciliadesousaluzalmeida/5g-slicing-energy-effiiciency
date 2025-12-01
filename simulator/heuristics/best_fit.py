@@ -3,6 +3,7 @@ import networkx as nx
 import pandas as pd
 from copy import deepcopy
 
+
 class BFState:
     def __init__(self, placed_vnfs=None, routed_vls=None, g_cost=0.0):
         self.placed_vnfs = placed_vnfs or {}
@@ -11,8 +12,8 @@ class BFState:
 
     def is_goal(self, vnf_chain, vl_chain, entry=None):
         """Goal: all VNFs placed and all VLs routed."""
-        return (len(self.placed_vnfs) == len(vnf_chain) and
-                len(self.routed_vls) >= len(vl_chain))
+        return (len(self.placed_vnfs) == len(vnf_chain)
+                and len(self.routed_vls) >= len(vl_chain))
 
 
 def run_best_fit(G, slices, node_capacity_base, link_capacity_base, link_latency, csv_path=None):
@@ -28,12 +29,16 @@ def run_best_fit(G, slices, node_capacity_base, link_capacity_base, link_latency
             path = nx.shortest_path(G, u, v, weight="latency")
         except nx.NetworkXNoPath:
             return None, None
+
         for a, b in zip(path[:-1], path[1:]):
             cap = link_capacity.get((a, b), link_capacity.get((b, a), 0))
             if cap < bandwidth:
                 return None, None
-        latency = sum(link_latency.get((a, b), link_latency.get((b, a), 1.0))
-                      for a, b in zip(path[:-1], path[1:]))
+
+        latency = sum(
+            link_latency.get((a, b), link_latency.get((b, a), 1.0))
+            for a, b in zip(path[:-1], path[1:])
+        )
         return path, latency
 
     # --------------- main loop over slices ---------------
@@ -56,24 +61,33 @@ def run_best_fit(G, slices, node_capacity_base, link_capacity_base, link_latency
         local_node_capacity = deepcopy(node_capacity_global)
         local_link_capacity = deepcopy(link_capacity_global)
 
+        # -------------------- iterate over VNFs --------------------
         for vnf in vnf_chain:
             vnf_id = vnf["id"]
             cpu_needed = vnf["cpu"]
             slice_id = vnf["slice"]
 
-            # Candidate nodes: best-fit sorted by minimal leftover CPU
-            candidate_nodes = sorted(
-                [n for n in G.nodes if local_node_capacity.get(n, 0) >= cpu_needed],
-                key=lambda n: (local_node_capacity[n] - cpu_needed, n)
-            )
+            # Candidate nodes: any node with enough CPU (order fixed for determinism)
+            candidate_nodes = [
+                n for n in sorted(G.nodes)
+                if local_node_capacity.get(n, 0) >= cpu_needed
+            ]
 
             placed = False
+            best_candidate_state = None
+            best_candidate_cost = None
+
+            # ---------------- try all candidate nodes ----------------
             for node in candidate_nodes:
-                # Anti-affinity check
-                if any(placed_node == node and slice_id == next(v["slice"] for v in vnf_chain if v["id"] == other_id)
-                       for other_id, placed_node in placed_vnfs.items()):
+                # Anti-affinity: avoid placing two VNFs of the same slice on the same node
+                if any(
+                    placed_node == node and
+                    slice_id == next(v["slice"] for v in vnf_chain if v["id"] == other_id)
+                    for other_id, placed_node in placed_vnfs.items()
+                ):
                     continue
 
+                # Local copies to simulate placement and routing on this node
                 temp_placed = placed_vnfs.copy()
                 temp_routed = routed_vls.copy()
                 temp_node_capacity = deepcopy(local_node_capacity)
@@ -81,6 +95,7 @@ def run_best_fit(G, slices, node_capacity_base, link_capacity_base, link_latency
                 temp_g_cost = g_cost
                 routing_ok = True
 
+                # Place current VNF on this node
                 temp_node_capacity[node] -= cpu_needed
                 temp_placed[vnf_id] = node
 
@@ -90,70 +105,95 @@ def run_best_fit(G, slices, node_capacity_base, link_capacity_base, link_latency
                     if src in temp_placed and dst in temp_placed and (src, dst) not in temp_routed:
                         src_node = temp_placed[src]
                         dst_node = temp_placed[dst]
-                        path, lat = shortest_path_with_capacity(G, src_node, dst_node,
-                                                                temp_link_capacity, vl["bandwidth"])
+                        path, lat = shortest_path_with_capacity(
+                            G, src_node, dst_node,
+                            temp_link_capacity, vl["bandwidth"]
+                        )
                         if path is None:
                             routing_ok = False
                             break
+
+                        bw = vl["bandwidth"]
                         for u, v in zip(path[:-1], path[1:]):
-                            bw = vl["bandwidth"]
                             if (u, v) in temp_link_capacity:
                                 temp_link_capacity[(u, v)] -= bw
                             else:
                                 temp_link_capacity[(v, u)] -= bw
+
                         temp_routed[(src, dst)] = path
                         temp_g_cost += lat
 
                 if not routing_ok:
                     continue
 
-                # ENTRY → first VNF if defined
+                # Route ENTRY → first VNF if defined and not yet routed
                 if entry is not None and vnf_chain:
                     first_id = vnf_chain[0]["id"]
                     if ("ENTRY", first_id) not in temp_routed and first_id in temp_placed:
-                        path, lat = shortest_path_with_capacity(G, entry, temp_placed[first_id],
-                                                                temp_link_capacity,
-                                                                vl_chain[0]["bandwidth"] if vl_chain else 0)
+                        path, lat = shortest_path_with_capacity(
+                            G, entry, temp_placed[first_id],
+                            temp_link_capacity,
+                            vl_chain[0]["bandwidth"] if vl_chain else 0
+                        )
                         if path is None:
                             routing_ok = False
                         else:
+                            bw_entry = vl_chain[0]["bandwidth"] if vl_chain else 0
                             for u, v in zip(path[:-1], path[1:]):
-                                bw = vl_chain[0]["bandwidth"] if vl_chain else 0
                                 if (u, v) in temp_link_capacity:
-                                    temp_link_capacity[(u, v)] -= bw
+                                    temp_link_capacity[(u, v)] -= bw_entry
                                 else:
-                                    temp_link_capacity[(v, u)] -= bw
+                                    temp_link_capacity[(v, u)] -= bw_entry
                             temp_routed[("ENTRY", first_id)] = path
                             temp_g_cost += lat
 
                 if not routing_ok:
                     continue
 
-                # Commit local success
-                placed_vnfs = temp_placed
-                routed_vls = temp_routed
-                local_link_capacity = temp_link_capacity
-                local_node_capacity = temp_node_capacity
-                g_cost = temp_g_cost
+                # Node is feasible: evaluate latency-based objective (minimize temp_g_cost)
+                if best_candidate_state is None or temp_g_cost < best_candidate_cost:
+                    best_candidate_cost = temp_g_cost
+                    best_candidate_state = (
+                        temp_placed,
+                        temp_routed,
+                        temp_node_capacity,
+                        temp_link_capacity,
+                        temp_g_cost,
+                        node,
+                    )
+
+            # --------- commit best candidate for this VNF, if any ----------
+            if best_candidate_state is not None:
+                (
+                    placed_vnfs,
+                    routed_vls,
+                    local_node_capacity,
+                    local_link_capacity,
+                    g_cost,
+                    chosen_node,
+                ) = best_candidate_state
+
                 placed = True
-
-                print(f"[INFO][BF] Placed {vnf_id} on node {node} "
-                      f"(use={cpu_needed}, remaining={local_node_capacity[node]}).")
-                break
-
-            if not placed:
+                print(
+                    f"[INFO][BF] Placed {vnf_id} on node {chosen_node} "
+                    f"(use={cpu_needed}, remaining={local_node_capacity[chosen_node]})."
+                )
+            else:
                 print(f"[WARN][BF] Failed to place VNF {vnf_id}, slice {i} rejected.")
                 success = False
                 break
 
+        # --------------------- slice summary ---------------------
         if success:
             node_capacity_global = local_node_capacity
             link_capacity_global = local_link_capacity
             results.append({"slice": i, "accepted": True, "g_cost": g_cost})
             full_results.append(BFState(placed_vnfs, routed_vls, g_cost))
-            print(f"[SUMMARY][BF] Slice {i} accepted. "
-                  f"Remaining min_node_cpu={min(node_capacity_global.values())}, "
-                  f"links_low_bw={sum(1 for v in link_capacity_global.values() if v <= 0)}")
+            print(
+                f"[SUMMARY][BF] Slice {i} accepted. "
+                f"Remaining min_node_cpu={min(node_capacity_global.values())}, "
+                f"links_low_bw={sum(1 for v in link_capacity_global.values() if v <= 0)}"
+            )
         else:
             results.append({"slice": i, "accepted": False, "g_cost": None})
             full_results.append(None)

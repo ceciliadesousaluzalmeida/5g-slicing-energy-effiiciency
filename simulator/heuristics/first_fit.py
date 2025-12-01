@@ -3,6 +3,7 @@ import networkx as nx
 import pandas as pd
 from copy import deepcopy
 
+
 class FFState:
     def __init__(self, placed_vnfs=None, routed_vls=None, g_cost=0.0):
         self.placed_vnfs = placed_vnfs or {}
@@ -28,12 +29,16 @@ def run_first_fit(G, slices, node_capacity_base, link_capacity_base, link_latenc
             path = nx.shortest_path(G, u, v, weight="latency")
         except nx.NetworkXNoPath:
             return None, None
+
         for a, b in zip(path[:-1], path[1:]):
             cap = link_capacity.get((a, b), link_capacity.get((b, a), 0))
             if cap < bandwidth:
                 return None, None
-        latency = sum(link_latency.get((a, b), link_latency.get((b, a), 1.0))
-                      for a, b in zip(path[:-1], path[1:]))
+
+        latency = sum(
+            link_latency.get((a, b), link_latency.get((b, a), 1.0))
+            for a, b in zip(path[:-1], path[1:])
+        )
         return path, latency
 
     # --------------- main loop over slices ---------------
@@ -56,22 +61,29 @@ def run_first_fit(G, slices, node_capacity_base, link_capacity_base, link_latenc
         local_node_capacity = deepcopy(node_capacity_global)
         local_link_capacity = deepcopy(link_capacity_global)
 
+        # -------------------- iterate over VNFs --------------------
         for vnf in vnf_chain:
             vnf_id = vnf["id"]
-            cpu_need = vnf["cpu"]
+            cpu_needed = vnf["cpu"]
             slice_id = vnf["slice"]
 
             placed = False
+
+            # First-Fit: scan nodes in a fixed order and pick the first feasible one
             for node in sorted(G.nodes):
                 avail_cpu = local_node_capacity.get(node, 0)
-                if avail_cpu < cpu_need:
+                if avail_cpu < cpu_needed:
                     continue
 
-                # Anti-affinity: same slice cannot share node
-                if any(node == placed_node and slice_id == next(v["slice"] for v in vnf_chain if v["id"] == other_id)
-                       for other_id, placed_node in placed_vnfs.items()):
+                # Anti-affinity: VNFs from the same slice cannot share the same node
+                if any(
+                    node == placed_node and
+                    slice_id == next(v["slice"] for v in vnf_chain if v["id"] == other_id)
+                    for other_id, placed_node in placed_vnfs.items()
+                ):
                     continue
 
+                # Local copies to simulate placement and routing on this node
                 temp_placed = placed_vnfs.copy()
                 temp_routed = routed_vls.copy()
                 temp_node_capacity = deepcopy(local_node_capacity)
@@ -79,77 +91,90 @@ def run_first_fit(G, slices, node_capacity_base, link_capacity_base, link_latenc
                 temp_g_cost = g_cost
                 routing_ok = True
 
-                temp_node_capacity[node] -= cpu_need
+                # Place current VNF on this node
+                temp_node_capacity[node] -= cpu_needed
                 temp_placed[vnf_id] = node
 
-                # Route internal VLs
+                # Route internal VLs whose endpoints are now both placed
                 for vl in vl_chain:
                     src, dst = vl["from"], vl["to"]
                     if src in temp_placed and dst in temp_placed and (src, dst) not in temp_routed:
-                        src_node, dst_node = temp_placed[src], temp_placed[dst]
-                        path, lat = shortest_path_with_capacity(G, src_node, dst_node,
-                                                                temp_link_capacity, vl["bandwidth"])
+                        src_node = temp_placed[src]
+                        dst_node = temp_placed[dst]
+                        path, lat = shortest_path_with_capacity(
+                            G, src_node, dst_node,
+                            temp_link_capacity, vl["bandwidth"]
+                        )
                         if path is None:
                             routing_ok = False
                             break
+
+                        bw = vl["bandwidth"]
                         for u, v in zip(path[:-1], path[1:]):
-                            bw = vl["bandwidth"]
                             if (u, v) in temp_link_capacity:
                                 temp_link_capacity[(u, v)] -= bw
                             else:
                                 temp_link_capacity[(v, u)] -= bw
+
                         temp_routed[(src, dst)] = path
                         temp_g_cost += lat
 
                 if not routing_ok:
                     continue
 
-                # ENTRY → first VNF if defined
+                # ENTRY → first VNF if defined and not yet routed
                 if entry is not None and vnf_chain:
                     first_id = vnf_chain[0]["id"]
                     if ("ENTRY", first_id) not in temp_routed and first_id in temp_placed:
-                        path, lat = shortest_path_with_capacity(G, entry, temp_placed[first_id],
-                                                                temp_link_capacity,
-                                                                vl_chain[0]["bandwidth"] if vl_chain else 0)
+                        path, lat = shortest_path_with_capacity(
+                            G, entry, temp_placed[first_id],
+                            temp_link_capacity,
+                            vl_chain[0]["bandwidth"] if vl_chain else 0
+                        )
                         if path is None:
                             routing_ok = False
                         else:
+                            bw_entry = vl_chain[0]["bandwidth"] if vl_chain else 0
                             for u, v in zip(path[:-1], path[1:]):
-                                bw = vl_chain[0]["bandwidth"] if vl_chain else 0
                                 if (u, v) in temp_link_capacity:
-                                    temp_link_capacity[(u, v)] -= bw
+                                    temp_link_capacity[(u, v)] -= bw_entry
                                 else:
-                                    temp_link_capacity[(v, u)] -= bw
+                                    temp_link_capacity[(v, u)] -= bw_entry
                             temp_routed[("ENTRY", first_id)] = path
                             temp_g_cost += lat
 
                 if not routing_ok:
                     continue
 
-                # Commit local placement
+                # Commit local placement: first feasible node wins (First-Fit)
                 placed_vnfs = temp_placed
                 routed_vls = temp_routed
                 local_node_capacity = temp_node_capacity
                 local_link_capacity = temp_link_capacity
                 g_cost = temp_g_cost
                 placed = True
-                print(f"[INFO][FF] Placed {vnf_id} on node {node} "
-                      f"(use={cpu_need}, remaining={local_node_capacity[node]}).")
-                break
+                print(
+                    f"[INFO][FF] Placed {vnf_id} on node {node} "
+                    f"(use={cpu_needed}, remaining={local_node_capacity[node]})."
+                )
+                break  # do not try other nodes (First-Fit behavior)
 
             if not placed:
                 print(f"[WARN][FF] Failed to place VNF {vnf_id}, slice {i} rejected.")
                 success = False
                 break
 
+        # --------------------- slice summary ---------------------
         if success:
             node_capacity_global = local_node_capacity
             link_capacity_global = local_link_capacity
             results.append({"slice": i, "accepted": True, "g_cost": g_cost})
             full_results.append(FFState(placed_vnfs, routed_vls, g_cost))
-            print(f"[SUMMARY][FF] Slice {i} accepted. "
-                  f"Remaining min_node_cpu={min(node_capacity_global.values())}, "
-                  f"links_low_bw={sum(1 for v in link_capacity_global.values() if v <= 0)}")
+            print(
+                f"[SUMMARY][FF] Slice {i} accepted. "
+                f"Remaining min_node_cpu={min(node_capacity_global.values())}, "
+                f"links_low_bw={sum(1 for v in link_capacity_global.values() if v <= 0)}"
+            )
         else:
             results.append({"slice": i, "accepted": False, "g_cost": None})
             full_results.append(None)

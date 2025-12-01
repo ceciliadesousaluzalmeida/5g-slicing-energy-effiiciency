@@ -84,10 +84,30 @@ def plot_solution_heuristic(G, result, title="Heuristic Solution", pos=None):
 # ------------------------------------------------------------
 # Combined routes visualization
 # ------------------------------------------------------------
-def plot_all_routes(G, results, title="All Routes", results_dir="./results"):
+def plot_all_routes(G, results, title="All Routes", results_dir="./results", label_offset=0.08):
     """
     Plot all routed paths from a list of heuristic results and save the figure in results_dir.
+    Labels are stacked per edge and offset perpendicularly to avoid overlaps.
     """
+    import os
+    import math
+    import matplotlib.pyplot as plt
+    import networkx as nx
+
+    # --- Helpers (all local to keep function self-contained) ---
+    def _midpoint(pu, pv):
+        return ((pu[0] + pv[0]) / 2.0, (pu[1] + pv[1]) / 2.0)
+
+    def _unit_perp(pu, pv):
+        """Return a unit vector perpendicular to (pv - pu)."""
+        dx, dy = pv[0] - pu[0], pv[1] - pu[1]
+        n = math.hypot(dx, dy) or 1.0
+        return (-dy / n, dx / n)
+
+    def _ekey(u, v):
+        """Undirected edge key for stacking labels on the same link."""
+        return (u, v) if u <= v else (v, u)
+
     os.makedirs(results_dir, exist_ok=True)
     pos = nx.spring_layout(G, seed=42)
 
@@ -102,23 +122,59 @@ def plot_all_routes(G, results, title="All Routes", results_dir="./results"):
     colors = plt.cm.get_cmap("tab20", 20)
     color_idx = 0
 
+    # --- Draw colored paths and collect label requests bucketed by edge ---
+    edge_labels = {}  # (u,v)_undirected -> list of dicts(label,color,mid_edge)
     for s_idx, res in enumerate(results):
         if not res or not hasattr(res, "routed_vls"):
             continue
+
         for (src, dst), path in res.routed_vls.items():
+            if not path or len(path) < 2:
+                continue
+
+            # Draw the path
             edges_in_path = [(path[i], path[i + 1]) for i in range(len(path) - 1)]
             color = colors(color_idx % 20)
             nx.draw_networkx_edges(
                 G, pos, edgelist=edges_in_path,
-                edge_color=[color], width=2.8, alpha=0.85
-            )
-            mid = path[len(path) // 2]
-            plt.text(
-                pos[mid][0], pos[mid][1] + 0.05,
-                f"S{s_idx + 1}:{src}->{dst}",
-                color=color, fontsize=9, ha='center'
+                edge_color=[color], width=2.8, alpha=0.9
             )
             color_idx += 1
+
+            # Choose the central edge of the path for labeling
+            mid_idx = (len(edges_in_path) - 1) // 2
+            u_mid, v_mid = edges_in_path[mid_idx]
+
+            k = _ekey(u_mid, v_mid)
+            edge_labels.setdefault(k, []).append({
+                "text": f"S{s_idx + 1}:{src}->{dst}",
+                "color": color,
+                "edge": (u_mid, v_mid)
+            })
+
+    # --- Place labels: stack per edge, offset perpendicular to the edge vector ---
+    for (u, v), items in edge_labels.items():
+        pu, pv = pos[u], pos[v]
+        mx, my = _midpoint(pu, pv)
+        px, py = _unit_perp(pu, pv)
+
+        n = len(items)
+        # symmetric offsets: e.g., n=1 -> [0], n=2 -> [-0.5, +0.5], n=3 -> [-1,0,+1]
+        if n == 1:
+            offsets = [0]
+        else:
+            # center the stack and keep spacing consistent
+            base = list(range(-(n // 2), n // 2 + 1))
+            offsets = base[:n]  # trim in case of odd/even mismatch
+
+        for off, it in zip(offsets, items):
+            ox = mx + off * label_offset * px
+            oy = my + off * label_offset * py
+            plt.text(
+                ox, oy, it["text"],
+                color=it["color"], fontsize=10, ha="center", va="center",
+                bbox=dict(facecolor="white", edgecolor="none", alpha=0.85, pad=1.5)
+            )
 
     plt.title(title, fontsize=14, pad=15)
     plt.tight_layout()

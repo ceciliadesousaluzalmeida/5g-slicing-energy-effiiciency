@@ -1,5 +1,6 @@
 from .topology_to_instance import build_instance_from_topology
 from .solver_gurobi import solve_gurobi
+from .solver_gurobi_multiobjectif import solve_gurobi_multiobj
 from .formulation import MILPInstance
 from .adapter import MILPResultAdapterGurobi
 from .create_instance import create_instance
