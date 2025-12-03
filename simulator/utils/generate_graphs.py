@@ -84,29 +84,40 @@ def plot_solution_heuristic(G, result, title="Heuristic Solution", pos=None):
 # ------------------------------------------------------------
 # Combined routes visualization
 # ------------------------------------------------------------
-def plot_all_routes(G, results, title="All Routes", results_dir="./results", label_offset=0.08):
+def plot_all_routes(
+    G,
+    results,
+    title="All Routes",
+    results_dir="./results",
+    label_offset=0.08,
+    num_slices=None,
+    num_vnfs_per_slice=None,
+    seed=None,
+    method_name=None,
+):
     """
     Plot all routed paths from a list of heuristic results and save the figure in results_dir.
     Labels are stacked per edge and offset perpendicularly to avoid overlaps.
+    Extra parameters are used only for title/filename context.
     """
     import os
     import math
     import matplotlib.pyplot as plt
     import networkx as nx
 
-    # --- Helpers (all local to keep function self-contained) ---
-    def _midpoint(pu, pv):
-        return ((pu[0] + pv[0]) / 2.0, (pu[1] + pv[1]) / 2.0)
+    # --- Build subtitle for title and filename ---
+    context_parts = []
+    if method_name:
+        context_parts.append(method_name)
+    if num_slices is not None:
+        context_parts.append(f"{num_slices} slices")
+    if num_vnfs_per_slice is not None:
+        context_parts.append(f"{num_vnfs_per_slice} VNFs/slice")
+    if seed is not None:
+        context_parts.append(f"seed={seed}")
 
-    def _unit_perp(pu, pv):
-        """Return a unit vector perpendicular to (pv - pu)."""
-        dx, dy = pv[0] - pu[0], pv[1] - pu[1]
-        n = math.hypot(dx, dy) or 1.0
-        return (-dy / n, dx / n)
-
-    def _ekey(u, v):
-        """Undirected edge key for stacking labels on the same link."""
-        return (u, v) if u <= v else (v, u)
+    context_str = " — ".join(context_parts) if context_parts else ""
+    full_title = f"{title}\n{context_str}" if context_str else title
 
     os.makedirs(results_dir, exist_ok=True)
     pos = nx.spring_layout(G, seed=42)
@@ -123,7 +134,21 @@ def plot_all_routes(G, results, title="All Routes", results_dir="./results", lab
     color_idx = 0
 
     # --- Draw colored paths and collect label requests bucketed by edge ---
-    edge_labels = {}  # (u,v)_undirected -> list of dicts(label,color,mid_edge)
+    def _midpoint(pu, pv):
+        return ((pu[0] + pv[0]) / 2.0, (pu[1] + pv[1]) / 2.0)
+
+    def _unit_perp(pu, pv):
+        """Return a unit vector perpendicular to (pv - pu)."""
+        dx, dy = pv[0] - pu[0], pv[1] - pu[1]
+        n = math.hypot(dx, dy) or 1.0
+        return (-dy / n, dx / n)
+
+    def _ekey(u, v):
+        """Undirected edge key for stacking labels on the same link."""
+        return (u, v) if u <= v else (v, u)
+
+    edge_labels = {}
+
     for s_idx, res in enumerate(results):
         if not res or not hasattr(res, "routed_vls"):
             continue
@@ -132,7 +157,6 @@ def plot_all_routes(G, results, title="All Routes", results_dir="./results", lab
             if not path or len(path) < 2:
                 continue
 
-            # Draw the path
             edges_in_path = [(path[i], path[i + 1]) for i in range(len(path) - 1)]
             color = colors(color_idx % 20)
             nx.draw_networkx_edges(
@@ -141,7 +165,6 @@ def plot_all_routes(G, results, title="All Routes", results_dir="./results", lab
             )
             color_idx += 1
 
-            # Choose the central edge of the path for labeling
             mid_idx = (len(edges_in_path) - 1) // 2
             u_mid, v_mid = edges_in_path[mid_idx]
 
@@ -152,20 +175,17 @@ def plot_all_routes(G, results, title="All Routes", results_dir="./results", lab
                 "edge": (u_mid, v_mid)
             })
 
-    # --- Place labels: stack per edge, offset perpendicular to the edge vector ---
     for (u, v), items in edge_labels.items():
         pu, pv = pos[u], pos[v]
         mx, my = _midpoint(pu, pv)
         px, py = _unit_perp(pu, pv)
 
         n = len(items)
-        # symmetric offsets: e.g., n=1 -> [0], n=2 -> [-0.5, +0.5], n=3 -> [-1,0,+1]
         if n == 1:
             offsets = [0]
         else:
-            # center the stack and keep spacing consistent
             base = list(range(-(n // 2), n // 2 + 1))
-            offsets = base[:n]  # trim in case of odd/even mismatch
+            offsets = base[:n]
 
         for off, it in zip(offsets, items):
             ox = mx + off * label_offset * px
@@ -176,10 +196,20 @@ def plot_all_routes(G, results, title="All Routes", results_dir="./results", lab
                 bbox=dict(facecolor="white", edgecolor="none", alpha=0.85, pad=1.5)
             )
 
-    plt.title(title, fontsize=14, pad=15)
+    plt.title(full_title, fontsize=14, pad=15)
     plt.tight_layout()
 
-    filename = title.lower().replace(" ", "_") + ".png"
+    # Build filename with context
+    safe_method = (method_name or "all").replace(" ", "_").lower()
+    filename_parts = [safe_method]
+    if num_slices is not None:
+        filename_parts.append(f"s{num_slices}")
+    if num_vnfs_per_slice is not None:
+        filename_parts.append(f"v{num_vnfs_per_slice}")
+    if seed is not None:
+        filename_parts.append(f"seed{seed}")
+
+    filename = "routes_" + "_".join(filename_parts) + ".png"
     output_path = os.path.join(results_dir, filename)
     plt.savefig(output_path, dpi=400)
     plt.close()
@@ -189,7 +219,21 @@ def plot_all_routes(G, results, title="All Routes", results_dir="./results", lab
 # ------------------------------------------------------------
 # CPU usage comparison
 # ------------------------------------------------------------
-def plot_cpu_usage(G, slices, method_results, results_dir):
+def plot_cpu_usage(
+    G,
+    slices,
+    method_results,
+    results_dir,
+    num_slices=None,
+    num_vnfs_per_slice=None,
+    seed=None,
+):
+    """
+    Plot CPU usage per node for all methods in method_results.
+    Adds scenario information (slices, VNFs/slice, seed) to title and filename.
+    """
+    os.makedirs(results_dir, exist_ok=True)
+
     node_capacity = {n: G.nodes[n]["cpu"] for n in G.nodes}
     nodes = list(node_capacity.keys())
 
@@ -210,7 +254,9 @@ def plot_cpu_usage(G, slices, method_results, results_dir):
             if hasattr(milp_res, "placed_vnfs"):
                 for vnf_id, n in milp_res.placed_vnfs.items():
                     try:
-                        vnf_cpu = next(vnf["cpu"] for s in slices for vnf in s[0] if vnf["id"] == vnf_id)
+                        vnf_cpu = next(
+                            vnf["cpu"] for s in slices for vnf in s[0] if vnf["id"] == vnf_id
+                        )
                         used_cpu[n] += vnf_cpu
                     except StopIteration:
                         continue
@@ -220,12 +266,13 @@ def plot_cpu_usage(G, slices, method_results, results_dir):
                     continue
                 for vnf_id, n in r.placed_vnfs.items():
                     try:
-                        vnf_cpu = next(vnf["cpu"] for s in slices for vnf in s[0] if vnf["id"] == vnf_id)
+                        vnf_cpu = next(
+                            vnf["cpu"] for s in slices for vnf in s[0] if vnf["id"] == vnf_id
+                        )
                         used_cpu[n] += vnf_cpu
                     except StopIteration:
                         continue
 
-        # Plot bars
         usage = [used_cpu[n] for n in nodes]
         offset = (idx - len(methods) / 2) * bar_width
         positions = [i + offset for i in range(len(nodes))]
@@ -238,8 +285,21 @@ def plot_cpu_usage(G, slices, method_results, results_dir):
             linewidth=0.5
         )
 
-    # Labels and layout
-    ax.set_title("CPU Utilization per Node", fontsize=14, pad=10)
+    # Build title with context
+    context_parts = []
+    if num_slices is not None:
+        context_parts.append(f"{num_slices} slices")
+    if num_vnfs_per_slice is not None:
+        context_parts.append(f"{num_vnfs_per_slice} VNFs/slice")
+    if seed is not None:
+        context_parts.append(f"seed={seed}")
+    context_str = " — ".join(context_parts)
+
+    title = "CPU Utilization per Node"
+    if context_str:
+        title = f"{title}\n{context_str}"
+
+    ax.set_title(title, fontsize=14, pad=10)
     ax.set_xlabel("Nodes", fontsize=12)
     ax.set_ylabel("CPU (units)", fontsize=12)
     ax.set_xticks(range(len(nodes)))
@@ -248,7 +308,17 @@ def plot_cpu_usage(G, slices, method_results, results_dir):
     plt.grid(axis="y", linestyle="--", alpha=0.6)
     plt.tight_layout()
 
-    output_path = os.path.join(results_dir, "cpu_utilization.png")
+    # Filename with scenario info
+    filename_parts = []
+    if num_slices is not None:
+        filename_parts.append(f"s{num_slices}")
+    if num_vnfs_per_slice is not None:
+        filename_parts.append(f"v{num_vnfs_per_slice}")
+    if seed is not None:
+        filename_parts.append(f"seed{seed}")
+
+    suffix = "_" + "_".join(filename_parts) if filename_parts else ""
+    output_path = os.path.join(results_dir, f"cpu_utilization{suffix}.png")
     plt.savefig(output_path, dpi=400)
     plt.close()
     print(f"[INFO] Saved CPU utilization chart to {output_path}")
