@@ -1,8 +1,9 @@
 from .topology_to_instance import build_instance_from_topology
 from .solver_gurobi import solve_gurobi
 from .solver_gurobi_multiobjectif import solve_gurobi_multiobj
+from .solve_gurobi_sequential import solve_gurobi_sequential, build_single_slice_model, update_remaining_capacities
 from .formulation import MILPInstance
-from .adapter import MILPResultAdapterGurobi
+from .adapter import MILPResultAdapterGurobi, MILPSequentialAdapter
 from .create_instance import create_instance
 from .helpers import sanity_check_milp_gurobi
 

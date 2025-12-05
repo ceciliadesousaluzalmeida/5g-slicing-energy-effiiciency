@@ -85,3 +85,59 @@ class MILPResultAdapterGurobi:
     # ---------------------------------------------------------------------
     def __repr__(self):
         return f"<MILPResultAdapterGurobi | {len(self.placed_vnfs)} VNFs, {len(self.routed_vls)} VLs>"
+
+
+# All comments in English
+
+# All comments in English
+
+class MILPSequentialAdapter:
+    """
+    Adapter to make the SEQUENTIAL MILP results compatible with
+    heuristic-style plotting and metric functions.
+
+    Exposes:
+      placed_vnfs: {vnf_id -> node}
+      routed_vls: {(i, j) -> [n1, n2, ..., nk]}
+    """
+
+    def __init__(self, seq_result, instance):
+        self.seq_result = seq_result
+        self.instance = instance
+        self.placed_vnfs = {}
+        self.routed_vls = {}
+
+        if (
+            not seq_result
+            or "slice_results" not in seq_result
+            or not seq_result["slice_results"]
+        ):
+            print("[WARN][MILPSequentialAdapter] Empty sequential MILP result")
+            return
+
+        self._parse_vnfs()
+        self._parse_routes()
+
+    def _parse_vnfs(self):
+        """Extract placement from keys ('x', s, i, n)."""
+        for s, res_s in self.seq_result["slice_results"].items():
+            for key, val in res_s.values.items():
+                if key[0] == "x" and val > 0.5:
+                    _, s_id, vnf_id, node = key
+                    self.placed_vnfs[vnf_id] = node
+
+    def _parse_routes(self):
+        """Reconstruct routed paths from ('f', s, i, j, u, v)."""
+        for s, res_s in self.seq_result["slice_results"].items():
+            for key, val in res_s.values.items():
+                if key[0] == "f" and val > 0.5:
+                    _, s_id, i, j, u, v = key
+                    self._add_edge_to_path((i, j), (u, v))
+
+    def _add_edge_to_path(self, key, edge):
+        """Append edge (u,v) to path for logical VL (i,j)."""
+        if key not in self.routed_vls:
+            self.routed_vls[key] = []
+        if not self.routed_vls[key] or self.routed_vls[key][-1] != edge[0]:
+            self.routed_vls[key].append(edge[0])
+        self.routed_vls[key].append(edge[1])
