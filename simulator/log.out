@@ -1,0 +1,7 @@
+nohup: les entrées sont ignorées
+Traceback (most recent call last):
+  File "/home/cecilia/5g-slicing-energy-effiiciency/simulator/run_experiment.py", line 43, in <module>
+    from utils.topology import topologie_finlande
+  File "/home/cecilia/5g-slicing-energy-effiiciency/simulator/utils/__init__.py", line 15, in <module>
+    from .create_folder import create_esimulation_folder
+ImportError: cannot import name 'create_esimulation_folder' from 'utils.create_folder' (/home/cecilia/5g-slicing-energy-effiiciency/simulator/utils/create_folder.py)
