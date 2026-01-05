@@ -1,0 +1,5 @@
+nohup: les entrées sont ignorées
+Traceback (most recent call last):
+  File "/home/cecilia/5g-slicing-energy-effiiciency/run_experiment.py", line 27, in <module>
+    from milp.create_instance import create_instance
+ModuleNotFoundError: No module named 'milp'
