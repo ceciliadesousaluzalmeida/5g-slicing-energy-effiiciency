@@ -2,4 +2,6 @@
 /venv
 /YASF
 __pycache__
-/.png
+*.png
+*.lic
+*.log

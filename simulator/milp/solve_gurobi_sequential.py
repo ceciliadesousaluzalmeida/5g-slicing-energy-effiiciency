@@ -6,14 +6,12 @@ from typing import Any, Dict, List, Tuple, Optional
 import gurobipy as gp
 from gurobipy import GRB
 
-
 # ==============================
-# Energy / latency weight params
+# Energy weight params
 # ==============================
 
-NODE_ENERGY_WEIGHT = 1.0   # weight for normalized node CPU usage
-LINK_ENERGY_WEIGHT = 1.0   # weight for normalized link bandwidth usage
-LATENCY_PENALTY   = 1e3    # penalty for latency slack xi
+NODE_ENERGY_WEIGHT = 1.0   # weight for node activation / node energy proxy
+LINK_ENERGY_WEIGHT = 1.0   # weight for link activation / link energy proxy
 
 
 @dataclass
@@ -22,7 +20,7 @@ class GurobiSolveResult:
     status_code: int
     status_str: str
     objective: float
-    values: dict  # maps tuple keys -> float values
+    values: Dict[Tuple, float]  # maps tuple keys -> float values
     solcount: int
     runtime: float
     mip_gap: Optional[float] = None
@@ -63,7 +61,6 @@ def _apply_fast_params(
     threads: Optional[int],
     log_file: Optional[str],
 ):
-    # Fast settings to get a good feasible solution quickly
     model.Params.OutputFlag = 1 if msg else 0
 
     if log_file:
@@ -75,17 +72,10 @@ def _apply_fast_params(
     if mip_gap is not None:
         model.Params.MIPGap = mip_gap
 
-    # 1: find feasible fast, 2: prove optimality, 3: improve bound
     model.Params.MIPFocus = mip_focus
-
-    # Heuristic effort and cuts balance
     model.Params.Heuristics = heuristics
     model.Params.Cuts = cuts
-
-    # Presolve usually helps a lot
     model.Params.Presolve = presolve
-
-    # Numerical stability (increase if you see instability)
     model.Params.NumericFocus = numeric_focus
 
     if seed is not None:
@@ -96,10 +86,7 @@ def _apply_fast_params(
 
 
 def _get_slice_vl_pairs(instance: Any, s: Any) -> List[Tuple[Any, Any]]:
-    """
-    Helper: return the list of logical VL pairs (i, j) for slice s
-    based on instance.V_of_s and instance.BW_sij keys.
-    """
+    """Return the list of logical VL pairs (i, j) for slice s based on BW_sij keys."""
     vl_pairs: List[Tuple[Any, Any]] = []
     V_s = instance.V_of_s[s]
     for i in V_s:
@@ -132,28 +119,24 @@ def build_multi_slice_model(
     iis_on_infeasible: bool = True,
 ) -> GurobiSolveResult:
     """
-    Build and solve a single MILP for a given subset of slices.
+    Multi-slice MILP without latency slack (hard latency constraints).
 
-    Expected instance fields (same as your single-slice solver):
-      - instance.N        : list of physical nodes
-      - instance.E        : list of physical directed edges (u, v)
-      - instance.V_of_s   : dict s -> list of global VNF ids
-      - instance.CPU_i    : dict vnf_id -> cpu demand
-      - instance.CPU_cap  : dict node -> cpu capacity
-      - instance.BW_cap   : dict (u,v) -> link capacity
-      - instance.BW_sij   : dict (s,i,j) -> bandwidth demand for VL i->j
-      - instance.L_sij    : dict (s,i,j) -> latency SLA for VL i->j (optional per VL)
-      - instance.lat_e    : dict (u,v) -> link latency
-
-    Model:
+    Variables:
       - x[s,i,n] binary placement
-      - f[s,i,j,u,v] continuous flow for each logical VL (i->j)
-      - xi[s] continuous slack for latency constraints (soft SLA)
-      - CPU & BW capacities are GLOBAL (across all slices in slice_set)
-      - Anti-colocation per slice (VNFs of same slice cannot share a node)
+      - y[s,i,j,u,v] binary edge-use for each logical VL (i->j) on physical edge (u,v)
+      - a[n] binary node activation
+      - b[u,v] binary link activation
+
+    Constraints:
+      - placement, anti-colocation
+      - global CPU capacity tied to a[n]
+      - global BW capacity tied to b[u,v]
+      - flow conservation
+      - hard latency: sum_e lat_e[e]*y <= L_ij
 
     Objective:
-      energy proxy (normalized CPU + normalized BW) + LATENCY_PENALTY * sum(xi[s])
+      NODE_ENERGY_WEIGHT*(node activation + normalized CPU load)
+    + LINK_ENERGY_WEIGHT*(link activation + normalized BW load)
     """
 
     model = gp.Model(f"multi_slice_{len(slice_set)}")
@@ -181,30 +164,28 @@ def build_multi_slice_model(
     # Variables
     # ==========================
 
-    # Placement variables x[s,i,n]
-    x_index = []
+    x_index: List[Tuple[Any, Any, Any]] = []
     for s in slice_set:
         for i in instance.V_of_s[s]:
             for n in N:
                 x_index.append((s, i, n))
     x = model.addVars(x_index, vtype=GRB.BINARY, name="x")
 
-    # Flow variables f[s,i,j,u,v] for each logical VL and physical edge
-    f_index = []
+    a = model.addVars(N, vtype=GRB.BINARY, name="a")
+    b = model.addVars(E, vtype=GRB.BINARY, name="b")
+
+    y_index: List[Tuple[Any, Any, Any, Any, Any]] = []
     for s in slice_set:
         for (i, j) in vl_pairs_by_s[s]:
             for (u, v) in E:
-                f_index.append((s, i, j, u, v))
-    f = model.addVars(f_index, vtype=GRB.CONTINUOUS, lb=0.0, name="f")
-
-    # Latency slack per slice xi[s]
-    xi = model.addVars(slice_set, vtype=GRB.CONTINUOUS, lb=0.0, name="xi")
+                y_index.append((s, i, j, u, v))
+    y = model.addVars(y_index, vtype=GRB.BINARY, name="y")
 
     # ==========================
     # Constraints
     # ==========================
 
-    # 1) Each VNF i of slice s must be placed on exactly one node (hard acceptance)
+    # 1) Placement
     for s in slice_set:
         V_s = list(instance.V_of_s[s])
         for i in V_s:
@@ -213,7 +194,7 @@ def build_multi_slice_model(
                 name=f"place_s{s}_i{i}",
             )
 
-    # 2) Hard anti-colocation per slice: at most one VNF of slice s per node n
+    # 2) Anti-colocation per slice
     for s in slice_set:
         V_s = list(instance.V_of_s[s])
         for n in N:
@@ -222,7 +203,7 @@ def build_multi_slice_model(
                 name=f"anti_coloc_s{s}_n{n}",
             )
 
-    # 3) Global CPU capacity per node (sum over slices)
+    # 3) Global CPU capacity per node tied to a[n]
     for n in N:
         cpu_usage = gp.quicksum(
             instance.CPU_i[i] * x[s, i, n]
@@ -230,95 +211,101 @@ def build_multi_slice_model(
             for i in instance.V_of_s[s]
         )
         model.addConstr(
-            cpu_usage <= instance.CPU_cap[n],
+            cpu_usage <= instance.CPU_cap[n] * a[n],
             name=f"cpu_cap_global_n{n}",
         )
 
-    # 4) Global BW capacity per physical edge (sum over slices and VLs)
+    # 4) Global BW capacity per edge tied to b[u,v]
     for (u, v) in E:
         bw_usage = gp.quicksum(
-            f[s, i, j, u, v]
+            instance.BW_sij[(s, i, j)] * y[s, i, j, u, v]
             for s in slice_set
             for (i, j) in vl_pairs_by_s[s]
         )
         model.addConstr(
-            bw_usage <= instance.BW_cap[(u, v)],
+            bw_usage <= instance.BW_cap[(u, v)] * b[u, v],
             name=f"bw_cap_global_{u}_{v}",
         )
 
-    # 5) Flow conservation per slice and per logical VL (i->j)
-    #    outflow - inflow = BW_sij * (x[s,i,n] - x[s,j,n])
+    # 5) Flow conservation (binary y)
     for s in slice_set:
         for (i, j) in vl_pairs_by_s[s]:
-            bw_ij = instance.BW_sij[(s, i, j)]
             for n in N:
                 outflow = gp.quicksum(
-                    f[s, i, j, n, v] for (uu, v) in E if uu == n
+                    y[s, i, j, n, vv] for (uu, vv) in E if uu == n
                 )
                 inflow = gp.quicksum(
-                    f[s, i, j, u, n] for (u, vv) in E if vv == n
+                    y[s, i, j, uu, n] for (uu, vv) in E if vv == n
                 )
                 model.addConstr(
-                    outflow - inflow == bw_ij * (x[s, i, n] - x[s, j, n]),
+                    outflow - inflow == (x[s, i, n] - x[s, j, n]),
                     name=f"flow_cons_s{s}_ij{i}_{j}_n{n}",
                 )
 
-    # 6) Latency constraints with slack xi[s]
-    #    For each VL (i->j) of slice s:
-    #       (1 / BW_sij) * sum_e lat_e[e] * f_sij[e] <= L_sij + xi[s]
+    # 6) Hard latency constraints (no slack)
     for s in slice_set:
         for (i, j) in vl_pairs_by_s[s]:
             key = (s, i, j)
             if key not in instance.L_sij:
                 continue
-
-            bw_ij = instance.BW_sij[key]
             L_ij = instance.L_sij[key]
 
-            lat_expr = (1.0 / bw_ij) * gp.quicksum(
-                instance.lat_e[(u, v)] * f[s, i, j, u, v] for (u, v) in E
+            lat_expr = gp.quicksum(
+                instance.lat_e[(u, v)] * y[s, i, j, u, v] for (u, v) in E
             )
 
             model.addConstr(
-                lat_expr <= L_ij + xi[s],
-                name=f"lat_s{s}_ij{i}_{j}",
+                lat_expr <= L_ij,
+                name=f"lat_hard_s{s}_ij{i}_{j}",
             )
+
+    # 7) Node activation
+    for n in N:
+        placed_any = gp.quicksum(x[s, i, n] for s in slice_set for i in instance.V_of_s[s])
+        model.addConstr(
+            placed_any <= len(slice_set) * a[n],
+            name=f"node_act_{n}",
+        )
+
+    # 8) Link activation
+    for (u, v) in E:
+        used_any = gp.quicksum(
+            y[s, i, j, u, v] for s in slice_set for (i, j) in vl_pairs_by_s[s]
+        )
+        model.addConstr(
+            used_any <= len(slice_set) * b[u, v],
+            name=f"link_act_{u}_{v}",
+        )
 
     # ==========================
     # Objective (energy proxy)
     # ==========================
 
-    # Node energy proxy: normalized CPU usage per node (global)
-    node_energy_terms = []
-    for n in N:
-        cap_n = instance.CPU_cap[n]
-        if cap_n > 0:
-            cpu_usage_n = gp.quicksum(
-                instance.CPU_i[i] * x[s, i, n]
-                for s in slice_set
-                for i in instance.V_of_s[s]
-            )
-            node_energy_terms.append(cpu_usage_n / cap_n)
-    E_nodes = gp.quicksum(node_energy_terms)
+    node_cost = gp.quicksum(
+        a[n] + (1.0 / instance.CPU_cap[n]) * gp.quicksum(
+            instance.CPU_i[i] * x[s, i, n]
+            for s in slice_set
+            for i in instance.V_of_s[s]
+        )
+        for n in N if instance.CPU_cap[n] > 0
+    )
 
-    # Link energy proxy: normalized bandwidth usage per link (global)
-    link_energy_terms = []
-    for (u, v) in E:
-        cap_uv = instance.BW_cap[(u, v)]
-        if cap_uv > 0:
-            bw_usage_uv = gp.quicksum(
-                f[s, i, j, u, v]
-                for s in slice_set
-                for (i, j) in vl_pairs_by_s[s]
-            )
-            link_energy_terms.append(bw_usage_uv / cap_uv)
-    E_links = gp.quicksum(link_energy_terms)
+    link_cost = gp.quicksum(
+        b[u, v] + (1.0 / instance.BW_cap[(u, v)]) * gp.quicksum(
+            instance.BW_sij[(s, i, j)] * y[s, i, j, u, v]
+            for s in slice_set
+            for (i, j) in vl_pairs_by_s[s]
+        )
+        for (u, v) in E if instance.BW_cap[(u, v)] > 0
+    )
 
-    energy_expr = NODE_ENERGY_WEIGHT * E_nodes + LINK_ENERGY_WEIGHT * E_links
-    model.setObjective(energy_expr + LATENCY_PENALTY * gp.quicksum(xi[s] for s in slice_set), GRB.MINIMIZE)
+    model.setObjective(
+        NODE_ENERGY_WEIGHT * node_cost + LINK_ENERGY_WEIGHT * link_cost,
+        GRB.MINIMIZE,
+    )
 
     # ==========================
-    # Solve + robust return
+    # Solve + return
     # ==========================
 
     model.optimize()
@@ -327,13 +314,13 @@ def build_multi_slice_model(
     status_str = _status_to_str(status)
     solcount = int(model.SolCount)
     runtime = float(model.Runtime)
+
     gap = None
     try:
         gap = float(model.MIPGap)
     except gp.GurobiError:
         gap = None
 
-    # If infeasible, optionally write IIS
     iis_file = None
     if status == GRB.INFEASIBLE and iis_on_infeasible:
         try:
@@ -354,7 +341,6 @@ def build_multi_slice_model(
             iis_file=iis_file,
         )
 
-    # If INF_OR_UNBD, disambiguate
     if status == GRB.INF_OR_UNBD:
         try:
             model.Params.DualReductions = 0
@@ -370,7 +356,6 @@ def build_multi_slice_model(
         except gp.GurobiError:
             pass
 
-    # Return best incumbent if available (TIME_LIMIT included)
     if solcount == 0:
         return GurobiSolveResult(
             status_code=status,
@@ -385,17 +370,17 @@ def build_multi_slice_model(
 
     values: Dict[Tuple, float] = {}
 
-    # Store x
     for (s, i, n) in x_index:
         values[("x", s, i, n)] = float(x[s, i, n].X)
 
-    # Store f
-    for (s, i, j, u, v) in f_index:
-        values[("f", s, i, j, u, v)] = float(f[s, i, j, u, v].X)
+    for (s, i, j, u, v) in y_index:
+        values[("f", s, i, j, u, v)] = float(y[s, i, j, u, v].X)
 
-    # Store xi
-    for s in slice_set:
-        values[("xi", s)] = float(xi[s].X)
+    for n in N:
+        values[("a", n)] = float(a[n].X)
+
+    for (u, v) in E:
+        values[("b", u, v)] = float(b[u, v].X)
 
     obj = float(model.ObjVal)
 
@@ -434,18 +419,9 @@ def solve_gurobi_shrink_until_feasible(
 
     Removal policy:
       - removes the last slice in slice_order (or instance.S order)
-
-    Returns:
-      - accepted_slices: the final feasible subset (maximal under this removal policy)
-      - last_result: GurobiSolveResult for the final subset (or None)
-      - attempts: list of (subset, status_str, solcount, runtime, objective)
     """
 
-    if slice_order is None:
-        current = list(instance.S)
-    else:
-        current = list(slice_order)
-
+    current = list(instance.S) if slice_order is None else list(slice_order)
     attempts = []
 
     while len(current) > 0:
@@ -485,7 +461,6 @@ def solve_gurobi_shrink_until_feasible(
             )
         )
 
-        # Feasible if we have an incumbent
         if res.solcount > 0 and res.objective != float("inf"):
             if msg:
                 print(f"[SUCCESS] Feasible with {len(current)} slices (status={res.status_str}).")
@@ -495,7 +470,6 @@ def solve_gurobi_shrink_until_feasible(
                 "attempts": attempts,
             }
 
-        # Infeasible or no incumbent -> remove one slice and retry
         removed = current.pop()
         if msg:
             print(f"[INFO] No feasible solution, removing slice {removed} and retrying...")
