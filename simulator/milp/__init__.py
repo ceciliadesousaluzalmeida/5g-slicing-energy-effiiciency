@@ -18,7 +18,7 @@ try:
         _gurobi_status_to_str,
         _gurobi_objval_to_str,
         _gurobi_mipgap_to_str,
-        solve_gurobi_shrink_until_feasible
+        solve_gurobi_max_accept
     )
 except ImportError:
     # Keep package importable even if sequential module symbols are missing

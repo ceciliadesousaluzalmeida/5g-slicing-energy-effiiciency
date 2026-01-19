@@ -1,518 +1,484 @@
 # energy_aware_astar_mininfra.py
+# NOTE: Code comments are in English per your preference.
+
 from copy import deepcopy
-import pandas as pd
-import networkx as nx
-from queue import PriorityQueue
 from dataclasses import dataclass
-import math
+from queue import PriorityQueue
 from typing import Dict, List, Tuple, Optional, Set, Any
 
+import math
+import pandas as pd
+import networkx as nx
+
+
+# ------------------------- Canonical helpers (undirected) -------------------------
+def _edge_key(u, v) -> Tuple[Any, Any]:
+    """Return canonical undirected edge key."""
+    return tuple(sorted((u, v)))
+
+
+def _get_link_cap(capdict: Dict[Tuple[Any, Any], float], u, v) -> Optional[float]:
+    """Get remaining bandwidth on undirected edge."""
+    return capdict.get(_edge_key(u, v), None)
+
+
+def _dec_link_cap(capdict: Dict[Tuple[Any, Any], float], u, v, amount: float) -> None:
+    """
+    Decrease remaining bandwidth on undirected edge.
+
+    English: Hard-fail if the decrement would underflow (go negative).
+    This prevents silent capacity violations during global commit.
+    """
+    ek = _edge_key(u, v)
+    if ek not in capdict:
+        raise KeyError(f"Edge {ek} not found in link capacities.")
+    capdict[ek] -= amount
+    if capdict[ek] < -1e-9:
+        raise ValueError(f"Link capacity underflow on {ek}: remaining={capdict[ek]}, dec={amount}")
+
+
+def _validate_canonical_link_keys(link_capacity_base: Dict[Tuple[Any, Any], float]) -> Dict[Tuple[Any, Any], float]:
+    """
+    English: Ensure all link keys are canonical and merge duplicates safely.
+    If duplicates exist (e.g., (2,6) and (6,2)), it will merge only if capacities match.
+    """
+    merged: Dict[Tuple[Any, Any], float] = {}
+    for (u, v), cap in link_capacity_base.items():
+        ek = _edge_key(u, v)
+        if ek in merged and abs(merged[ek] - cap) > 1e-9:
+            raise ValueError(
+                f"Non-canonical or conflicting capacities for edge {ek}: "
+                f"seen={merged[ek]} vs new={cap} from key {(u, v)}"
+            )
+        merged[ek] = float(cap)
+    return merged
+
+
 # ------------------------- Energy model -------------------------
-@dataclass
+@dataclass(frozen=True)
 class EnergyParams:
     """
-    Energy model compatible with MILP formulation:
-      - link_dynamic_w_per_mbps: per-Mbps dynamic cost on links (normalized BW usage)
-      - node_forward_w_per_mbps: per-Mbps forwarding cost on nodes
-      - link_baseline_w: fixed activation cost when a link becomes active (b_uv * 1)
-      - node_baseline_w: fixed activation cost when a node becomes active (a_n * 1)
-      - host_baseline_w: one-time cost when placing a VNF on a previously inactive host
-      - min_incremental_per_hop: optimistic per-hop lower bound for pruning
+    MILP-compatible *incremental* energy model (consistent and non-duplicated):
+      - node_baseline_w: cost paid once when a node becomes active
+      - link_baseline_w: cost paid once when a link becomes active
+      - node_dynamic_w: variable cost for CPU placement, proportional to cpu_demand / cpu_cap_total
+      - link_dynamic_w: variable cost for bandwidth routing, proportional to bw_demand / bw_cap_total
     """
-    link_dynamic_w_per_mbps: float = 1.0  # Now matches MILP: b_uv * BW_used/BW_cap
-    node_forward_w_per_mbps: float = 1.0  # Matches MILP: a_n * CPU_used/CPU_cap
-    link_baseline_w: float = 1.0          # Fixed cost: b_uv * 1
-    node_baseline_w: float = 1.0          # Fixed cost: a_n * 1
-    host_baseline_w: float = 0.0          # Could be merged with node_baseline_w
-    min_incremental_per_hop: float = 0.0015
+    node_baseline_w: float = 1.0
+    link_baseline_w: float = 1.0
+    node_dynamic_w: float = 1.0
+    link_dynamic_w: float = 1.0
 
 
+# ------------------------- Optional latency constraints -------------------------
+@dataclass
+class LatencyInfo:
+    """
+    Optional hard latency constraints for VLs.
+    - link_latencies uses canonical undirected keys: {(u,v): latency}
+    - vl_sla uses VL keys: {(from_vnf,to_vnf): max_latency}
+    """
+    link_latencies: Optional[Dict[Tuple[Any, Any], float]] = None
+    vl_sla: Optional[Dict[Tuple[Any, Any], float]] = None
+
+    def path_latency(self, path: List[Any], bw_demand_mbps: float) -> float:
+        """Compute total path latency (prop + simple transmission approximation)."""
+        if not self.link_latencies or not path or len(path) == 1:
+            return 0.0
+
+        total = 0.0
+        for u, v in zip(path[:-1], path[1:]):
+            total += self.link_latencies.get(_edge_key(u, v), 0.0)
+
+        # Simple transmission delay approximation per hop (optional)
+        # packet=1500B -> 1500*8 bits, bw in Mbps -> bw*1e6 bps
+        if bw_demand_mbps > 0:
+            tx = (1500 * 8) / (bw_demand_mbps * 1e6)
+            total += tx * (len(path) - 1)
+
+        return total
+
+    def check_path(
+        self,
+        path: List[Any],
+        bw_demand_mbps: float,
+        vl_key: Optional[Tuple[Any, Any]] = None
+    ) -> Tuple[bool, float]:
+        """Check if a path satisfies SLA for a given VL key (hard constraint)."""
+        lat = self.path_latency(path, bw_demand_mbps)
+        if self.vl_sla is None or vl_key is None:
+            return True, lat
+        max_lat = self.vl_sla.get(vl_key, None)
+        if max_lat is None:
+            return True, lat
+        return (lat <= max_lat), lat
+
+
+# ------------------------- A* State -------------------------
 class AStarInfraState:
-    def __init__(self, placed_vnfs=None, routed_vls=None, g_cost=(0,0,0.0),
-                 node_capacity=None, link_capacity=None, energy=0.0,
-                 active_nodes=None, active_links=None,
-                 node_cpu_used=None, link_bw_used=None):
-        self.placed_vnfs   = placed_vnfs or {}              # {vnf_id: node}
-        self.routed_vls    = routed_vls or {}               # {(from,to): path}
-        self.g_cost        = g_cost                         # (nodes_used, links_used, energy)
-        self.node_capacity = node_capacity or {}            # {node: cpu_left}
-        self.link_capacity = link_capacity or {}            # {(u,v): bw_left} undirected
-        self.energy        = float(energy)                  # accumulated energy
-        
-        # NEW: Track active infrastructure and resource usage for MILP-compatible costs
-        self.active_nodes  = active_nodes or set()          # Nodes with baseline cost already paid
-        self.active_links  = active_links or set()          # Links with baseline cost already paid
-        self.node_cpu_used = node_cpu_used or {}            # {node: total_cpu_used} for normalized cost
-        self.link_bw_used  = link_bw_used or {}             # {(u,v): total_bw_used} for normalized cost
+    """
+    State stores:
+      - placements: vnf_id -> node
+      - routes: (from_id,to_id) -> path list of nodes
+      - remaining capacities (node/link)
+      - active infra sets (nodes/links)
+      - resource usage tracking (cpu_used/bw_used) for reporting (not required for energy)
+      - energy: accumulated incremental energy (no double counting)
+    """
+    def __init__(
+        self,
+        placed_vnfs: Optional[Dict[Any, Any]] = None,
+        routed_vls: Optional[Dict[Tuple[Any, Any], List[Any]]] = None,
+        node_capacity: Optional[Dict[Any, float]] = None,
+        link_capacity: Optional[Dict[Tuple[Any, Any], float]] = None,
+        active_nodes: Optional[Set[Any]] = None,
+        active_links: Optional[Set[Tuple[Any, Any]]] = None,
+        node_cpu_used: Optional[Dict[Any, float]] = None,
+        link_bw_used: Optional[Dict[Tuple[Any, Any], float]] = None,
+        energy: float = 0.0,
+        h_cost: float = 0.0,
+    ):
+        self.placed_vnfs = placed_vnfs or {}
+        self.routed_vls = routed_vls or {}
+        self.node_capacity = node_capacity or {}
+        self.link_capacity = link_capacity or {}
 
-    def is_goal(self, vnf_chain, vl_chain, entry=None):
-        # All VNFs placed
+        self.active_nodes = active_nodes or set()
+        self.active_links = active_links or set()
+
+        self.node_cpu_used = node_cpu_used or {}
+        self.link_bw_used = link_bw_used or {}
+
+        self.energy = float(energy)
+        self.h_cost = float(h_cost)
+
+        self.f_cost = self._calculate_f_cost()
+
+    def _calculate_f_cost(self):
+        """f = g + h with small tie-breakers."""
+        # Tie-breaker: fewer active nodes/links
+        return (
+            self.energy + self.h_cost,
+            0.01 * len(self.active_nodes),
+            0.001 * len(self.active_links),
+        )
+
+    def __lt__(self, other):
+        return self.f_cost < other.f_cost
+
+    def is_goal(self, vnf_chain, vl_chain, entry=None) -> bool:
         if len(self.placed_vnfs) != len(vnf_chain):
             return False
-        # All VLs routed
         want = set((vl["from"], vl["to"]) for vl in vl_chain)
         if not want.issubset(set(self.routed_vls.keys())):
             return False
-        # ENTRY->first VNF (if applicable)
         if entry is not None and vnf_chain:
             first_id = vnf_chain[0]["id"]
             if ("ENTRY", first_id) not in self.routed_vls:
                 return False
         return True
 
-    def __lt__(self, other):
-        # Lexicographic comparison: (nodes_used, links_used, energy)
-        return self.g_cost < other.g_cost
 
-
-# ------------------------- Helpers for link caps (undirected) -------------------------
-def _edge_key(u, v):
-    return tuple(sorted((u, v)))
-
-def _get_link_cap(capdict, u, v):
-    key = (u, v) if (u, v) in capdict else ((v, u) if (v, u) in capdict else None)
-    return capdict.get(key) if key is not None else None
-
-def _dec_link_cap(capdict, u, v, amount):
-    if (u, v) in capdict:
-        capdict[(u, v)] -= amount
-    elif (v, u) in capdict:
-        capdict[(v, u)] -= amount
-    else:
-        raise KeyError(f"Edge ({u},{v}) not found in link capacities.")
-
-
-# ------------------------- Energy calculation helpers (MILP-compatible) -------------------------
-def _calculate_milp_energy_increment(state, new_node=None, new_link=None,
-                                     cpu_demand=0, bw_demand=0,
-                                     new_active_nodes=None, new_active_links=None,
-                                     energy_params=None):
+# ------------------------- Heuristic (admissible & safe) -------------------------
+def estimate_remaining_energy_admissible(
+    state: AStarInfraState,
+    vnf_chain: List[Dict[str, Any]],
+    vl_chain: List[Dict[str, Any]],
+    energy_params: EnergyParams,
+    node_capacity_total: Dict[Any, float],
+    link_capacity_total: Dict[Tuple[Any, Any], float],
+) -> float:
     """
-    Calculate energy increment using MILP formula:
-      For nodes: a_n * (1 + CPU_used/CPU_cap)
-      For links: b_uv * (1 + BW_used/BW_cap)
+    Admissible heuristic: returns 0.0 (never overestimates).
+    You can later strengthen it carefully, but 0 is consistent and safe.
     """
-    increment = 0.0
-    new_active_nodes = new_active_nodes or set()
-    new_active_links = new_active_links or set()
-    
-    # Node energy (if placing a VNF)
-    if new_node is not None and cpu_demand > 0:
-        # Baseline cost: a_n * 1 (only if node becomes active)
-        if new_node not in state.active_nodes and new_node in new_active_nodes:
-            increment += energy_params.node_baseline_w
-        
-        # Variable cost: a_n * (CPU_used/CPU_cap)
-        # Need to estimate total capacity (used + remaining)
-        current_cpu_used = state.node_cpu_used.get(new_node, 0.0)
-        remaining_cpu = state.node_capacity.get(new_node, 0.0)
-        # Estimate total capacity = used + remaining/0.8 (assuming 80% max usage)
-        total_capacity = current_cpu_used + (remaining_cpu / 0.8)
-        
-        if total_capacity > 0 and (new_node in state.active_nodes or new_node in new_active_nodes):
-            # Only pay variable cost if node is active
-            cpu_usage_ratio = cpu_demand / total_capacity
-            increment += energy_params.node_forward_w_per_mbps * cpu_usage_ratio
-    
-    # Link energy (if using a link)
-    if new_link is not None and bw_demand > 0:
-        u, v = new_link
-        link_key = (u, v) if (u, v) in state.link_capacity else (v, u)
-        
-        # Baseline cost: b_uv * 1 (only if link becomes active)
-        if link_key not in state.active_links and link_key in new_active_links:
-            increment += energy_params.link_baseline_w
-        
-        # Variable cost: b_uv * (BW_used/BW_cap)
-        current_bw_used = state.link_bw_used.get(link_key, 0.0)
-        remaining_bw = state.link_capacity.get(link_key, 0.0)
-        total_capacity = current_bw_used + (remaining_bw / 0.8)
-        
-        if total_capacity > 0 and (link_key in state.active_links or link_key in new_active_links):
-            # Only pay variable cost if link is active
-            bw_usage_ratio = bw_demand / total_capacity
-            increment += energy_params.link_dynamic_w_per_mbps * bw_usage_ratio
-    
-    return increment
+    return 0.0
 
 
-# ------------------------- Energy-aware DFS path finder (MILP-compatible) -------------------------
-def find_min_energy_path_dfs(
-    G, s, t, demand_mbps, link_capacity, energy_params,
-    active_nodes, active_links, state,
-    max_hops=None
-):
+# ------------------------- Energy increment utilities (NO DOUBLE COUNTING) -------------------------
+def _vnf_increment(
+    state: AStarInfraState,
+    node: Any,
+    cpu_demand: float,
+    energy_params: EnergyParams,
+    node_capacity_total: Dict[Any, float],
+) -> float:
+    """Incremental energy for placing a VNF on a node."""
+    inc = 0.0
+    if node not in state.active_nodes:
+        inc += energy_params.node_baseline_w
+
+    cap_total = node_capacity_total.get(node, None)
+    if cap_total is None or cap_total <= 0:
+        raise ValueError(f"Missing/invalid total CPU capacity for node {node}.")
+
+    inc += energy_params.node_dynamic_w * (cpu_demand / cap_total)
+    return inc
+
+
+def _path_increment_and_apply(
+    state: AStarInfraState,
+    path: List[Any],
+    bw_demand: float,
+    energy_params: EnergyParams,
+    link_capacity_total: Dict[Tuple[Any, Any], float],
+    # Mutated copies (child state buffers):
+    new_link_cap: Dict[Tuple[Any, Any], float],
+    new_active_nodes: Set[Any],
+    new_active_links: Set[Tuple[Any, Any]],
+    new_link_bw_used: Dict[Tuple[Any, Any], float],
+) -> float:
     """
-    Energy-driven DFS with MILP-compatible cost calculation.
-    Returns (best_path, path_energy_increment) or (None, None) if infeasible.
-    
-    state: current AStarInfraState for accessing node_cpu_used, link_bw_used
+    Compute incremental energy for routing a VL along `path` and apply:
+      - remaining capacity decrement on each edge
+      - active links/nodes updates
+      - bw_used updates
+
+    English: This function hard-checks capacity against the *child state's* remaining capacities
+    and will raise if infeasible.
+    """
+    if not path or len(path) == 1:
+        return 0.0
+
+    if bw_demand < 0:
+        raise ValueError(f"Invalid bw_demand (negative): {bw_demand}")
+
+    inc = 0.0
+
+    # Activate nodes along the path (baseline once)
+    for n in path:
+        if n not in new_active_nodes:
+            new_active_nodes.add(n)
+            if n not in state.active_nodes:
+                inc += energy_params.node_baseline_w
+
+    # Process edges
+    for u, v in zip(path[:-1], path[1:]):
+        ek = _edge_key(u, v)
+
+        # Capacity check (hard)
+        rem = new_link_cap.get(ek, None)
+        if rem is None:
+            raise KeyError(f"Edge {ek} not found in link capacities.")
+        if rem < bw_demand:
+            raise ValueError(f"Infeasible path: edge {ek} remaining bw {rem} < demand {bw_demand}.")
+
+        # Consume capacity
+        new_link_cap[ek] -= bw_demand
+        if new_link_cap[ek] < -1e-9:
+            raise ValueError(f"Internal capacity underflow on {ek}: remaining={new_link_cap[ek]}, dec={bw_demand}")
+
+        # Activate link baseline once
+        if ek not in new_active_links:
+            new_active_links.add(ek)
+            if ek not in state.active_links:
+                inc += energy_params.link_baseline_w
+
+        # Link dynamic
+        bw_cap_total = link_capacity_total.get(ek, None)
+        if bw_cap_total is None or bw_cap_total <= 0:
+            raise ValueError(f"Missing/invalid total BW capacity for link {ek}.")
+        inc += energy_params.link_dynamic_w * (bw_demand / bw_cap_total)
+
+        # Tracking
+        new_link_bw_used[ek] = new_link_bw_used.get(ek, 0.0) + bw_demand
+
+    return inc
+
+
+# ------------------------- Routing: k-shortest simple paths + exact incremental cost -------------------------
+def _find_min_energy_path_ksp(
+    G: nx.Graph,
+    s: Any,
+    t: Any,
+    bw_demand: float,
+    state: AStarInfraState,
+    energy_params: EnergyParams,
+    link_capacity_total: Dict[Tuple[Any, Any], float],
+    latency_info: Optional[LatencyInfo] = None,
+    vl_key: Optional[Tuple[Any, Any]] = None,
+    k: int = 30,
+    max_hops: Optional[int] = None,
+) -> Optional[List[Any]]:
+    """
+    Find a feasible path that minimizes *exact* incremental energy given current state,
+    by enumerating up to k shortest simple paths (by hop count) and evaluating exact incremental energy.
     """
     if s == t:
-        return [s], 0.0
+        return [s]
 
-    best_path, best_cost = None, math.inf
-    visited = set()
+    if bw_demand < 0:
+        raise ValueError(f"Invalid bw_demand (negative): {bw_demand}")
 
-    def heuristic_hops(u):
-        try:
-            return nx.shortest_path_length(G, u, t)
-        except nx.NetworkXNoPath:
-            return math.inf
+    # Generator of simple paths in increasing hop-length (unweighted) order.
+    try:
+        gen = nx.shortest_simple_paths(G, s, t)
+    except (nx.NetworkXNoPath, nx.NodeNotFound):
+        return None
 
-    def step_energy_milp(u, v, used_nodes, used_links):
-        """MILP-compatible energy calculation for step u->v"""
-        link_key = (u, v) if (u, v) in link_capacity else (v, u)
-        
-        # New active sets for this path branch
-        new_active_nodes = set(used_nodes)
-        new_active_links = set(used_links)
-        
-        # Add v to active nodes if not already active
-        if v not in active_nodes and v not in new_active_nodes:
-            new_active_nodes.add(v)
-        
-        # Add link to active links if not already active
-        if link_key not in active_links and link_key not in new_active_links:
-            new_active_links.add(link_key)
-        
-        # Calculate MILP energy increment
-        return _calculate_milp_energy_increment(
-            state=state,
-            new_node=v,
-            new_link=(u, v),
-            bw_demand=demand_mbps,
-            new_active_nodes=new_active_nodes,
-            new_active_links=new_active_links,
-            energy_params=energy_params
-        )
+    best_path = None
+    best_cost = math.inf
+    checked = 0
 
-    def lower_bound(u, acc_cost):
-        rem_h = heuristic_hops(u)
-        if rem_h == math.inf:
-            return math.inf
-        lb = acc_cost + (energy_params.min_incremental_per_hop * demand_mbps * rem_h)
-        return lb
+    for path in gen:
+        checked += 1
+        if checked > k:
+            break
 
-    def dfs(u, acc_cost, path, used_nodes, used_links, depth):
-        nonlocal best_path, best_cost
-        if acc_cost >= best_cost:
-            return
-        if max_hops is not None and depth > max_hops:
-            return
-        # Lower bound pruning
-        if lower_bound(u, acc_cost) >= best_cost:
-            return
-        if u == t:
-            best_cost = acc_cost
-            best_path = list(path)
-            return
+        if max_hops is not None and (len(path) - 1) > max_hops:
+            continue
 
-        visited.add(u)
-
-        # Expand neighbors
-        nbrs = sorted(G.neighbors(u), key=lambda v: (
-            (0 if ((u, v) in active_links or (v, u) in active_links) else 1),
-            G.degree(v)
-        ))
-
-        for v in nbrs:
-            if v in visited:
-                continue
-            # Capacity check
-            cap = _get_link_cap(link_capacity, u, v)
-            if cap is None or cap < demand_mbps:
-                continue
-
-            # Energy increment for (u->v) with MILP formula
-            inc = step_energy_milp(u, v, used_nodes, used_links)
-
-            # Apply step (temporary): mark link used and node used
-            link_key = (u, v) if (u, v) in link_capacity else (v, u)
-            used_links.add(link_key)
-            used_nodes.add(v)
-
-            dfs(v, acc_cost + inc, path + [v], used_nodes, used_links, depth + 1)
-
-            # Rollback
-            used_links.remove(link_key)
-            used_nodes.remove(v)
-
-        visited.remove(u)
-
-    dfs(s, 0.0, [s], set(), set(), 0)
-    return best_path, (best_cost if best_path is not None else None)
-
-
-# ------------------------- Latency constraint helpers -------------------------
-@dataclass
-class LatencyInfo:
-    """
-    Optional latency constraints for VLs.
-    If provided, paths must satisfy these hard constraints.
-    """
-    link_latencies: Dict[Tuple, float] = None  # {(u,v): latency} for physical links
-    vl_sla: Dict[Tuple, float] = None         # {(from_vnf,to_vnf): max_latency} for VLs
-    
-    def check_path_latency(self, path, bw_demand, vl_key=None):
-        """Check if a path satisfies latency SLA (hard constraint)"""
-        if not self.link_latencies or not path:
-            return True, 0.0
-        
-        total_latency = 0.0
+        # Capacity feasibility
+        feasible = True
         for u, v in zip(path[:-1], path[1:]):
-            link_key = _edge_key(u, v)
-            total_latency += self.link_latencies.get(link_key, 0.0)
-        
-        # Add simplified transmission delay
-        transmission_delay = (1500 * 8) / (bw_demand * 1e6) if bw_demand > 0 else 0.0
-        total_latency += transmission_delay * (len(path) - 1)
-        
-        # Check against SLA if provided
-        if vl_key and self.vl_sla:
-            max_latency = self.vl_sla.get(vl_key)
-            if max_latency is not None and total_latency > max_latency:
-                return False, total_latency
-        
-        return True, total_latency
+            rem = state.link_capacity.get(_edge_key(u, v), None)
+            if rem is None or rem < bw_demand:
+                feasible = False
+                break
+        if not feasible:
+            continue
 
+        # Latency feasibility (hard)
+        if latency_info is not None:
+            ok, _lat = latency_info.check_path(path, bw_demand, vl_key)
+            if not ok:
+                continue
 
-# ------------------------- Modified DFS with latency constraints -------------------------
-def find_min_energy_path_dfs_with_latency(
-    G, s, t, demand_mbps, link_capacity, energy_params,
-    active_nodes, active_links, state, latency_info=None, vl_key=None,
-    max_hops=None
-):
-    """
-    Energy-driven DFS with MILP costs and optional latency constraints.
-    """
-    if s == t:
-        return [s], 0.0
+        # Exact incremental energy evaluation WITHOUT mutating the state
+        tmp_link_cap = deepcopy(state.link_capacity)
+        tmp_active_nodes = set(state.active_nodes)
+        tmp_active_links = set(state.active_links)
+        tmp_link_bw_used = dict(state.link_bw_used)
 
-    best_path, best_cost = None, math.inf
-    visited = set()
-
-    def heuristic_hops(u):
         try:
-            return nx.shortest_path_length(G, u, t)
-        except nx.NetworkXNoPath:
-            return math.inf
+            inc = _path_increment_and_apply(
+                state=state,
+                path=path,
+                bw_demand=bw_demand,
+                energy_params=energy_params,
+                link_capacity_total=link_capacity_total,
+                new_link_cap=tmp_link_cap,
+                new_active_nodes=tmp_active_nodes,
+                new_active_links=tmp_active_links,
+                new_link_bw_used=tmp_link_bw_used,
+            )
+        except Exception:
+            continue
 
-    def step_energy_milp(u, v, used_nodes, used_links):
-        """Same as before"""
-        link_key = (u, v) if (u, v) in link_capacity else (v, u)
-        new_active_nodes = set(used_nodes)
-        new_active_links = set(used_links)
-        
-        if v not in active_nodes and v not in new_active_nodes:
-            new_active_nodes.add(v)
-        if link_key not in active_links and link_key not in new_active_links:
-            new_active_links.add(link_key)
-        
-        return _calculate_milp_energy_increment(
-            state=state,
-            new_node=v,
-            new_link=(u, v),
-            bw_demand=demand_mbps,
-            new_active_nodes=new_active_nodes,
-            new_active_links=new_active_links,
-            energy_params=energy_params
-        )
+        if inc < best_cost:
+            best_cost = inc
+            best_path = path
 
-    def lower_bound(u, acc_cost):
-        rem_h = heuristic_hops(u)
-        if rem_h == math.inf:
-            return math.inf
-        lb = acc_cost + (energy_params.min_incremental_per_hop * demand_mbps * rem_h)
-        return lb
-
-    def dfs(u, acc_cost, path, used_nodes, used_links, current_latency, depth):
-        nonlocal best_path, best_cost
-        if acc_cost >= best_cost:
-            return
-        if max_hops is not None and depth > max_hops:
-            return
-        # Lower bound pruning
-        if lower_bound(u, acc_cost) >= best_cost:
-            return
-        
-        # Latency constraint check (if we have SLA)
-        if latency_info and vl_key and latency_info.vl_sla:
-            max_latency = latency_info.vl_sla.get(vl_key)
-            if max_latency is not None and current_latency > max_latency:
-                return
-        
-        if u == t:
-            # Final latency check
-            if latency_info:
-                feasible, final_latency = latency_info.check_path_latency(path, demand_mbps, vl_key)
-                if not feasible:
-                    return
-            best_cost = acc_cost
-            best_path = list(path)
-            return
-
-        visited.add(u)
-
-        nbrs = sorted(G.neighbors(u), key=lambda v: (
-            (0 if ((u, v) in active_links or (v, u) in active_links) else 1),
-            G.degree(v)
-        ))
-
-        for v in nbrs:
-            if v in visited:
-                continue
-            # Capacity check
-            cap = _get_link_cap(link_capacity, u, v)
-            if cap is None or cap < demand_mbps:
-                continue
-            
-            # Calculate link latency if needed
-            link_latency = 0.0
-            if latency_info and latency_info.link_latencies:
-                link_key = _edge_key(u, v)
-                link_latency = latency_info.link_latencies.get(link_key, 0.0)
-            
-            # Check intermediate latency
-            new_latency = current_latency + link_latency
-            if latency_info and vl_key and latency_info.vl_sla:
-                max_latency = latency_info.vl_sla.get(vl_key)
-                if max_latency is not None and new_latency > max_latency:
-                    continue
-
-            # Energy increment
-            inc = step_energy_milp(u, v, used_nodes, used_links)
-
-            # Apply step
-            link_key = (u, v) if (u, v) in link_capacity else (v, u)
-            used_links.add(link_key)
-            used_nodes.add(v)
-
-            dfs(v, acc_cost + inc, path + [v], used_nodes, used_links, new_latency, depth + 1)
-
-            # Rollback
-            used_links.remove(link_key)
-            used_nodes.remove(v)
-
-        visited.remove(u)
-
-    dfs(s, 0.0, [s], set(), set(), 0.0, 0)
-    return best_path, (best_cost if best_path is not None else None)
+    return best_path
 
 
-# ------------------------- Main solver (updated for MILP compatibility) -------------------------
+# ------------------------- Main solver -------------------------
 def energy_aware_astar(
-    G, slices, node_capacity_base, link_capacity_base,
-    w_nodes=1.0, w_links=1.0, energy_params=EnergyParams(),
-    latency_info=None, csv_path=None
+    G: nx.Graph,
+    slices: List[Any],
+    node_capacity_base: Dict[Any, float],
+    link_capacity_base: Dict[Tuple[Any, Any], float],
+    energy_params: EnergyParams = EnergyParams(),
+    latency_info: Optional[LatencyInfo] = None,
+    csv_path: Optional[str] = None,
+    k_paths: int = 30,
+    max_hops: Optional[int] = None,
 ):
     """
-    Infrastructure- & energy-aware search with MILP-compatible costs.
-    
-    Changes for MILP compatibility:
-    1. Energy calculation uses: a_n*(1 + CPU_used/CPU_cap) + b_uv*(1 + BW_used/BW_cap)
-    2. No latency penalty in objective (hard constraint if provided)
-    3. Track active infrastructure and resource usage for normalized costs
+    Energy-aware A* that is:
+      - consistent (canonical edge keys everywhere)
+      - MILP-style baseline + variable terms
+      - no double counting (routing cost computed once per path)
+      - hard constraints for capacities and optional latency SLA
+      - sequential slice admission (commit after each accepted slice)
+
+    Fixes in this version:
+      1) Global commit now hard-checks capacity underflow.
+      2) Commit validates that every routed VL has a matching bandwidth in vl_chain.
+      3) Canonical link keys are validated/merged at input.
     """
-    astar_results = []
-    node_capacity_global = deepcopy(node_capacity_base)
-    link_capacity_global = deepcopy(link_capacity_base)
 
-    def state_active_nodes(state):
-        nodes = set(state.placed_vnfs.values())
-        for path in state.routed_vls.values():
-            for v in path:
-                nodes.add(v)
-        return nodes
+    if latency_info is not None and not isinstance(latency_info, LatencyInfo):
+        raise TypeError(f"latency_info must be LatencyInfo or None, got {type(latency_info).__name__}: {latency_info}")
 
-    def state_active_links(state):
-        used = set()
-        for path in state.routed_vls.values():
-            for u, v in zip(path[:-1], path[1:]):
-                key = (u, v) if (u, v) in state.link_capacity else ((v, u) if (v, u) in state.link_capacity else _edge_key(u, v))
-                used.add(key)
-        return used
+    # Total capacities are the base capacities (assumed constant)
+    node_capacity_total = {n: float(c) for n, c in node_capacity_base.items()}
+    link_capacity_base_canon = _validate_canonical_link_keys(link_capacity_base)
+    link_capacity_total = dict(link_capacity_base_canon)
 
-    def lex_cost_tuple(state):
-        nodes_used = len(state.active_nodes)  # Use tracked active nodes
-        links_used = len(state.active_links)  # Use tracked active links
-        return (w_nodes * nodes_used, w_links * links_used, state.energy)
+    # Global remaining capacities (committed sequentially)
+    node_capacity_global = deepcopy(node_capacity_total)
+    link_capacity_global = deepcopy(link_capacity_total)
 
-    def expand_state(state, vnf_chain, vl_chain, entry=None):
-        expansions = []
+    astar_results: List[Optional[AStarInfraState]] = []
 
-        # Identify next VNF to place
-        unplaced_ids = [v["id"] for v in vnf_chain if v["id"] not in state.placed_vnfs]
-        if not unplaced_ids:
+    def expand_state(state: AStarInfraState, vnf_chain, vl_chain, entry=None) -> List[AStarInfraState]:
+        expansions: List[AStarInfraState] = []
+
+        # Choose next VNF in *chain order* (not by id sorting)
+        next_vnf = None
+        for v in vnf_chain:
+            if v["id"] not in state.placed_vnfs:
+                next_vnf = v
+                break
+        if next_vnf is None:
             return expansions
-        next_vnf_id = sorted(unplaced_ids)[0]
-        vnf_obj = next(v for v in vnf_chain if v["id"] == next_vnf_id)
 
-        # Candidate nodes
-        active_nodes_now = state_active_nodes(state)
+        next_vnf_id = next_vnf["id"]
+        cpu_need = float(next_vnf.get("cpu", 0.0))
+
+        # Candidate nodes: prefer already active nodes, then highest remaining CPU
         node_order = sorted(
             G.nodes,
-            key=lambda n: ((n not in active_nodes_now), -state.node_capacity.get(n, 0))
+            key=lambda n: ((n not in state.active_nodes), -state.node_capacity.get(n, 0.0))
         )
 
+        # Pre-index VNFs for anti-affinity checks
+        vnf_by_id = {v["id"]: v for v in vnf_chain}
+
         for node in node_order:
-            cpu_need = vnf_obj["cpu"]
-            avail_cpu = state.node_capacity.get(node, 0)
+            avail_cpu = state.node_capacity.get(node, 0.0)
             if avail_cpu < cpu_need:
                 continue
 
-            # Anti-affinity
+            # Anti-affinity: VNFs of same slice cannot share same node
             same_slice_on_node = any(
-                next(v for v in vnf_chain if v["id"] == pid)["slice"] == vnf_obj["slice"]
-                for pid, n_ in state.placed_vnfs.items() if n_ == node
+                vnf_by_id[pid]["slice"] == next_vnf["slice"]
+                for pid, n_ in state.placed_vnfs.items()
+                if n_ == node
             )
             if same_slice_on_node:
                 continue
 
-            # Clone state
+            # Clone structures
             new_placed = dict(state.placed_vnfs)
             new_routed = dict(state.routed_vls)
             new_node_cap = deepcopy(state.node_capacity)
             new_link_cap = deepcopy(state.link_capacity)
-            new_energy  = state.energy
-            
-            # NEW: Track resource usage and active infrastructure
             new_active_nodes = set(state.active_nodes)
             new_active_links = set(state.active_links)
             new_node_cpu_used = dict(state.node_cpu_used)
             new_link_bw_used = dict(state.link_bw_used)
+            new_energy = state.energy
 
-            # Place VNF
+            # Place VNF (apply CPU capacity + energy)
             new_node_cap[node] -= cpu_need
             new_placed[next_vnf_id] = node
-            
-            # Update CPU usage tracking
             new_node_cpu_used[node] = new_node_cpu_used.get(node, 0.0) + cpu_need
-            
-            # Host baseline energy if node was not active before
-            if node not in state.active_nodes:
-                new_energy += energy_params.host_baseline_w
-            
-            # MILP node energy cost: a_n * (1 + CPU_used/CPU_cap)
-            # Baseline cost if node becomes active
-            if node not in state.active_nodes:
-                new_active_nodes.add(node)
-                new_energy += energy_params.node_baseline_w  # a_n * 1
-            
-            # Variable CPU cost (only if node is active)
-            if node in new_active_nodes:
-                # Estimate total capacity
-                remaining_cpu = new_node_cap.get(node, 0.0)
-                total_capacity = new_node_cpu_used[node] + (remaining_cpu / 0.8)
-                if total_capacity > 0:
-                    cpu_usage_ratio = cpu_need / total_capacity
-                    new_energy += energy_params.node_forward_w_per_mbps * cpu_usage_ratio
 
-            # Route all VLs whose endpoints are now known
-            routing_ok = True
-            
-            # Precompute active sets for this state
-            temp_state = AStarInfraState(
+            # Activate node and add incremental VNF energy
+            if node not in new_active_nodes:
+                new_active_nodes.add(node)
+            new_energy += _vnf_increment(
+                state=state,
+                node=node,
+                cpu_demand=cpu_need,
+                energy_params=energy_params,
+                node_capacity_total=node_capacity_total,
+            )
+
+            # Build a temporary state (for routing evaluation)
+            tmp_state = AStarInfraState(
                 placed_vnfs=new_placed,
                 routed_vls=new_routed,
                 node_capacity=new_node_cap,
@@ -520,191 +486,191 @@ def energy_aware_astar(
                 active_nodes=new_active_nodes,
                 active_links=new_active_links,
                 node_cpu_used=new_node_cpu_used,
-                link_bw_used=new_link_bw_used
+                link_bw_used=new_link_bw_used,
+                energy=new_energy,
+                h_cost=0.0,
             )
-            
-            cur_active_nodes = state_active_nodes(temp_state)
-            cur_active_links = state_active_links(temp_state)
+
+            # Route VLs whose endpoints are now placed
+            routing_ok = True
 
             for vl in vl_chain:
-                key = (vl["from"], vl["to"])
-                if key in new_routed:
+                vl_key = (vl["from"], vl["to"])
+                if vl_key in new_routed:
                     continue
+
                 src_node = new_placed.get(vl["from"])
                 dst_node = new_placed.get(vl["to"])
                 if src_node is None or dst_node is None:
                     continue
 
-                # Choose DFS function based on latency constraints
-                if latency_info:
-                    path, path_energy = find_min_energy_path_dfs_with_latency(
-                        G, src_node, dst_node, vl["bandwidth"],
-                        new_link_cap, energy_params,
-                        active_nodes=cur_active_nodes,
-                        active_links=cur_active_links,
-                        state=temp_state,
-                        latency_info=latency_info,
-                        vl_key=key,
-                        max_hops=None
-                    )
-                else:
-                    path, path_energy = find_min_energy_path_dfs(
-                        G, src_node, dst_node, vl["bandwidth"],
-                        new_link_cap, energy_params,
-                        active_nodes=cur_active_nodes,
-                        active_links=cur_active_links,
-                        state=temp_state,
-                        max_hops=None
-                    )
-                
+                bw = float(vl.get("bandwidth", 0.0))
+
+                path = _find_min_energy_path_ksp(
+                    G=G,
+                    s=src_node,
+                    t=dst_node,
+                    bw_demand=bw,
+                    state=tmp_state,
+                    energy_params=energy_params,
+                    link_capacity_total=link_capacity_total,
+                    latency_info=latency_info,
+                    vl_key=vl_key,
+                    k=k_paths,
+                    max_hops=max_hops,
+                )
                 if path is None:
                     routing_ok = False
                     break
 
-                # Apply link capacities and record path
-                for u, v in zip(path[:-1], path[1:]):
-                    link_key = _dec_link_cap(new_link_cap, u, v, vl["bandwidth"])
-                    # Update link bandwidth usage tracking
-                    canonical_key = _edge_key(u, v)
-                    new_link_bw_used[canonical_key] = new_link_bw_used.get(canonical_key, 0.0) + vl["bandwidth"]
-                    
-                    # Update active links and MILP link energy
-                    if canonical_key not in state.active_links:
-                        new_active_links.add(canonical_key)
-                        # Baseline link cost: b_uv * 1
-                        new_energy += energy_params.link_baseline_w
-                    
-                    # Variable link cost: b_uv * (BW_used/BW_cap)
-                    if canonical_key in new_active_links:
-                        remaining_bw = new_link_cap.get(canonical_key, 0.0)
-                        total_capacity = new_link_bw_used[canonical_key] + (remaining_bw / 0.8)
-                        if total_capacity > 0:
-                            bw_usage_ratio = vl["bandwidth"] / total_capacity
-                            new_energy += energy_params.link_dynamic_w_per_mbps * bw_usage_ratio
-                    
-                    # Update active nodes for forwarding
-                    if v not in state.active_nodes:
-                        new_active_nodes.add(v)
-                        # Node forwarding baseline already handled above
+                # Apply routing effects *once* (no double counting)
+                inc = _path_increment_and_apply(
+                    state=tmp_state,
+                    path=path,
+                    bw_demand=bw,
+                    energy_params=energy_params,
+                    link_capacity_total=link_capacity_total,
+                    new_link_cap=new_link_cap,
+                    new_active_nodes=new_active_nodes,
+                    new_active_links=new_active_links,
+                    new_link_bw_used=new_link_bw_used,
+                )
+                new_energy += inc
+                new_routed[vl_key] = path
 
-                new_routed[key] = path
-                new_energy += path_energy  # Add any additional energy from DFS
+                # Update tmp_state for subsequent VLs
+                tmp_state = AStarInfraState(
+                    placed_vnfs=new_placed,
+                    routed_vls=new_routed,
+                    node_capacity=new_node_cap,
+                    link_capacity=new_link_cap,
+                    active_nodes=new_active_nodes,
+                    active_links=new_active_links,
+                    node_cpu_used=new_node_cpu_used,
+                    link_bw_used=new_link_bw_used,
+                    energy=new_energy,
+                    h_cost=0.0,
+                )
 
-            # ENTRY → first VNF path
+            # ENTRY -> first VNF (optional)
             if routing_ok and entry is not None and vnf_chain:
                 first_id = vnf_chain[0]["id"]
                 if ("ENTRY", first_id) not in new_routed:
                     first_node = new_placed.get(first_id)
-                    if first_node is not None:
-                        bw_first = vl_chain[0]["bandwidth"] if vl_chain else 0.0
-                        
-                        if latency_info:
-                            path, path_energy = find_min_energy_path_dfs_with_latency(
-                                G, entry, first_node, bw_first,
-                                new_link_cap, energy_params,
-                                active_nodes=cur_active_nodes,
-                                active_links=cur_active_links,
-                                state=temp_state,
-                                latency_info=latency_info,
-                                vl_key=("ENTRY", first_id),
-                                max_hops=None
-                            )
-                        else:
-                            path, path_energy = find_min_energy_path_dfs(
-                                G, entry, first_node, bw_first,
-                                new_link_cap, energy_params,
-                                active_nodes=cur_active_nodes,
-                                active_links=cur_active_links,
-                                state=temp_state,
-                                max_hops=None
-                            )
-                        
+                    if first_node is None:
+                        routing_ok = False
+                    else:
+                        bw_first = float(vl_chain[0].get("bandwidth", 0.0)) if vl_chain else 0.0
+                        path = _find_min_energy_path_ksp(
+                            G=G,
+                            s=entry,
+                            t=first_node,
+                            bw_demand=bw_first,
+                            state=tmp_state,
+                            energy_params=energy_params,
+                            link_capacity_total=link_capacity_total,
+                            latency_info=latency_info,
+                            vl_key=("ENTRY", first_id),
+                            k=k_paths,
+                            max_hops=max_hops,
+                        )
                         if path is None:
                             routing_ok = False
                         else:
-                            for u, v in zip(path[:-1], path[1:]):
-                                _dec_link_cap(new_link_cap, u, v, bw_first)
-                                canonical_key = _edge_key(u, v)
-                                new_link_bw_used[canonical_key] = new_link_bw_used.get(canonical_key, 0.0) + bw_first
-                                
-                                if canonical_key not in state.active_links:
-                                    new_active_links.add(canonical_key)
-                                    new_energy += energy_params.link_baseline_w
-                                
-                                if canonical_key in new_active_links:
-                                    remaining_bw = new_link_cap.get(canonical_key, 0.0)
-                                    total_capacity = new_link_bw_used[canonical_key] + (remaining_bw / 0.8)
-                                    if total_capacity > 0:
-                                        bw_usage_ratio = bw_first / total_capacity
-                                        new_energy += energy_params.link_dynamic_w_per_mbps * bw_usage_ratio
-                                
-                                if v not in state.active_nodes:
-                                    new_active_nodes.add(v)
-                            
+                            inc = _path_increment_and_apply(
+                                state=tmp_state,
+                                path=path,
+                                bw_demand=bw_first,
+                                energy_params=energy_params,
+                                link_capacity_total=link_capacity_total,
+                                new_link_cap=new_link_cap,
+                                new_active_nodes=new_active_nodes,
+                                new_active_links=new_active_links,
+                                new_link_bw_used=new_link_bw_used,
+                            )
+                            new_energy += inc
                             new_routed[("ENTRY", first_id)] = path
-                            new_energy += path_energy
 
             if not routing_ok:
                 continue
 
-            # Build child state
             child = AStarInfraState(
                 placed_vnfs=new_placed,
                 routed_vls=new_routed,
-                g_cost=(0, 0, 0.0),
                 node_capacity=new_node_cap,
                 link_capacity=new_link_cap,
-                energy=new_energy,
                 active_nodes=new_active_nodes,
                 active_links=new_active_links,
                 node_cpu_used=new_node_cpu_used,
-                link_bw_used=new_link_bw_used
+                link_bw_used=new_link_bw_used,
+                energy=new_energy,
+                h_cost=0.0,
             )
-            child.g_cost = lex_cost_tuple(child)
             expansions.append(child)
 
         return expansions
 
-    def solve_one_slice(vnf_chain, vl_chain, entry=None):
+    def solve_one_slice(vnf_chain, vl_chain, entry=None) -> Optional[AStarInfraState]:
         init_state = AStarInfraState(
             placed_vnfs={},
             routed_vls={},
-            g_cost=(0, 0, 0.0),
             node_capacity=deepcopy(node_capacity_global),
             link_capacity=deepcopy(link_capacity_global),
-            energy=0.0,
             active_nodes=set(),
             active_links=set(),
             node_cpu_used={},
-            link_bw_used={}
+            link_bw_used={},
+            energy=0.0,
+            h_cost=0.0,
         )
-        init_state.g_cost = (0, 0, 0.0)
+        init_state.h_cost = estimate_remaining_energy_admissible(
+            init_state, vnf_chain, vl_chain, energy_params, node_capacity_total, link_capacity_total
+        )
+        init_state.f_cost = init_state._calculate_f_cost()
 
         pq = PriorityQueue()
         counter = 0
-        pq.put((init_state.g_cost, counter, init_state))
+        pq.put((init_state.f_cost, counter, init_state))
+
         visited = 0
+        best_solution = None
+        best_energy = float("inf")
 
         while not pq.empty():
             _, _, state = pq.get()
             visited += 1
+
+            if state.energy >= best_energy:
+                continue
+
             if state.is_goal(vnf_chain, vl_chain, entry):
-                nodes_used = len(state.active_nodes)
-                links_used = len(state.active_links)
-                print(f"[INFO][A*-Energy Aware] Solution after {visited} expansions. "
-                      f"(nodes={nodes_used}, links={links_used}, energy={state.energy:.4f})")
-                if latency_info:
-                    print(f"[INFO][A*-Energy Aware] Latency constraints: {'SATISFIED' if latency_info else 'N/A'}")
-                return state
+                if state.energy < best_energy:
+                    best_energy = state.energy
+                    best_solution = state
+                continue
 
             for child in expand_state(state, vnf_chain, vl_chain, entry):
-                counter += 1
-                pq.put((child.g_cost, counter, child))
+                child.h_cost = estimate_remaining_energy_admissible(
+                    child, vnf_chain, vl_chain, energy_params, node_capacity_total, link_capacity_total
+                )
+                child.f_cost = child._calculate_f_cost()
 
-        print(f"[WARN][A*-Energy Aware] No feasible solution for slice after {visited} expansions.")
+                if child.energy + child.h_cost < best_energy:
+                    counter += 1
+                    pq.put((child.f_cost, counter, child))
+
+        if best_solution is not None:
+            print(
+                f"[INFO][A*-EnergyAware] Solution found: energy={best_solution.energy:.6f}, "
+                f"active_nodes={len(best_solution.active_nodes)}, active_links={len(best_solution.active_links)}, "
+                f"expansions={visited}"
+            )
+            return best_solution
+
+        print(f"[WARN][A*-EnergyAware] No feasible solution (expansions={visited}).")
         return None
 
-    # ------------------------- Run over slices & commit capacities -------------------------
+    # ------------------------- Run slices sequentially & commit capacities -------------------------
     for i, slice_data in enumerate(slices, start=1):
         if len(slice_data) == 2:
             vnf_chain, vl_chain = slice_data
@@ -714,67 +680,150 @@ def energy_aware_astar(
         else:
             raise ValueError(f"Unexpected slice format: {slice_data}")
 
-        print(f"\n[INFO][A*-Energy Aware] === Solving slice {i} (VNFs={len(vnf_chain)}, VLs={len(vl_chain)}) ===")
-        if latency_info:
-            print(f"[INFO][A*-Energy Aware] Latency constraints enabled for {len(latency_info.vl_sla) if latency_info.vl_sla else 0} VLs")
-        
-        result_state = solve_one_slice(vnf_chain, vl_chain, entry)
-        astar_results.append(result_state)
+        print(f"\n[INFO][A*-EnergyAware] === Solving slice {i} (VNFs={len(vnf_chain)}, VLs={len(vl_chain)}) ===")
+        if latency_info and latency_info.vl_sla:
+            print(f"[INFO][A*-EnergyAware] Latency SLA enabled for {len(latency_info.vl_sla)} VLs")
 
-        if result_state is None:
-            print(f"[WARN][A*-Energy Aware] Slice {i} rejected.\n")
+        res = solve_one_slice(vnf_chain, vl_chain, entry)
+        astar_results.append(res)
+
+        if res is None:
+            print(f"[SUMMARY][A*-EnergyAware] Slice {i} rejected.")
             continue
 
-        # Commit global node capacities
-        for vnf_id, node in result_state.placed_vnfs.items():
-            vnf_cpu = next(v["cpu"] for v in vnf_chain if v["id"] == vnf_id)
-            node_capacity_global[node] -= vnf_cpu
+        # Commit global node capacities (optional: add underflow checks if desired)
+        cpu_by_id = {v["id"]: float(v.get("cpu", 0.0)) for v in vnf_chain}
+        for vnf_id, node in res.placed_vnfs.items():
+            node_capacity_global[node] -= cpu_by_id[vnf_id]
+            if node_capacity_global[node] < -1e-9:
+                raise ValueError(
+                    f"Node capacity underflow on {node} in slice {i}: remaining={node_capacity_global[node]}, "
+                    f"dec={cpu_by_id[vnf_id]}"
+                )
 
-        # Commit global link capacities
-        for (src, dst), path in result_state.routed_vls.items():
+        # Commit global link capacities (skip ENTRY)
+        bw_by_key = {(vl["from"], vl["to"]): float(vl.get("bandwidth", 0.0)) for vl in vl_chain}
+
+        for (src, dst), path in res.routed_vls.items():
             if src == "ENTRY":
                 continue
-            bw = next(vl["bandwidth"] for vl in vl_chain if vl["from"] == src and vl["to"] == dst)
+
+            if (src, dst) not in bw_by_key:
+                raise KeyError(
+                    f"BW not found for routed VL {(src, dst)} in slice {i}. Available VL keys: {list(bw_by_key.keys())}"
+                )
+
+            bw = bw_by_key[(src, dst)]
             for u, v in zip(path[:-1], path[1:]):
                 _dec_link_cap(link_capacity_global, u, v, bw)
 
-        nodes_used = len(result_state.active_nodes)
-        links_used = len(result_state.active_links)
+        print(
+            f"[SUMMARY][A*-EnergyAware] Slice {i} accepted: "
+            f"energy={res.energy:.6f}, nodes={len(res.active_nodes)}, links={len(res.active_links)}"
+        )
+        print(f"[DEBUG] Placements: {res.placed_vnfs}")
 
-        print(f"[SUMMARY][A*-Energy Aware] Slice {i} accepted. "
-              f"(nodes={nodes_used}, links={links_used}, energy={result_state.energy:.4f})\n")
-        
-        # Print VNF placements for debugging
-        print(f"[DEBUG] VNF placements: {result_state.placed_vnfs}")
-        if latency_info:
-            # Check and print latency satisfaction
+        if latency_info is not None and latency_info.vl_sla:
             for vl in vl_chain:
-                key = (vl["from"], vl["to"])
-                if key in result_state.routed_vls:
-                    path = result_state.routed_vls[key]
-                    feasible, actual_latency = latency_info.check_path_latency(
-                        path, vl["bandwidth"], key
-                    )
-                    if feasible and latency_info.vl_sla and key in latency_info.vl_sla:
-                        print(f"  VL {key}: latency {actual_latency:.6f} <= SLA {latency_info.vl_sla[key]:.6f}")
-                    elif not feasible:
-                        print(f"  VL {key}: LATENCY VIOLATION! {actual_latency:.6f} > SLA {latency_info.vl_sla[key]:.6f}")
+                k = (vl["from"], vl["to"])
+                if k in res.routed_vls and k in latency_info.vl_sla:
+                    p = res.routed_vls[k]
+                    ok, lat = latency_info.check_path(p, float(vl.get("bandwidth", 0.0)), k)
+                    print(f"[DEBUG] VL {k}: latency={lat:.6f} (SLA={latency_info.vl_sla[k]:.6f}) ok={ok}")
 
+        # English: Optional sanity print (min remaining link cap after each accepted slice)
+        if link_capacity_global:
+            min_edge = min(link_capacity_global, key=lambda e: link_capacity_global[e])
+            print(f"[CHECK] After slice {i}: min remaining link cap = {link_capacity_global[min_edge]:.6f} on edge {min_edge}")
+
+    # ------------------------- Summary dataframe -------------------------
     summary = []
-    for idx, res in enumerate(astar_results, start=1):
-        if res is None:
-            summary.append({"slice": idx, "accepted": False, "nodes_used": None, "links_used": None, "energy": None})
+    for idx, st in enumerate(astar_results, start=1):
+        if st is None:
+            summary.append(
+                {"slice": idx, "accepted": False, "nodes_used": None, "links_used": None, "energy": None, "f_cost": None}
+            )
         else:
-            summary.append({
-                "slice": idx,
-                "accepted": True,
-                "nodes_used": len(res.active_nodes),
-                "links_used": len(res.active_links),
-                "energy": res.energy
-            })
+            summary.append(
+                {
+                    "slice": idx,
+                    "accepted": True,
+                    "nodes_used": len(st.active_nodes),
+                    "links_used": len(st.active_links),
+                    "energy": st.energy,
+                    "f_cost": st.f_cost[0],
+                }
+            )
 
-    df_results = pd.DataFrame(summary)
+    df = pd.DataFrame(summary)
     if csv_path:
-        df_results.to_csv(csv_path, index=False)
-    return df_results, astar_results
+        df.to_csv(csv_path, index=False)
+        print(f"[INFO] Results saved to {csv_path}")
 
+    return df, astar_results
+
+
+# ------------------------- Example usage -------------------------
+if __name__ == "__main__":
+    G = nx.Graph()
+    G.add_edges_from(
+        [
+            (0, 1, {"latency": 0.001}),
+            (1, 2, {"latency": 0.002}),
+            (2, 3, {"latency": 0.001}),
+            (3, 0, {"latency": 0.003}),
+            (1, 3, {"latency": 0.002}),
+        ]
+    )
+
+    node_cap = {0: 100, 1: 100, 2: 100, 3: 100}
+    link_cap = {_edge_key(u, v): 1000 for (u, v) in G.edges()}
+
+    test_slice = (
+        [
+            {"id": "vnf1", "cpu": 20, "slice": 1},
+            {"id": "vnf2", "cpu": 30, "slice": 1},
+            {"id": "vnf3", "cpu": 25, "slice": 1},
+        ],
+        [
+            {"from": "vnf1", "to": "vnf2", "bandwidth": 100},
+            {"from": "vnf2", "to": "vnf3", "bandwidth": 80},
+        ],
+        0,
+    )
+    slices = [test_slice]
+
+    latency_info = LatencyInfo(
+        link_latencies={
+            _edge_key(0, 1): 0.001,
+            _edge_key(1, 2): 0.002,
+            _edge_key(2, 3): 0.001,
+            _edge_key(3, 0): 0.003,
+            _edge_key(1, 3): 0.002,
+        },
+        vl_sla={
+            ("vnf1", "vnf2"): 0.010,
+            ("vnf2", "vnf3"): 0.015,
+            ("ENTRY", "vnf1"): 0.020,
+        },
+    )
+
+    df_results, astar_results = energy_aware_astar(
+        G=G,
+        slices=slices,
+        node_capacity_base=node_cap,
+        link_capacity_base=link_cap,
+        energy_params=EnergyParams(
+            node_baseline_w=1.0,
+            link_baseline_w=1.0,
+            node_dynamic_w=1.0,
+            link_dynamic_w=1.0,
+        ),
+        latency_info=None,
+        csv_path="energy_aware_results.csv",
+        k_paths=30,
+        max_hops=None,
+    )
+
+    print("\nFinal Results:")
+    print(df_results)

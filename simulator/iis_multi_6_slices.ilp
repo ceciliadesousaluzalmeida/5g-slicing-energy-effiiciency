@@ -1,0 +1,954 @@
+\ Model multi_slice_6_copy
+\ LP format - for model browsing. Use MPS format to capture full model detail.
+Minimize
+ 
+Subject To
+ place_s2_ivnf2_3: x[2,vnf2_3,1] + x[2,vnf2_3,2] + x[2,vnf2_3,3]
+   + x[2,vnf2_3,4] + x[2,vnf2_3,5] + x[2,vnf2_3,6] + x[2,vnf2_3,7]
+   + x[2,vnf2_3,8] + x[2,vnf2_3,9] + x[2,vnf2_3,10] + x[2,vnf2_3,11]
+   + x[2,vnf2_3,12] = 1
+ place_s2_ivnf2_4: x[2,vnf2_4,1] + x[2,vnf2_4,2] + x[2,vnf2_4,3]
+   + x[2,vnf2_4,4] + x[2,vnf2_4,5] + x[2,vnf2_4,6] + x[2,vnf2_4,7]
+   + x[2,vnf2_4,8] + x[2,vnf2_4,9] + x[2,vnf2_4,10] + x[2,vnf2_4,11]
+   + x[2,vnf2_4,12] = 1
+ cpu_cap_global_n7: x[0,vnf0_0,7] + 2 x[0,vnf0_1,7] + 4 x[0,vnf0_2,7]
+   + 6 x[0,vnf0_3,7] + 8 x[0,vnf0_4,7] + 12 x[0,vnf0_5,7] + x[1,vnf1_0,7]
+   + 2 x[1,vnf1_1,7] + 4 x[1,vnf1_2,7] + 6 x[1,vnf1_3,7] + 8 x[1,vnf1_4,7]
+   + 12 x[1,vnf1_5,7] + x[2,vnf2_0,7] + 2 x[2,vnf2_1,7] + 4 x[2,vnf2_2,7]
+   + 6 x[2,vnf2_3,7] + 8 x[2,vnf2_4,7] + 12 x[2,vnf2_5,7] + x[3,vnf3_0,7]
+   + 2 x[3,vnf3_1,7] + 4 x[3,vnf3_2,7] + 6 x[3,vnf3_3,7] + 8 x[3,vnf3_4,7]
+   + 12 x[3,vnf3_5,7] + x[4,vnf4_0,7] + 2 x[4,vnf4_1,7] + 4 x[4,vnf4_2,7]
+   + 6 x[4,vnf4_3,7] + 8 x[4,vnf4_4,7] + 12 x[4,vnf4_5,7] + x[5,vnf5_0,7]
+   + 2 x[5,vnf5_1,7] + 4 x[5,vnf5_2,7] + 6 x[5,vnf5_3,7] + 8 x[5,vnf5_4,7]
+   + 12 x[5,vnf5_5,7] - 16 a[7] <= 0
+ cpu_cap_global_n8: x[0,vnf0_0,8] + 2 x[0,vnf0_1,8] + 4 x[0,vnf0_2,8]
+   + 6 x[0,vnf0_3,8] + 8 x[0,vnf0_4,8] + 12 x[0,vnf0_5,8] + x[1,vnf1_0,8]
+   + 2 x[1,vnf1_1,8] + 4 x[1,vnf1_2,8] + 6 x[1,vnf1_3,8] + 8 x[1,vnf1_4,8]
+   + 12 x[1,vnf1_5,8] + x[2,vnf2_0,8] + 2 x[2,vnf2_1,8] + 4 x[2,vnf2_2,8]
+   + 6 x[2,vnf2_3,8] + 8 x[2,vnf2_4,8] + 12 x[2,vnf2_5,8] + x[3,vnf3_0,8]
+   + 2 x[3,vnf3_1,8] + 4 x[3,vnf3_2,8] + 6 x[3,vnf3_3,8] + 8 x[3,vnf3_4,8]
+   + 12 x[3,vnf3_5,8] + x[4,vnf4_0,8] + 2 x[4,vnf4_1,8] + 4 x[4,vnf4_2,8]
+   + 6 x[4,vnf4_3,8] + 8 x[4,vnf4_4,8] + 12 x[4,vnf4_5,8] + x[5,vnf5_0,8]
+   + 2 x[5,vnf5_1,8] + 4 x[5,vnf5_2,8] + 6 x[5,vnf5_3,8] + 8 x[5,vnf5_4,8]
+   + 12 x[5,vnf5_5,8] - 16 a[8] <= 0
+ cpu_cap_global_n9: x[0,vnf0_0,9] + 2 x[0,vnf0_1,9] + 4 x[0,vnf0_2,9]
+   + 6 x[0,vnf0_3,9] + 8 x[0,vnf0_4,9] + 12 x[0,vnf0_5,9] + x[1,vnf1_0,9]
+   + 2 x[1,vnf1_1,9] + 4 x[1,vnf1_2,9] + 6 x[1,vnf1_3,9] + 8 x[1,vnf1_4,9]
+   + 12 x[1,vnf1_5,9] + x[2,vnf2_0,9] + 2 x[2,vnf2_1,9] + 4 x[2,vnf2_2,9]
+   + 6 x[2,vnf2_3,9] + 8 x[2,vnf2_4,9] + 12 x[2,vnf2_5,9] + x[3,vnf3_0,9]
+   + 2 x[3,vnf3_1,9] + 4 x[3,vnf3_2,9] + 6 x[3,vnf3_3,9] + 8 x[3,vnf3_4,9]
+   + 12 x[3,vnf3_5,9] + x[4,vnf4_0,9] + 2 x[4,vnf4_1,9] + 4 x[4,vnf4_2,9]
+   + 6 x[4,vnf4_3,9] + 8 x[4,vnf4_4,9] + 12 x[4,vnf4_5,9] + x[5,vnf5_0,9]
+   + 2 x[5,vnf5_1,9] + 4 x[5,vnf5_2,9] + 6 x[5,vnf5_3,9] + 8 x[5,vnf5_4,9]
+   + 12 x[5,vnf5_5,9] - 16 a[9] <= 0
+ cpu_cap_global_n10: x[0,vnf0_0,10] + 2 x[0,vnf0_1,10] + 4 x[0,vnf0_2,10]
+   + 6 x[0,vnf0_3,10] + 8 x[0,vnf0_4,10] + 12 x[0,vnf0_5,10]
+   + x[1,vnf1_0,10] + 2 x[1,vnf1_1,10] + 4 x[1,vnf1_2,10]
+   + 6 x[1,vnf1_3,10] + 8 x[1,vnf1_4,10] + 12 x[1,vnf1_5,10]
+   + x[2,vnf2_0,10] + 2 x[2,vnf2_1,10] + 4 x[2,vnf2_2,10]
+   + 6 x[2,vnf2_3,10] + 8 x[2,vnf2_4,10] + 12 x[2,vnf2_5,10]
+   + x[3,vnf3_0,10] + 2 x[3,vnf3_1,10] + 4 x[3,vnf3_2,10]
+   + 6 x[3,vnf3_3,10] + 8 x[3,vnf3_4,10] + 12 x[3,vnf3_5,10]
+   + x[4,vnf4_0,10] + 2 x[4,vnf4_1,10] + 4 x[4,vnf4_2,10]
+   + 6 x[4,vnf4_3,10] + 8 x[4,vnf4_4,10] + 12 x[4,vnf4_5,10]
+   + x[5,vnf5_0,10] + 2 x[5,vnf5_1,10] + 4 x[5,vnf5_2,10]
+   + 6 x[5,vnf5_3,10] + 8 x[5,vnf5_4,10] + 12 x[5,vnf5_5,10] - 16 a[10]
+   <= 0
+ cpu_cap_global_n11: x[0,vnf0_0,11] + 2 x[0,vnf0_1,11] + 4 x[0,vnf0_2,11]
+   + 6 x[0,vnf0_3,11] + 8 x[0,vnf0_4,11] + 12 x[0,vnf0_5,11]
+   + x[1,vnf1_0,11] + 2 x[1,vnf1_1,11] + 4 x[1,vnf1_2,11]
+   + 6 x[1,vnf1_3,11] + 8 x[1,vnf1_4,11] + 12 x[1,vnf1_5,11]
+   + x[2,vnf2_0,11] + 2 x[2,vnf2_1,11] + 4 x[2,vnf2_2,11]
+   + 6 x[2,vnf2_3,11] + 8 x[2,vnf2_4,11] + 12 x[2,vnf2_5,11]
+   + x[3,vnf3_0,11] + 2 x[3,vnf3_1,11] + 4 x[3,vnf3_2,11]
+   + 6 x[3,vnf3_3,11] + 8 x[3,vnf3_4,11] + 12 x[3,vnf3_5,11]
+   + x[4,vnf4_0,11] + 2 x[4,vnf4_1,11] + 4 x[4,vnf4_2,11]
+   + 6 x[4,vnf4_3,11] + 8 x[4,vnf4_4,11] + 12 x[4,vnf4_5,11]
+   + x[5,vnf5_0,11] + 2 x[5,vnf5_1,11] + 4 x[5,vnf5_2,11]
+   + 6 x[5,vnf5_3,11] + 8 x[5,vnf5_4,11] + 12 x[5,vnf5_5,11] - 64 a[11]
+   <= 0
+ cpu_cap_global_n12: x[0,vnf0_0,12] + 2 x[0,vnf0_1,12] + 4 x[0,vnf0_2,12]
+   + 6 x[0,vnf0_3,12] + 8 x[0,vnf0_4,12] + 12 x[0,vnf0_5,12]
+   + x[1,vnf1_0,12] + 2 x[1,vnf1_1,12] + 4 x[1,vnf1_2,12]
+   + 6 x[1,vnf1_3,12] + 8 x[1,vnf1_4,12] + 12 x[1,vnf1_5,12]
+   + x[2,vnf2_0,12] + 2 x[2,vnf2_1,12] + 4 x[2,vnf2_2,12]
+   + 6 x[2,vnf2_3,12] + 8 x[2,vnf2_4,12] + 12 x[2,vnf2_5,12]
+   + x[3,vnf3_0,12] + 2 x[3,vnf3_1,12] + 4 x[3,vnf3_2,12]
+   + 6 x[3,vnf3_3,12] + 8 x[3,vnf3_4,12] + 12 x[3,vnf3_5,12]
+   + x[4,vnf4_0,12] + 2 x[4,vnf4_1,12] + 4 x[4,vnf4_2,12]
+   + 6 x[4,vnf4_3,12] + 8 x[4,vnf4_4,12] + 12 x[4,vnf4_5,12]
+   + x[5,vnf5_0,12] + 2 x[5,vnf5_1,12] + 4 x[5,vnf5_2,12]
+   + 6 x[5,vnf5_3,12] + 8 x[5,vnf5_4,12] + 12 x[5,vnf5_5,12] - 16 a[12]
+   <= 0
+ flow_cons_s0_ijvnf0_0_vnf0_1_n7: - x[0,vnf0_0,7] + x[0,vnf0_1,7]
+   - y[0,vnf0_0,vnf0_1,6,7] + y[0,vnf0_0,vnf0_1,7,8]
+   + y[0,vnf0_0,vnf0_1,7,9] + y[0,vnf0_0,vnf0_1,7,10] = 0
+ flow_cons_s0_ijvnf0_0_vnf0_1_n8: - x[0,vnf0_0,8] + x[0,vnf0_1,8]
+   - y[0,vnf0_0,vnf0_1,5,8] - y[0,vnf0_0,vnf0_1,7,8]
+   + y[0,vnf0_0,vnf0_1,8,9] + y[0,vnf0_0,vnf0_1,8,11] = 0
+ flow_cons_s0_ijvnf0_0_vnf0_1_n9: - x[0,vnf0_0,9] + x[0,vnf0_1,9]
+   - y[0,vnf0_0,vnf0_1,7,9] - y[0,vnf0_0,vnf0_1,8,9]
+   + y[0,vnf0_0,vnf0_1,9,10] = 0
+ flow_cons_s0_ijvnf0_0_vnf0_1_n10: - x[0,vnf0_0,10] + x[0,vnf0_1,10]
+   - y[0,vnf0_0,vnf0_1,7,10] - y[0,vnf0_0,vnf0_1,9,10]
+   + y[0,vnf0_0,vnf0_1,10,11] + y[0,vnf0_0,vnf0_1,10,12] = 0
+ flow_cons_s0_ijvnf0_0_vnf0_1_n11: - x[0,vnf0_0,11] + x[0,vnf0_1,11]
+   - y[0,vnf0_0,vnf0_1,3,11] - y[0,vnf0_0,vnf0_1,8,11]
+   - y[0,vnf0_0,vnf0_1,10,11] = 0
+ flow_cons_s0_ijvnf0_0_vnf0_1_n12: - x[0,vnf0_0,12] + x[0,vnf0_1,12]
+   - y[0,vnf0_0,vnf0_1,3,12] - y[0,vnf0_0,vnf0_1,10,12] = 0
+ flow_cons_s0_ijvnf0_1_vnf0_2_n7: - x[0,vnf0_1,7] + x[0,vnf0_2,7]
+   - y[0,vnf0_1,vnf0_2,6,7] + y[0,vnf0_1,vnf0_2,7,8]
+   + y[0,vnf0_1,vnf0_2,7,9] + y[0,vnf0_1,vnf0_2,7,10] = 0
+ flow_cons_s0_ijvnf0_1_vnf0_2_n8: - x[0,vnf0_1,8] + x[0,vnf0_2,8]
+   - y[0,vnf0_1,vnf0_2,5,8] - y[0,vnf0_1,vnf0_2,7,8]
+   + y[0,vnf0_1,vnf0_2,8,9] + y[0,vnf0_1,vnf0_2,8,11] = 0
+ flow_cons_s0_ijvnf0_1_vnf0_2_n9: - x[0,vnf0_1,9] + x[0,vnf0_2,9]
+   - y[0,vnf0_1,vnf0_2,7,9] - y[0,vnf0_1,vnf0_2,8,9]
+   + y[0,vnf0_1,vnf0_2,9,10] = 0
+ flow_cons_s0_ijvnf0_1_vnf0_2_n10: - x[0,vnf0_1,10] + x[0,vnf0_2,10]
+   - y[0,vnf0_1,vnf0_2,7,10] - y[0,vnf0_1,vnf0_2,9,10]
+   + y[0,vnf0_1,vnf0_2,10,11] + y[0,vnf0_1,vnf0_2,10,12] = 0
+ flow_cons_s0_ijvnf0_1_vnf0_2_n11: - x[0,vnf0_1,11] + x[0,vnf0_2,11]
+   - y[0,vnf0_1,vnf0_2,3,11] - y[0,vnf0_1,vnf0_2,8,11]
+   - y[0,vnf0_1,vnf0_2,10,11] = 0
+ flow_cons_s0_ijvnf0_1_vnf0_2_n12: - x[0,vnf0_1,12] + x[0,vnf0_2,12]
+   - y[0,vnf0_1,vnf0_2,3,12] - y[0,vnf0_1,vnf0_2,10,12] = 0
+ flow_cons_s0_ijvnf0_2_vnf0_3_n7: - x[0,vnf0_2,7] + x[0,vnf0_3,7]
+   - y[0,vnf0_2,vnf0_3,6,7] + y[0,vnf0_2,vnf0_3,7,8]
+   + y[0,vnf0_2,vnf0_3,7,9] + y[0,vnf0_2,vnf0_3,7,10] = 0
+ flow_cons_s0_ijvnf0_2_vnf0_3_n8: - x[0,vnf0_2,8] + x[0,vnf0_3,8]
+   - y[0,vnf0_2,vnf0_3,5,8] - y[0,vnf0_2,vnf0_3,7,8]
+   + y[0,vnf0_2,vnf0_3,8,9] + y[0,vnf0_2,vnf0_3,8,11] = 0
+ flow_cons_s0_ijvnf0_2_vnf0_3_n9: - x[0,vnf0_2,9] + x[0,vnf0_3,9]
+   - y[0,vnf0_2,vnf0_3,7,9] - y[0,vnf0_2,vnf0_3,8,9]
+   + y[0,vnf0_2,vnf0_3,9,10] = 0
+ flow_cons_s0_ijvnf0_2_vnf0_3_n10: - x[0,vnf0_2,10] + x[0,vnf0_3,10]
+   - y[0,vnf0_2,vnf0_3,7,10] - y[0,vnf0_2,vnf0_3,9,10]
+   + y[0,vnf0_2,vnf0_3,10,11] + y[0,vnf0_2,vnf0_3,10,12] = 0
+ flow_cons_s0_ijvnf0_2_vnf0_3_n11: - x[0,vnf0_2,11] + x[0,vnf0_3,11]
+   - y[0,vnf0_2,vnf0_3,3,11] - y[0,vnf0_2,vnf0_3,8,11]
+   - y[0,vnf0_2,vnf0_3,10,11] = 0
+ flow_cons_s0_ijvnf0_2_vnf0_3_n12: - x[0,vnf0_2,12] + x[0,vnf0_3,12]
+   - y[0,vnf0_2,vnf0_3,3,12] - y[0,vnf0_2,vnf0_3,10,12] = 0
+ flow_cons_s0_ijENTRY_vnf0_0_n6: x[0,vnf0_0,6] - y[0,ENTRY,vnf0_0,2,6]
+   - y[0,ENTRY,vnf0_0,5,6] + y[0,ENTRY,vnf0_0,6,7] = 1
+ flow_cons_s0_ijENTRY_vnf0_0_n7: x[0,vnf0_0,7] - y[0,ENTRY,vnf0_0,6,7]
+   + y[0,ENTRY,vnf0_0,7,8] + y[0,ENTRY,vnf0_0,7,9] + y[0,ENTRY,vnf0_0,7,10]
+   = 0
+ flow_cons_s0_ijENTRY_vnf0_0_n8: x[0,vnf0_0,8] - y[0,ENTRY,vnf0_0,5,8]
+   - y[0,ENTRY,vnf0_0,7,8] + y[0,ENTRY,vnf0_0,8,9] + y[0,ENTRY,vnf0_0,8,11]
+   = 0
+ flow_cons_s0_ijENTRY_vnf0_0_n9: x[0,vnf0_0,9] - y[0,ENTRY,vnf0_0,7,9]
+   - y[0,ENTRY,vnf0_0,8,9] + y[0,ENTRY,vnf0_0,9,10] = 0
+ flow_cons_s0_ijENTRY_vnf0_0_n10: x[0,vnf0_0,10] - y[0,ENTRY,vnf0_0,7,10]
+   - y[0,ENTRY,vnf0_0,9,10] + y[0,ENTRY,vnf0_0,10,11]
+   + y[0,ENTRY,vnf0_0,10,12] = 0
+ flow_cons_s0_ijENTRY_vnf0_0_n11: x[0,vnf0_0,11] - y[0,ENTRY,vnf0_0,3,11]
+   - y[0,ENTRY,vnf0_0,8,11] - y[0,ENTRY,vnf0_0,10,11] = 0
+ flow_cons_s0_ijENTRY_vnf0_0_n12: x[0,vnf0_0,12] - y[0,ENTRY,vnf0_0,3,12]
+   - y[0,ENTRY,vnf0_0,10,12] = 0
+ flow_cons_s1_ijvnf1_0_vnf1_1_n6: - x[1,vnf1_0,6] + x[1,vnf1_1,6]
+   - y[1,vnf1_0,vnf1_1,2,6] - y[1,vnf1_0,vnf1_1,5,6]
+   + y[1,vnf1_0,vnf1_1,6,7] = 0
+ flow_cons_s1_ijvnf1_0_vnf1_1_n7: - x[1,vnf1_0,7] + x[1,vnf1_1,7]
+   - y[1,vnf1_0,vnf1_1,6,7] + y[1,vnf1_0,vnf1_1,7,8]
+   + y[1,vnf1_0,vnf1_1,7,9] + y[1,vnf1_0,vnf1_1,7,10] = 0
+ flow_cons_s1_ijvnf1_0_vnf1_1_n8: - x[1,vnf1_0,8] + x[1,vnf1_1,8]
+   - y[1,vnf1_0,vnf1_1,5,8] - y[1,vnf1_0,vnf1_1,7,8]
+   + y[1,vnf1_0,vnf1_1,8,9] + y[1,vnf1_0,vnf1_1,8,11] = 0
+ flow_cons_s1_ijvnf1_0_vnf1_1_n9: - x[1,vnf1_0,9] + x[1,vnf1_1,9]
+   - y[1,vnf1_0,vnf1_1,7,9] - y[1,vnf1_0,vnf1_1,8,9]
+   + y[1,vnf1_0,vnf1_1,9,10] = 0
+ flow_cons_s1_ijvnf1_0_vnf1_1_n10: - x[1,vnf1_0,10] + x[1,vnf1_1,10]
+   - y[1,vnf1_0,vnf1_1,7,10] - y[1,vnf1_0,vnf1_1,9,10]
+   + y[1,vnf1_0,vnf1_1,10,11] + y[1,vnf1_0,vnf1_1,10,12] = 0
+ flow_cons_s1_ijvnf1_0_vnf1_1_n11: - x[1,vnf1_0,11] + x[1,vnf1_1,11]
+   - y[1,vnf1_0,vnf1_1,3,11] - y[1,vnf1_0,vnf1_1,8,11]
+   - y[1,vnf1_0,vnf1_1,10,11] = 0
+ flow_cons_s1_ijvnf1_0_vnf1_1_n12: - x[1,vnf1_0,12] + x[1,vnf1_1,12]
+   - y[1,vnf1_0,vnf1_1,3,12] - y[1,vnf1_0,vnf1_1,10,12] = 0
+ flow_cons_s1_ijvnf1_1_vnf1_2_n6: - x[1,vnf1_1,6] + x[1,vnf1_2,6]
+   - y[1,vnf1_1,vnf1_2,2,6] - y[1,vnf1_1,vnf1_2,5,6]
+   + y[1,vnf1_1,vnf1_2,6,7] = 0
+ flow_cons_s1_ijvnf1_1_vnf1_2_n7: - x[1,vnf1_1,7] + x[1,vnf1_2,7]
+   - y[1,vnf1_1,vnf1_2,6,7] + y[1,vnf1_1,vnf1_2,7,8]
+   + y[1,vnf1_1,vnf1_2,7,9] + y[1,vnf1_1,vnf1_2,7,10] = 0
+ flow_cons_s1_ijvnf1_1_vnf1_2_n8: - x[1,vnf1_1,8] + x[1,vnf1_2,8]
+   - y[1,vnf1_1,vnf1_2,5,8] - y[1,vnf1_1,vnf1_2,7,8]
+   + y[1,vnf1_1,vnf1_2,8,9] + y[1,vnf1_1,vnf1_2,8,11] = 0
+ flow_cons_s1_ijvnf1_1_vnf1_2_n9: - x[1,vnf1_1,9] + x[1,vnf1_2,9]
+   - y[1,vnf1_1,vnf1_2,7,9] - y[1,vnf1_1,vnf1_2,8,9]
+   + y[1,vnf1_1,vnf1_2,9,10] = 0
+ flow_cons_s1_ijvnf1_1_vnf1_2_n10: - x[1,vnf1_1,10] + x[1,vnf1_2,10]
+   - y[1,vnf1_1,vnf1_2,7,10] - y[1,vnf1_1,vnf1_2,9,10]
+   + y[1,vnf1_1,vnf1_2,10,11] + y[1,vnf1_1,vnf1_2,10,12] = 0
+ flow_cons_s1_ijvnf1_1_vnf1_2_n11: - x[1,vnf1_1,11] + x[1,vnf1_2,11]
+   - y[1,vnf1_1,vnf1_2,3,11] - y[1,vnf1_1,vnf1_2,8,11]
+   - y[1,vnf1_1,vnf1_2,10,11] = 0
+ flow_cons_s1_ijvnf1_1_vnf1_2_n12: - x[1,vnf1_1,12] + x[1,vnf1_2,12]
+   - y[1,vnf1_1,vnf1_2,3,12] - y[1,vnf1_1,vnf1_2,10,12] = 0
+ flow_cons_s1_ijvnf1_2_vnf1_3_n6: - x[1,vnf1_2,6] + x[1,vnf1_3,6]
+   - y[1,vnf1_2,vnf1_3,2,6] - y[1,vnf1_2,vnf1_3,5,6]
+   + y[1,vnf1_2,vnf1_3,6,7] = 0
+ flow_cons_s1_ijvnf1_2_vnf1_3_n7: - x[1,vnf1_2,7] + x[1,vnf1_3,7]
+   - y[1,vnf1_2,vnf1_3,6,7] + y[1,vnf1_2,vnf1_3,7,8]
+   + y[1,vnf1_2,vnf1_3,7,9] + y[1,vnf1_2,vnf1_3,7,10] = 0
+ flow_cons_s1_ijvnf1_2_vnf1_3_n8: - x[1,vnf1_2,8] + x[1,vnf1_3,8]
+   - y[1,vnf1_2,vnf1_3,5,8] - y[1,vnf1_2,vnf1_3,7,8]
+   + y[1,vnf1_2,vnf1_3,8,9] + y[1,vnf1_2,vnf1_3,8,11] = 0
+ flow_cons_s1_ijvnf1_2_vnf1_3_n9: - x[1,vnf1_2,9] + x[1,vnf1_3,9]
+   - y[1,vnf1_2,vnf1_3,7,9] - y[1,vnf1_2,vnf1_3,8,9]
+   + y[1,vnf1_2,vnf1_3,9,10] = 0
+ flow_cons_s1_ijvnf1_2_vnf1_3_n10: - x[1,vnf1_2,10] + x[1,vnf1_3,10]
+   - y[1,vnf1_2,vnf1_3,7,10] - y[1,vnf1_2,vnf1_3,9,10]
+   + y[1,vnf1_2,vnf1_3,10,11] + y[1,vnf1_2,vnf1_3,10,12] = 0
+ flow_cons_s1_ijvnf1_2_vnf1_3_n11: - x[1,vnf1_2,11] + x[1,vnf1_3,11]
+   - y[1,vnf1_2,vnf1_3,3,11] - y[1,vnf1_2,vnf1_3,8,11]
+   - y[1,vnf1_2,vnf1_3,10,11] = 0
+ flow_cons_s1_ijvnf1_2_vnf1_3_n12: - x[1,vnf1_2,12] + x[1,vnf1_3,12]
+   - y[1,vnf1_2,vnf1_3,3,12] - y[1,vnf1_2,vnf1_3,10,12] = 0
+ flow_cons_s1_ijvnf1_3_vnf1_4_n6: - x[1,vnf1_3,6] + x[1,vnf1_4,6]
+   - y[1,vnf1_3,vnf1_4,2,6] - y[1,vnf1_3,vnf1_4,5,6]
+   + y[1,vnf1_3,vnf1_4,6,7] = 0
+ flow_cons_s1_ijvnf1_3_vnf1_4_n7: - x[1,vnf1_3,7] + x[1,vnf1_4,7]
+   - y[1,vnf1_3,vnf1_4,6,7] + y[1,vnf1_3,vnf1_4,7,8]
+   + y[1,vnf1_3,vnf1_4,7,9] + y[1,vnf1_3,vnf1_4,7,10] = 0
+ flow_cons_s1_ijvnf1_3_vnf1_4_n8: - x[1,vnf1_3,8] + x[1,vnf1_4,8]
+   - y[1,vnf1_3,vnf1_4,5,8] - y[1,vnf1_3,vnf1_4,7,8]
+   + y[1,vnf1_3,vnf1_4,8,9] + y[1,vnf1_3,vnf1_4,8,11] = 0
+ flow_cons_s1_ijvnf1_3_vnf1_4_n9: - x[1,vnf1_3,9] + x[1,vnf1_4,9]
+   - y[1,vnf1_3,vnf1_4,7,9] - y[1,vnf1_3,vnf1_4,8,9]
+   + y[1,vnf1_3,vnf1_4,9,10] = 0
+ flow_cons_s1_ijvnf1_3_vnf1_4_n10: - x[1,vnf1_3,10] + x[1,vnf1_4,10]
+   - y[1,vnf1_3,vnf1_4,7,10] - y[1,vnf1_3,vnf1_4,9,10]
+   + y[1,vnf1_3,vnf1_4,10,11] + y[1,vnf1_3,vnf1_4,10,12] = 0
+ flow_cons_s1_ijvnf1_3_vnf1_4_n11: - x[1,vnf1_3,11] + x[1,vnf1_4,11]
+   - y[1,vnf1_3,vnf1_4,3,11] - y[1,vnf1_3,vnf1_4,8,11]
+   - y[1,vnf1_3,vnf1_4,10,11] = 0
+ flow_cons_s1_ijvnf1_3_vnf1_4_n12: - x[1,vnf1_3,12] + x[1,vnf1_4,12]
+   - y[1,vnf1_3,vnf1_4,3,12] - y[1,vnf1_3,vnf1_4,10,12] = 0
+ flow_cons_s1_ijvnf1_4_vnf1_5_n6: - x[1,vnf1_4,6] + x[1,vnf1_5,6]
+   - y[1,vnf1_4,vnf1_5,2,6] - y[1,vnf1_4,vnf1_5,5,6]
+   + y[1,vnf1_4,vnf1_5,6,7] = 0
+ flow_cons_s1_ijvnf1_4_vnf1_5_n7: - x[1,vnf1_4,7] + x[1,vnf1_5,7]
+   - y[1,vnf1_4,vnf1_5,6,7] + y[1,vnf1_4,vnf1_5,7,8]
+   + y[1,vnf1_4,vnf1_5,7,9] + y[1,vnf1_4,vnf1_5,7,10] = 0
+ flow_cons_s1_ijvnf1_4_vnf1_5_n8: - x[1,vnf1_4,8] + x[1,vnf1_5,8]
+   - y[1,vnf1_4,vnf1_5,5,8] - y[1,vnf1_4,vnf1_5,7,8]
+   + y[1,vnf1_4,vnf1_5,8,9] + y[1,vnf1_4,vnf1_5,8,11] = 0
+ flow_cons_s1_ijvnf1_4_vnf1_5_n9: - x[1,vnf1_4,9] + x[1,vnf1_5,9]
+   - y[1,vnf1_4,vnf1_5,7,9] - y[1,vnf1_4,vnf1_5,8,9]
+   + y[1,vnf1_4,vnf1_5,9,10] = 0
+ flow_cons_s1_ijvnf1_4_vnf1_5_n10: - x[1,vnf1_4,10] + x[1,vnf1_5,10]
+   - y[1,vnf1_4,vnf1_5,7,10] - y[1,vnf1_4,vnf1_5,9,10]
+   + y[1,vnf1_4,vnf1_5,10,11] + y[1,vnf1_4,vnf1_5,10,12] = 0
+ flow_cons_s1_ijvnf1_4_vnf1_5_n11: - x[1,vnf1_4,11] + x[1,vnf1_5,11]
+   - y[1,vnf1_4,vnf1_5,3,11] - y[1,vnf1_4,vnf1_5,8,11]
+   - y[1,vnf1_4,vnf1_5,10,11] = 0
+ flow_cons_s1_ijvnf1_4_vnf1_5_n12: - x[1,vnf1_4,12] + x[1,vnf1_5,12]
+   - y[1,vnf1_4,vnf1_5,3,12] - y[1,vnf1_4,vnf1_5,10,12] = 0
+ flow_cons_s1_ijENTRY_vnf1_0_n6: x[1,vnf1_0,6] - y[1,ENTRY,vnf1_0,2,6]
+   - y[1,ENTRY,vnf1_0,5,6] + y[1,ENTRY,vnf1_0,6,7] = 1
+ flow_cons_s1_ijENTRY_vnf1_0_n7: x[1,vnf1_0,7] - y[1,ENTRY,vnf1_0,6,7]
+   + y[1,ENTRY,vnf1_0,7,8] + y[1,ENTRY,vnf1_0,7,9] + y[1,ENTRY,vnf1_0,7,10]
+   = 0
+ flow_cons_s1_ijENTRY_vnf1_0_n8: x[1,vnf1_0,8] - y[1,ENTRY,vnf1_0,5,8]
+   - y[1,ENTRY,vnf1_0,7,8] + y[1,ENTRY,vnf1_0,8,9] + y[1,ENTRY,vnf1_0,8,11]
+   = 0
+ flow_cons_s1_ijENTRY_vnf1_0_n9: x[1,vnf1_0,9] - y[1,ENTRY,vnf1_0,7,9]
+   - y[1,ENTRY,vnf1_0,8,9] + y[1,ENTRY,vnf1_0,9,10] = 0
+ flow_cons_s1_ijENTRY_vnf1_0_n10: x[1,vnf1_0,10] - y[1,ENTRY,vnf1_0,7,10]
+   - y[1,ENTRY,vnf1_0,9,10] + y[1,ENTRY,vnf1_0,10,11]
+   + y[1,ENTRY,vnf1_0,10,12] = 0
+ flow_cons_s1_ijENTRY_vnf1_0_n11: x[1,vnf1_0,11] - y[1,ENTRY,vnf1_0,3,11]
+   - y[1,ENTRY,vnf1_0,8,11] - y[1,ENTRY,vnf1_0,10,11] = 0
+ flow_cons_s1_ijENTRY_vnf1_0_n12: x[1,vnf1_0,12] - y[1,ENTRY,vnf1_0,3,12]
+   - y[1,ENTRY,vnf1_0,10,12] = 0
+ flow_cons_s2_ijvnf2_0_vnf2_1_n6: - x[2,vnf2_0,6] + x[2,vnf2_1,6]
+   - y[2,vnf2_0,vnf2_1,2,6] - y[2,vnf2_0,vnf2_1,5,6]
+   + y[2,vnf2_0,vnf2_1,6,7] = 0
+ flow_cons_s2_ijvnf2_0_vnf2_1_n7: - x[2,vnf2_0,7] + x[2,vnf2_1,7]
+   - y[2,vnf2_0,vnf2_1,6,7] + y[2,vnf2_0,vnf2_1,7,8]
+   + y[2,vnf2_0,vnf2_1,7,9] + y[2,vnf2_0,vnf2_1,7,10] = 0
+ flow_cons_s2_ijvnf2_0_vnf2_1_n8: - x[2,vnf2_0,8] + x[2,vnf2_1,8]
+   - y[2,vnf2_0,vnf2_1,5,8] - y[2,vnf2_0,vnf2_1,7,8]
+   + y[2,vnf2_0,vnf2_1,8,9] + y[2,vnf2_0,vnf2_1,8,11] = 0
+ flow_cons_s2_ijvnf2_0_vnf2_1_n9: - x[2,vnf2_0,9] + x[2,vnf2_1,9]
+   - y[2,vnf2_0,vnf2_1,7,9] - y[2,vnf2_0,vnf2_1,8,9]
+   + y[2,vnf2_0,vnf2_1,9,10] = 0
+ flow_cons_s2_ijvnf2_0_vnf2_1_n10: - x[2,vnf2_0,10] + x[2,vnf2_1,10]
+   - y[2,vnf2_0,vnf2_1,7,10] - y[2,vnf2_0,vnf2_1,9,10]
+   + y[2,vnf2_0,vnf2_1,10,11] + y[2,vnf2_0,vnf2_1,10,12] = 0
+ flow_cons_s2_ijvnf2_0_vnf2_1_n11: - x[2,vnf2_0,11] + x[2,vnf2_1,11]
+   - y[2,vnf2_0,vnf2_1,3,11] - y[2,vnf2_0,vnf2_1,8,11]
+   - y[2,vnf2_0,vnf2_1,10,11] = 0
+ flow_cons_s2_ijvnf2_0_vnf2_1_n12: - x[2,vnf2_0,12] + x[2,vnf2_1,12]
+   - y[2,vnf2_0,vnf2_1,3,12] - y[2,vnf2_0,vnf2_1,10,12] = 0
+ flow_cons_s2_ijvnf2_1_vnf2_2_n6: - x[2,vnf2_1,6] + x[2,vnf2_2,6]
+   - y[2,vnf2_1,vnf2_2,2,6] - y[2,vnf2_1,vnf2_2,5,6]
+   + y[2,vnf2_1,vnf2_2,6,7] = 0
+ flow_cons_s2_ijvnf2_1_vnf2_2_n7: - x[2,vnf2_1,7] + x[2,vnf2_2,7]
+   - y[2,vnf2_1,vnf2_2,6,7] + y[2,vnf2_1,vnf2_2,7,8]
+   + y[2,vnf2_1,vnf2_2,7,9] + y[2,vnf2_1,vnf2_2,7,10] = 0
+ flow_cons_s2_ijvnf2_1_vnf2_2_n8: - x[2,vnf2_1,8] + x[2,vnf2_2,8]
+   - y[2,vnf2_1,vnf2_2,5,8] - y[2,vnf2_1,vnf2_2,7,8]
+   + y[2,vnf2_1,vnf2_2,8,9] + y[2,vnf2_1,vnf2_2,8,11] = 0
+ flow_cons_s2_ijvnf2_1_vnf2_2_n9: - x[2,vnf2_1,9] + x[2,vnf2_2,9]
+   - y[2,vnf2_1,vnf2_2,7,9] - y[2,vnf2_1,vnf2_2,8,9]
+   + y[2,vnf2_1,vnf2_2,9,10] = 0
+ flow_cons_s2_ijvnf2_1_vnf2_2_n10: - x[2,vnf2_1,10] + x[2,vnf2_2,10]
+   - y[2,vnf2_1,vnf2_2,7,10] - y[2,vnf2_1,vnf2_2,9,10]
+   + y[2,vnf2_1,vnf2_2,10,11] + y[2,vnf2_1,vnf2_2,10,12] = 0
+ flow_cons_s2_ijvnf2_1_vnf2_2_n11: - x[2,vnf2_1,11] + x[2,vnf2_2,11]
+   - y[2,vnf2_1,vnf2_2,3,11] - y[2,vnf2_1,vnf2_2,8,11]
+   - y[2,vnf2_1,vnf2_2,10,11] = 0
+ flow_cons_s2_ijvnf2_1_vnf2_2_n12: - x[2,vnf2_1,12] + x[2,vnf2_2,12]
+   - y[2,vnf2_1,vnf2_2,3,12] - y[2,vnf2_1,vnf2_2,10,12] = 0
+ flow_cons_s2_ijvnf2_2_vnf2_3_n6: - x[2,vnf2_2,6] + x[2,vnf2_3,6]
+   - y[2,vnf2_2,vnf2_3,2,6] - y[2,vnf2_2,vnf2_3,5,6]
+   + y[2,vnf2_2,vnf2_3,6,7] = 0
+ flow_cons_s2_ijvnf2_2_vnf2_3_n7: - x[2,vnf2_2,7] + x[2,vnf2_3,7]
+   - y[2,vnf2_2,vnf2_3,6,7] + y[2,vnf2_2,vnf2_3,7,8]
+   + y[2,vnf2_2,vnf2_3,7,9] + y[2,vnf2_2,vnf2_3,7,10] = 0
+ flow_cons_s2_ijvnf2_2_vnf2_3_n8: - x[2,vnf2_2,8] + x[2,vnf2_3,8]
+   - y[2,vnf2_2,vnf2_3,5,8] - y[2,vnf2_2,vnf2_3,7,8]
+   + y[2,vnf2_2,vnf2_3,8,9] + y[2,vnf2_2,vnf2_3,8,11] = 0
+ flow_cons_s2_ijvnf2_2_vnf2_3_n9: - x[2,vnf2_2,9] + x[2,vnf2_3,9]
+   - y[2,vnf2_2,vnf2_3,7,9] - y[2,vnf2_2,vnf2_3,8,9]
+   + y[2,vnf2_2,vnf2_3,9,10] = 0
+ flow_cons_s2_ijvnf2_2_vnf2_3_n10: - x[2,vnf2_2,10] + x[2,vnf2_3,10]
+   - y[2,vnf2_2,vnf2_3,7,10] - y[2,vnf2_2,vnf2_3,9,10]
+   + y[2,vnf2_2,vnf2_3,10,11] + y[2,vnf2_2,vnf2_3,10,12] = 0
+ flow_cons_s2_ijvnf2_2_vnf2_3_n11: - x[2,vnf2_2,11] + x[2,vnf2_3,11]
+   - y[2,vnf2_2,vnf2_3,3,11] - y[2,vnf2_2,vnf2_3,8,11]
+   - y[2,vnf2_2,vnf2_3,10,11] = 0
+ flow_cons_s2_ijvnf2_2_vnf2_3_n12: - x[2,vnf2_2,12] + x[2,vnf2_3,12]
+   - y[2,vnf2_2,vnf2_3,3,12] - y[2,vnf2_2,vnf2_3,10,12] = 0
+ flow_cons_s2_ijvnf2_3_vnf2_4_n1: - x[2,vnf2_3,1] + x[2,vnf2_4,1]
+   + y[2,vnf2_3,vnf2_4,1,2] + y[2,vnf2_3,vnf2_4,1,3] = 0
+ flow_cons_s2_ijvnf2_3_vnf2_4_n2: - x[2,vnf2_3,2] + x[2,vnf2_4,2]
+   - y[2,vnf2_3,vnf2_4,1,2] + y[2,vnf2_3,vnf2_4,2,4]
+   + y[2,vnf2_3,vnf2_4,2,6] = 0
+ flow_cons_s2_ijvnf2_3_vnf2_4_n3: - x[2,vnf2_3,3] + x[2,vnf2_4,3]
+   - y[2,vnf2_3,vnf2_4,1,3] + y[2,vnf2_3,vnf2_4,3,4]
+   + y[2,vnf2_3,vnf2_4,3,11] + y[2,vnf2_3,vnf2_4,3,12] = 0
+ flow_cons_s2_ijvnf2_3_vnf2_4_n4: - x[2,vnf2_3,4] + x[2,vnf2_4,4]
+   - y[2,vnf2_3,vnf2_4,2,4] - y[2,vnf2_3,vnf2_4,3,4]
+   + y[2,vnf2_3,vnf2_4,4,5] = 0
+ flow_cons_s2_ijvnf2_3_vnf2_4_n5: - x[2,vnf2_3,5] + x[2,vnf2_4,5]
+   - y[2,vnf2_3,vnf2_4,4,5] + y[2,vnf2_3,vnf2_4,5,6]
+   + y[2,vnf2_3,vnf2_4,5,8] = 0
+ flow_cons_s2_ijvnf2_3_vnf2_4_n6: - x[2,vnf2_3,6] + x[2,vnf2_4,6]
+   - y[2,vnf2_3,vnf2_4,2,6] - y[2,vnf2_3,vnf2_4,5,6]
+   + y[2,vnf2_3,vnf2_4,6,7] = 0
+ flow_cons_s2_ijvnf2_4_vnf2_5_n6: - x[2,vnf2_4,6] + x[2,vnf2_5,6]
+   - y[2,vnf2_4,vnf2_5,2,6] - y[2,vnf2_4,vnf2_5,5,6]
+   + y[2,vnf2_4,vnf2_5,6,7] = 0
+ flow_cons_s2_ijvnf2_4_vnf2_5_n7: - x[2,vnf2_4,7] + x[2,vnf2_5,7]
+   - y[2,vnf2_4,vnf2_5,6,7] + y[2,vnf2_4,vnf2_5,7,8]
+   + y[2,vnf2_4,vnf2_5,7,9] + y[2,vnf2_4,vnf2_5,7,10] = 0
+ flow_cons_s2_ijvnf2_4_vnf2_5_n8: - x[2,vnf2_4,8] + x[2,vnf2_5,8]
+   - y[2,vnf2_4,vnf2_5,5,8] - y[2,vnf2_4,vnf2_5,7,8]
+   + y[2,vnf2_4,vnf2_5,8,9] + y[2,vnf2_4,vnf2_5,8,11] = 0
+ flow_cons_s2_ijvnf2_4_vnf2_5_n9: - x[2,vnf2_4,9] + x[2,vnf2_5,9]
+   - y[2,vnf2_4,vnf2_5,7,9] - y[2,vnf2_4,vnf2_5,8,9]
+   + y[2,vnf2_4,vnf2_5,9,10] = 0
+ flow_cons_s2_ijvnf2_4_vnf2_5_n10: - x[2,vnf2_4,10] + x[2,vnf2_5,10]
+   - y[2,vnf2_4,vnf2_5,7,10] - y[2,vnf2_4,vnf2_5,9,10]
+   + y[2,vnf2_4,vnf2_5,10,11] + y[2,vnf2_4,vnf2_5,10,12] = 0
+ flow_cons_s2_ijvnf2_4_vnf2_5_n11: - x[2,vnf2_4,11] + x[2,vnf2_5,11]
+   - y[2,vnf2_4,vnf2_5,3,11] - y[2,vnf2_4,vnf2_5,8,11]
+   - y[2,vnf2_4,vnf2_5,10,11] = 0
+ flow_cons_s2_ijvnf2_4_vnf2_5_n12: - x[2,vnf2_4,12] + x[2,vnf2_5,12]
+   - y[2,vnf2_4,vnf2_5,3,12] - y[2,vnf2_4,vnf2_5,10,12] = 0
+ flow_cons_s2_ijENTRY_vnf2_0_n6: x[2,vnf2_0,6] - y[2,ENTRY,vnf2_0,2,6]
+   - y[2,ENTRY,vnf2_0,5,6] + y[2,ENTRY,vnf2_0,6,7] = 1
+ flow_cons_s2_ijENTRY_vnf2_0_n7: x[2,vnf2_0,7] - y[2,ENTRY,vnf2_0,6,7]
+   + y[2,ENTRY,vnf2_0,7,8] + y[2,ENTRY,vnf2_0,7,9] + y[2,ENTRY,vnf2_0,7,10]
+   = 0
+ flow_cons_s2_ijENTRY_vnf2_0_n8: x[2,vnf2_0,8] - y[2,ENTRY,vnf2_0,5,8]
+   - y[2,ENTRY,vnf2_0,7,8] + y[2,ENTRY,vnf2_0,8,9] + y[2,ENTRY,vnf2_0,8,11]
+   = 0
+ flow_cons_s2_ijENTRY_vnf2_0_n9: x[2,vnf2_0,9] - y[2,ENTRY,vnf2_0,7,9]
+   - y[2,ENTRY,vnf2_0,8,9] + y[2,ENTRY,vnf2_0,9,10] = 0
+ flow_cons_s2_ijENTRY_vnf2_0_n10: x[2,vnf2_0,10] - y[2,ENTRY,vnf2_0,7,10]
+   - y[2,ENTRY,vnf2_0,9,10] + y[2,ENTRY,vnf2_0,10,11]
+   + y[2,ENTRY,vnf2_0,10,12] = 0
+ flow_cons_s2_ijENTRY_vnf2_0_n11: x[2,vnf2_0,11] - y[2,ENTRY,vnf2_0,3,11]
+   - y[2,ENTRY,vnf2_0,8,11] - y[2,ENTRY,vnf2_0,10,11] = 0
+ flow_cons_s2_ijENTRY_vnf2_0_n12: x[2,vnf2_0,12] - y[2,ENTRY,vnf2_0,3,12]
+   - y[2,ENTRY,vnf2_0,10,12] = 0
+ flow_cons_s3_ijvnf3_0_vnf3_1_n6: - x[3,vnf3_0,6] + x[3,vnf3_1,6]
+   - y[3,vnf3_0,vnf3_1,2,6] - y[3,vnf3_0,vnf3_1,5,6]
+   + y[3,vnf3_0,vnf3_1,6,7] = 0
+ flow_cons_s3_ijvnf3_0_vnf3_1_n7: - x[3,vnf3_0,7] + x[3,vnf3_1,7]
+   - y[3,vnf3_0,vnf3_1,6,7] + y[3,vnf3_0,vnf3_1,7,8]
+   + y[3,vnf3_0,vnf3_1,7,9] + y[3,vnf3_0,vnf3_1,7,10] = 0
+ flow_cons_s3_ijvnf3_0_vnf3_1_n8: - x[3,vnf3_0,8] + x[3,vnf3_1,8]
+   - y[3,vnf3_0,vnf3_1,5,8] - y[3,vnf3_0,vnf3_1,7,8]
+   + y[3,vnf3_0,vnf3_1,8,9] + y[3,vnf3_0,vnf3_1,8,11] = 0
+ flow_cons_s3_ijvnf3_0_vnf3_1_n9: - x[3,vnf3_0,9] + x[3,vnf3_1,9]
+   - y[3,vnf3_0,vnf3_1,7,9] - y[3,vnf3_0,vnf3_1,8,9]
+   + y[3,vnf3_0,vnf3_1,9,10] = 0
+ flow_cons_s3_ijvnf3_0_vnf3_1_n10: - x[3,vnf3_0,10] + x[3,vnf3_1,10]
+   - y[3,vnf3_0,vnf3_1,7,10] - y[3,vnf3_0,vnf3_1,9,10]
+   + y[3,vnf3_0,vnf3_1,10,11] + y[3,vnf3_0,vnf3_1,10,12] = 0
+ flow_cons_s3_ijvnf3_0_vnf3_1_n11: - x[3,vnf3_0,11] + x[3,vnf3_1,11]
+   - y[3,vnf3_0,vnf3_1,3,11] - y[3,vnf3_0,vnf3_1,8,11]
+   - y[3,vnf3_0,vnf3_1,10,11] = 0
+ flow_cons_s3_ijvnf3_0_vnf3_1_n12: - x[3,vnf3_0,12] + x[3,vnf3_1,12]
+   - y[3,vnf3_0,vnf3_1,3,12] - y[3,vnf3_0,vnf3_1,10,12] = 0
+ flow_cons_s3_ijvnf3_1_vnf3_2_n6: - x[3,vnf3_1,6] + x[3,vnf3_2,6]
+   - y[3,vnf3_1,vnf3_2,2,6] - y[3,vnf3_1,vnf3_2,5,6]
+   + y[3,vnf3_1,vnf3_2,6,7] = 0
+ flow_cons_s3_ijvnf3_1_vnf3_2_n7: - x[3,vnf3_1,7] + x[3,vnf3_2,7]
+   - y[3,vnf3_1,vnf3_2,6,7] + y[3,vnf3_1,vnf3_2,7,8]
+   + y[3,vnf3_1,vnf3_2,7,9] + y[3,vnf3_1,vnf3_2,7,10] = 0
+ flow_cons_s3_ijvnf3_1_vnf3_2_n8: - x[3,vnf3_1,8] + x[3,vnf3_2,8]
+   - y[3,vnf3_1,vnf3_2,5,8] - y[3,vnf3_1,vnf3_2,7,8]
+   + y[3,vnf3_1,vnf3_2,8,9] + y[3,vnf3_1,vnf3_2,8,11] = 0
+ flow_cons_s3_ijvnf3_1_vnf3_2_n9: - x[3,vnf3_1,9] + x[3,vnf3_2,9]
+   - y[3,vnf3_1,vnf3_2,7,9] - y[3,vnf3_1,vnf3_2,8,9]
+   + y[3,vnf3_1,vnf3_2,9,10] = 0
+ flow_cons_s3_ijvnf3_1_vnf3_2_n10: - x[3,vnf3_1,10] + x[3,vnf3_2,10]
+   - y[3,vnf3_1,vnf3_2,7,10] - y[3,vnf3_1,vnf3_2,9,10]
+   + y[3,vnf3_1,vnf3_2,10,11] + y[3,vnf3_1,vnf3_2,10,12] = 0
+ flow_cons_s3_ijvnf3_1_vnf3_2_n11: - x[3,vnf3_1,11] + x[3,vnf3_2,11]
+   - y[3,vnf3_1,vnf3_2,3,11] - y[3,vnf3_1,vnf3_2,8,11]
+   - y[3,vnf3_1,vnf3_2,10,11] = 0
+ flow_cons_s3_ijvnf3_1_vnf3_2_n12: - x[3,vnf3_1,12] + x[3,vnf3_2,12]
+   - y[3,vnf3_1,vnf3_2,3,12] - y[3,vnf3_1,vnf3_2,10,12] = 0
+ flow_cons_s3_ijvnf3_2_vnf3_3_n6: - x[3,vnf3_2,6] + x[3,vnf3_3,6]
+   - y[3,vnf3_2,vnf3_3,2,6] - y[3,vnf3_2,vnf3_3,5,6]
+   + y[3,vnf3_2,vnf3_3,6,7] = 0
+ flow_cons_s3_ijvnf3_2_vnf3_3_n7: - x[3,vnf3_2,7] + x[3,vnf3_3,7]
+   - y[3,vnf3_2,vnf3_3,6,7] + y[3,vnf3_2,vnf3_3,7,8]
+   + y[3,vnf3_2,vnf3_3,7,9] + y[3,vnf3_2,vnf3_3,7,10] = 0
+ flow_cons_s3_ijvnf3_2_vnf3_3_n8: - x[3,vnf3_2,8] + x[3,vnf3_3,8]
+   - y[3,vnf3_2,vnf3_3,5,8] - y[3,vnf3_2,vnf3_3,7,8]
+   + y[3,vnf3_2,vnf3_3,8,9] + y[3,vnf3_2,vnf3_3,8,11] = 0
+ flow_cons_s3_ijvnf3_2_vnf3_3_n9: - x[3,vnf3_2,9] + x[3,vnf3_3,9]
+   - y[3,vnf3_2,vnf3_3,7,9] - y[3,vnf3_2,vnf3_3,8,9]
+   + y[3,vnf3_2,vnf3_3,9,10] = 0
+ flow_cons_s3_ijvnf3_2_vnf3_3_n10: - x[3,vnf3_2,10] + x[3,vnf3_3,10]
+   - y[3,vnf3_2,vnf3_3,7,10] - y[3,vnf3_2,vnf3_3,9,10]
+   + y[3,vnf3_2,vnf3_3,10,11] + y[3,vnf3_2,vnf3_3,10,12] = 0
+ flow_cons_s3_ijvnf3_2_vnf3_3_n11: - x[3,vnf3_2,11] + x[3,vnf3_3,11]
+   - y[3,vnf3_2,vnf3_3,3,11] - y[3,vnf3_2,vnf3_3,8,11]
+   - y[3,vnf3_2,vnf3_3,10,11] = 0
+ flow_cons_s3_ijvnf3_2_vnf3_3_n12: - x[3,vnf3_2,12] + x[3,vnf3_3,12]
+   - y[3,vnf3_2,vnf3_3,3,12] - y[3,vnf3_2,vnf3_3,10,12] = 0
+ flow_cons_s3_ijvnf3_3_vnf3_4_n6: - x[3,vnf3_3,6] + x[3,vnf3_4,6]
+   - y[3,vnf3_3,vnf3_4,2,6] - y[3,vnf3_3,vnf3_4,5,6]
+   + y[3,vnf3_3,vnf3_4,6,7] = 0
+ flow_cons_s3_ijvnf3_3_vnf3_4_n7: - x[3,vnf3_3,7] + x[3,vnf3_4,7]
+   - y[3,vnf3_3,vnf3_4,6,7] + y[3,vnf3_3,vnf3_4,7,8]
+   + y[3,vnf3_3,vnf3_4,7,9] + y[3,vnf3_3,vnf3_4,7,10] = 0
+ flow_cons_s3_ijvnf3_3_vnf3_4_n8: - x[3,vnf3_3,8] + x[3,vnf3_4,8]
+   - y[3,vnf3_3,vnf3_4,5,8] - y[3,vnf3_3,vnf3_4,7,8]
+   + y[3,vnf3_3,vnf3_4,8,9] + y[3,vnf3_3,vnf3_4,8,11] = 0
+ flow_cons_s3_ijvnf3_3_vnf3_4_n9: - x[3,vnf3_3,9] + x[3,vnf3_4,9]
+   - y[3,vnf3_3,vnf3_4,7,9] - y[3,vnf3_3,vnf3_4,8,9]
+   + y[3,vnf3_3,vnf3_4,9,10] = 0
+ flow_cons_s3_ijvnf3_3_vnf3_4_n10: - x[3,vnf3_3,10] + x[3,vnf3_4,10]
+   - y[3,vnf3_3,vnf3_4,7,10] - y[3,vnf3_3,vnf3_4,9,10]
+   + y[3,vnf3_3,vnf3_4,10,11] + y[3,vnf3_3,vnf3_4,10,12] = 0
+ flow_cons_s3_ijvnf3_3_vnf3_4_n11: - x[3,vnf3_3,11] + x[3,vnf3_4,11]
+   - y[3,vnf3_3,vnf3_4,3,11] - y[3,vnf3_3,vnf3_4,8,11]
+   - y[3,vnf3_3,vnf3_4,10,11] = 0
+ flow_cons_s3_ijvnf3_3_vnf3_4_n12: - x[3,vnf3_3,12] + x[3,vnf3_4,12]
+   - y[3,vnf3_3,vnf3_4,3,12] - y[3,vnf3_3,vnf3_4,10,12] = 0
+ flow_cons_s3_ijvnf3_4_vnf3_5_n6: - x[3,vnf3_4,6] + x[3,vnf3_5,6]
+   - y[3,vnf3_4,vnf3_5,2,6] - y[3,vnf3_4,vnf3_5,5,6]
+   + y[3,vnf3_4,vnf3_5,6,7] = 0
+ flow_cons_s3_ijvnf3_4_vnf3_5_n7: - x[3,vnf3_4,7] + x[3,vnf3_5,7]
+   - y[3,vnf3_4,vnf3_5,6,7] + y[3,vnf3_4,vnf3_5,7,8]
+   + y[3,vnf3_4,vnf3_5,7,9] + y[3,vnf3_4,vnf3_5,7,10] = 0
+ flow_cons_s3_ijvnf3_4_vnf3_5_n8: - x[3,vnf3_4,8] + x[3,vnf3_5,8]
+   - y[3,vnf3_4,vnf3_5,5,8] - y[3,vnf3_4,vnf3_5,7,8]
+   + y[3,vnf3_4,vnf3_5,8,9] + y[3,vnf3_4,vnf3_5,8,11] = 0
+ flow_cons_s3_ijvnf3_4_vnf3_5_n9: - x[3,vnf3_4,9] + x[3,vnf3_5,9]
+   - y[3,vnf3_4,vnf3_5,7,9] - y[3,vnf3_4,vnf3_5,8,9]
+   + y[3,vnf3_4,vnf3_5,9,10] = 0
+ flow_cons_s3_ijvnf3_4_vnf3_5_n10: - x[3,vnf3_4,10] + x[3,vnf3_5,10]
+   - y[3,vnf3_4,vnf3_5,7,10] - y[3,vnf3_4,vnf3_5,9,10]
+   + y[3,vnf3_4,vnf3_5,10,11] + y[3,vnf3_4,vnf3_5,10,12] = 0
+ flow_cons_s3_ijvnf3_4_vnf3_5_n11: - x[3,vnf3_4,11] + x[3,vnf3_5,11]
+   - y[3,vnf3_4,vnf3_5,3,11] - y[3,vnf3_4,vnf3_5,8,11]
+   - y[3,vnf3_4,vnf3_5,10,11] = 0
+ flow_cons_s3_ijvnf3_4_vnf3_5_n12: - x[3,vnf3_4,12] + x[3,vnf3_5,12]
+   - y[3,vnf3_4,vnf3_5,3,12] - y[3,vnf3_4,vnf3_5,10,12] = 0
+ flow_cons_s3_ijENTRY_vnf3_0_n6: x[3,vnf3_0,6] - y[3,ENTRY,vnf3_0,2,6]
+   - y[3,ENTRY,vnf3_0,5,6] + y[3,ENTRY,vnf3_0,6,7] = 1
+ flow_cons_s3_ijENTRY_vnf3_0_n7: x[3,vnf3_0,7] - y[3,ENTRY,vnf3_0,6,7]
+   + y[3,ENTRY,vnf3_0,7,8] + y[3,ENTRY,vnf3_0,7,9] + y[3,ENTRY,vnf3_0,7,10]
+   = 0
+ flow_cons_s3_ijENTRY_vnf3_0_n8: x[3,vnf3_0,8] - y[3,ENTRY,vnf3_0,5,8]
+   - y[3,ENTRY,vnf3_0,7,8] + y[3,ENTRY,vnf3_0,8,9] + y[3,ENTRY,vnf3_0,8,11]
+   = 0
+ flow_cons_s3_ijENTRY_vnf3_0_n9: x[3,vnf3_0,9] - y[3,ENTRY,vnf3_0,7,9]
+   - y[3,ENTRY,vnf3_0,8,9] + y[3,ENTRY,vnf3_0,9,10] = 0
+ flow_cons_s3_ijENTRY_vnf3_0_n10: x[3,vnf3_0,10] - y[3,ENTRY,vnf3_0,7,10]
+   - y[3,ENTRY,vnf3_0,9,10] + y[3,ENTRY,vnf3_0,10,11]
+   + y[3,ENTRY,vnf3_0,10,12] = 0
+ flow_cons_s3_ijENTRY_vnf3_0_n11: x[3,vnf3_0,11] - y[3,ENTRY,vnf3_0,3,11]
+   - y[3,ENTRY,vnf3_0,8,11] - y[3,ENTRY,vnf3_0,10,11] = 0
+ flow_cons_s3_ijENTRY_vnf3_0_n12: x[3,vnf3_0,12] - y[3,ENTRY,vnf3_0,3,12]
+   - y[3,ENTRY,vnf3_0,10,12] = 0
+ flow_cons_s4_ijvnf4_0_vnf4_1_n6: - x[4,vnf4_0,6] + x[4,vnf4_1,6]
+   - y[4,vnf4_0,vnf4_1,2,6] - y[4,vnf4_0,vnf4_1,5,6]
+   + y[4,vnf4_0,vnf4_1,6,7] = 0
+ flow_cons_s4_ijvnf4_0_vnf4_1_n7: - x[4,vnf4_0,7] + x[4,vnf4_1,7]
+   - y[4,vnf4_0,vnf4_1,6,7] + y[4,vnf4_0,vnf4_1,7,8]
+   + y[4,vnf4_0,vnf4_1,7,9] + y[4,vnf4_0,vnf4_1,7,10] = 0
+ flow_cons_s4_ijvnf4_0_vnf4_1_n8: - x[4,vnf4_0,8] + x[4,vnf4_1,8]
+   - y[4,vnf4_0,vnf4_1,5,8] - y[4,vnf4_0,vnf4_1,7,8]
+   + y[4,vnf4_0,vnf4_1,8,9] + y[4,vnf4_0,vnf4_1,8,11] = 0
+ flow_cons_s4_ijvnf4_0_vnf4_1_n9: - x[4,vnf4_0,9] + x[4,vnf4_1,9]
+   - y[4,vnf4_0,vnf4_1,7,9] - y[4,vnf4_0,vnf4_1,8,9]
+   + y[4,vnf4_0,vnf4_1,9,10] = 0
+ flow_cons_s4_ijvnf4_0_vnf4_1_n10: - x[4,vnf4_0,10] + x[4,vnf4_1,10]
+   - y[4,vnf4_0,vnf4_1,7,10] - y[4,vnf4_0,vnf4_1,9,10]
+   + y[4,vnf4_0,vnf4_1,10,11] + y[4,vnf4_0,vnf4_1,10,12] = 0
+ flow_cons_s4_ijvnf4_0_vnf4_1_n11: - x[4,vnf4_0,11] + x[4,vnf4_1,11]
+   - y[4,vnf4_0,vnf4_1,3,11] - y[4,vnf4_0,vnf4_1,8,11]
+   - y[4,vnf4_0,vnf4_1,10,11] = 0
+ flow_cons_s4_ijvnf4_0_vnf4_1_n12: - x[4,vnf4_0,12] + x[4,vnf4_1,12]
+   - y[4,vnf4_0,vnf4_1,3,12] - y[4,vnf4_0,vnf4_1,10,12] = 0
+ flow_cons_s4_ijvnf4_1_vnf4_2_n6: - x[4,vnf4_1,6] + x[4,vnf4_2,6]
+   - y[4,vnf4_1,vnf4_2,2,6] - y[4,vnf4_1,vnf4_2,5,6]
+   + y[4,vnf4_1,vnf4_2,6,7] = 0
+ flow_cons_s4_ijvnf4_1_vnf4_2_n7: - x[4,vnf4_1,7] + x[4,vnf4_2,7]
+   - y[4,vnf4_1,vnf4_2,6,7] + y[4,vnf4_1,vnf4_2,7,8]
+   + y[4,vnf4_1,vnf4_2,7,9] + y[4,vnf4_1,vnf4_2,7,10] = 0
+ flow_cons_s4_ijvnf4_1_vnf4_2_n8: - x[4,vnf4_1,8] + x[4,vnf4_2,8]
+   - y[4,vnf4_1,vnf4_2,5,8] - y[4,vnf4_1,vnf4_2,7,8]
+   + y[4,vnf4_1,vnf4_2,8,9] + y[4,vnf4_1,vnf4_2,8,11] = 0
+ flow_cons_s4_ijvnf4_1_vnf4_2_n9: - x[4,vnf4_1,9] + x[4,vnf4_2,9]
+   - y[4,vnf4_1,vnf4_2,7,9] - y[4,vnf4_1,vnf4_2,8,9]
+   + y[4,vnf4_1,vnf4_2,9,10] = 0
+ flow_cons_s4_ijvnf4_1_vnf4_2_n10: - x[4,vnf4_1,10] + x[4,vnf4_2,10]
+   - y[4,vnf4_1,vnf4_2,7,10] - y[4,vnf4_1,vnf4_2,9,10]
+   + y[4,vnf4_1,vnf4_2,10,11] + y[4,vnf4_1,vnf4_2,10,12] = 0
+ flow_cons_s4_ijvnf4_1_vnf4_2_n11: - x[4,vnf4_1,11] + x[4,vnf4_2,11]
+   - y[4,vnf4_1,vnf4_2,3,11] - y[4,vnf4_1,vnf4_2,8,11]
+   - y[4,vnf4_1,vnf4_2,10,11] = 0
+ flow_cons_s4_ijvnf4_1_vnf4_2_n12: - x[4,vnf4_1,12] + x[4,vnf4_2,12]
+   - y[4,vnf4_1,vnf4_2,3,12] - y[4,vnf4_1,vnf4_2,10,12] = 0
+ flow_cons_s4_ijvnf4_2_vnf4_3_n6: - x[4,vnf4_2,6] + x[4,vnf4_3,6]
+   - y[4,vnf4_2,vnf4_3,2,6] - y[4,vnf4_2,vnf4_3,5,6]
+   + y[4,vnf4_2,vnf4_3,6,7] = 0
+ flow_cons_s4_ijvnf4_2_vnf4_3_n7: - x[4,vnf4_2,7] + x[4,vnf4_3,7]
+   - y[4,vnf4_2,vnf4_3,6,7] + y[4,vnf4_2,vnf4_3,7,8]
+   + y[4,vnf4_2,vnf4_3,7,9] + y[4,vnf4_2,vnf4_3,7,10] = 0
+ flow_cons_s4_ijvnf4_2_vnf4_3_n8: - x[4,vnf4_2,8] + x[4,vnf4_3,8]
+   - y[4,vnf4_2,vnf4_3,5,8] - y[4,vnf4_2,vnf4_3,7,8]
+   + y[4,vnf4_2,vnf4_3,8,9] + y[4,vnf4_2,vnf4_3,8,11] = 0
+ flow_cons_s4_ijvnf4_2_vnf4_3_n9: - x[4,vnf4_2,9] + x[4,vnf4_3,9]
+   - y[4,vnf4_2,vnf4_3,7,9] - y[4,vnf4_2,vnf4_3,8,9]
+   + y[4,vnf4_2,vnf4_3,9,10] = 0
+ flow_cons_s4_ijvnf4_2_vnf4_3_n10: - x[4,vnf4_2,10] + x[4,vnf4_3,10]
+   - y[4,vnf4_2,vnf4_3,7,10] - y[4,vnf4_2,vnf4_3,9,10]
+   + y[4,vnf4_2,vnf4_3,10,11] + y[4,vnf4_2,vnf4_3,10,12] = 0
+ flow_cons_s4_ijvnf4_2_vnf4_3_n11: - x[4,vnf4_2,11] + x[4,vnf4_3,11]
+   - y[4,vnf4_2,vnf4_3,3,11] - y[4,vnf4_2,vnf4_3,8,11]
+   - y[4,vnf4_2,vnf4_3,10,11] = 0
+ flow_cons_s4_ijvnf4_2_vnf4_3_n12: - x[4,vnf4_2,12] + x[4,vnf4_3,12]
+   - y[4,vnf4_2,vnf4_3,3,12] - y[4,vnf4_2,vnf4_3,10,12] = 0
+ flow_cons_s4_ijvnf4_3_vnf4_4_n6: - x[4,vnf4_3,6] + x[4,vnf4_4,6]
+   - y[4,vnf4_3,vnf4_4,2,6] - y[4,vnf4_3,vnf4_4,5,6]
+   + y[4,vnf4_3,vnf4_4,6,7] = 0
+ flow_cons_s4_ijvnf4_3_vnf4_4_n7: - x[4,vnf4_3,7] + x[4,vnf4_4,7]
+   - y[4,vnf4_3,vnf4_4,6,7] + y[4,vnf4_3,vnf4_4,7,8]
+   + y[4,vnf4_3,vnf4_4,7,9] + y[4,vnf4_3,vnf4_4,7,10] = 0
+ flow_cons_s4_ijvnf4_3_vnf4_4_n8: - x[4,vnf4_3,8] + x[4,vnf4_4,8]
+   - y[4,vnf4_3,vnf4_4,5,8] - y[4,vnf4_3,vnf4_4,7,8]
+   + y[4,vnf4_3,vnf4_4,8,9] + y[4,vnf4_3,vnf4_4,8,11] = 0
+ flow_cons_s4_ijvnf4_3_vnf4_4_n9: - x[4,vnf4_3,9] + x[4,vnf4_4,9]
+   - y[4,vnf4_3,vnf4_4,7,9] - y[4,vnf4_3,vnf4_4,8,9]
+   + y[4,vnf4_3,vnf4_4,9,10] = 0
+ flow_cons_s4_ijvnf4_3_vnf4_4_n10: - x[4,vnf4_3,10] + x[4,vnf4_4,10]
+   - y[4,vnf4_3,vnf4_4,7,10] - y[4,vnf4_3,vnf4_4,9,10]
+   + y[4,vnf4_3,vnf4_4,10,11] + y[4,vnf4_3,vnf4_4,10,12] = 0
+ flow_cons_s4_ijvnf4_3_vnf4_4_n11: - x[4,vnf4_3,11] + x[4,vnf4_4,11]
+   - y[4,vnf4_3,vnf4_4,3,11] - y[4,vnf4_3,vnf4_4,8,11]
+   - y[4,vnf4_3,vnf4_4,10,11] = 0
+ flow_cons_s4_ijvnf4_3_vnf4_4_n12: - x[4,vnf4_3,12] + x[4,vnf4_4,12]
+   - y[4,vnf4_3,vnf4_4,3,12] - y[4,vnf4_3,vnf4_4,10,12] = 0
+ flow_cons_s4_ijvnf4_4_vnf4_5_n6: - x[4,vnf4_4,6] + x[4,vnf4_5,6]
+   - y[4,vnf4_4,vnf4_5,2,6] - y[4,vnf4_4,vnf4_5,5,6]
+   + y[4,vnf4_4,vnf4_5,6,7] = 0
+ flow_cons_s4_ijvnf4_4_vnf4_5_n7: - x[4,vnf4_4,7] + x[4,vnf4_5,7]
+   - y[4,vnf4_4,vnf4_5,6,7] + y[4,vnf4_4,vnf4_5,7,8]
+   + y[4,vnf4_4,vnf4_5,7,9] + y[4,vnf4_4,vnf4_5,7,10] = 0
+ flow_cons_s4_ijvnf4_4_vnf4_5_n8: - x[4,vnf4_4,8] + x[4,vnf4_5,8]
+   - y[4,vnf4_4,vnf4_5,5,8] - y[4,vnf4_4,vnf4_5,7,8]
+   + y[4,vnf4_4,vnf4_5,8,9] + y[4,vnf4_4,vnf4_5,8,11] = 0
+ flow_cons_s4_ijvnf4_4_vnf4_5_n9: - x[4,vnf4_4,9] + x[4,vnf4_5,9]
+   - y[4,vnf4_4,vnf4_5,7,9] - y[4,vnf4_4,vnf4_5,8,9]
+   + y[4,vnf4_4,vnf4_5,9,10] = 0
+ flow_cons_s4_ijvnf4_4_vnf4_5_n10: - x[4,vnf4_4,10] + x[4,vnf4_5,10]
+   - y[4,vnf4_4,vnf4_5,7,10] - y[4,vnf4_4,vnf4_5,9,10]
+   + y[4,vnf4_4,vnf4_5,10,11] + y[4,vnf4_4,vnf4_5,10,12] = 0
+ flow_cons_s4_ijvnf4_4_vnf4_5_n11: - x[4,vnf4_4,11] + x[4,vnf4_5,11]
+   - y[4,vnf4_4,vnf4_5,3,11] - y[4,vnf4_4,vnf4_5,8,11]
+   - y[4,vnf4_4,vnf4_5,10,11] = 0
+ flow_cons_s4_ijvnf4_4_vnf4_5_n12: - x[4,vnf4_4,12] + x[4,vnf4_5,12]
+   - y[4,vnf4_4,vnf4_5,3,12] - y[4,vnf4_4,vnf4_5,10,12] = 0
+ flow_cons_s4_ijENTRY_vnf4_0_n6: x[4,vnf4_0,6] - y[4,ENTRY,vnf4_0,2,6]
+   - y[4,ENTRY,vnf4_0,5,6] + y[4,ENTRY,vnf4_0,6,7] = 1
+ flow_cons_s4_ijENTRY_vnf4_0_n7: x[4,vnf4_0,7] - y[4,ENTRY,vnf4_0,6,7]
+   + y[4,ENTRY,vnf4_0,7,8] + y[4,ENTRY,vnf4_0,7,9] + y[4,ENTRY,vnf4_0,7,10]
+   = 0
+ flow_cons_s4_ijENTRY_vnf4_0_n8: x[4,vnf4_0,8] - y[4,ENTRY,vnf4_0,5,8]
+   - y[4,ENTRY,vnf4_0,7,8] + y[4,ENTRY,vnf4_0,8,9] + y[4,ENTRY,vnf4_0,8,11]
+   = 0
+ flow_cons_s4_ijENTRY_vnf4_0_n9: x[4,vnf4_0,9] - y[4,ENTRY,vnf4_0,7,9]
+   - y[4,ENTRY,vnf4_0,8,9] + y[4,ENTRY,vnf4_0,9,10] = 0
+ flow_cons_s4_ijENTRY_vnf4_0_n10: x[4,vnf4_0,10] - y[4,ENTRY,vnf4_0,7,10]
+   - y[4,ENTRY,vnf4_0,9,10] + y[4,ENTRY,vnf4_0,10,11]
+   + y[4,ENTRY,vnf4_0,10,12] = 0
+ flow_cons_s4_ijENTRY_vnf4_0_n11: x[4,vnf4_0,11] - y[4,ENTRY,vnf4_0,3,11]
+   - y[4,ENTRY,vnf4_0,8,11] - y[4,ENTRY,vnf4_0,10,11] = 0
+ flow_cons_s4_ijENTRY_vnf4_0_n12: x[4,vnf4_0,12] - y[4,ENTRY,vnf4_0,3,12]
+   - y[4,ENTRY,vnf4_0,10,12] = 0
+ flow_cons_s5_ijvnf5_0_vnf5_1_n6: - x[5,vnf5_0,6] + x[5,vnf5_1,6]
+   - y[5,vnf5_0,vnf5_1,2,6] - y[5,vnf5_0,vnf5_1,5,6]
+   + y[5,vnf5_0,vnf5_1,6,7] = 0
+ flow_cons_s5_ijvnf5_0_vnf5_1_n7: - x[5,vnf5_0,7] + x[5,vnf5_1,7]
+   - y[5,vnf5_0,vnf5_1,6,7] + y[5,vnf5_0,vnf5_1,7,8]
+   + y[5,vnf5_0,vnf5_1,7,9] + y[5,vnf5_0,vnf5_1,7,10] = 0
+ flow_cons_s5_ijvnf5_0_vnf5_1_n8: - x[5,vnf5_0,8] + x[5,vnf5_1,8]
+   - y[5,vnf5_0,vnf5_1,5,8] - y[5,vnf5_0,vnf5_1,7,8]
+   + y[5,vnf5_0,vnf5_1,8,9] + y[5,vnf5_0,vnf5_1,8,11] = 0
+ flow_cons_s5_ijvnf5_0_vnf5_1_n9: - x[5,vnf5_0,9] + x[5,vnf5_1,9]
+   - y[5,vnf5_0,vnf5_1,7,9] - y[5,vnf5_0,vnf5_1,8,9]
+   + y[5,vnf5_0,vnf5_1,9,10] = 0
+ flow_cons_s5_ijvnf5_0_vnf5_1_n10: - x[5,vnf5_0,10] + x[5,vnf5_1,10]
+   - y[5,vnf5_0,vnf5_1,7,10] - y[5,vnf5_0,vnf5_1,9,10]
+   + y[5,vnf5_0,vnf5_1,10,11] + y[5,vnf5_0,vnf5_1,10,12] = 0
+ flow_cons_s5_ijvnf5_0_vnf5_1_n11: - x[5,vnf5_0,11] + x[5,vnf5_1,11]
+   - y[5,vnf5_0,vnf5_1,3,11] - y[5,vnf5_0,vnf5_1,8,11]
+   - y[5,vnf5_0,vnf5_1,10,11] = 0
+ flow_cons_s5_ijvnf5_0_vnf5_1_n12: - x[5,vnf5_0,12] + x[5,vnf5_1,12]
+   - y[5,vnf5_0,vnf5_1,3,12] - y[5,vnf5_0,vnf5_1,10,12] = 0
+ flow_cons_s5_ijvnf5_1_vnf5_2_n6: - x[5,vnf5_1,6] + x[5,vnf5_2,6]
+   - y[5,vnf5_1,vnf5_2,2,6] - y[5,vnf5_1,vnf5_2,5,6]
+   + y[5,vnf5_1,vnf5_2,6,7] = 0
+ flow_cons_s5_ijvnf5_1_vnf5_2_n7: - x[5,vnf5_1,7] + x[5,vnf5_2,7]
+   - y[5,vnf5_1,vnf5_2,6,7] + y[5,vnf5_1,vnf5_2,7,8]
+   + y[5,vnf5_1,vnf5_2,7,9] + y[5,vnf5_1,vnf5_2,7,10] = 0
+ flow_cons_s5_ijvnf5_1_vnf5_2_n8: - x[5,vnf5_1,8] + x[5,vnf5_2,8]
+   - y[5,vnf5_1,vnf5_2,5,8] - y[5,vnf5_1,vnf5_2,7,8]
+   + y[5,vnf5_1,vnf5_2,8,9] + y[5,vnf5_1,vnf5_2,8,11] = 0
+ flow_cons_s5_ijvnf5_1_vnf5_2_n9: - x[5,vnf5_1,9] + x[5,vnf5_2,9]
+   - y[5,vnf5_1,vnf5_2,7,9] - y[5,vnf5_1,vnf5_2,8,9]
+   + y[5,vnf5_1,vnf5_2,9,10] = 0
+ flow_cons_s5_ijvnf5_1_vnf5_2_n10: - x[5,vnf5_1,10] + x[5,vnf5_2,10]
+   - y[5,vnf5_1,vnf5_2,7,10] - y[5,vnf5_1,vnf5_2,9,10]
+   + y[5,vnf5_1,vnf5_2,10,11] + y[5,vnf5_1,vnf5_2,10,12] = 0
+ flow_cons_s5_ijvnf5_1_vnf5_2_n11: - x[5,vnf5_1,11] + x[5,vnf5_2,11]
+   - y[5,vnf5_1,vnf5_2,3,11] - y[5,vnf5_1,vnf5_2,8,11]
+   - y[5,vnf5_1,vnf5_2,10,11] = 0
+ flow_cons_s5_ijvnf5_1_vnf5_2_n12: - x[5,vnf5_1,12] + x[5,vnf5_2,12]
+   - y[5,vnf5_1,vnf5_2,3,12] - y[5,vnf5_1,vnf5_2,10,12] = 0
+ flow_cons_s5_ijvnf5_2_vnf5_3_n6: - x[5,vnf5_2,6] + x[5,vnf5_3,6]
+   - y[5,vnf5_2,vnf5_3,2,6] - y[5,vnf5_2,vnf5_3,5,6]
+   + y[5,vnf5_2,vnf5_3,6,7] = 0
+ flow_cons_s5_ijvnf5_2_vnf5_3_n7: - x[5,vnf5_2,7] + x[5,vnf5_3,7]
+   - y[5,vnf5_2,vnf5_3,6,7] + y[5,vnf5_2,vnf5_3,7,8]
+   + y[5,vnf5_2,vnf5_3,7,9] + y[5,vnf5_2,vnf5_3,7,10] = 0
+ flow_cons_s5_ijvnf5_2_vnf5_3_n8: - x[5,vnf5_2,8] + x[5,vnf5_3,8]
+   - y[5,vnf5_2,vnf5_3,5,8] - y[5,vnf5_2,vnf5_3,7,8]
+   + y[5,vnf5_2,vnf5_3,8,9] + y[5,vnf5_2,vnf5_3,8,11] = 0
+ flow_cons_s5_ijvnf5_2_vnf5_3_n9: - x[5,vnf5_2,9] + x[5,vnf5_3,9]
+   - y[5,vnf5_2,vnf5_3,7,9] - y[5,vnf5_2,vnf5_3,8,9]
+   + y[5,vnf5_2,vnf5_3,9,10] = 0
+ flow_cons_s5_ijvnf5_2_vnf5_3_n10: - x[5,vnf5_2,10] + x[5,vnf5_3,10]
+   - y[5,vnf5_2,vnf5_3,7,10] - y[5,vnf5_2,vnf5_3,9,10]
+   + y[5,vnf5_2,vnf5_3,10,11] + y[5,vnf5_2,vnf5_3,10,12] = 0
+ flow_cons_s5_ijvnf5_2_vnf5_3_n11: - x[5,vnf5_2,11] + x[5,vnf5_3,11]
+   - y[5,vnf5_2,vnf5_3,3,11] - y[5,vnf5_2,vnf5_3,8,11]
+   - y[5,vnf5_2,vnf5_3,10,11] = 0
+ flow_cons_s5_ijvnf5_2_vnf5_3_n12: - x[5,vnf5_2,12] + x[5,vnf5_3,12]
+   - y[5,vnf5_2,vnf5_3,3,12] - y[5,vnf5_2,vnf5_3,10,12] = 0
+ flow_cons_s5_ijvnf5_3_vnf5_4_n6: - x[5,vnf5_3,6] + x[5,vnf5_4,6]
+   - y[5,vnf5_3,vnf5_4,2,6] - y[5,vnf5_3,vnf5_4,5,6]
+   + y[5,vnf5_3,vnf5_4,6,7] = 0
+ flow_cons_s5_ijvnf5_3_vnf5_4_n7: - x[5,vnf5_3,7] + x[5,vnf5_4,7]
+   - y[5,vnf5_3,vnf5_4,6,7] + y[5,vnf5_3,vnf5_4,7,8]
+   + y[5,vnf5_3,vnf5_4,7,9] + y[5,vnf5_3,vnf5_4,7,10] = 0
+ flow_cons_s5_ijvnf5_3_vnf5_4_n8: - x[5,vnf5_3,8] + x[5,vnf5_4,8]
+   - y[5,vnf5_3,vnf5_4,5,8] - y[5,vnf5_3,vnf5_4,7,8]
+   + y[5,vnf5_3,vnf5_4,8,9] + y[5,vnf5_3,vnf5_4,8,11] = 0
+ flow_cons_s5_ijvnf5_3_vnf5_4_n9: - x[5,vnf5_3,9] + x[5,vnf5_4,9]
+   - y[5,vnf5_3,vnf5_4,7,9] - y[5,vnf5_3,vnf5_4,8,9]
+   + y[5,vnf5_3,vnf5_4,9,10] = 0
+ flow_cons_s5_ijvnf5_3_vnf5_4_n10: - x[5,vnf5_3,10] + x[5,vnf5_4,10]
+   - y[5,vnf5_3,vnf5_4,7,10] - y[5,vnf5_3,vnf5_4,9,10]
+   + y[5,vnf5_3,vnf5_4,10,11] + y[5,vnf5_3,vnf5_4,10,12] = 0
+ flow_cons_s5_ijvnf5_3_vnf5_4_n11: - x[5,vnf5_3,11] + x[5,vnf5_4,11]
+   - y[5,vnf5_3,vnf5_4,3,11] - y[5,vnf5_3,vnf5_4,8,11]
+   - y[5,vnf5_3,vnf5_4,10,11] = 0
+ flow_cons_s5_ijvnf5_3_vnf5_4_n12: - x[5,vnf5_3,12] + x[5,vnf5_4,12]
+   - y[5,vnf5_3,vnf5_4,3,12] - y[5,vnf5_3,vnf5_4,10,12] = 0
+ flow_cons_s5_ijvnf5_4_vnf5_5_n6: - x[5,vnf5_4,6] + x[5,vnf5_5,6]
+   - y[5,vnf5_4,vnf5_5,2,6] - y[5,vnf5_4,vnf5_5,5,6]
+   + y[5,vnf5_4,vnf5_5,6,7] = 0
+ flow_cons_s5_ijvnf5_4_vnf5_5_n7: - x[5,vnf5_4,7] + x[5,vnf5_5,7]
+   - y[5,vnf5_4,vnf5_5,6,7] + y[5,vnf5_4,vnf5_5,7,8]
+   + y[5,vnf5_4,vnf5_5,7,9] + y[5,vnf5_4,vnf5_5,7,10] = 0
+ flow_cons_s5_ijvnf5_4_vnf5_5_n8: - x[5,vnf5_4,8] + x[5,vnf5_5,8]
+   - y[5,vnf5_4,vnf5_5,5,8] - y[5,vnf5_4,vnf5_5,7,8]
+   + y[5,vnf5_4,vnf5_5,8,9] + y[5,vnf5_4,vnf5_5,8,11] = 0
+ flow_cons_s5_ijvnf5_4_vnf5_5_n9: - x[5,vnf5_4,9] + x[5,vnf5_5,9]
+   - y[5,vnf5_4,vnf5_5,7,9] - y[5,vnf5_4,vnf5_5,8,9]
+   + y[5,vnf5_4,vnf5_5,9,10] = 0
+ flow_cons_s5_ijvnf5_4_vnf5_5_n10: - x[5,vnf5_4,10] + x[5,vnf5_5,10]
+   - y[5,vnf5_4,vnf5_5,7,10] - y[5,vnf5_4,vnf5_5,9,10]
+   + y[5,vnf5_4,vnf5_5,10,11] + y[5,vnf5_4,vnf5_5,10,12] = 0
+ flow_cons_s5_ijvnf5_4_vnf5_5_n11: - x[5,vnf5_4,11] + x[5,vnf5_5,11]
+   - y[5,vnf5_4,vnf5_5,3,11] - y[5,vnf5_4,vnf5_5,8,11]
+   - y[5,vnf5_4,vnf5_5,10,11] = 0
+ flow_cons_s5_ijvnf5_4_vnf5_5_n12: - x[5,vnf5_4,12] + x[5,vnf5_5,12]
+   - y[5,vnf5_4,vnf5_5,3,12] - y[5,vnf5_4,vnf5_5,10,12] = 0
+ flow_cons_s5_ijENTRY_vnf5_0_n6: x[5,vnf5_0,6] - y[5,ENTRY,vnf5_0,2,6]
+   - y[5,ENTRY,vnf5_0,5,6] + y[5,ENTRY,vnf5_0,6,7] = 1
+ flow_cons_s5_ijENTRY_vnf5_0_n7: x[5,vnf5_0,7] - y[5,ENTRY,vnf5_0,6,7]
+   + y[5,ENTRY,vnf5_0,7,8] + y[5,ENTRY,vnf5_0,7,9] + y[5,ENTRY,vnf5_0,7,10]
+   = 0
+ flow_cons_s5_ijENTRY_vnf5_0_n8: x[5,vnf5_0,8] - y[5,ENTRY,vnf5_0,5,8]
+   - y[5,ENTRY,vnf5_0,7,8] + y[5,ENTRY,vnf5_0,8,9] + y[5,ENTRY,vnf5_0,8,11]
+   = 0
+ flow_cons_s5_ijENTRY_vnf5_0_n9: x[5,vnf5_0,9] - y[5,ENTRY,vnf5_0,7,9]
+   - y[5,ENTRY,vnf5_0,8,9] + y[5,ENTRY,vnf5_0,9,10] = 0
+ flow_cons_s5_ijENTRY_vnf5_0_n10: x[5,vnf5_0,10] - y[5,ENTRY,vnf5_0,7,10]
+   - y[5,ENTRY,vnf5_0,9,10] + y[5,ENTRY,vnf5_0,10,11]
+   + y[5,ENTRY,vnf5_0,10,12] = 0
+ flow_cons_s5_ijENTRY_vnf5_0_n11: x[5,vnf5_0,11] - y[5,ENTRY,vnf5_0,3,11]
+   - y[5,ENTRY,vnf5_0,8,11] - y[5,ENTRY,vnf5_0,10,11] = 0
+ flow_cons_s5_ijENTRY_vnf5_0_n12: x[5,vnf5_0,12] - y[5,ENTRY,vnf5_0,3,12]
+   - y[5,ENTRY,vnf5_0,10,12] = 0
+ node_act_6: x[0,vnf0_0,6] + x[0,vnf0_1,6] + x[0,vnf0_2,6] + x[0,vnf0_3,6]
+   + x[0,vnf0_4,6] + x[0,vnf0_5,6] + x[1,vnf1_0,6] + x[1,vnf1_1,6]
+   + x[1,vnf1_2,6] + x[1,vnf1_3,6] + x[1,vnf1_4,6] + x[1,vnf1_5,6]
+   + x[2,vnf2_0,6] + x[2,vnf2_1,6] + x[2,vnf2_2,6] + x[2,vnf2_3,6]
+   + x[2,vnf2_4,6] + x[2,vnf2_5,6] + x[3,vnf3_0,6] + x[3,vnf3_1,6]
+   + x[3,vnf3_2,6] + x[3,vnf3_3,6] + x[3,vnf3_4,6] + x[3,vnf3_5,6]
+   + x[4,vnf4_0,6] + x[4,vnf4_1,6] + x[4,vnf4_2,6] + x[4,vnf4_3,6]
+   + x[4,vnf4_4,6] + x[4,vnf4_5,6] + x[5,vnf5_0,6] + x[5,vnf5_1,6]
+   + x[5,vnf5_2,6] + x[5,vnf5_3,6] + x[5,vnf5_4,6] + x[5,vnf5_5,6] - 6 a[6]
+   <= 0
+Bounds
+Binaries
+ x[0,vnf0_0,6] x[0,vnf0_0,7] x[0,vnf0_0,8] x[0,vnf0_0,9] x[0,vnf0_0,10]
+ x[0,vnf0_0,11] x[0,vnf0_0,12] x[0,vnf0_1,6] x[0,vnf0_1,7] x[0,vnf0_1,8]
+ x[0,vnf0_1,9] x[0,vnf0_1,10] x[0,vnf0_1,11] x[0,vnf0_1,12] x[0,vnf0_2,6]
+ x[0,vnf0_2,7] x[0,vnf0_2,8] x[0,vnf0_2,9] x[0,vnf0_2,10] x[0,vnf0_2,11]
+ x[0,vnf0_2,12] x[0,vnf0_3,6] x[0,vnf0_3,7] x[0,vnf0_3,8] x[0,vnf0_3,9]
+ x[0,vnf0_3,10] x[0,vnf0_3,11] x[0,vnf0_3,12] x[0,vnf0_4,6] x[0,vnf0_4,7]
+ x[0,vnf0_4,8] x[0,vnf0_4,9] x[0,vnf0_4,10] x[0,vnf0_4,11] x[0,vnf0_4,12]
+ x[0,vnf0_5,6] x[0,vnf0_5,7] x[0,vnf0_5,8] x[0,vnf0_5,9] x[0,vnf0_5,10]
+ x[0,vnf0_5,11] x[0,vnf0_5,12] x[1,vnf1_0,6] x[1,vnf1_0,7] x[1,vnf1_0,8]
+ x[1,vnf1_0,9] x[1,vnf1_0,10] x[1,vnf1_0,11] x[1,vnf1_0,12] x[1,vnf1_1,6]
+ x[1,vnf1_1,7] x[1,vnf1_1,8] x[1,vnf1_1,9] x[1,vnf1_1,10] x[1,vnf1_1,11]
+ x[1,vnf1_1,12] x[1,vnf1_2,6] x[1,vnf1_2,7] x[1,vnf1_2,8] x[1,vnf1_2,9]
+ x[1,vnf1_2,10] x[1,vnf1_2,11] x[1,vnf1_2,12] x[1,vnf1_3,6] x[1,vnf1_3,7]
+ x[1,vnf1_3,8] x[1,vnf1_3,9] x[1,vnf1_3,10] x[1,vnf1_3,11] x[1,vnf1_3,12]
+ x[1,vnf1_4,6] x[1,vnf1_4,7] x[1,vnf1_4,8] x[1,vnf1_4,9] x[1,vnf1_4,10]
+ x[1,vnf1_4,11] x[1,vnf1_4,12] x[1,vnf1_5,6] x[1,vnf1_5,7] x[1,vnf1_5,8]
+ x[1,vnf1_5,9] x[1,vnf1_5,10] x[1,vnf1_5,11] x[1,vnf1_5,12] x[2,vnf2_0,6]
+ x[2,vnf2_0,7] x[2,vnf2_0,8] x[2,vnf2_0,9] x[2,vnf2_0,10] x[2,vnf2_0,11]
+ x[2,vnf2_0,12] x[2,vnf2_1,6] x[2,vnf2_1,7] x[2,vnf2_1,8] x[2,vnf2_1,9]
+ x[2,vnf2_1,10] x[2,vnf2_1,11] x[2,vnf2_1,12] x[2,vnf2_2,6] x[2,vnf2_2,7]
+ x[2,vnf2_2,8] x[2,vnf2_2,9] x[2,vnf2_2,10] x[2,vnf2_2,11] x[2,vnf2_2,12]
+ x[2,vnf2_3,1] x[2,vnf2_3,2] x[2,vnf2_3,3] x[2,vnf2_3,4] x[2,vnf2_3,5]
+ x[2,vnf2_3,6] x[2,vnf2_3,7] x[2,vnf2_3,8] x[2,vnf2_3,9] x[2,vnf2_3,10]
+ x[2,vnf2_3,11] x[2,vnf2_3,12] x[2,vnf2_4,1] x[2,vnf2_4,2] x[2,vnf2_4,3]
+ x[2,vnf2_4,4] x[2,vnf2_4,5] x[2,vnf2_4,6] x[2,vnf2_4,7] x[2,vnf2_4,8]
+ x[2,vnf2_4,9] x[2,vnf2_4,10] x[2,vnf2_4,11] x[2,vnf2_4,12] x[2,vnf2_5,6]
+ x[2,vnf2_5,7] x[2,vnf2_5,8] x[2,vnf2_5,9] x[2,vnf2_5,10] x[2,vnf2_5,11]
+ x[2,vnf2_5,12] x[3,vnf3_0,6] x[3,vnf3_0,7] x[3,vnf3_0,8] x[3,vnf3_0,9]
+ x[3,vnf3_0,10] x[3,vnf3_0,11] x[3,vnf3_0,12] x[3,vnf3_1,6] x[3,vnf3_1,7]
+ x[3,vnf3_1,8] x[3,vnf3_1,9] x[3,vnf3_1,10] x[3,vnf3_1,11] x[3,vnf3_1,12]
+ x[3,vnf3_2,6] x[3,vnf3_2,7] x[3,vnf3_2,8] x[3,vnf3_2,9] x[3,vnf3_2,10]
+ x[3,vnf3_2,11] x[3,vnf3_2,12] x[3,vnf3_3,6] x[3,vnf3_3,7] x[3,vnf3_3,8]
+ x[3,vnf3_3,9] x[3,vnf3_3,10] x[3,vnf3_3,11] x[3,vnf3_3,12] x[3,vnf3_4,6]
+ x[3,vnf3_4,7] x[3,vnf3_4,8] x[3,vnf3_4,9] x[3,vnf3_4,10] x[3,vnf3_4,11]
+ x[3,vnf3_4,12] x[3,vnf3_5,6] x[3,vnf3_5,7] x[3,vnf3_5,8] x[3,vnf3_5,9]
+ x[3,vnf3_5,10] x[3,vnf3_5,11] x[3,vnf3_5,12] x[4,vnf4_0,6] x[4,vnf4_0,7]
+ x[4,vnf4_0,8] x[4,vnf4_0,9] x[4,vnf4_0,10] x[4,vnf4_0,11] x[4,vnf4_0,12]
+ x[4,vnf4_1,6] x[4,vnf4_1,7] x[4,vnf4_1,8] x[4,vnf4_1,9] x[4,vnf4_1,10]
+ x[4,vnf4_1,11] x[4,vnf4_1,12] x[4,vnf4_2,6] x[4,vnf4_2,7] x[4,vnf4_2,8]
+ x[4,vnf4_2,9] x[4,vnf4_2,10] x[4,vnf4_2,11] x[4,vnf4_2,12] x[4,vnf4_3,6]
+ x[4,vnf4_3,7] x[4,vnf4_3,8] x[4,vnf4_3,9] x[4,vnf4_3,10] x[4,vnf4_3,11]
+ x[4,vnf4_3,12] x[4,vnf4_4,6] x[4,vnf4_4,7] x[4,vnf4_4,8] x[4,vnf4_4,9]
+ x[4,vnf4_4,10] x[4,vnf4_4,11] x[4,vnf4_4,12] x[4,vnf4_5,6] x[4,vnf4_5,7]
+ x[4,vnf4_5,8] x[4,vnf4_5,9] x[4,vnf4_5,10] x[4,vnf4_5,11] x[4,vnf4_5,12]
+ x[5,vnf5_0,6] x[5,vnf5_0,7] x[5,vnf5_0,8] x[5,vnf5_0,9] x[5,vnf5_0,10]
+ x[5,vnf5_0,11] x[5,vnf5_0,12] x[5,vnf5_1,6] x[5,vnf5_1,7] x[5,vnf5_1,8]
+ x[5,vnf5_1,9] x[5,vnf5_1,10] x[5,vnf5_1,11] x[5,vnf5_1,12] x[5,vnf5_2,6]
+ x[5,vnf5_2,7] x[5,vnf5_2,8] x[5,vnf5_2,9] x[5,vnf5_2,10] x[5,vnf5_2,11]
+ x[5,vnf5_2,12] x[5,vnf5_3,6] x[5,vnf5_3,7] x[5,vnf5_3,8] x[5,vnf5_3,9]
+ x[5,vnf5_3,10] x[5,vnf5_3,11] x[5,vnf5_3,12] x[5,vnf5_4,6] x[5,vnf5_4,7]
+ x[5,vnf5_4,8] x[5,vnf5_4,9] x[5,vnf5_4,10] x[5,vnf5_4,11] x[5,vnf5_4,12]
+ x[5,vnf5_5,6] x[5,vnf5_5,7] x[5,vnf5_5,8] x[5,vnf5_5,9] x[5,vnf5_5,10]
+ x[5,vnf5_5,11] x[5,vnf5_5,12] a[6] a[7] a[8] a[9] a[10] a[11] a[12]
+ y[0,vnf0_0,vnf0_1,3,11] y[0,vnf0_0,vnf0_1,3,12] y[0,vnf0_0,vnf0_1,5,8]
+ y[0,vnf0_0,vnf0_1,6,7] y[0,vnf0_0,vnf0_1,7,8] y[0,vnf0_0,vnf0_1,7,9]
+ y[0,vnf0_0,vnf0_1,7,10] y[0,vnf0_0,vnf0_1,8,9] y[0,vnf0_0,vnf0_1,8,11]
+ y[0,vnf0_0,vnf0_1,9,10] y[0,vnf0_0,vnf0_1,10,11] y[0,vnf0_0,vnf0_1,10,12]
+ y[0,vnf0_1,vnf0_2,3,11] y[0,vnf0_1,vnf0_2,3,12] y[0,vnf0_1,vnf0_2,5,8]
+ y[0,vnf0_1,vnf0_2,6,7] y[0,vnf0_1,vnf0_2,7,8] y[0,vnf0_1,vnf0_2,7,9]
+ y[0,vnf0_1,vnf0_2,7,10] y[0,vnf0_1,vnf0_2,8,9] y[0,vnf0_1,vnf0_2,8,11]
+ y[0,vnf0_1,vnf0_2,9,10] y[0,vnf0_1,vnf0_2,10,11] y[0,vnf0_1,vnf0_2,10,12]
+ y[0,vnf0_2,vnf0_3,3,11] y[0,vnf0_2,vnf0_3,3,12] y[0,vnf0_2,vnf0_3,5,8]
+ y[0,vnf0_2,vnf0_3,6,7] y[0,vnf0_2,vnf0_3,7,8] y[0,vnf0_2,vnf0_3,7,9]
+ y[0,vnf0_2,vnf0_3,7,10] y[0,vnf0_2,vnf0_3,8,9] y[0,vnf0_2,vnf0_3,8,11]
+ y[0,vnf0_2,vnf0_3,9,10] y[0,vnf0_2,vnf0_3,10,11] y[0,vnf0_2,vnf0_3,10,12]
+ y[0,ENTRY,vnf0_0,2,6] y[0,ENTRY,vnf0_0,3,11] y[0,ENTRY,vnf0_0,3,12]
+ y[0,ENTRY,vnf0_0,5,6] y[0,ENTRY,vnf0_0,5,8] y[0,ENTRY,vnf0_0,6,7]
+ y[0,ENTRY,vnf0_0,7,8] y[0,ENTRY,vnf0_0,7,9] y[0,ENTRY,vnf0_0,7,10]
+ y[0,ENTRY,vnf0_0,8,9] y[0,ENTRY,vnf0_0,8,11] y[0,ENTRY,vnf0_0,9,10]
+ y[0,ENTRY,vnf0_0,10,11] y[0,ENTRY,vnf0_0,10,12] y[1,vnf1_0,vnf1_1,2,6]
+ y[1,vnf1_0,vnf1_1,3,11] y[1,vnf1_0,vnf1_1,3,12] y[1,vnf1_0,vnf1_1,5,6]
+ y[1,vnf1_0,vnf1_1,5,8] y[1,vnf1_0,vnf1_1,6,7] y[1,vnf1_0,vnf1_1,7,8]
+ y[1,vnf1_0,vnf1_1,7,9] y[1,vnf1_0,vnf1_1,7,10] y[1,vnf1_0,vnf1_1,8,9]
+ y[1,vnf1_0,vnf1_1,8,11] y[1,vnf1_0,vnf1_1,9,10] y[1,vnf1_0,vnf1_1,10,11]
+ y[1,vnf1_0,vnf1_1,10,12] y[1,vnf1_1,vnf1_2,2,6] y[1,vnf1_1,vnf1_2,3,11]
+ y[1,vnf1_1,vnf1_2,3,12] y[1,vnf1_1,vnf1_2,5,6] y[1,vnf1_1,vnf1_2,5,8]
+ y[1,vnf1_1,vnf1_2,6,7] y[1,vnf1_1,vnf1_2,7,8] y[1,vnf1_1,vnf1_2,7,9]
+ y[1,vnf1_1,vnf1_2,7,10] y[1,vnf1_1,vnf1_2,8,9] y[1,vnf1_1,vnf1_2,8,11]
+ y[1,vnf1_1,vnf1_2,9,10] y[1,vnf1_1,vnf1_2,10,11] y[1,vnf1_1,vnf1_2,10,12]
+ y[1,vnf1_2,vnf1_3,2,6] y[1,vnf1_2,vnf1_3,3,11] y[1,vnf1_2,vnf1_3,3,12]
+ y[1,vnf1_2,vnf1_3,5,6] y[1,vnf1_2,vnf1_3,5,8] y[1,vnf1_2,vnf1_3,6,7]
+ y[1,vnf1_2,vnf1_3,7,8] y[1,vnf1_2,vnf1_3,7,9] y[1,vnf1_2,vnf1_3,7,10]
+ y[1,vnf1_2,vnf1_3,8,9] y[1,vnf1_2,vnf1_3,8,11] y[1,vnf1_2,vnf1_3,9,10]
+ y[1,vnf1_2,vnf1_3,10,11] y[1,vnf1_2,vnf1_3,10,12] y[1,vnf1_3,vnf1_4,2,6]
+ y[1,vnf1_3,vnf1_4,3,11] y[1,vnf1_3,vnf1_4,3,12] y[1,vnf1_3,vnf1_4,5,6]
+ y[1,vnf1_3,vnf1_4,5,8] y[1,vnf1_3,vnf1_4,6,7] y[1,vnf1_3,vnf1_4,7,8]
+ y[1,vnf1_3,vnf1_4,7,9] y[1,vnf1_3,vnf1_4,7,10] y[1,vnf1_3,vnf1_4,8,9]
+ y[1,vnf1_3,vnf1_4,8,11] y[1,vnf1_3,vnf1_4,9,10] y[1,vnf1_3,vnf1_4,10,11]
+ y[1,vnf1_3,vnf1_4,10,12] y[1,vnf1_4,vnf1_5,2,6] y[1,vnf1_4,vnf1_5,3,11]
+ y[1,vnf1_4,vnf1_5,3,12] y[1,vnf1_4,vnf1_5,5,6] y[1,vnf1_4,vnf1_5,5,8]
+ y[1,vnf1_4,vnf1_5,6,7] y[1,vnf1_4,vnf1_5,7,8] y[1,vnf1_4,vnf1_5,7,9]
+ y[1,vnf1_4,vnf1_5,7,10] y[1,vnf1_4,vnf1_5,8,9] y[1,vnf1_4,vnf1_5,8,11]
+ y[1,vnf1_4,vnf1_5,9,10] y[1,vnf1_4,vnf1_5,10,11] y[1,vnf1_4,vnf1_5,10,12]
+ y[1,ENTRY,vnf1_0,2,6] y[1,ENTRY,vnf1_0,3,11] y[1,ENTRY,vnf1_0,3,12]
+ y[1,ENTRY,vnf1_0,5,6] y[1,ENTRY,vnf1_0,5,8] y[1,ENTRY,vnf1_0,6,7]
+ y[1,ENTRY,vnf1_0,7,8] y[1,ENTRY,vnf1_0,7,9] y[1,ENTRY,vnf1_0,7,10]
+ y[1,ENTRY,vnf1_0,8,9] y[1,ENTRY,vnf1_0,8,11] y[1,ENTRY,vnf1_0,9,10]
+ y[1,ENTRY,vnf1_0,10,11] y[1,ENTRY,vnf1_0,10,12] y[2,vnf2_0,vnf2_1,2,6]
+ y[2,vnf2_0,vnf2_1,3,11] y[2,vnf2_0,vnf2_1,3,12] y[2,vnf2_0,vnf2_1,5,6]
+ y[2,vnf2_0,vnf2_1,5,8] y[2,vnf2_0,vnf2_1,6,7] y[2,vnf2_0,vnf2_1,7,8]
+ y[2,vnf2_0,vnf2_1,7,9] y[2,vnf2_0,vnf2_1,7,10] y[2,vnf2_0,vnf2_1,8,9]
+ y[2,vnf2_0,vnf2_1,8,11] y[2,vnf2_0,vnf2_1,9,10] y[2,vnf2_0,vnf2_1,10,11]
+ y[2,vnf2_0,vnf2_1,10,12] y[2,vnf2_1,vnf2_2,2,6] y[2,vnf2_1,vnf2_2,3,11]
+ y[2,vnf2_1,vnf2_2,3,12] y[2,vnf2_1,vnf2_2,5,6] y[2,vnf2_1,vnf2_2,5,8]
+ y[2,vnf2_1,vnf2_2,6,7] y[2,vnf2_1,vnf2_2,7,8] y[2,vnf2_1,vnf2_2,7,9]
+ y[2,vnf2_1,vnf2_2,7,10] y[2,vnf2_1,vnf2_2,8,9] y[2,vnf2_1,vnf2_2,8,11]
+ y[2,vnf2_1,vnf2_2,9,10] y[2,vnf2_1,vnf2_2,10,11] y[2,vnf2_1,vnf2_2,10,12]
+ y[2,vnf2_2,vnf2_3,2,6] y[2,vnf2_2,vnf2_3,3,11] y[2,vnf2_2,vnf2_3,3,12]
+ y[2,vnf2_2,vnf2_3,5,6] y[2,vnf2_2,vnf2_3,5,8] y[2,vnf2_2,vnf2_3,6,7]
+ y[2,vnf2_2,vnf2_3,7,8] y[2,vnf2_2,vnf2_3,7,9] y[2,vnf2_2,vnf2_3,7,10]
+ y[2,vnf2_2,vnf2_3,8,9] y[2,vnf2_2,vnf2_3,8,11] y[2,vnf2_2,vnf2_3,9,10]
+ y[2,vnf2_2,vnf2_3,10,11] y[2,vnf2_2,vnf2_3,10,12] y[2,vnf2_3,vnf2_4,1,2]
+ y[2,vnf2_3,vnf2_4,1,3] y[2,vnf2_3,vnf2_4,2,4] y[2,vnf2_3,vnf2_4,2,6]
+ y[2,vnf2_3,vnf2_4,3,4] y[2,vnf2_3,vnf2_4,3,11] y[2,vnf2_3,vnf2_4,3,12]
+ y[2,vnf2_3,vnf2_4,4,5] y[2,vnf2_3,vnf2_4,5,6] y[2,vnf2_3,vnf2_4,5,8]
+ y[2,vnf2_3,vnf2_4,6,7] y[2,vnf2_4,vnf2_5,2,6] y[2,vnf2_4,vnf2_5,3,11]
+ y[2,vnf2_4,vnf2_5,3,12] y[2,vnf2_4,vnf2_5,5,6] y[2,vnf2_4,vnf2_5,5,8]
+ y[2,vnf2_4,vnf2_5,6,7] y[2,vnf2_4,vnf2_5,7,8] y[2,vnf2_4,vnf2_5,7,9]
+ y[2,vnf2_4,vnf2_5,7,10] y[2,vnf2_4,vnf2_5,8,9] y[2,vnf2_4,vnf2_5,8,11]
+ y[2,vnf2_4,vnf2_5,9,10] y[2,vnf2_4,vnf2_5,10,11] y[2,vnf2_4,vnf2_5,10,12]
+ y[2,ENTRY,vnf2_0,2,6] y[2,ENTRY,vnf2_0,3,11] y[2,ENTRY,vnf2_0,3,12]
+ y[2,ENTRY,vnf2_0,5,6] y[2,ENTRY,vnf2_0,5,8] y[2,ENTRY,vnf2_0,6,7]
+ y[2,ENTRY,vnf2_0,7,8] y[2,ENTRY,vnf2_0,7,9] y[2,ENTRY,vnf2_0,7,10]
+ y[2,ENTRY,vnf2_0,8,9] y[2,ENTRY,vnf2_0,8,11] y[2,ENTRY,vnf2_0,9,10]
+ y[2,ENTRY,vnf2_0,10,11] y[2,ENTRY,vnf2_0,10,12] y[3,vnf3_0,vnf3_1,2,6]
+ y[3,vnf3_0,vnf3_1,3,11] y[3,vnf3_0,vnf3_1,3,12] y[3,vnf3_0,vnf3_1,5,6]
+ y[3,vnf3_0,vnf3_1,5,8] y[3,vnf3_0,vnf3_1,6,7] y[3,vnf3_0,vnf3_1,7,8]
+ y[3,vnf3_0,vnf3_1,7,9] y[3,vnf3_0,vnf3_1,7,10] y[3,vnf3_0,vnf3_1,8,9]
+ y[3,vnf3_0,vnf3_1,8,11] y[3,vnf3_0,vnf3_1,9,10] y[3,vnf3_0,vnf3_1,10,11]
+ y[3,vnf3_0,vnf3_1,10,12] y[3,vnf3_1,vnf3_2,2,6] y[3,vnf3_1,vnf3_2,3,11]
+ y[3,vnf3_1,vnf3_2,3,12] y[3,vnf3_1,vnf3_2,5,6] y[3,vnf3_1,vnf3_2,5,8]
+ y[3,vnf3_1,vnf3_2,6,7] y[3,vnf3_1,vnf3_2,7,8] y[3,vnf3_1,vnf3_2,7,9]
+ y[3,vnf3_1,vnf3_2,7,10] y[3,vnf3_1,vnf3_2,8,9] y[3,vnf3_1,vnf3_2,8,11]
+ y[3,vnf3_1,vnf3_2,9,10] y[3,vnf3_1,vnf3_2,10,11] y[3,vnf3_1,vnf3_2,10,12]
+ y[3,vnf3_2,vnf3_3,2,6] y[3,vnf3_2,vnf3_3,3,11] y[3,vnf3_2,vnf3_3,3,12]
+ y[3,vnf3_2,vnf3_3,5,6] y[3,vnf3_2,vnf3_3,5,8] y[3,vnf3_2,vnf3_3,6,7]
+ y[3,vnf3_2,vnf3_3,7,8] y[3,vnf3_2,vnf3_3,7,9] y[3,vnf3_2,vnf3_3,7,10]
+ y[3,vnf3_2,vnf3_3,8,9] y[3,vnf3_2,vnf3_3,8,11] y[3,vnf3_2,vnf3_3,9,10]
+ y[3,vnf3_2,vnf3_3,10,11] y[3,vnf3_2,vnf3_3,10,12] y[3,vnf3_3,vnf3_4,2,6]
+ y[3,vnf3_3,vnf3_4,3,11] y[3,vnf3_3,vnf3_4,3,12] y[3,vnf3_3,vnf3_4,5,6]
+ y[3,vnf3_3,vnf3_4,5,8] y[3,vnf3_3,vnf3_4,6,7] y[3,vnf3_3,vnf3_4,7,8]
+ y[3,vnf3_3,vnf3_4,7,9] y[3,vnf3_3,vnf3_4,7,10] y[3,vnf3_3,vnf3_4,8,9]
+ y[3,vnf3_3,vnf3_4,8,11] y[3,vnf3_3,vnf3_4,9,10] y[3,vnf3_3,vnf3_4,10,11]
+ y[3,vnf3_3,vnf3_4,10,12] y[3,vnf3_4,vnf3_5,2,6] y[3,vnf3_4,vnf3_5,3,11]
+ y[3,vnf3_4,vnf3_5,3,12] y[3,vnf3_4,vnf3_5,5,6] y[3,vnf3_4,vnf3_5,5,8]
+ y[3,vnf3_4,vnf3_5,6,7] y[3,vnf3_4,vnf3_5,7,8] y[3,vnf3_4,vnf3_5,7,9]
+ y[3,vnf3_4,vnf3_5,7,10] y[3,vnf3_4,vnf3_5,8,9] y[3,vnf3_4,vnf3_5,8,11]
+ y[3,vnf3_4,vnf3_5,9,10] y[3,vnf3_4,vnf3_5,10,11] y[3,vnf3_4,vnf3_5,10,12]
+ y[3,ENTRY,vnf3_0,2,6] y[3,ENTRY,vnf3_0,3,11] y[3,ENTRY,vnf3_0,3,12]
+ y[3,ENTRY,vnf3_0,5,6] y[3,ENTRY,vnf3_0,5,8] y[3,ENTRY,vnf3_0,6,7]
+ y[3,ENTRY,vnf3_0,7,8] y[3,ENTRY,vnf3_0,7,9] y[3,ENTRY,vnf3_0,7,10]
+ y[3,ENTRY,vnf3_0,8,9] y[3,ENTRY,vnf3_0,8,11] y[3,ENTRY,vnf3_0,9,10]
+ y[3,ENTRY,vnf3_0,10,11] y[3,ENTRY,vnf3_0,10,12] y[4,vnf4_0,vnf4_1,2,6]
+ y[4,vnf4_0,vnf4_1,3,11] y[4,vnf4_0,vnf4_1,3,12] y[4,vnf4_0,vnf4_1,5,6]
+ y[4,vnf4_0,vnf4_1,5,8] y[4,vnf4_0,vnf4_1,6,7] y[4,vnf4_0,vnf4_1,7,8]
+ y[4,vnf4_0,vnf4_1,7,9] y[4,vnf4_0,vnf4_1,7,10] y[4,vnf4_0,vnf4_1,8,9]
+ y[4,vnf4_0,vnf4_1,8,11] y[4,vnf4_0,vnf4_1,9,10] y[4,vnf4_0,vnf4_1,10,11]
+ y[4,vnf4_0,vnf4_1,10,12] y[4,vnf4_1,vnf4_2,2,6] y[4,vnf4_1,vnf4_2,3,11]
+ y[4,vnf4_1,vnf4_2,3,12] y[4,vnf4_1,vnf4_2,5,6] y[4,vnf4_1,vnf4_2,5,8]
+ y[4,vnf4_1,vnf4_2,6,7] y[4,vnf4_1,vnf4_2,7,8] y[4,vnf4_1,vnf4_2,7,9]
+ y[4,vnf4_1,vnf4_2,7,10] y[4,vnf4_1,vnf4_2,8,9] y[4,vnf4_1,vnf4_2,8,11]
+ y[4,vnf4_1,vnf4_2,9,10] y[4,vnf4_1,vnf4_2,10,11] y[4,vnf4_1,vnf4_2,10,12]
+ y[4,vnf4_2,vnf4_3,2,6] y[4,vnf4_2,vnf4_3,3,11] y[4,vnf4_2,vnf4_3,3,12]
+ y[4,vnf4_2,vnf4_3,5,6] y[4,vnf4_2,vnf4_3,5,8] y[4,vnf4_2,vnf4_3,6,7]
+ y[4,vnf4_2,vnf4_3,7,8] y[4,vnf4_2,vnf4_3,7,9] y[4,vnf4_2,vnf4_3,7,10]
+ y[4,vnf4_2,vnf4_3,8,9] y[4,vnf4_2,vnf4_3,8,11] y[4,vnf4_2,vnf4_3,9,10]
+ y[4,vnf4_2,vnf4_3,10,11] y[4,vnf4_2,vnf4_3,10,12] y[4,vnf4_3,vnf4_4,2,6]
+ y[4,vnf4_3,vnf4_4,3,11] y[4,vnf4_3,vnf4_4,3,12] y[4,vnf4_3,vnf4_4,5,6]
+ y[4,vnf4_3,vnf4_4,5,8] y[4,vnf4_3,vnf4_4,6,7] y[4,vnf4_3,vnf4_4,7,8]
+ y[4,vnf4_3,vnf4_4,7,9] y[4,vnf4_3,vnf4_4,7,10] y[4,vnf4_3,vnf4_4,8,9]
+ y[4,vnf4_3,vnf4_4,8,11] y[4,vnf4_3,vnf4_4,9,10] y[4,vnf4_3,vnf4_4,10,11]
+ y[4,vnf4_3,vnf4_4,10,12] y[4,vnf4_4,vnf4_5,2,6] y[4,vnf4_4,vnf4_5,3,11]
+ y[4,vnf4_4,vnf4_5,3,12] y[4,vnf4_4,vnf4_5,5,6] y[4,vnf4_4,vnf4_5,5,8]
+ y[4,vnf4_4,vnf4_5,6,7] y[4,vnf4_4,vnf4_5,7,8] y[4,vnf4_4,vnf4_5,7,9]
+ y[4,vnf4_4,vnf4_5,7,10] y[4,vnf4_4,vnf4_5,8,9] y[4,vnf4_4,vnf4_5,8,11]
+ y[4,vnf4_4,vnf4_5,9,10] y[4,vnf4_4,vnf4_5,10,11] y[4,vnf4_4,vnf4_5,10,12]
+ y[4,ENTRY,vnf4_0,2,6] y[4,ENTRY,vnf4_0,3,11] y[4,ENTRY,vnf4_0,3,12]
+ y[4,ENTRY,vnf4_0,5,6] y[4,ENTRY,vnf4_0,5,8] y[4,ENTRY,vnf4_0,6,7]
+ y[4,ENTRY,vnf4_0,7,8] y[4,ENTRY,vnf4_0,7,9] y[4,ENTRY,vnf4_0,7,10]
+ y[4,ENTRY,vnf4_0,8,9] y[4,ENTRY,vnf4_0,8,11] y[4,ENTRY,vnf4_0,9,10]
+ y[4,ENTRY,vnf4_0,10,11] y[4,ENTRY,vnf4_0,10,12] y[5,vnf5_0,vnf5_1,2,6]
+ y[5,vnf5_0,vnf5_1,3,11] y[5,vnf5_0,vnf5_1,3,12] y[5,vnf5_0,vnf5_1,5,6]
+ y[5,vnf5_0,vnf5_1,5,8] y[5,vnf5_0,vnf5_1,6,7] y[5,vnf5_0,vnf5_1,7,8]
+ y[5,vnf5_0,vnf5_1,7,9] y[5,vnf5_0,vnf5_1,7,10] y[5,vnf5_0,vnf5_1,8,9]
+ y[5,vnf5_0,vnf5_1,8,11] y[5,vnf5_0,vnf5_1,9,10] y[5,vnf5_0,vnf5_1,10,11]
+ y[5,vnf5_0,vnf5_1,10,12] y[5,vnf5_1,vnf5_2,2,6] y[5,vnf5_1,vnf5_2,3,11]
+ y[5,vnf5_1,vnf5_2,3,12] y[5,vnf5_1,vnf5_2,5,6] y[5,vnf5_1,vnf5_2,5,8]
+ y[5,vnf5_1,vnf5_2,6,7] y[5,vnf5_1,vnf5_2,7,8] y[5,vnf5_1,vnf5_2,7,9]
+ y[5,vnf5_1,vnf5_2,7,10] y[5,vnf5_1,vnf5_2,8,9] y[5,vnf5_1,vnf5_2,8,11]
+ y[5,vnf5_1,vnf5_2,9,10] y[5,vnf5_1,vnf5_2,10,11] y[5,vnf5_1,vnf5_2,10,12]
+ y[5,vnf5_2,vnf5_3,2,6] y[5,vnf5_2,vnf5_3,3,11] y[5,vnf5_2,vnf5_3,3,12]
+ y[5,vnf5_2,vnf5_3,5,6] y[5,vnf5_2,vnf5_3,5,8] y[5,vnf5_2,vnf5_3,6,7]
+ y[5,vnf5_2,vnf5_3,7,8] y[5,vnf5_2,vnf5_3,7,9] y[5,vnf5_2,vnf5_3,7,10]
+ y[5,vnf5_2,vnf5_3,8,9] y[5,vnf5_2,vnf5_3,8,11] y[5,vnf5_2,vnf5_3,9,10]
+ y[5,vnf5_2,vnf5_3,10,11] y[5,vnf5_2,vnf5_3,10,12] y[5,vnf5_3,vnf5_4,2,6]
+ y[5,vnf5_3,vnf5_4,3,11] y[5,vnf5_3,vnf5_4,3,12] y[5,vnf5_3,vnf5_4,5,6]
+ y[5,vnf5_3,vnf5_4,5,8] y[5,vnf5_3,vnf5_4,6,7] y[5,vnf5_3,vnf5_4,7,8]
+ y[5,vnf5_3,vnf5_4,7,9] y[5,vnf5_3,vnf5_4,7,10] y[5,vnf5_3,vnf5_4,8,9]
+ y[5,vnf5_3,vnf5_4,8,11] y[5,vnf5_3,vnf5_4,9,10] y[5,vnf5_3,vnf5_4,10,11]
+ y[5,vnf5_3,vnf5_4,10,12] y[5,vnf5_4,vnf5_5,2,6] y[5,vnf5_4,vnf5_5,3,11]
+ y[5,vnf5_4,vnf5_5,3,12] y[5,vnf5_4,vnf5_5,5,6] y[5,vnf5_4,vnf5_5,5,8]
+ y[5,vnf5_4,vnf5_5,6,7] y[5,vnf5_4,vnf5_5,7,8] y[5,vnf5_4,vnf5_5,7,9]
+ y[5,vnf5_4,vnf5_5,7,10] y[5,vnf5_4,vnf5_5,8,9] y[5,vnf5_4,vnf5_5,8,11]
+ y[5,vnf5_4,vnf5_5,9,10] y[5,vnf5_4,vnf5_5,10,11] y[5,vnf5_4,vnf5_5,10,12]
+ y[5,ENTRY,vnf5_0,2,6] y[5,ENTRY,vnf5_0,3,11] y[5,ENTRY,vnf5_0,3,12]
+ y[5,ENTRY,vnf5_0,5,6] y[5,ENTRY,vnf5_0,5,8] y[5,ENTRY,vnf5_0,6,7]
+ y[5,ENTRY,vnf5_0,7,8] y[5,ENTRY,vnf5_0,7,9] y[5,ENTRY,vnf5_0,7,10]
+ y[5,ENTRY,vnf5_0,8,9] y[5,ENTRY,vnf5_0,8,11] y[5,ENTRY,vnf5_0,9,10]
+ y[5,ENTRY,vnf5_0,10,11] y[5,ENTRY,vnf5_0,10,12]
+End

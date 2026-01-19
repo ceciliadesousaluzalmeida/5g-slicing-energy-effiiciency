@@ -416,7 +416,7 @@ def main():
 
     # --- Imports that depend on your project structure ---
     from milp.create_instance import create_instance
-    from milp.solve_gurobi_sequential import solve_gurobi_shrink_until_feasible
+    from milp.solve_gurobi_sequential import solve_gurobi_max_accept
     from milp.adapter import MILPResultAdapterGurobi
 
     from utils.topology import topologie_finlande
@@ -440,23 +440,25 @@ def main():
     # Config (edit here)
     # ============================
 
-    MILP_TIME_LIMIT = 180
-    ENTRY = 6
+    MILP_TIME_LIMIT = 1800
+    ENTRY = 11
 
     MAX_MILP_SLICES = 128
-    MAX_MILP_VNFS_TOTAL = 512
+    MAX_MILP_VNFS_TOTAL = 768
 
     param_grid = {
-        "num_slices": [4, 8],
-        "num_vnfs_per_slice": [2, 3, 4],
-        "seed": [1],
+        "num_slices": [4, 8, 16, 32, 64, 128],
+        "num_vnfs_per_slice": [2, 3, 4, 5, 6],
+        "seed": [1, 2, 3, 4, 5],
     }
 
     vnf_profiles = [
-        {"cpu": 2, "throughput": 40, "latency": 120},
-        {"cpu": 4, "throughput": 50, "latency": 180},
-        {"cpu": 6, "throughput": 60, "latency": 200},
-        {"cpu": 8, "throughput": 75, "latency": 250},
+        {"cpu": 1, "throughput": 15, "latency": 30},
+        {"cpu": 1, "throughput": 20, "latency": 60},
+        {"cpu": 2, "throughput": 25, "latency": 90},
+        {"cpu": 3, "throughput": 30, "latency": 100},
+        {"cpu": 4, "throughput": 35, "latency": 125},
+        {"cpu": 6, "throughput": 50, "latency": 135},
     ]
 
 
@@ -528,11 +530,11 @@ def main():
 
                 print("\n[DEBUG] slices[0] type:", type(slices[0]))
                 if isinstance(slices[0], dict):
-                    print("[DEBUG] slices[0] keys:", list(slices[0].keys())[:30])
+                    print("[DEBUG] slices[0] keys:", list(slices[0].keys())[:MAX_MILP_SLICES])
                     for k in ["vnfs", "vnf_list", "functions", "chain", "vnf_cpu", "cpu_demands", "vnf_demands"]:
                         if k in slices[0]:
                             print(f"[DEBUG] slices[0]['{k}'] type:", type(slices[0][k]))
-                            print(f"[DEBUG] slices[0]['{k}'] sample:", str(slices[0][k])[:200])
+                            print(f"[DEBUG] slices[0]['{k}'] sample:", str(slices[0][k])[:MAX_MILP_VNFS_TOTAL])
 
                 # Show one heuristic placement id format
                 tmp_name = "ABO"
@@ -550,7 +552,7 @@ def main():
                     ("FABO", run_fabo_full_batch, (G, slices, node_capacity_base, link_latency, link_capacity_base)),
                     ("Best Fit", run_best_fit, (G, slices, node_capacity_base, link_capacity_base, link_latency)),
                     ("First Fit", run_first_fit, (G, slices, node_capacity_base, link_capacity_base, link_latency)),
-                    ("Energy-Aware A*", energy_aware_astar, (G, slices, node_capacity_base, link_capacity_base, 0.6, 0.4)),
+                    ("Energy-Aware A*", energy_aware_astar, (G, slices, node_capacity_base, link_capacity_base)),
                 ]:
                     start = time.time()
                     try:
@@ -561,16 +563,16 @@ def main():
                         method_results[name] = []
                     method_times[name] = time.time() - start
 
-                # --- MILP (shrink-until-feasible) ---
+                # --- MILP (max-accept with z[s]) ---
                 if num_slices <= MAX_MILP_SLICES and total_vnfs <= MAX_MILP_VNFS_TOTAL:
                     try:
-                        print("[INFO][MILP] Running Gurobi (shrink-until-feasible)…")
+                        print("[INFO][MILP] Running Gurobi (max-accept)…")
                         start = time.time()
 
                         instance = create_instance(G, slices)
-                        instance.entry_node = ENTRY
+                        instance.entry_node = ENTRY  # keep if your create_instance uses it
 
-                        out = solve_gurobi_shrink_until_feasible(
+                        out = solve_gurobi_max_accept(
                             instance,
                             msg=False,
                             time_limit=MILP_TIME_LIMIT,
@@ -579,6 +581,11 @@ def main():
                         if out.get("last_result") is not None:
                             adapter = MILPResultAdapterGurobi(out["last_result"], instance)
                             method_results["MILP_Gurobi"] = [adapter]
+
+                            # Optional: print acceptance summary
+                            acc = len(out.get("accepted_slices", []))
+                            rej = len(out.get("rejected_slices", []))
+                            print(f"[INFO][MILP] Accepted={acc}/{len(slices)} (Rejected={rej})")
 
                             records_milp_raw.extend(
                                 export_milp_solution_to_rows(
@@ -600,6 +607,7 @@ def main():
                         print(f"[ERROR][MILP] Failed: {e}")
                         method_results["MILP_Gurobi"] = []
                         method_times["MILP_Gurobi"] = None
+
 
                 # --- Export routes (ALL methods) ---
                 for method_name, result_list in method_results.items():
