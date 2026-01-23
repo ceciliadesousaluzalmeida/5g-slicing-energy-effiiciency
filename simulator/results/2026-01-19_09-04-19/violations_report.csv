@@ -1,0 +1,2 @@
+type            , method, scenario, entity, detail                                                                                               , value, limit
+BW_CHECK_SKIPPED,       ,         ,       , "routes_all_methods.csv does not provide enough columns to check BW usage (need method,u,v,bw_used).",      , 

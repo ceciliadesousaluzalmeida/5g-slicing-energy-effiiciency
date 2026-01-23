@@ -400,6 +400,84 @@ def export_milp_solution_to_rows(
 
     return rows
 
+def export_link_bw_load_to_rows(
+    method_name,
+    result_list,
+    slices,
+    num_slices,
+    num_vnfs_per_slice,
+    seed,
+    timestamp_str,
+    link_capacity_base,
+):
+    # All comments in English
+    rows = []
+
+    # Compute total BW used per directed physical link (u,v)
+    bw_used = {}  # (u,v) -> float
+
+    # Build a vlink bw alias map from slices, similar to CPU aliasing
+    # We try common patterns inside each slice/vlink object/dict
+    def _get_vlink_bw(sl, src, dst):
+        # All comments in English
+        if isinstance(sl, dict):
+            # Try explicit mapping if exists
+            for k in ["vlink_bw", "bw_by_vlink", "bw_demands", "link_demands", "demands_bw"]:
+                m = sl.get(k)
+                if isinstance(m, dict):
+                    if (src, dst) in m:
+                        return m[(src, dst)]
+                    if (str(src), str(dst)) in m:
+                        return m[(str(src), str(dst))]
+            # Fallback: if profiles are uniform, you may not have per-vlink BW here
+        return None
+
+    # Create a simple slice index -> slice object map
+    slice_map = {i: sl for i, sl in enumerate(slices)}
+    # Also allow direct id access if slice is dict with "id"
+    for i, sl in enumerate(slices):
+        if isinstance(sl, dict) and "id" in sl:
+            slice_map[sl["id"]] = sl
+
+    for res in result_list:
+        if not hasattr(res, "routed_vls") or res.routed_vls is None:
+            continue
+
+        for vl_key, path_nodes in res.routed_vls.items():
+            s_id, vnf_src, vnf_dst = _route_key_to_parts(vl_key)
+            if not path_nodes or len(path_nodes) < 2:
+                continue
+
+            # Try to recover BW demand for this vlink
+            bw = None
+            if s_id in slice_map:
+                bw = _get_vlink_bw(slice_map[s_id], vnf_src, vnf_dst)
+
+            # If BW is missing, skip (but you will see it in the report)
+            if bw is None:
+                continue
+
+            for u, v in zip(path_nodes[:-1], path_nodes[1:]):
+                bw_used[(u, v)] = bw_used.get((u, v), 0.0) + float(bw)
+
+    for (u, v), used in bw_used.items():
+        cap = float(link_capacity_base.get((u, v), float("nan")))
+        rows.append({
+            "timestamp": timestamp_str,
+            "method": method_name,
+            "num_slices": num_slices,
+            "num_vnfs_per_slice": num_vnfs_per_slice,
+            "seed": seed,
+            "u": u,
+            "v": v,
+            "bw_used": used,
+            "bw_capacity": cap,
+            "bw_utilization": used / cap if cap and cap > 0 else float("nan"),
+        })
+
+    return rows
+
+
 
 # ============================
 # Main
@@ -440,16 +518,16 @@ def main():
     # Config (edit here)
     # ============================
 
-    MILP_TIME_LIMIT = 1800
-    ENTRY = 11
+    MILP_TIME_LIMIT = 10**9 
+    ENTRY = 6
 
-    MAX_MILP_SLICES = 128
-    MAX_MILP_VNFS_TOTAL = 768
+    MAX_MILP_SLICES = 10**9
+    MAX_MILP_VNFS_TOTAL = 10**9
 
     param_grid = {
         "num_slices": [4, 8, 16, 32, 64, 128],
         "num_vnfs_per_slice": [2, 3, 4, 5, 6],
-        "seed": [1, 2, 3, 4, 5],
+        "seed": [1],
     }
 
     vnf_profiles = [
@@ -491,6 +569,8 @@ def main():
     records_milp_raw = []
     records_node_hosting = []
     records_node_cpu = []
+    records_link_bw = []
+
 
 
     # ============================
@@ -624,6 +704,23 @@ def main():
                         )
                     )
                 
+                for method_name, result_list in method_results.items():
+                    if not result_list:
+                        continue
+                    records_link_bw.extend(
+                        export_link_bw_load_to_rows(
+                            method_name=method_name,
+                            result_list=result_list,
+                            slices=slices,
+                            num_slices=num_slices,
+                            num_vnfs_per_slice=num_vnfs,
+                            seed=seed,
+                            timestamp_str=ts_now,
+                            link_capacity_base=link_capacity_base,
+                        )
+                    )
+
+                
                 # --- Export node hosting + cpu load (ALL methods) ---
                 for method_name, result_list in method_results.items():
                     if not result_list:
@@ -700,6 +797,12 @@ def main():
 
     df_node_hosting.to_csv(node_hosting_path, index=False)
     df_node_cpu.to_csv(node_cpu_path, index=False)
+
+    df_link_bw = pd.DataFrame(records_link_bw)
+    link_bw_path = os.path.join(results_dir, "link_bw_load_all_methods.csv")
+    df_link_bw.to_csv(link_bw_path, index=False)
+    print(f"[INFO] Link BW load CSV saved to: {link_bw_path} (rows={len(df_link_bw)})")
+
 
     print(f"[INFO] Node hosting CSV saved to: {node_hosting_path} (rows={len(df_node_hosting)})")
     print(f"[INFO] Node CPU load CSV saved to: {node_cpu_path} (rows={len(df_node_cpu)})")

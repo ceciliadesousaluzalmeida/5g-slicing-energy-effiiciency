@@ -1,0 +1,1765 @@
+timestamp,method,num_slices,num_vnfs_per_slice,seed,node,hosted_vnfs,num_hosted_vnfs
+2026-01-21 12:20:57,A*,4,2,1,6,"vnf0_0,vnf1_0,vnf2_0,vnf3_0",4
+2026-01-21 12:20:57,A*,4,2,1,2,"vnf0_1,vnf3_1",2
+2026-01-21 12:20:57,A*,4,2,1,5,vnf1_1,1
+2026-01-21 12:20:57,A*,4,2,1,7,vnf2_1,1
+2026-01-21 12:20:57,ABO,4,2,1,2,"vnf0_0,vnf1_0,vnf2_0,vnf3_0",4
+2026-01-21 12:20:57,ABO,4,2,1,1,"vnf0_1,vnf1_1,vnf2_1,vnf3_1",4
+2026-01-21 12:20:57,FABO,4,2,1,2,"vnf0_0,vnf3_0",2
+2026-01-21 12:20:57,FABO,4,2,1,1,"vnf0_1,vnf3_1",2
+2026-01-21 12:20:57,FABO,4,2,1,5,vnf1_0,1
+2026-01-21 12:20:57,FABO,4,2,1,4,vnf1_1,1
+2026-01-21 12:20:57,FABO,4,2,1,7,vnf2_0,1
+2026-01-21 12:20:57,FABO,4,2,1,6,vnf2_1,1
+2026-01-21 12:20:57,Best Fit,4,2,1,6,"vnf0_0,vnf1_0,vnf2_0,vnf3_0",4
+2026-01-21 12:20:57,Best Fit,4,2,1,2,"vnf0_1,vnf1_1,vnf2_1,vnf3_1",4
+2026-01-21 12:20:57,First Fit,4,2,1,1,"vnf0_0,vnf1_0,vnf2_0,vnf3_0",4
+2026-01-21 12:20:57,First Fit,4,2,1,2,"vnf0_1,vnf1_1,vnf2_1,vnf3_1",4
+2026-01-21 12:20:57,Energy-Aware A*,4,2,1,2,"vnf0_0,vnf3_0",2
+2026-01-21 12:20:57,Energy-Aware A*,4,2,1,6,"vnf0_1,vnf1_1,vnf2_1,vnf3_1",4
+2026-01-21 12:20:57,Energy-Aware A*,4,2,1,5,vnf1_0,1
+2026-01-21 12:20:57,Energy-Aware A*,4,2,1,7,vnf2_0,1
+2026-01-21 12:20:57,MILP_Gurobi,4,2,1,6,"vnf0_0,vnf1_0,vnf2_0,vnf3_0",4
+2026-01-21 12:20:57,MILP_Gurobi,4,2,1,7,"vnf0_1,vnf1_1,vnf2_1,vnf3_1",4
+2026-01-21 12:21:05,A*,8,2,1,6,"vnf0_0,vnf1_0,vnf2_0,vnf3_0,vnf4_0,vnf5_0,vnf6_0,vnf7_0",8
+2026-01-21 12:21:05,A*,8,2,1,2,"vnf0_1,vnf3_1,vnf6_1",3
+2026-01-21 12:21:05,A*,8,2,1,5,"vnf1_1,vnf4_1,vnf7_1",3
+2026-01-21 12:21:05,A*,8,2,1,7,"vnf2_1,vnf5_1",2
+2026-01-21 12:21:05,ABO,8,2,1,2,"vnf0_0,vnf1_0,vnf2_0,vnf3_0,vnf4_0,vnf5_0,vnf6_0,vnf7_0",8
+2026-01-21 12:21:05,ABO,8,2,1,1,"vnf0_1,vnf1_1,vnf2_1,vnf3_1,vnf4_1,vnf5_1,vnf6_1,vnf7_1",8
+2026-01-21 12:21:05,FABO,8,2,1,2,"vnf0_0,vnf3_0,vnf6_0",3
+2026-01-21 12:21:05,FABO,8,2,1,1,"vnf0_1,vnf3_1",2
+2026-01-21 12:21:05,FABO,8,2,1,5,"vnf1_0,vnf4_0,vnf7_0",3
+2026-01-21 12:21:05,FABO,8,2,1,4,vnf1_1,1
+2026-01-21 12:21:05,FABO,8,2,1,7,"vnf2_0,vnf5_0",2
+2026-01-21 12:21:05,FABO,8,2,1,6,"vnf2_1,vnf6_1,vnf7_1",3
+2026-01-21 12:21:05,FABO,8,2,1,8,vnf4_1,1
+2026-01-21 12:21:05,FABO,8,2,1,9,vnf5_1,1
+2026-01-21 12:21:05,Best Fit,8,2,1,6,"vnf0_0,vnf1_0,vnf2_0,vnf3_0,vnf4_0,vnf5_0,vnf6_0,vnf7_0",8
+2026-01-21 12:21:05,Best Fit,8,2,1,2,"vnf0_1,vnf1_1,vnf2_1,vnf3_1,vnf4_1,vnf5_1,vnf6_1,vnf7_1",8
+2026-01-21 12:21:05,First Fit,8,2,1,1,"vnf0_0,vnf1_0,vnf2_0,vnf3_0,vnf4_0,vnf5_0,vnf6_0,vnf7_0",8
+2026-01-21 12:21:05,First Fit,8,2,1,2,"vnf0_1,vnf1_1,vnf2_1,vnf3_1,vnf4_1,vnf5_1,vnf6_1,vnf7_1",8
+2026-01-21 12:21:05,Energy-Aware A*,8,2,1,2,"vnf0_0,vnf3_0,vnf6_0",3
+2026-01-21 12:21:05,Energy-Aware A*,8,2,1,6,"vnf0_1,vnf1_1,vnf2_1,vnf3_1,vnf4_1,vnf5_1,vnf6_1,vnf7_1",8
+2026-01-21 12:21:05,Energy-Aware A*,8,2,1,5,"vnf1_0,vnf4_0,vnf7_0",3
+2026-01-21 12:21:05,Energy-Aware A*,8,2,1,7,"vnf2_0,vnf5_0",2
+2026-01-21 12:21:05,MILP_Gurobi,8,2,1,6,"vnf0_0,vnf1_0,vnf2_0,vnf3_0,vnf4_0,vnf5_0,vnf6_0,vnf7_0",8
+2026-01-21 12:21:05,MILP_Gurobi,8,2,1,7,"vnf0_1,vnf1_1,vnf2_1,vnf3_1,vnf4_1,vnf5_1,vnf6_1,vnf7_1",8
+2026-01-21 12:21:22,A*,16,2,1,6,"vnf0_0,vnf10_0,vnf11_0,vnf12_0,vnf13_0,vnf14_0,vnf15_0,vnf1_0,vnf2_0,vnf3_0,vnf4_0,vnf5_0,vnf6_0,vnf7_0,vnf8_0,vnf9_0",16
+2026-01-21 12:21:22,A*,16,2,1,2,"vnf0_1,vnf12_1,vnf15_1,vnf3_1,vnf6_1,vnf9_1",6
+2026-01-21 12:21:22,A*,16,2,1,5,"vnf10_1,vnf13_1,vnf1_1,vnf4_1,vnf7_1",5
+2026-01-21 12:21:22,A*,16,2,1,7,"vnf11_1,vnf14_1,vnf2_1,vnf5_1,vnf8_1",5
+2026-01-21 12:21:22,ABO,16,2,1,2,"vnf0_0,vnf10_0,vnf11_0,vnf12_0,vnf13_0,vnf14_0,vnf15_0,vnf1_0,vnf2_0,vnf3_0,vnf4_0,vnf5_0,vnf6_0,vnf7_0,vnf8_0,vnf9_0",16
+2026-01-21 12:21:22,ABO,16,2,1,1,"vnf0_1,vnf10_1,vnf11_1,vnf12_1,vnf13_1,vnf14_1,vnf15_1,vnf1_1,vnf2_1,vnf3_1,vnf4_1,vnf5_1,vnf6_1,vnf7_1,vnf8_1,vnf9_1",16
+2026-01-21 12:21:22,FABO,16,2,1,2,"vnf0_0,vnf12_0,vnf15_0,vnf3_0,vnf6_0,vnf9_0",6
+2026-01-21 12:21:22,FABO,16,2,1,1,"vnf0_1,vnf12_1,vnf15_1,vnf3_1,vnf9_1",5
+2026-01-21 12:21:22,FABO,16,2,1,5,"vnf10_0,vnf13_0,vnf1_0,vnf4_0,vnf7_0",5
+2026-01-21 12:21:22,FABO,16,2,1,4,vnf1_1,1
+2026-01-21 12:21:22,FABO,16,2,1,7,"vnf11_0,vnf14_0,vnf2_0,vnf5_0,vnf8_0",5
+2026-01-21 12:21:22,FABO,16,2,1,6,"vnf10_1,vnf11_1,vnf2_1,vnf6_1,vnf7_1",5
+2026-01-21 12:21:22,FABO,16,2,1,8,"vnf13_1,vnf4_1",2
+2026-01-21 12:21:22,FABO,16,2,1,9,"vnf14_1,vnf5_1",2
+2026-01-21 12:21:22,FABO,16,2,1,10,vnf8_1,1
+2026-01-21 12:21:22,Best Fit,16,2,1,6,"vnf0_0,vnf10_0,vnf11_0,vnf12_0,vnf13_0,vnf14_0,vnf15_0,vnf1_0,vnf2_0,vnf3_0,vnf4_0,vnf5_0,vnf6_0,vnf7_0,vnf8_0,vnf9_0",16
+2026-01-21 12:21:22,Best Fit,16,2,1,2,"vnf0_1,vnf10_1,vnf11_1,vnf12_1,vnf13_1,vnf14_1,vnf15_1,vnf1_1,vnf2_1,vnf3_1,vnf4_1,vnf5_1,vnf6_1,vnf7_1,vnf8_1,vnf9_1",16
+2026-01-21 12:21:22,First Fit,16,2,1,1,"vnf0_0,vnf10_0,vnf11_0,vnf12_0,vnf13_0,vnf14_0,vnf15_0,vnf1_0,vnf2_0,vnf3_0,vnf4_0,vnf5_0,vnf6_0,vnf7_0,vnf8_0,vnf9_0",16
+2026-01-21 12:21:22,First Fit,16,2,1,2,"vnf0_1,vnf10_1,vnf11_1,vnf12_1,vnf13_1,vnf14_1,vnf15_1,vnf1_1,vnf2_1,vnf3_1,vnf4_1,vnf5_1,vnf6_1,vnf7_1,vnf8_1,vnf9_1",16
+2026-01-21 12:21:22,Energy-Aware A*,16,2,1,2,"vnf0_0,vnf12_0,vnf15_0,vnf3_0,vnf6_0,vnf9_0",6
+2026-01-21 12:21:22,Energy-Aware A*,16,2,1,6,"vnf0_1,vnf10_1,vnf11_1,vnf12_1,vnf13_1,vnf14_1,vnf15_1,vnf1_1,vnf2_1,vnf3_1,vnf4_1,vnf5_1,vnf6_1,vnf7_1,vnf8_1,vnf9_1",16
+2026-01-21 12:21:22,Energy-Aware A*,16,2,1,5,"vnf10_0,vnf13_0,vnf1_0,vnf4_0,vnf7_0",5
+2026-01-21 12:21:22,Energy-Aware A*,16,2,1,7,"vnf11_0,vnf14_0,vnf2_0,vnf5_0,vnf8_0",5
+2026-01-21 12:21:22,MILP_Gurobi,16,2,1,6,"vnf0_0,vnf10_0,vnf11_0,vnf12_0,vnf13_0,vnf14_0,vnf15_0,vnf1_0,vnf2_0,vnf3_0,vnf4_0,vnf5_0,vnf6_0,vnf7_0,vnf8_0,vnf9_0",16
+2026-01-21 12:21:22,MILP_Gurobi,16,2,1,7,"vnf0_1,vnf10_1,vnf11_1,vnf12_1,vnf13_1,vnf14_1,vnf15_1,vnf1_1,vnf2_1,vnf3_1,vnf4_1,vnf5_1,vnf6_1,vnf7_1,vnf8_1,vnf9_1",16
+2026-01-21 12:21:55,A*,32,2,1,6,"vnf0_0,vnf10_0,vnf11_0,vnf12_0,vnf13_0,vnf14_0,vnf15_0,vnf16_0,vnf17_0,vnf18_0,vnf19_0,vnf1_0,vnf20_0,vnf21_0,vnf22_0,vnf23_0,vnf24_0,vnf25_0,vnf26_0,vnf27_0,vnf28_0,vnf29_0,vnf2_0,vnf30_0,vnf31_0,vnf3_0,vnf4_0,vnf5_0,vnf6_0,vnf7_0,vnf8_0,vnf9_0",32
+2026-01-21 12:21:55,A*,32,2,1,2,"vnf0_1,vnf12_1,vnf15_1,vnf18_1,vnf21_1,vnf24_1,vnf27_1,vnf30_1,vnf3_1,vnf6_1,vnf9_1",11
+2026-01-21 12:21:55,A*,32,2,1,5,"vnf10_1,vnf13_1,vnf16_1,vnf19_1,vnf1_1,vnf22_1,vnf25_1,vnf28_1,vnf31_1,vnf4_1,vnf7_1",11
+2026-01-21 12:21:55,A*,32,2,1,7,"vnf11_1,vnf14_1,vnf17_1,vnf20_1,vnf23_1,vnf26_1,vnf29_1,vnf2_1,vnf5_1,vnf8_1",10
+2026-01-21 12:21:55,ABO,32,2,1,2,"vnf0_0,vnf10_0,vnf11_0,vnf12_0,vnf13_0,vnf14_0,vnf15_0,vnf1_0,vnf2_0,vnf3_0,vnf4_0,vnf5_0,vnf6_0,vnf7_0,vnf8_0,vnf9_0",16
+2026-01-21 12:21:55,ABO,32,2,1,1,"vnf0_1,vnf10_1,vnf11_1,vnf12_1,vnf13_1,vnf14_1,vnf15_1,vnf1_1,vnf2_1,vnf3_1,vnf4_1,vnf5_1,vnf6_1,vnf7_1,vnf8_1,vnf9_1",16
+2026-01-21 12:21:55,ABO,32,2,1,5,"vnf16_0,vnf17_0,vnf18_0,vnf19_0,vnf20_0,vnf21_0,vnf22_0,vnf23_0,vnf24_0,vnf25_0,vnf26_0,vnf27_0,vnf28_0,vnf29_0,vnf30_0,vnf31_0",16
+2026-01-21 12:21:55,ABO,32,2,1,4,vnf16_1,1
+2026-01-21 12:21:55,ABO,32,2,1,6,vnf17_1,1
+2026-01-21 12:21:55,ABO,32,2,1,8,"vnf18_1,vnf19_1,vnf20_1,vnf21_1,vnf22_1,vnf23_1,vnf24_1,vnf25_1,vnf26_1,vnf27_1,vnf28_1,vnf29_1,vnf30_1,vnf31_1",14
+2026-01-21 12:21:55,FABO,32,2,1,2,"vnf0_0,vnf12_0,vnf15_0,vnf18_0,vnf21_0,vnf24_0,vnf27_0,vnf30_0,vnf3_0,vnf6_0,vnf9_0",11
+2026-01-21 12:21:55,FABO,32,2,1,1,"vnf0_1,vnf12_1,vnf15_1,vnf21_1,vnf24_1,vnf30_1,vnf3_1,vnf9_1",8
+2026-01-21 12:21:55,FABO,32,2,1,5,"vnf10_0,vnf13_0,vnf16_0,vnf19_0,vnf1_0,vnf22_0,vnf25_0,vnf28_0,vnf31_0,vnf4_0,vnf7_0",11
+2026-01-21 12:21:55,FABO,32,2,1,4,"vnf18_1,vnf1_1",2
+2026-01-21 12:21:55,FABO,32,2,1,7,"vnf11_0,vnf14_0,vnf17_0,vnf20_0,vnf23_0,vnf26_0,vnf29_0,vnf2_0,vnf5_0,vnf8_0",10
+2026-01-21 12:21:55,FABO,32,2,1,6,"vnf10_1,vnf11_1,vnf20_1,vnf27_1,vnf28_1,vnf29_1,vnf2_1,vnf6_1,vnf7_1",9
+2026-01-21 12:21:55,FABO,32,2,1,8,"vnf13_1,vnf16_1,vnf19_1,vnf22_1,vnf25_1,vnf31_1,vnf4_1",7
+2026-01-21 12:21:55,FABO,32,2,1,9,"vnf14_1,vnf23_1,vnf5_1",3
+2026-01-21 12:21:55,FABO,32,2,1,10,"vnf17_1,vnf26_1,vnf8_1",3
+2026-01-21 12:21:55,Best Fit,32,2,1,6,"vnf0_0,vnf10_0,vnf11_0,vnf12_0,vnf13_0,vnf14_0,vnf15_0,vnf16_0,vnf17_0,vnf18_0,vnf19_0,vnf1_0,vnf20_0,vnf21_0,vnf22_0,vnf23_0,vnf24_0,vnf25_0,vnf26_0,vnf27_0,vnf28_0,vnf29_0,vnf2_0,vnf30_0,vnf31_0,vnf3_0,vnf4_0,vnf5_0,vnf6_0,vnf7_0,vnf8_0,vnf9_0",32
+2026-01-21 12:21:55,Best Fit,32,2,1,2,"vnf0_1,vnf10_1,vnf11_1,vnf12_1,vnf13_1,vnf14_1,vnf15_1,vnf1_1,vnf2_1,vnf3_1,vnf4_1,vnf5_1,vnf6_1,vnf7_1,vnf8_1,vnf9_1",16
+2026-01-21 12:21:55,Best Fit,32,2,1,5,"vnf16_1,vnf17_1,vnf18_1,vnf19_1,vnf20_1,vnf21_1,vnf22_1,vnf23_1,vnf24_1,vnf25_1,vnf26_1,vnf27_1,vnf28_1,vnf29_1,vnf30_1,vnf31_1",16
+2026-01-21 12:21:55,First Fit,32,2,1,1,"vnf0_0,vnf10_0,vnf11_0,vnf12_0,vnf13_0,vnf14_0,vnf15_0,vnf16_0,vnf17_0,vnf18_0,vnf19_0,vnf1_0,vnf20_0,vnf21_0,vnf22_0,vnf23_0,vnf24_0,vnf25_0,vnf26_0,vnf27_0,vnf28_0,vnf29_0,vnf2_0,vnf30_0,vnf31_0,vnf3_0,vnf4_0,vnf5_0,vnf6_0,vnf7_0,vnf8_0,vnf9_0",32
+2026-01-21 12:21:55,First Fit,32,2,1,2,"vnf0_1,vnf10_1,vnf11_1,vnf12_1,vnf13_1,vnf14_1,vnf15_1,vnf1_1,vnf2_1,vnf3_1,vnf4_1,vnf5_1,vnf6_1,vnf7_1,vnf8_1,vnf9_1",16
+2026-01-21 12:21:55,First Fit,32,2,1,3,"vnf16_1,vnf17_1,vnf18_1,vnf19_1,vnf20_1,vnf21_1,vnf22_1,vnf23_1,vnf24_1,vnf25_1,vnf26_1,vnf27_1,vnf28_1,vnf29_1,vnf30_1,vnf31_1",16
+2026-01-21 12:21:55,Energy-Aware A*,32,2,1,2,"vnf0_0,vnf12_0,vnf15_0,vnf18_0,vnf21_0,vnf24_0,vnf27_0,vnf30_0,vnf3_0,vnf6_0,vnf9_0",11
+2026-01-21 12:21:55,Energy-Aware A*,32,2,1,6,"vnf0_1,vnf10_1,vnf11_1,vnf12_1,vnf13_1,vnf14_1,vnf15_1,vnf16_1,vnf17_1,vnf18_1,vnf19_1,vnf1_1,vnf20_1,vnf21_1,vnf22_1,vnf23_1,vnf24_1,vnf25_1,vnf26_1,vnf27_1,vnf28_1,vnf29_1,vnf2_1,vnf30_1,vnf31_1,vnf3_1,vnf4_1,vnf5_1,vnf6_1,vnf7_1,vnf8_1,vnf9_1",32
+2026-01-21 12:21:55,Energy-Aware A*,32,2,1,5,"vnf10_0,vnf13_0,vnf16_0,vnf19_0,vnf1_0,vnf22_0,vnf25_0,vnf28_0,vnf31_0,vnf4_0,vnf7_0",11
+2026-01-21 12:21:55,Energy-Aware A*,32,2,1,7,"vnf11_0,vnf14_0,vnf17_0,vnf20_0,vnf23_0,vnf26_0,vnf29_0,vnf2_0,vnf5_0,vnf8_0",10
+2026-01-21 12:21:55,MILP_Gurobi,32,2,1,6,"vnf0_0,vnf10_0,vnf11_0,vnf12_0,vnf13_0,vnf14_0,vnf15_0,vnf16_0,vnf17_0,vnf18_0,vnf19_0,vnf1_0,vnf20_0,vnf21_0,vnf22_0,vnf23_0,vnf24_0,vnf25_0,vnf26_0,vnf27_0,vnf28_0,vnf29_0,vnf2_0,vnf30_0,vnf31_0,vnf3_0,vnf4_0,vnf5_0,vnf6_0,vnf7_0,vnf8_0,vnf9_0",32
+2026-01-21 12:21:55,MILP_Gurobi,32,2,1,11,"vnf0_1,vnf10_1,vnf11_1,vnf12_1,vnf13_1,vnf14_1,vnf15_1,vnf16_1,vnf17_1,vnf18_1,vnf19_1,vnf1_1,vnf20_1,vnf21_1,vnf22_1,vnf23_1,vnf24_1,vnf25_1,vnf26_1,vnf27_1,vnf28_1,vnf29_1,vnf2_1,vnf30_1,vnf31_1,vnf3_1,vnf4_1,vnf5_1,vnf6_1,vnf7_1,vnf8_1,vnf9_1",32
+2026-01-21 12:22:56,A*,64,2,1,6,"vnf0_0,vnf10_0,vnf11_0,vnf12_0,vnf13_0,vnf14_0,vnf15_0,vnf16_0,vnf17_0,vnf18_0,vnf19_0,vnf1_0,vnf20_0,vnf21_0,vnf22_0,vnf23_0,vnf24_0,vnf25_0,vnf26_0,vnf27_0,vnf28_0,vnf29_0,vnf2_0,vnf30_0,vnf31_0,vnf32_0,vnf33_0,vnf34_0,vnf35_0,vnf36_0,vnf37_0,vnf38_0,vnf39_0,vnf3_0,vnf40_0,vnf41_0,vnf42_0,vnf43_0,vnf44_0,vnf45_0,vnf46_0,vnf47_0,vnf48_0,vnf49_0,vnf4_0,vnf50_0,vnf51_0,vnf52_0,vnf53_0,vnf54_0,vnf55_0,vnf56_0,vnf57_0,vnf58_0,vnf59_0,vnf5_0,vnf60_0,vnf61_0,vnf62_0,vnf63_0,vnf6_0,vnf7_0,vnf8_0,vnf9_0",64
+2026-01-21 12:22:56,A*,64,2,1,2,"vnf0_1,vnf12_1,vnf15_1,vnf18_1,vnf21_1,vnf24_1,vnf27_1,vnf30_1,vnf33_1,vnf36_1,vnf39_1,vnf3_1,vnf42_1,vnf45_1,vnf6_1,vnf9_1",16
+2026-01-21 12:22:56,A*,64,2,1,5,"vnf10_1,vnf13_1,vnf16_1,vnf19_1,vnf1_1,vnf22_1,vnf25_1,vnf28_1,vnf31_1,vnf34_1,vnf37_1,vnf40_1,vnf43_1,vnf46_1,vnf4_1,vnf7_1",16
+2026-01-21 12:22:56,A*,64,2,1,7,"vnf11_1,vnf14_1,vnf17_1,vnf20_1,vnf23_1,vnf26_1,vnf29_1,vnf2_1,vnf32_1,vnf35_1,vnf38_1,vnf41_1,vnf44_1,vnf47_1,vnf5_1,vnf8_1",16
+2026-01-21 12:22:56,A*,64,2,1,1,"vnf48_1,vnf49_1,vnf50_1,vnf51_1,vnf52_1,vnf53_1,vnf54_1,vnf55_1,vnf56_1,vnf57_1,vnf58_1,vnf59_1,vnf60_1,vnf61_1,vnf62_1,vnf63_1",16
+2026-01-21 12:22:56,ABO,64,2,1,2,"vnf0_0,vnf10_0,vnf11_0,vnf12_0,vnf13_0,vnf14_0,vnf15_0,vnf1_0,vnf2_0,vnf3_0,vnf4_0,vnf5_0,vnf6_0,vnf7_0,vnf8_0,vnf9_0",16
+2026-01-21 12:22:56,ABO,64,2,1,1,"vnf0_1,vnf10_1,vnf11_1,vnf12_1,vnf13_1,vnf14_1,vnf15_1,vnf1_1,vnf2_1,vnf3_1,vnf4_1,vnf5_1,vnf6_1,vnf7_1,vnf8_1,vnf9_1",16
+2026-01-21 12:22:56,ABO,64,2,1,5,"vnf16_0,vnf17_0,vnf18_0,vnf19_0,vnf20_0,vnf21_0,vnf22_0,vnf23_0,vnf24_0,vnf25_0,vnf26_0,vnf27_0,vnf28_0,vnf29_0,vnf30_0,vnf31_0",16
+2026-01-21 12:22:56,ABO,64,2,1,4,"vnf16_1,vnf48_0",2
+2026-01-21 12:22:56,ABO,64,2,1,6,"vnf17_1,vnf32_1,vnf33_1",3
+2026-01-21 12:22:56,ABO,64,2,1,8,"vnf18_1,vnf19_1,vnf20_1,vnf21_1,vnf22_1,vnf23_1,vnf24_1,vnf25_1,vnf26_1,vnf27_1,vnf28_1,vnf29_1,vnf30_1,vnf31_1,vnf49_0,vnf50_0",16
+2026-01-21 12:22:56,ABO,64,2,1,7,"vnf32_0,vnf33_0,vnf34_0,vnf35_0,vnf36_0,vnf37_0,vnf38_0,vnf39_0,vnf40_0,vnf41_0,vnf42_0,vnf43_0,vnf44_0,vnf45_0,vnf46_0,vnf47_0",16
+2026-01-21 12:22:56,ABO,64,2,1,9,"vnf34_1,vnf35_1,vnf36_1,vnf37_1,vnf38_1,vnf39_1,vnf40_1,vnf41_1,vnf42_1,vnf43_1,vnf44_1,vnf45_1,vnf46_1,vnf47_1,vnf49_1,vnf50_1",16
+2026-01-21 12:22:56,ABO,64,2,1,3,vnf48_1,1
+2026-01-21 12:22:56,ABO,64,2,1,10,"vnf51_0,vnf52_0,vnf53_0,vnf54_0,vnf55_0,vnf56_0,vnf57_0,vnf58_0,vnf59_0,vnf60_0,vnf61_0,vnf62_0,vnf63_0",13
+2026-01-21 12:22:56,ABO,64,2,1,11,vnf51_1,1
+2026-01-21 12:22:56,ABO,64,2,1,12,"vnf52_1,vnf53_1,vnf54_1,vnf55_1,vnf56_1,vnf57_1,vnf58_1,vnf59_1,vnf60_1,vnf61_1,vnf62_1,vnf63_1",12
+2026-01-21 12:22:56,FABO,64,2,1,2,"vnf0_0,vnf12_0,vnf15_0,vnf18_0,vnf21_0,vnf24_0,vnf27_0,vnf30_0,vnf33_0,vnf36_0,vnf39_0,vnf3_0,vnf42_0,vnf45_0,vnf6_0,vnf9_0",16
+2026-01-21 12:22:56,FABO,64,2,1,1,"vnf0_1,vnf12_1,vnf15_1,vnf21_1,vnf24_1,vnf30_1,vnf33_1,vnf39_1,vnf3_1,vnf45_1,vnf9_1",11
+2026-01-21 12:22:56,FABO,64,2,1,5,"vnf10_0,vnf13_0,vnf16_0,vnf19_0,vnf1_0,vnf22_0,vnf25_0,vnf28_0,vnf31_0,vnf34_0,vnf37_0,vnf40_0,vnf43_0,vnf46_0,vnf4_0,vnf7_0",16
+2026-01-21 12:22:56,FABO,64,2,1,4,"vnf18_1,vnf1_1,vnf36_1,vnf48_0",4
+2026-01-21 12:22:56,FABO,64,2,1,7,"vnf11_0,vnf14_0,vnf17_0,vnf20_0,vnf23_0,vnf26_0,vnf29_0,vnf2_0,vnf32_0,vnf35_0,vnf38_0,vnf41_0,vnf44_0,vnf47_0,vnf5_0,vnf8_0",16
+2026-01-21 12:22:56,FABO,64,2,1,6,"vnf10_1,vnf11_1,vnf20_1,vnf27_1,vnf28_1,vnf29_1,vnf2_1,vnf42_1,vnf43_1,vnf44_1,vnf6_1,vnf7_1",12
+2026-01-21 12:22:56,FABO,64,2,1,8,"vnf13_1,vnf16_1,vnf19_1,vnf22_1,vnf25_1,vnf31_1,vnf34_1,vnf37_1,vnf40_1,vnf46_1,vnf4_1,vnf50_1,vnf52_1,vnf54_1,vnf56_1,vnf58_1",16
+2026-01-21 12:22:56,FABO,64,2,1,9,"vnf14_1,vnf23_1,vnf32_1,vnf38_1,vnf47_1,vnf50_0,vnf52_0,vnf54_0,vnf56_0,vnf58_0,vnf5_1",11
+2026-01-21 12:22:56,FABO,64,2,1,10,"vnf17_1,vnf26_1,vnf35_1,vnf41_1,vnf49_0,vnf51_0,vnf53_0,vnf55_0,vnf57_0,vnf59_0,vnf60_0,vnf61_0,vnf62_0,vnf63_0,vnf8_1",15
+2026-01-21 12:22:56,FABO,64,2,1,3,vnf48_1,1
+2026-01-21 12:22:56,FABO,64,2,1,11,vnf49_1,1
+2026-01-21 12:22:56,FABO,64,2,1,12,"vnf51_1,vnf53_1,vnf55_1,vnf57_1,vnf59_1,vnf60_1,vnf61_1,vnf62_1,vnf63_1",9
+2026-01-21 12:22:56,Best Fit,64,2,1,6,"vnf0_0,vnf10_0,vnf11_0,vnf12_0,vnf13_0,vnf14_0,vnf15_0,vnf16_0,vnf17_0,vnf18_0,vnf19_0,vnf1_0,vnf20_0,vnf21_0,vnf22_0,vnf23_0,vnf24_0,vnf25_0,vnf26_0,vnf27_0,vnf28_0,vnf29_0,vnf2_0,vnf30_0,vnf31_0,vnf32_0,vnf33_0,vnf34_0,vnf35_0,vnf36_0,vnf37_0,vnf38_0,vnf39_0,vnf3_0,vnf40_0,vnf41_0,vnf42_0,vnf43_0,vnf44_0,vnf45_0,vnf46_0,vnf47_0,vnf48_0,vnf49_0,vnf4_0,vnf50_0,vnf51_0,vnf52_0,vnf53_0,vnf54_0,vnf55_0,vnf56_0,vnf57_0,vnf58_0,vnf59_0,vnf5_0,vnf60_0,vnf61_0,vnf62_0,vnf63_0,vnf6_0,vnf7_0,vnf8_0,vnf9_0",64
+2026-01-21 12:22:56,Best Fit,64,2,1,2,"vnf0_1,vnf10_1,vnf11_1,vnf12_1,vnf13_1,vnf14_1,vnf15_1,vnf1_1,vnf2_1,vnf3_1,vnf4_1,vnf5_1,vnf6_1,vnf7_1,vnf8_1,vnf9_1",16
+2026-01-21 12:22:56,Best Fit,64,2,1,5,"vnf16_1,vnf17_1,vnf18_1,vnf19_1,vnf20_1,vnf21_1,vnf22_1,vnf23_1,vnf24_1,vnf25_1,vnf26_1,vnf27_1,vnf28_1,vnf29_1,vnf30_1,vnf31_1",16
+2026-01-21 12:22:56,Best Fit,64,2,1,7,"vnf32_1,vnf33_1,vnf34_1,vnf35_1,vnf36_1,vnf37_1,vnf38_1,vnf39_1,vnf40_1,vnf41_1,vnf42_1,vnf43_1,vnf44_1,vnf45_1,vnf46_1,vnf47_1",16
+2026-01-21 12:22:56,Best Fit,64,2,1,1,"vnf48_1,vnf49_1,vnf50_1,vnf51_1,vnf52_1,vnf53_1,vnf54_1,vnf55_1,vnf56_1,vnf57_1,vnf58_1,vnf59_1,vnf60_1,vnf61_1,vnf62_1,vnf63_1",16
+2026-01-21 12:22:56,First Fit,64,2,1,1,"vnf0_0,vnf10_0,vnf11_0,vnf12_0,vnf13_0,vnf14_0,vnf15_0,vnf16_0,vnf17_0,vnf18_0,vnf19_0,vnf1_0,vnf20_0,vnf21_0,vnf22_0,vnf23_0,vnf24_0,vnf25_0,vnf26_0,vnf27_0,vnf28_0,vnf29_0,vnf2_0,vnf30_0,vnf31_0,vnf32_0,vnf33_1,vnf34_1,vnf35_1,vnf36_1,vnf37_1,vnf38_1,vnf39_1,vnf3_0,vnf40_1,vnf41_1,vnf42_1,vnf43_1,vnf44_1,vnf45_1,vnf46_1,vnf47_1,vnf48_1,vnf4_0,vnf5_0,vnf6_0,vnf7_0,vnf8_0,vnf9_0",49
+2026-01-21 12:22:56,First Fit,64,2,1,2,"vnf0_1,vnf10_1,vnf11_1,vnf12_1,vnf13_1,vnf14_1,vnf15_1,vnf1_1,vnf2_1,vnf3_1,vnf4_1,vnf5_1,vnf6_1,vnf7_1,vnf8_1,vnf9_1",16
+2026-01-21 12:22:56,First Fit,64,2,1,3,"vnf16_1,vnf17_1,vnf18_1,vnf19_1,vnf20_1,vnf21_1,vnf22_1,vnf23_1,vnf24_1,vnf25_1,vnf26_1,vnf27_1,vnf28_1,vnf29_1,vnf30_1,vnf31_1",16
+2026-01-21 12:22:56,First Fit,64,2,1,4,vnf32_1,1
+2026-01-21 12:22:56,First Fit,64,2,1,5,"vnf33_0,vnf34_0,vnf35_0,vnf36_0,vnf37_0,vnf38_0,vnf39_0,vnf40_0,vnf41_0,vnf42_0,vnf43_0,vnf44_0,vnf45_0,vnf46_0,vnf47_0,vnf48_0",16
+2026-01-21 12:22:56,First Fit,64,2,1,6,"vnf49_0,vnf50_0,vnf51_0,vnf52_0,vnf53_0,vnf54_0,vnf55_0,vnf56_0,vnf57_0,vnf58_0,vnf59_0,vnf60_0,vnf61_0,vnf62_0,vnf63_0",15
+2026-01-21 12:22:56,First Fit,64,2,1,7,"vnf49_1,vnf50_1,vnf51_1,vnf52_1,vnf53_1,vnf54_1,vnf55_1,vnf56_1,vnf57_1,vnf58_1,vnf59_1,vnf60_1,vnf61_1,vnf62_1,vnf63_1",15
+2026-01-21 12:22:56,Energy-Aware A*,64,2,1,2,"vnf0_0,vnf12_0,vnf15_0,vnf18_0,vnf21_0,vnf24_0,vnf27_0,vnf30_0,vnf33_0,vnf36_0,vnf39_0,vnf3_0,vnf42_0,vnf45_0,vnf6_0,vnf9_0",16
+2026-01-21 12:22:56,Energy-Aware A*,64,2,1,6,"vnf0_1,vnf10_1,vnf11_1,vnf12_1,vnf13_1,vnf14_1,vnf15_1,vnf16_1,vnf17_1,vnf18_1,vnf19_1,vnf1_1,vnf20_1,vnf21_1,vnf22_1,vnf23_1,vnf24_1,vnf25_1,vnf26_1,vnf27_1,vnf28_1,vnf29_1,vnf2_1,vnf30_1,vnf31_1,vnf32_1,vnf33_1,vnf34_1,vnf35_1,vnf36_1,vnf37_1,vnf38_1,vnf39_1,vnf3_1,vnf40_1,vnf41_1,vnf42_1,vnf43_1,vnf44_1,vnf45_1,vnf46_1,vnf47_1,vnf48_1,vnf49_1,vnf4_1,vnf50_1,vnf51_1,vnf52_1,vnf53_1,vnf54_1,vnf55_1,vnf56_1,vnf57_1,vnf58_1,vnf59_1,vnf5_1,vnf60_1,vnf61_1,vnf62_1,vnf63_1,vnf6_1,vnf7_1,vnf8_1,vnf9_1",64
+2026-01-21 12:22:56,Energy-Aware A*,64,2,1,5,"vnf10_0,vnf13_0,vnf16_0,vnf19_0,vnf1_0,vnf22_0,vnf25_0,vnf28_0,vnf31_0,vnf34_0,vnf37_0,vnf40_0,vnf43_0,vnf46_0,vnf4_0,vnf7_0",16
+2026-01-21 12:22:56,Energy-Aware A*,64,2,1,7,"vnf11_0,vnf14_0,vnf17_0,vnf20_0,vnf23_0,vnf26_0,vnf29_0,vnf2_0,vnf32_0,vnf35_0,vnf38_0,vnf41_0,vnf44_0,vnf47_0,vnf5_0,vnf8_0",16
+2026-01-21 12:22:56,Energy-Aware A*,64,2,1,1,"vnf48_0,vnf49_0,vnf50_0,vnf51_0,vnf52_0,vnf53_0,vnf54_0,vnf55_0,vnf56_0,vnf57_0,vnf58_0,vnf59_0,vnf60_0,vnf61_0,vnf62_0,vnf63_0",16
+2026-01-21 12:22:56,MILP_Gurobi,64,2,1,6,"vnf0_0,vnf10_0,vnf13_0,vnf15_0,vnf16_0,vnf18_0,vnf21_0,vnf23_0,vnf25_0,vnf27_0,vnf29_0,vnf2_0,vnf30_0,vnf33_0,vnf34_0,vnf36_0,vnf38_0,vnf40_0,vnf43_0,vnf45_0,vnf47_0,vnf48_0,vnf4_0,vnf50_0,vnf53_0,vnf56_0,vnf58_0,vnf59_0,vnf61_0,vnf63_0,vnf6_0,vnf7_0,vnf9_0",33
+2026-01-21 12:22:56,MILP_Gurobi,64,2,1,11,"vnf0_1,vnf10_1,vnf13_1,vnf15_1,vnf16_1,vnf18_1,vnf21_1,vnf23_1,vnf25_1,vnf27_1,vnf29_1,vnf2_1,vnf30_1,vnf33_1,vnf34_1,vnf36_1,vnf38_1,vnf40_1,vnf43_1,vnf45_1,vnf47_1,vnf48_1,vnf4_1,vnf50_1,vnf53_1,vnf56_1,vnf58_1,vnf59_1,vnf61_1,vnf63_1,vnf6_1,vnf7_1,vnf9_1",33
+2026-01-21 12:24:45,A*,128,2,1,6,"vnf0_0,vnf10_0,vnf11_0,vnf12_0,vnf13_0,vnf14_0,vnf15_0,vnf16_0,vnf17_0,vnf18_0,vnf19_0,vnf1_0,vnf20_0,vnf21_0,vnf22_0,vnf23_0,vnf24_0,vnf25_0,vnf26_0,vnf27_0,vnf28_0,vnf29_0,vnf2_0,vnf30_0,vnf31_0,vnf32_0,vnf33_0,vnf34_0,vnf35_0,vnf36_0,vnf37_0,vnf38_0,vnf39_0,vnf3_0,vnf40_0,vnf41_0,vnf42_0,vnf43_0,vnf44_0,vnf45_0,vnf46_0,vnf47_0,vnf48_0,vnf49_0,vnf4_0,vnf50_0,vnf51_0,vnf52_0,vnf53_0,vnf54_0,vnf55_0,vnf56_0,vnf57_0,vnf58_0,vnf59_0,vnf5_0,vnf60_0,vnf61_0,vnf62_0,vnf63_0,vnf6_0,vnf7_0,vnf8_0,vnf9_0",64
+2026-01-21 12:24:45,A*,128,2,1,2,"vnf0_1,vnf12_1,vnf15_1,vnf18_1,vnf21_1,vnf24_1,vnf27_1,vnf30_1,vnf33_1,vnf36_1,vnf39_1,vnf3_1,vnf42_1,vnf45_1,vnf6_1,vnf9_1",16
+2026-01-21 12:24:45,A*,128,2,1,5,"vnf10_1,vnf13_1,vnf16_1,vnf19_1,vnf1_1,vnf22_1,vnf25_1,vnf28_1,vnf31_1,vnf34_1,vnf37_1,vnf40_1,vnf43_1,vnf46_1,vnf4_1,vnf7_1",16
+2026-01-21 12:24:45,A*,128,2,1,7,"vnf11_1,vnf14_1,vnf17_1,vnf20_1,vnf23_1,vnf26_1,vnf29_1,vnf2_1,vnf32_1,vnf35_1,vnf38_1,vnf41_1,vnf44_1,vnf47_1,vnf5_1,vnf8_1",16
+2026-01-21 12:24:45,A*,128,2,1,1,"vnf112_0,vnf113_0,vnf114_0,vnf115_0,vnf116_0,vnf117_0,vnf118_0,vnf119_0,vnf120_0,vnf121_0,vnf122_0,vnf123_0,vnf124_0,vnf125_0,vnf126_0,vnf127_0,vnf48_1,vnf49_1,vnf50_1,vnf51_1,vnf52_1,vnf53_1,vnf54_1,vnf55_1,vnf56_1,vnf57_1,vnf58_1,vnf59_1,vnf60_1,vnf61_1,vnf62_1,vnf63_1,vnf64_0,vnf65_0,vnf66_0,vnf67_0,vnf68_0,vnf69_0,vnf70_0,vnf71_0,vnf72_0,vnf73_0,vnf74_0,vnf75_0,vnf76_0,vnf77_0,vnf78_0,vnf79_0",48
+2026-01-21 12:24:45,A*,128,2,1,3,"vnf64_1,vnf65_1,vnf66_1,vnf67_1,vnf68_1,vnf69_1,vnf70_1,vnf71_1,vnf72_1,vnf73_1,vnf74_1,vnf75_1,vnf76_1,vnf77_1,vnf78_1,vnf79_1",16
+2026-01-21 12:24:45,A*,128,2,1,8,"vnf100_0,vnf102_0,vnf104_0,vnf106_0,vnf108_0,vnf110_0,vnf80_0,vnf82_0,vnf84_0,vnf86_0,vnf88_0,vnf90_0,vnf92_0,vnf94_0,vnf96_0,vnf98_0",16
+2026-01-21 12:24:45,A*,128,2,1,11,"vnf100_1,vnf102_1,vnf104_1,vnf106_1,vnf108_1,vnf110_1,vnf80_1,vnf82_1,vnf84_1,vnf86_1,vnf88_1,vnf90_1,vnf92_1,vnf94_1,vnf96_1,vnf98_1",16
+2026-01-21 12:24:45,A*,128,2,1,9,"vnf101_0,vnf103_0,vnf105_0,vnf107_0,vnf109_0,vnf111_0,vnf81_0,vnf83_0,vnf85_0,vnf87_0,vnf89_0,vnf91_0,vnf93_0,vnf95_0,vnf97_0,vnf99_0",16
+2026-01-21 12:24:45,A*,128,2,1,10,"vnf101_1,vnf103_1,vnf105_1,vnf107_1,vnf109_1,vnf111_1,vnf81_1,vnf83_1,vnf85_1,vnf87_1,vnf89_1,vnf91_1,vnf93_1,vnf95_1,vnf97_1,vnf99_1",16
+2026-01-21 12:24:45,A*,128,2,1,4,"vnf112_1,vnf113_1,vnf114_1,vnf115_1,vnf116_1,vnf117_1,vnf118_1,vnf119_1,vnf120_1,vnf121_1,vnf122_1,vnf123_1,vnf124_1,vnf125_1,vnf126_1,vnf127_1",16
+2026-01-21 12:24:45,ABO,128,2,1,2,"vnf0_0,vnf10_0,vnf11_0,vnf12_0,vnf13_0,vnf14_0,vnf15_0,vnf1_0,vnf2_0,vnf3_0,vnf4_0,vnf5_0,vnf6_0,vnf7_0,vnf8_0,vnf9_0",16
+2026-01-21 12:24:45,ABO,128,2,1,1,"vnf0_1,vnf100_0,vnf101_0,vnf102_0,vnf103_0,vnf104_0,vnf105_0,vnf106_0,vnf107_0,vnf108_0,vnf109_0,vnf10_1,vnf110_0,vnf111_0,vnf112_0,vnf113_0,vnf114_0,vnf115_0,vnf116_0,vnf117_0,vnf11_1,vnf12_1,vnf13_1,vnf14_1,vnf15_1,vnf1_1,vnf2_1,vnf3_1,vnf4_1,vnf5_1,vnf67_0,vnf68_0,vnf69_0,vnf6_1,vnf70_0,vnf71_0,vnf72_0,vnf73_0,vnf74_0,vnf75_0,vnf76_0,vnf77_0,vnf78_0,vnf79_0,vnf7_1,vnf80_0,vnf81_0,vnf82_0,vnf83_0,vnf84_0,vnf85_0,vnf86_0,vnf87_0,vnf88_0,vnf89_0,vnf8_1,vnf90_0,vnf91_0,vnf92_0,vnf93_0,vnf94_0,vnf95_0,vnf99_0,vnf9_1",64
+2026-01-21 12:24:45,ABO,128,2,1,5,"vnf16_0,vnf17_0,vnf18_0,vnf19_0,vnf20_0,vnf21_0,vnf22_0,vnf23_0,vnf24_0,vnf25_0,vnf26_0,vnf27_0,vnf28_0,vnf29_0,vnf30_0,vnf31_0",16
+2026-01-21 12:24:45,ABO,128,2,1,4,"vnf16_1,vnf48_0,vnf67_1,vnf68_1,vnf71_1,vnf73_1,vnf75_1,vnf77_1,vnf79_1,vnf81_1,vnf83_1,vnf85_1,vnf87_1,vnf89_1,vnf91_1,vnf93_1",16
+2026-01-21 12:24:45,ABO,128,2,1,6,"vnf100_1,vnf102_1,vnf105_1,vnf108_1,vnf111_1,vnf114_1,vnf117_1,vnf118_1,vnf119_1,vnf120_1,vnf121_1,vnf122_1,vnf123_1,vnf124_1,vnf125_1,vnf126_1,vnf127_1,vnf17_1,vnf32_1,vnf33_1,vnf69_1,vnf70_1,vnf72_1,vnf74_1,vnf76_1,vnf78_1,vnf80_1,vnf82_1,vnf84_1,vnf86_1,vnf88_1,vnf90_1,vnf92_1,vnf94_1,vnf95_1",35
+2026-01-21 12:24:45,ABO,128,2,1,8,"vnf18_1,vnf19_1,vnf20_1,vnf21_1,vnf22_1,vnf23_1,vnf24_1,vnf25_1,vnf26_1,vnf27_1,vnf28_1,vnf29_1,vnf30_1,vnf31_1,vnf49_0,vnf50_0",16
+2026-01-21 12:24:45,ABO,128,2,1,7,"vnf32_0,vnf33_0,vnf34_0,vnf35_0,vnf36_0,vnf37_0,vnf38_0,vnf39_0,vnf40_0,vnf41_0,vnf42_0,vnf43_0,vnf44_0,vnf45_0,vnf46_0,vnf47_0",16
+2026-01-21 12:24:45,ABO,128,2,1,9,"vnf34_1,vnf35_1,vnf36_1,vnf37_1,vnf38_1,vnf39_1,vnf40_1,vnf41_1,vnf42_1,vnf43_1,vnf44_1,vnf45_1,vnf46_1,vnf47_1,vnf49_1,vnf50_1",16
+2026-01-21 12:24:45,ABO,128,2,1,3,"vnf101_1,vnf103_1,vnf104_1,vnf106_1,vnf107_1,vnf109_1,vnf110_1,vnf112_1,vnf113_1,vnf115_1,vnf116_1,vnf48_1,vnf96_0,vnf97_0,vnf98_1,vnf99_1",16
+2026-01-21 12:24:45,ABO,128,2,1,10,"vnf51_0,vnf52_0,vnf53_0,vnf54_0,vnf55_0,vnf56_0,vnf57_0,vnf58_0,vnf59_0,vnf60_0,vnf61_0,vnf62_0,vnf63_0,vnf64_0,vnf65_0,vnf66_0",16
+2026-01-21 12:24:45,ABO,128,2,1,11,"vnf118_0,vnf119_0,vnf120_0,vnf121_0,vnf122_0,vnf123_0,vnf124_0,vnf125_0,vnf126_0,vnf127_0,vnf51_1,vnf96_1,vnf98_0",13
+2026-01-21 12:24:45,ABO,128,2,1,12,"vnf52_1,vnf53_1,vnf54_1,vnf55_1,vnf56_1,vnf57_1,vnf58_1,vnf59_1,vnf60_1,vnf61_1,vnf62_1,vnf63_1,vnf64_1,vnf65_1,vnf66_1,vnf97_1",16
+2026-01-21 12:24:45,FABO,128,2,1,2,"vnf0_0,vnf12_0,vnf15_0,vnf18_0,vnf21_0,vnf24_0,vnf27_0,vnf30_0,vnf33_0,vnf36_0,vnf39_0,vnf3_0,vnf42_0,vnf45_0,vnf6_0,vnf9_0",16
+2026-01-21 12:24:45,FABO,128,2,1,1,"vnf0_1,vnf102_0,vnf103_0,vnf106_0,vnf107_0,vnf109_0,vnf110_0,vnf111_0,vnf112_0,vnf113_0,vnf114_0,vnf115_0,vnf116_0,vnf117_0,vnf118_0,vnf119_0,vnf120_0,vnf121_0,vnf122_0,vnf123_0,vnf124_0,vnf125_0,vnf126_0,vnf127_0,vnf12_1,vnf15_1,vnf21_1,vnf24_1,vnf30_1,vnf33_1,vnf39_1,vnf3_1,vnf45_1,vnf65_0,vnf66_0,vnf67_0,vnf68_0,vnf69_0,vnf70_0,vnf71_0,vnf72_0,vnf73_0,vnf74_0,vnf75_0,vnf76_0,vnf77_0,vnf78_0,vnf79_0,vnf80_0,vnf81_0,vnf82_0,vnf83_0,vnf84_0,vnf85_0,vnf86_0,vnf87_0,vnf88_0,vnf9_1",58
+2026-01-21 12:24:45,FABO,128,2,1,5,"vnf10_0,vnf13_0,vnf16_0,vnf19_0,vnf1_0,vnf22_0,vnf25_0,vnf28_0,vnf31_0,vnf34_0,vnf37_0,vnf40_0,vnf43_0,vnf46_0,vnf4_0,vnf7_0",16
+2026-01-21 12:24:45,FABO,128,2,1,4,"vnf18_1,vnf1_1,vnf36_1,vnf48_0,vnf67_1,vnf68_1,vnf69_1,vnf71_1,vnf73_1,vnf75_1,vnf77_1,vnf79_1,vnf81_1,vnf83_1,vnf85_1,vnf87_1",16
+2026-01-21 12:24:45,FABO,128,2,1,7,"vnf11_0,vnf14_0,vnf17_0,vnf20_0,vnf23_0,vnf26_0,vnf29_0,vnf2_0,vnf32_0,vnf35_0,vnf38_0,vnf41_0,vnf44_0,vnf47_0,vnf5_0,vnf8_0",16
+2026-01-21 12:24:45,FABO,128,2,1,6,"vnf103_1,vnf107_1,vnf10_1,vnf111_1,vnf114_1,vnf117_1,vnf11_1,vnf120_1,vnf123_1,vnf126_1,vnf20_1,vnf27_1,vnf28_1,vnf29_1,vnf2_1,vnf42_1,vnf43_1,vnf44_1,vnf65_1,vnf66_1,vnf6_1,vnf70_1,vnf72_1,vnf74_1,vnf76_1,vnf78_1,vnf7_1,vnf80_1,vnf82_1,vnf84_1,vnf86_1,vnf88_1",32
+2026-01-21 12:24:45,FABO,128,2,1,8,"vnf13_1,vnf16_1,vnf19_1,vnf22_1,vnf25_1,vnf31_1,vnf34_1,vnf37_1,vnf40_1,vnf46_1,vnf4_1,vnf50_1,vnf52_1,vnf54_1,vnf56_1,vnf58_1",16
+2026-01-21 12:24:45,FABO,128,2,1,9,"vnf14_1,vnf23_1,vnf32_1,vnf38_1,vnf47_1,vnf50_0,vnf52_0,vnf54_0,vnf56_0,vnf58_0,vnf5_1,vnf89_0,vnf90_0,vnf91_0,vnf92_0,vnf93_0",16
+2026-01-21 12:24:45,FABO,128,2,1,10,"vnf17_1,vnf26_1,vnf35_1,vnf41_1,vnf49_0,vnf51_0,vnf53_0,vnf55_0,vnf57_0,vnf59_0,vnf60_0,vnf61_0,vnf62_0,vnf63_0,vnf64_0,vnf8_1",16
+2026-01-21 12:24:45,FABO,128,2,1,3,"vnf100_1,vnf101_1,vnf102_1,vnf104_1,vnf105_1,vnf106_1,vnf108_1,vnf109_1,vnf110_1,vnf48_1,vnf94_0,vnf95_1,vnf96_0,vnf97_0,vnf98_1,vnf99_1",16
+2026-01-21 12:24:45,FABO,128,2,1,11,"vnf104_0,vnf108_0,vnf112_1,vnf113_1,vnf115_1,vnf116_1,vnf118_1,vnf119_1,vnf121_1,vnf122_1,vnf124_1,vnf125_1,vnf127_1,vnf49_1,vnf89_1,vnf90_1,vnf91_1,vnf92_1,vnf93_1,vnf94_1,vnf95_0,vnf99_0",22
+2026-01-21 12:24:45,FABO,128,2,1,12,"vnf100_0,vnf101_0,vnf105_0,vnf51_1,vnf53_1,vnf55_1,vnf57_1,vnf59_1,vnf60_1,vnf61_1,vnf62_1,vnf63_1,vnf64_1,vnf96_1,vnf97_1,vnf98_0",16
+2026-01-21 12:24:45,Best Fit,128,2,1,6,"vnf0_0,vnf10_0,vnf11_0,vnf12_0,vnf13_0,vnf14_0,vnf15_0,vnf16_0,vnf17_0,vnf18_0,vnf19_0,vnf1_0,vnf20_0,vnf21_0,vnf22_0,vnf23_0,vnf24_0,vnf25_0,vnf26_0,vnf27_0,vnf28_0,vnf29_0,vnf2_0,vnf30_0,vnf31_0,vnf32_0,vnf33_0,vnf34_0,vnf35_0,vnf36_0,vnf37_0,vnf38_0,vnf39_0,vnf3_0,vnf40_0,vnf41_0,vnf42_0,vnf43_0,vnf44_0,vnf45_0,vnf46_0,vnf47_0,vnf48_0,vnf49_0,vnf4_0,vnf50_0,vnf51_0,vnf52_0,vnf53_0,vnf54_0,vnf55_0,vnf56_0,vnf57_0,vnf58_0,vnf59_0,vnf5_0,vnf60_0,vnf61_0,vnf62_0,vnf63_0,vnf6_0,vnf7_0,vnf8_0,vnf9_0",64
+2026-01-21 12:24:45,Best Fit,128,2,1,2,"vnf0_1,vnf10_1,vnf11_1,vnf12_1,vnf13_1,vnf14_1,vnf15_1,vnf1_1,vnf2_1,vnf3_1,vnf4_1,vnf5_1,vnf6_1,vnf7_1,vnf8_1,vnf9_1",16
+2026-01-21 12:24:45,Best Fit,128,2,1,5,"vnf16_1,vnf17_1,vnf18_1,vnf19_1,vnf20_1,vnf21_1,vnf22_1,vnf23_1,vnf24_1,vnf25_1,vnf26_1,vnf27_1,vnf28_1,vnf29_1,vnf30_1,vnf31_1",16
+2026-01-21 12:24:45,Best Fit,128,2,1,7,"vnf32_1,vnf33_1,vnf34_1,vnf35_1,vnf36_1,vnf37_1,vnf38_1,vnf39_1,vnf40_1,vnf41_1,vnf42_1,vnf43_1,vnf44_1,vnf45_1,vnf46_1,vnf47_1",16
+2026-01-21 12:24:45,Best Fit,128,2,1,1,"vnf48_1,vnf49_1,vnf50_1,vnf51_1,vnf52_1,vnf53_1,vnf54_1,vnf55_1,vnf56_1,vnf57_1,vnf58_1,vnf59_1,vnf60_1,vnf61_1,vnf62_1,vnf63_1,vnf64_0",17
+2026-01-21 12:24:45,Best Fit,128,2,1,3,"vnf64_1,vnf97_1,vnf98_1",3
+2026-01-21 12:24:45,Best Fit,128,2,1,8,"vnf65_0,vnf66_0,vnf67_0,vnf68_0,vnf69_0,vnf70_0,vnf71_0,vnf72_0,vnf73_0,vnf74_0,vnf75_0,vnf76_0,vnf77_0,vnf78_0,vnf79_0,vnf80_0",16
+2026-01-21 12:24:45,Best Fit,128,2,1,9,"vnf65_1,vnf66_1,vnf67_1,vnf68_1,vnf69_1,vnf70_1,vnf71_1,vnf72_1,vnf73_1,vnf74_1,vnf75_1,vnf76_1,vnf77_1,vnf78_1,vnf79_1,vnf80_1",16
+2026-01-21 12:24:45,Best Fit,128,2,1,10,"vnf81_0,vnf82_0,vnf83_0,vnf84_0,vnf85_0,vnf86_0,vnf87_0,vnf88_0,vnf89_0,vnf90_0,vnf91_0,vnf92_0,vnf93_0,vnf94_0,vnf95_0,vnf96_0",16
+2026-01-21 12:24:45,Best Fit,128,2,1,11,"vnf81_1,vnf82_1,vnf83_1,vnf84_1,vnf85_1,vnf86_1,vnf87_1,vnf88_1,vnf89_1,vnf90_1,vnf91_1,vnf92_1,vnf93_1,vnf94_1,vnf95_1,vnf96_1,vnf97_0",17
+2026-01-21 12:24:45,Best Fit,128,2,1,12,vnf98_0,1
+2026-01-21 12:24:45,First Fit,128,2,1,1,"vnf0_0,vnf10_0,vnf11_0,vnf12_0,vnf13_0,vnf14_0,vnf15_0,vnf16_0,vnf17_0,vnf18_0,vnf19_0,vnf1_0,vnf20_0,vnf21_0,vnf22_0,vnf23_0,vnf24_0,vnf25_0,vnf26_0,vnf27_0,vnf28_0,vnf29_0,vnf2_0,vnf30_0,vnf31_0,vnf32_0,vnf33_1,vnf34_1,vnf35_1,vnf36_1,vnf37_1,vnf38_1,vnf39_1,vnf3_0,vnf40_1,vnf41_1,vnf42_1,vnf43_1,vnf44_1,vnf45_1,vnf46_1,vnf47_1,vnf48_1,vnf4_0,vnf5_0,vnf6_0,vnf7_0,vnf8_0,vnf9_0",49
+2026-01-21 12:24:45,First Fit,128,2,1,2,"vnf0_1,vnf10_1,vnf11_1,vnf12_1,vnf13_1,vnf14_1,vnf15_1,vnf1_1,vnf2_1,vnf3_1,vnf4_1,vnf5_1,vnf6_1,vnf7_1,vnf8_1,vnf9_1",16
+2026-01-21 12:24:45,First Fit,128,2,1,3,"vnf16_1,vnf17_1,vnf18_1,vnf19_1,vnf20_1,vnf21_1,vnf22_1,vnf23_1,vnf24_1,vnf25_1,vnf26_1,vnf27_1,vnf28_1,vnf29_1,vnf30_1,vnf31_1",16
+2026-01-21 12:24:45,First Fit,128,2,1,4,vnf32_1,1
+2026-01-21 12:24:45,First Fit,128,2,1,5,"vnf33_0,vnf34_0,vnf35_0,vnf36_0,vnf37_0,vnf38_0,vnf39_0,vnf40_0,vnf41_0,vnf42_0,vnf43_0,vnf44_0,vnf45_0,vnf46_0,vnf47_0,vnf48_0",16
+2026-01-21 12:24:45,First Fit,128,2,1,6,"vnf49_0,vnf50_0,vnf51_0,vnf52_0,vnf53_0,vnf54_0,vnf55_0,vnf56_0,vnf57_0,vnf58_0,vnf59_0,vnf60_0,vnf61_0,vnf62_0,vnf63_0,vnf64_0,vnf65_0,vnf66_0,vnf67_0,vnf68_0,vnf69_0,vnf70_0,vnf71_0,vnf72_0,vnf73_0,vnf74_0,vnf75_0,vnf76_0,vnf77_0,vnf78_0,vnf79_0,vnf80_0,vnf81_0,vnf82_0,vnf83_0,vnf84_0,vnf85_0,vnf86_0,vnf87_0,vnf88_0,vnf89_0,vnf90_0,vnf91_0,vnf92_0,vnf93_0,vnf94_0,vnf95_0,vnf96_0,vnf97_0,vnf98_0",50
+2026-01-21 12:24:45,First Fit,128,2,1,7,"vnf49_1,vnf50_1,vnf51_1,vnf52_1,vnf53_1,vnf54_1,vnf55_1,vnf56_1,vnf57_1,vnf58_1,vnf59_1,vnf60_1,vnf61_1,vnf62_1,vnf63_1,vnf64_1",16
+2026-01-21 12:24:45,First Fit,128,2,1,8,"vnf65_1,vnf66_1,vnf67_1,vnf68_1,vnf69_1,vnf70_1,vnf71_1,vnf72_1,vnf73_1,vnf74_1,vnf75_1,vnf76_1,vnf77_1,vnf78_1,vnf79_1,vnf80_1",16
+2026-01-21 12:24:45,First Fit,128,2,1,9,"vnf81_1,vnf82_1,vnf83_1,vnf84_1,vnf85_1,vnf86_1,vnf87_1,vnf88_1,vnf89_1,vnf90_1,vnf91_1,vnf92_1,vnf93_1,vnf94_1,vnf95_1,vnf96_1",16
+2026-01-21 12:24:45,First Fit,128,2,1,10,vnf97_1,1
+2026-01-21 12:24:45,First Fit,128,2,1,11,vnf98_1,1
+2026-01-21 12:24:45,Energy-Aware A*,128,2,1,2,"vnf0_0,vnf12_0,vnf15_0,vnf18_0,vnf21_0,vnf24_0,vnf27_0,vnf30_0,vnf33_0,vnf36_0,vnf39_0,vnf3_0,vnf42_0,vnf45_0,vnf6_0,vnf9_0",16
+2026-01-21 12:24:45,Energy-Aware A*,128,2,1,6,"vnf0_1,vnf10_1,vnf11_1,vnf12_1,vnf13_1,vnf14_1,vnf15_1,vnf16_1,vnf17_1,vnf18_1,vnf19_1,vnf1_1,vnf20_1,vnf21_1,vnf22_1,vnf23_1,vnf24_1,vnf25_1,vnf26_1,vnf27_1,vnf28_1,vnf29_1,vnf2_1,vnf30_1,vnf31_1,vnf32_1,vnf33_1,vnf34_1,vnf35_1,vnf36_1,vnf37_1,vnf38_1,vnf39_1,vnf3_1,vnf40_1,vnf41_1,vnf42_1,vnf43_1,vnf44_1,vnf45_1,vnf46_1,vnf47_1,vnf48_1,vnf49_1,vnf4_1,vnf50_1,vnf51_1,vnf52_1,vnf53_1,vnf54_1,vnf55_1,vnf56_1,vnf57_1,vnf58_1,vnf59_1,vnf5_1,vnf60_1,vnf61_1,vnf62_1,vnf63_1,vnf6_1,vnf7_1,vnf8_1,vnf9_1",64
+2026-01-21 12:24:45,Energy-Aware A*,128,2,1,5,"vnf10_0,vnf13_0,vnf16_0,vnf19_0,vnf1_0,vnf22_0,vnf25_0,vnf28_0,vnf31_0,vnf34_0,vnf37_0,vnf40_0,vnf43_0,vnf46_0,vnf4_0,vnf7_0",16
+2026-01-21 12:24:45,Energy-Aware A*,128,2,1,7,"vnf11_0,vnf14_0,vnf17_0,vnf20_0,vnf23_0,vnf26_0,vnf29_0,vnf2_0,vnf32_0,vnf35_0,vnf38_0,vnf41_0,vnf44_0,vnf47_0,vnf5_0,vnf8_0",16
+2026-01-21 12:24:45,Energy-Aware A*,128,2,1,1,"vnf112_0,vnf113_0,vnf114_0,vnf115_0,vnf116_0,vnf117_0,vnf118_0,vnf119_0,vnf120_0,vnf121_0,vnf122_0,vnf123_0,vnf124_0,vnf125_0,vnf126_0,vnf127_0,vnf48_0,vnf49_0,vnf50_0,vnf51_0,vnf52_0,vnf53_0,vnf54_0,vnf55_0,vnf56_0,vnf57_0,vnf58_0,vnf59_0,vnf60_0,vnf61_0,vnf62_0,vnf63_0",32
+2026-01-21 12:24:45,Energy-Aware A*,128,2,1,8,"vnf64_0,vnf65_0,vnf66_0,vnf67_0,vnf68_0,vnf69_0,vnf70_0,vnf71_0,vnf72_0,vnf73_0,vnf74_0,vnf75_0,vnf76_0,vnf77_0,vnf78_0,vnf79_0",16
+2026-01-21 12:24:45,Energy-Aware A*,128,2,1,11,"vnf100_1,vnf101_1,vnf102_1,vnf103_1,vnf104_1,vnf105_1,vnf106_1,vnf107_1,vnf108_1,vnf109_1,vnf110_1,vnf111_1,vnf112_1,vnf113_1,vnf114_1,vnf115_1,vnf116_1,vnf117_1,vnf118_1,vnf119_1,vnf120_1,vnf121_1,vnf122_1,vnf123_1,vnf124_1,vnf125_1,vnf126_1,vnf127_1,vnf64_1,vnf65_1,vnf66_1,vnf67_1,vnf68_1,vnf69_1,vnf70_1,vnf71_1,vnf72_1,vnf73_1,vnf74_1,vnf75_1,vnf76_1,vnf77_1,vnf78_1,vnf79_1,vnf80_1,vnf81_1,vnf82_1,vnf83_1,vnf84_1,vnf85_1,vnf86_1,vnf87_1,vnf88_1,vnf89_1,vnf90_1,vnf91_1,vnf92_1,vnf93_1,vnf94_1,vnf95_1,vnf96_1,vnf97_1,vnf98_1,vnf99_1",64
+2026-01-21 12:24:45,Energy-Aware A*,128,2,1,10,"vnf80_0,vnf81_0,vnf82_0,vnf83_0,vnf84_0,vnf85_0,vnf86_0,vnf87_0,vnf88_0,vnf89_0,vnf90_0,vnf91_0,vnf92_0,vnf93_0,vnf94_0,vnf95_0",16
+2026-01-21 12:24:45,Energy-Aware A*,128,2,1,9,"vnf100_0,vnf101_0,vnf102_0,vnf103_0,vnf104_0,vnf105_0,vnf106_0,vnf107_0,vnf108_0,vnf109_0,vnf110_0,vnf111_0,vnf96_0,vnf97_0,vnf98_0,vnf99_0",16
+2026-01-21 12:24:45,MILP_Gurobi,128,2,1,6,"vnf100_0,vnf104_0,vnf108_0,vnf10_0,vnf112_0,vnf116_0,vnf120_0,vnf124_0,vnf127_0,vnf15_0,vnf19_0,vnf23_0,vnf27_0,vnf2_0,vnf31_0,vnf34_0,vnf38_0,vnf42_0,vnf46_0,vnf50_0,vnf54_0,vnf58_0,vnf62_0,vnf65_0,vnf69_0,vnf6_0,vnf73_0,vnf77_0,vnf81_0,vnf85_0,vnf89_0,vnf93_0,vnf96_0",33
+2026-01-21 12:24:45,MILP_Gurobi,128,2,1,11,"vnf100_1,vnf104_1,vnf108_1,vnf10_1,vnf112_1,vnf116_1,vnf120_1,vnf124_1,vnf127_1,vnf15_1,vnf19_1,vnf23_1,vnf27_1,vnf2_1,vnf31_1,vnf34_1,vnf38_1,vnf42_1,vnf46_1,vnf50_1,vnf54_1,vnf58_1,vnf62_1,vnf65_1,vnf69_1,vnf6_1,vnf73_1,vnf77_1,vnf81_1,vnf85_1,vnf89_1,vnf93_1,vnf96_1",33
+2026-01-21 12:27:15,A*,4,3,1,6,"vnf0_0,vnf1_0,vnf2_0,vnf3_0",4
+2026-01-21 12:27:15,A*,4,3,1,2,"vnf0_1,vnf3_1",2
+2026-01-21 12:27:15,A*,4,3,1,1,"vnf0_2,vnf3_2",2
+2026-01-21 12:27:15,A*,4,3,1,5,vnf1_1,1
+2026-01-21 12:27:15,A*,4,3,1,4,vnf1_2,1
+2026-01-21 12:27:15,A*,4,3,1,7,vnf2_1,1
+2026-01-21 12:27:15,A*,4,3,1,8,vnf2_2,1
+2026-01-21 12:27:15,ABO,4,3,1,2,"vnf0_0,vnf1_0,vnf2_0,vnf3_0",4
+2026-01-21 12:27:15,ABO,4,3,1,4,"vnf0_1,vnf2_1",2
+2026-01-21 12:27:15,ABO,4,3,1,3,vnf0_2,1
+2026-01-21 12:27:15,ABO,4,3,1,6,"vnf1_1,vnf3_1",2
+2026-01-21 12:27:15,ABO,4,3,1,5,"vnf1_2,vnf2_2",2
+2026-01-21 12:27:15,ABO,4,3,1,7,vnf3_2,1
+2026-01-21 12:27:15,FABO,4,3,1,2,"vnf0_0,vnf2_0,vnf3_0",3
+2026-01-21 12:27:15,FABO,4,3,1,4,vnf0_1,1
+2026-01-21 12:27:15,FABO,4,3,1,3,vnf0_2,1
+2026-01-21 12:27:15,FABO,4,3,1,5,"vnf1_0,vnf2_2",2
+2026-01-21 12:27:15,FABO,4,3,1,6,"vnf1_1,vnf2_1,vnf3_1",3
+2026-01-21 12:27:15,FABO,4,3,1,7,"vnf1_2,vnf3_2",2
+2026-01-21 12:27:15,Best Fit,4,3,1,6,"vnf0_0,vnf1_0,vnf2_0,vnf3_0",4
+2026-01-21 12:27:15,Best Fit,4,3,1,2,"vnf0_1,vnf1_1,vnf2_1,vnf3_1",4
+2026-01-21 12:27:15,Best Fit,4,3,1,1,"vnf0_2,vnf1_2,vnf2_2,vnf3_2",4
+2026-01-21 12:27:15,First Fit,4,3,1,1,"vnf0_0,vnf1_0,vnf2_0,vnf3_0",4
+2026-01-21 12:27:15,First Fit,4,3,1,2,"vnf0_1,vnf1_1,vnf2_1,vnf3_1",4
+2026-01-21 12:27:15,First Fit,4,3,1,3,"vnf0_2,vnf1_2,vnf2_2,vnf3_2",4
+2026-01-21 12:27:15,Energy-Aware A*,4,3,1,1,"vnf0_0,vnf1_0,vnf2_0,vnf3_0",4
+2026-01-21 12:27:15,Energy-Aware A*,4,3,1,2,"vnf0_1,vnf1_1,vnf2_1,vnf3_1",4
+2026-01-21 12:27:15,Energy-Aware A*,4,3,1,6,"vnf0_2,vnf1_2,vnf2_2,vnf3_2",4
+2026-01-21 12:27:15,MILP_Gurobi,4,3,1,6,"vnf0_0,vnf1_0,vnf2_0,vnf3_0",4
+2026-01-21 12:27:15,MILP_Gurobi,4,3,1,7,"vnf0_1,vnf1_1,vnf2_1,vnf3_1",4
+2026-01-21 12:27:15,MILP_Gurobi,4,3,1,10,"vnf0_2,vnf1_2,vnf2_2,vnf3_2",4
+2026-01-21 12:27:49,A*,8,3,1,6,"vnf0_0,vnf1_0,vnf2_0,vnf3_0,vnf4_0,vnf5_0,vnf6_0,vnf7_0",8
+2026-01-21 12:27:49,A*,8,3,1,2,"vnf0_1,vnf3_1,vnf6_1",3
+2026-01-21 12:27:49,A*,8,3,1,1,"vnf0_2,vnf3_2,vnf6_2",3
+2026-01-21 12:27:49,A*,8,3,1,5,"vnf1_1,vnf4_1,vnf7_1",3
+2026-01-21 12:27:49,A*,8,3,1,4,"vnf1_2,vnf4_2",2
+2026-01-21 12:27:49,A*,8,3,1,7,"vnf2_1,vnf5_1",2
+2026-01-21 12:27:49,A*,8,3,1,8,"vnf2_2,vnf7_2",2
+2026-01-21 12:27:49,A*,8,3,1,9,vnf5_2,1
+2026-01-21 12:27:49,ABO,8,3,1,2,"vnf0_0,vnf1_0,vnf2_0,vnf3_0,vnf4_0,vnf5_0,vnf6_0,vnf7_0",8
+2026-01-21 12:27:49,ABO,8,3,1,4,"vnf0_1,vnf2_1,vnf4_1,vnf6_1",4
+2026-01-21 12:27:49,ABO,8,3,1,3,"vnf0_2,vnf4_2",2
+2026-01-21 12:27:49,ABO,8,3,1,6,"vnf1_1,vnf3_1,vnf5_1,vnf7_1",4
+2026-01-21 12:27:49,ABO,8,3,1,5,"vnf1_2,vnf2_2,vnf5_2,vnf6_2",4
+2026-01-21 12:27:49,ABO,8,3,1,7,"vnf3_2,vnf7_2",2
+2026-01-21 12:27:49,FABO,8,3,1,2,"vnf0_0,vnf2_0,vnf3_0,vnf4_0,vnf5_0,vnf7_0",6
+2026-01-21 12:27:49,FABO,8,3,1,4,"vnf0_1,vnf4_1,vnf7_1",3
+2026-01-21 12:27:49,FABO,8,3,1,3,"vnf0_2,vnf7_2",2
+2026-01-21 12:27:49,FABO,8,3,1,5,"vnf1_0,vnf2_2,vnf4_2,vnf5_2",4
+2026-01-21 12:27:49,FABO,8,3,1,6,"vnf1_1,vnf2_1,vnf3_1,vnf5_1",4
+2026-01-21 12:27:49,FABO,8,3,1,7,"vnf1_2,vnf3_2,vnf6_0",3
+2026-01-21 12:27:49,FABO,8,3,1,9,vnf6_1,1
+2026-01-21 12:27:49,FABO,8,3,1,8,vnf6_2,1
+2026-01-21 12:27:49,Best Fit,8,3,1,6,"vnf0_0,vnf1_0,vnf2_0,vnf3_0,vnf4_0,vnf5_0,vnf6_0,vnf7_0",8
+2026-01-21 12:27:49,Best Fit,8,3,1,2,"vnf0_1,vnf1_1,vnf2_1,vnf3_1,vnf4_1,vnf5_1,vnf6_1,vnf7_1",8
+2026-01-21 12:27:49,Best Fit,8,3,1,1,"vnf0_2,vnf1_2,vnf2_2,vnf3_2,vnf4_2,vnf5_2,vnf6_2,vnf7_2",8
+2026-01-21 12:27:49,First Fit,8,3,1,1,"vnf0_0,vnf1_0,vnf2_0,vnf3_0,vnf4_0,vnf5_0,vnf6_0,vnf7_0",8
+2026-01-21 12:27:49,First Fit,8,3,1,2,"vnf0_1,vnf1_1,vnf2_1,vnf3_1,vnf4_1,vnf5_1,vnf6_1,vnf7_1",8
+2026-01-21 12:27:49,First Fit,8,3,1,3,"vnf0_2,vnf1_2,vnf2_2,vnf3_2,vnf4_2,vnf5_2,vnf6_2,vnf7_2",8
+2026-01-21 12:27:49,Energy-Aware A*,8,3,1,1,"vnf0_0,vnf1_0,vnf2_0,vnf3_0,vnf4_0,vnf5_0,vnf6_0,vnf7_0",8
+2026-01-21 12:27:49,Energy-Aware A*,8,3,1,2,"vnf0_1,vnf1_1,vnf2_1,vnf3_1,vnf4_1,vnf5_1,vnf6_1,vnf7_1",8
+2026-01-21 12:27:49,Energy-Aware A*,8,3,1,6,"vnf0_2,vnf1_2,vnf2_2,vnf3_2,vnf4_2,vnf5_2,vnf6_2,vnf7_2",8
+2026-01-21 12:27:49,MILP_Gurobi,8,3,1,6,"vnf0_0,vnf1_0,vnf2_0,vnf3_0,vnf4_0,vnf5_0,vnf6_0,vnf7_0",8
+2026-01-21 12:27:49,MILP_Gurobi,8,3,1,7,"vnf0_1,vnf1_1,vnf2_1,vnf3_1,vnf4_1,vnf5_1,vnf6_1,vnf7_1",8
+2026-01-21 12:27:49,MILP_Gurobi,8,3,1,10,"vnf0_2,vnf1_2,vnf2_2,vnf3_2,vnf4_2,vnf5_2,vnf6_2,vnf7_2",8
+2026-01-21 12:28:55,A*,16,3,1,6,"vnf0_0,vnf10_0,vnf11_0,vnf12_0,vnf13_0,vnf14_0,vnf15_0,vnf1_0,vnf2_0,vnf3_0,vnf4_0,vnf5_0,vnf6_0,vnf7_0,vnf8_0,vnf9_0",16
+2026-01-21 12:28:55,A*,16,3,1,2,"vnf0_1,vnf12_1,vnf15_1,vnf3_1,vnf6_1,vnf9_1",6
+2026-01-21 12:28:55,A*,16,3,1,1,"vnf0_2,vnf12_2,vnf15_2,vnf3_2,vnf6_2,vnf9_2",6
+2026-01-21 12:28:55,A*,16,3,1,5,"vnf10_1,vnf13_1,vnf1_1,vnf4_1,vnf7_1",5
+2026-01-21 12:28:55,A*,16,3,1,4,"vnf10_2,vnf1_2,vnf4_2",3
+2026-01-21 12:28:55,A*,16,3,1,7,"vnf11_1,vnf14_1,vnf2_1,vnf5_1,vnf8_1",5
+2026-01-21 12:28:55,A*,16,3,1,8,"vnf13_2,vnf2_2,vnf7_2",3
+2026-01-21 12:28:55,A*,16,3,1,9,"vnf11_2,vnf5_2",2
+2026-01-21 12:28:55,A*,16,3,1,10,"vnf14_2,vnf8_2",2
+2026-01-21 12:28:55,ABO,16,3,1,2,"vnf0_0,vnf10_0,vnf11_0,vnf12_0,vnf13_0,vnf14_0,vnf15_0,vnf1_0,vnf2_0,vnf3_0,vnf4_0,vnf5_0,vnf6_0,vnf7_0,vnf8_0,vnf9_0",16
+2026-01-21 12:28:55,ABO,16,3,1,4,"vnf0_1,vnf10_1,vnf12_1,vnf14_1,vnf2_1,vnf4_1,vnf6_1,vnf8_1",8
+2026-01-21 12:28:55,ABO,16,3,1,3,"vnf0_2,vnf12_2,vnf4_2,vnf8_2",4
+2026-01-21 12:28:55,ABO,16,3,1,6,"vnf11_1,vnf13_1,vnf15_1,vnf1_1,vnf3_1,vnf5_1,vnf7_1,vnf9_1",8
+2026-01-21 12:28:55,ABO,16,3,1,5,"vnf10_2,vnf13_2,vnf14_2,vnf1_2,vnf2_2,vnf5_2,vnf6_2,vnf9_2",8
+2026-01-21 12:28:55,ABO,16,3,1,7,"vnf11_2,vnf15_2,vnf3_2,vnf7_2",4
+2026-01-21 12:28:55,FABO,16,3,1,2,"vnf0_0,vnf10_0,vnf11_0,vnf13_0,vnf15_0,vnf2_0,vnf3_0,vnf4_0,vnf5_0,vnf7_0,vnf9_0",11
+2026-01-21 12:28:55,FABO,16,3,1,4,"vnf0_1,vnf10_1,vnf13_1,vnf4_1,vnf7_1",5
+2026-01-21 12:28:55,FABO,16,3,1,3,"vnf0_2,vnf13_2,vnf7_2",3
+2026-01-21 12:28:55,FABO,16,3,1,5,"vnf10_2,vnf11_2,vnf1_0,vnf2_2,vnf4_2,vnf5_2",6
+2026-01-21 12:28:55,FABO,16,3,1,6,"vnf11_1,vnf15_1,vnf1_1,vnf2_1,vnf3_1,vnf5_1,vnf9_1",7
+2026-01-21 12:28:55,FABO,16,3,1,7,"vnf12_0,vnf14_0,vnf15_2,vnf1_2,vnf3_2,vnf6_0,vnf8_0,vnf9_2",8
+2026-01-21 12:28:55,FABO,16,3,1,9,"vnf12_1,vnf6_1",2
+2026-01-21 12:28:55,FABO,16,3,1,8,"vnf12_2,vnf6_2",2
+2026-01-21 12:28:55,FABO,16,3,1,10,"vnf14_1,vnf8_1",2
+2026-01-21 12:28:55,FABO,16,3,1,11,vnf8_2,1
+2026-01-21 12:28:55,FABO,16,3,1,12,vnf14_2,1
+2026-01-21 12:28:55,Best Fit,16,3,1,6,"vnf0_0,vnf10_0,vnf11_0,vnf12_0,vnf13_0,vnf14_0,vnf15_0,vnf1_0,vnf2_0,vnf3_0,vnf4_0,vnf5_0,vnf6_0,vnf7_0,vnf8_0,vnf9_0",16
+2026-01-21 12:28:55,Best Fit,16,3,1,2,"vnf0_1,vnf10_1,vnf11_1,vnf12_1,vnf13_1,vnf14_1,vnf15_1,vnf1_1,vnf2_1,vnf3_1,vnf4_1,vnf5_1,vnf6_1,vnf7_1,vnf8_1,vnf9_1",16
+2026-01-21 12:28:55,Best Fit,16,3,1,1,"vnf0_2,vnf10_2,vnf11_2,vnf12_2,vnf13_2,vnf14_2,vnf15_2,vnf1_2,vnf2_2,vnf3_2,vnf4_2,vnf5_2,vnf6_2,vnf7_2,vnf8_2,vnf9_2",16
+2026-01-21 12:28:55,First Fit,16,3,1,1,"vnf0_0,vnf10_0,vnf11_0,vnf12_0,vnf13_0,vnf14_0,vnf15_0,vnf1_0,vnf2_0,vnf3_0,vnf4_0,vnf5_0,vnf6_0,vnf7_0,vnf8_0,vnf9_0",16
+2026-01-21 12:28:55,First Fit,16,3,1,2,"vnf0_1,vnf10_1,vnf11_1,vnf12_1,vnf13_1,vnf14_1,vnf15_1,vnf1_1,vnf2_1,vnf3_1,vnf4_1,vnf5_1,vnf6_1,vnf7_1,vnf8_1,vnf9_1",16
+2026-01-21 12:28:55,First Fit,16,3,1,3,"vnf0_2,vnf1_2,vnf2_2,vnf3_2,vnf4_2,vnf5_2,vnf6_2,vnf7_2",8
+2026-01-21 12:28:55,First Fit,16,3,1,4,"vnf10_2,vnf11_2,vnf12_2,vnf13_2,vnf14_2,vnf15_2,vnf8_2,vnf9_2",8
+2026-01-21 12:28:55,Energy-Aware A*,16,3,1,1,"vnf0_0,vnf10_0,vnf11_0,vnf12_0,vnf13_0,vnf14_0,vnf15_0,vnf1_0,vnf2_0,vnf3_0,vnf4_0,vnf5_0,vnf6_0,vnf7_0,vnf8_0,vnf9_0",16
+2026-01-21 12:28:55,Energy-Aware A*,16,3,1,2,"vnf0_1,vnf10_1,vnf11_1,vnf12_1,vnf13_1,vnf14_1,vnf15_1,vnf1_1,vnf2_1,vnf3_1,vnf4_1,vnf5_1,vnf6_1,vnf7_1,vnf8_1,vnf9_1",16
+2026-01-21 12:28:55,Energy-Aware A*,16,3,1,6,"vnf0_2,vnf10_2,vnf11_2,vnf12_2,vnf13_2,vnf14_2,vnf15_2,vnf1_2,vnf2_2,vnf3_2,vnf4_2,vnf5_2,vnf6_2,vnf7_2,vnf8_2,vnf9_2",16
+2026-01-21 12:28:55,MILP_Gurobi,16,3,1,6,"vnf0_0,vnf10_0,vnf11_0,vnf12_0,vnf13_0,vnf14_0,vnf15_0,vnf1_0,vnf2_0,vnf3_0,vnf4_0,vnf5_0,vnf6_0,vnf7_0,vnf8_0,vnf9_0",16
+2026-01-21 12:28:55,MILP_Gurobi,16,3,1,8,"vnf0_1,vnf10_1,vnf11_1,vnf12_1,vnf13_1,vnf14_1,vnf15_1,vnf1_1,vnf2_1,vnf3_1,vnf4_1,vnf5_1,vnf6_1,vnf7_1,vnf8_1,vnf9_1",16
+2026-01-21 12:28:55,MILP_Gurobi,16,3,1,11,"vnf0_2,vnf10_2,vnf11_2,vnf12_2,vnf13_2,vnf14_2,vnf15_2,vnf1_2,vnf2_2,vnf3_2,vnf4_2,vnf5_2,vnf6_2,vnf7_2,vnf8_2,vnf9_2",16
+2026-01-21 12:31:08,A*,32,3,1,6,"vnf0_0,vnf10_0,vnf11_0,vnf12_0,vnf13_0,vnf14_0,vnf15_0,vnf16_0,vnf17_0,vnf18_0,vnf19_0,vnf1_0,vnf20_0,vnf21_0,vnf22_0,vnf23_0,vnf24_0,vnf25_0,vnf26_0,vnf27_0,vnf28_0,vnf29_0,vnf2_0,vnf30_0,vnf31_0,vnf3_0,vnf4_0,vnf5_0,vnf6_0,vnf7_0,vnf8_0,vnf9_0",32
+2026-01-21 12:31:08,A*,32,3,1,2,"vnf0_1,vnf12_1,vnf15_1,vnf18_1,vnf21_1,vnf24_1,vnf27_1,vnf30_1,vnf3_1,vnf6_1,vnf9_1",11
+2026-01-21 12:31:08,A*,32,3,1,1,"vnf0_2,vnf12_2,vnf15_2,vnf18_2,vnf21_2,vnf24_2,vnf27_2,vnf30_2,vnf3_2,vnf6_2,vnf9_2",11
+2026-01-21 12:31:08,A*,32,3,1,5,"vnf10_1,vnf13_1,vnf16_1,vnf19_1,vnf1_1,vnf22_1,vnf25_1,vnf28_1,vnf31_1,vnf4_1,vnf7_1",11
+2026-01-21 12:31:08,A*,32,3,1,4,"vnf10_2,vnf16_2,vnf1_2,vnf22_2,vnf28_2,vnf4_2",6
+2026-01-21 12:31:08,A*,32,3,1,7,"vnf11_1,vnf14_1,vnf17_1,vnf20_1,vnf23_1,vnf26_1,vnf29_1,vnf2_1,vnf5_1,vnf8_1",10
+2026-01-21 12:31:08,A*,32,3,1,8,"vnf13_2,vnf19_2,vnf25_2,vnf2_2,vnf31_2,vnf7_2",6
+2026-01-21 12:31:08,A*,32,3,1,9,"vnf11_2,vnf17_2,vnf23_2,vnf29_2,vnf5_2",5
+2026-01-21 12:31:08,A*,32,3,1,10,"vnf14_2,vnf20_2,vnf26_2,vnf8_2",4
+2026-01-21 12:31:08,ABO,32,3,1,2,"vnf0_0,vnf10_0,vnf11_0,vnf12_0,vnf13_0,vnf14_0,vnf15_0,vnf1_0,vnf2_0,vnf3_0,vnf4_0,vnf5_0,vnf6_0,vnf7_0,vnf8_0,vnf9_0",16
+2026-01-21 12:31:08,ABO,32,3,1,4,"vnf0_1,vnf10_1,vnf12_1,vnf14_1,vnf24_0,vnf28_0,vnf29_0,vnf2_1,vnf30_0,vnf31_0,vnf4_1,vnf6_1,vnf8_1",13
+2026-01-21 12:31:08,ABO,32,3,1,3,"vnf0_2,vnf12_2,vnf24_1,vnf25_2,vnf26_2,vnf27_2,vnf4_2,vnf8_2",8
+2026-01-21 12:31:08,ABO,32,3,1,6,"vnf11_1,vnf13_1,vnf15_1,vnf1_1,vnf3_1,vnf5_1,vnf7_1,vnf9_1",8
+2026-01-21 12:31:08,ABO,32,3,1,5,"vnf10_2,vnf13_2,vnf14_2,vnf1_2,vnf2_2,vnf5_2,vnf6_2,vnf9_2",8
+2026-01-21 12:31:08,ABO,32,3,1,7,"vnf11_2,vnf15_2,vnf16_0,vnf17_0,vnf18_0,vnf19_0,vnf20_0,vnf21_0,vnf22_0,vnf23_0,vnf3_2,vnf7_2",12
+2026-01-21 12:31:08,ABO,32,3,1,9,"vnf16_1,vnf17_1,vnf18_1,vnf19_1,vnf20_1,vnf21_1,vnf22_1,vnf23_1",8
+2026-01-21 12:31:08,ABO,32,3,1,8,"vnf16_2,vnf17_2,vnf18_2,vnf19_2,vnf20_2,vnf21_2,vnf22_2,vnf23_2",8
+2026-01-21 12:31:08,ABO,32,3,1,11,"vnf24_2,vnf25_1",2
+2026-01-21 12:31:08,ABO,32,3,1,10,"vnf25_0,vnf26_0,vnf27_0,vnf28_2,vnf29_2,vnf30_2,vnf31_2",7
+2026-01-21 12:31:08,ABO,32,3,1,12,"vnf26_1,vnf27_1,vnf28_1,vnf29_1,vnf30_1,vnf31_1",6
+2026-01-21 12:31:08,FABO,32,3,1,2,"vnf0_0,vnf10_0,vnf11_0,vnf13_0,vnf15_0,vnf16_0,vnf17_0,vnf18_2,vnf21_0,vnf2_0,vnf3_0,vnf4_0,vnf5_0,vnf7_0,vnf9_0",15
+2026-01-21 12:31:08,FABO,32,3,1,4,"vnf0_1,vnf10_1,vnf13_1,vnf16_1,vnf21_1,vnf4_1,vnf7_1",7
+2026-01-21 12:31:08,FABO,32,3,1,3,"vnf0_2,vnf13_2,vnf21_2,vnf24_2,vnf7_2",5
+2026-01-21 12:31:08,FABO,32,3,1,5,"vnf10_2,vnf11_2,vnf16_2,vnf17_2,vnf1_0,vnf22_0,vnf2_2,vnf4_2,vnf5_2",9
+2026-01-21 12:31:08,FABO,32,3,1,6,"vnf11_1,vnf15_1,vnf17_1,vnf18_1,vnf1_1,vnf2_1,vnf3_1,vnf5_1,vnf9_1",9
+2026-01-21 12:31:08,FABO,32,3,1,7,"vnf12_0,vnf14_0,vnf15_2,vnf18_0,vnf19_0,vnf1_2,vnf20_0,vnf23_0,vnf3_2,vnf6_0,vnf8_0,vnf9_2",12
+2026-01-21 12:31:08,FABO,32,3,1,9,"vnf12_1,vnf19_1,vnf23_1,vnf25_0,vnf26_0,vnf27_0,vnf28_0,vnf29_0,vnf30_0,vnf31_0,vnf6_1",11
+2026-01-21 12:31:08,FABO,32,3,1,8,"vnf12_2,vnf19_2,vnf22_1,vnf23_2,vnf25_1,vnf26_1,vnf27_1,vnf28_1,vnf29_1,vnf30_1,vnf31_1,vnf6_2",12
+2026-01-21 12:31:08,FABO,32,3,1,10,"vnf14_1,vnf20_1,vnf24_0,vnf8_1",4
+2026-01-21 12:31:08,FABO,32,3,1,11,"vnf22_2,vnf25_2,vnf26_2,vnf27_2,vnf28_2,vnf29_2,vnf30_2,vnf31_2,vnf8_2",9
+2026-01-21 12:31:08,FABO,32,3,1,12,"vnf14_2,vnf20_2,vnf24_1",3
+2026-01-21 12:31:08,Best Fit,32,3,1,6,"vnf0_0,vnf10_0,vnf11_0,vnf12_0,vnf13_0,vnf14_0,vnf15_0,vnf16_0,vnf17_0,vnf18_0,vnf19_0,vnf1_0,vnf20_0,vnf21_0,vnf22_0,vnf23_0,vnf24_0,vnf25_0,vnf26_0,vnf27_0,vnf28_0,vnf29_0,vnf2_0,vnf30_0,vnf31_0,vnf3_0,vnf4_0,vnf5_0,vnf6_0,vnf7_0,vnf8_0,vnf9_0",32
+2026-01-21 12:31:08,Best Fit,32,3,1,2,"vnf0_1,vnf10_1,vnf11_1,vnf12_1,vnf13_1,vnf14_1,vnf15_1,vnf1_1,vnf2_1,vnf3_1,vnf4_1,vnf5_1,vnf6_1,vnf7_1,vnf8_1,vnf9_1",16
+2026-01-21 12:31:08,Best Fit,32,3,1,1,"vnf0_2,vnf10_2,vnf11_2,vnf12_2,vnf13_2,vnf14_2,vnf15_2,vnf1_2,vnf2_2,vnf3_2,vnf4_2,vnf5_2,vnf6_2,vnf7_2,vnf8_2,vnf9_2",16
+2026-01-21 12:31:08,Best Fit,32,3,1,5,"vnf16_1,vnf17_1,vnf18_1,vnf19_1,vnf20_1,vnf21_1,vnf22_1,vnf23_1,vnf24_1,vnf25_1,vnf26_1,vnf27_1,vnf28_1,vnf29_1,vnf30_1,vnf31_1",16
+2026-01-21 12:31:08,Best Fit,32,3,1,4,"vnf16_2,vnf17_2,vnf18_2,vnf19_2,vnf20_2,vnf21_2,vnf22_2,vnf23_2",8
+2026-01-21 12:31:08,Best Fit,32,3,1,8,"vnf24_2,vnf25_2,vnf26_2,vnf27_2,vnf28_2,vnf29_2,vnf30_2,vnf31_2",8
+2026-01-21 12:31:08,First Fit,32,3,1,1,"vnf0_0,vnf10_0,vnf11_0,vnf12_0,vnf13_0,vnf14_0,vnf15_0,vnf16_0,vnf17_0,vnf18_0,vnf19_0,vnf1_0,vnf20_0,vnf21_0,vnf22_0,vnf23_0,vnf24_0,vnf25_0,vnf26_0,vnf27_0,vnf28_0,vnf29_0,vnf2_0,vnf30_0,vnf31_0,vnf3_0,vnf4_0,vnf5_0,vnf6_0,vnf7_0,vnf8_0,vnf9_0",32
+2026-01-21 12:31:08,First Fit,32,3,1,2,"vnf0_1,vnf10_1,vnf11_1,vnf12_1,vnf13_1,vnf14_1,vnf15_1,vnf1_1,vnf2_1,vnf3_1,vnf4_1,vnf5_1,vnf6_1,vnf7_1,vnf8_1,vnf9_1",16
+2026-01-21 12:31:08,First Fit,32,3,1,3,"vnf0_2,vnf1_2,vnf2_2,vnf3_2,vnf4_2,vnf5_2,vnf6_2,vnf7_2",8
+2026-01-21 12:31:08,First Fit,32,3,1,4,"vnf10_2,vnf11_2,vnf12_2,vnf13_2,vnf14_2,vnf15_2,vnf8_2,vnf9_2",8
+2026-01-21 12:31:08,First Fit,32,3,1,5,"vnf16_1,vnf17_1,vnf18_1,vnf19_1,vnf20_1,vnf21_1,vnf22_1,vnf23_1,vnf24_1,vnf25_1,vnf26_1,vnf27_1,vnf28_1,vnf29_1,vnf30_1,vnf31_1",16
+2026-01-21 12:31:08,First Fit,32,3,1,6,"vnf16_2,vnf17_2,vnf18_2,vnf19_2,vnf20_2,vnf21_2,vnf22_2,vnf23_2,vnf24_2,vnf25_2,vnf26_2,vnf27_2,vnf28_2,vnf29_2,vnf30_2,vnf31_2",16
+2026-01-21 12:31:08,Energy-Aware A*,32,3,1,1,"vnf0_0,vnf10_0,vnf11_0,vnf12_0,vnf13_0,vnf14_0,vnf15_0,vnf16_2,vnf17_2,vnf18_2,vnf19_2,vnf1_0,vnf20_2,vnf21_2,vnf22_2,vnf23_2,vnf24_2,vnf2_0,vnf3_0,vnf4_0,vnf5_0,vnf6_0,vnf7_0,vnf8_0,vnf9_0",25
+2026-01-21 12:31:08,Energy-Aware A*,32,3,1,2,"vnf0_1,vnf10_1,vnf11_1,vnf12_1,vnf13_1,vnf14_1,vnf15_1,vnf1_1,vnf2_1,vnf3_1,vnf4_1,vnf5_1,vnf6_1,vnf7_1,vnf8_1,vnf9_1",16
+2026-01-21 12:31:08,Energy-Aware A*,32,3,1,6,"vnf0_2,vnf10_2,vnf11_2,vnf12_2,vnf13_2,vnf14_2,vnf15_2,vnf16_1,vnf17_1,vnf18_1,vnf19_1,vnf1_2,vnf20_1,vnf21_1,vnf22_1,vnf23_1,vnf24_1,vnf25_1,vnf26_1,vnf27_1,vnf28_1,vnf29_1,vnf2_2,vnf30_1,vnf31_1,vnf3_2,vnf4_2,vnf5_2,vnf6_2,vnf7_2,vnf8_2,vnf9_2",32
+2026-01-21 12:31:08,Energy-Aware A*,32,3,1,5,"vnf16_0,vnf18_0,vnf20_0,vnf22_0,vnf24_0,vnf25_0,vnf26_0,vnf27_0,vnf28_0,vnf29_0,vnf30_0,vnf31_0",12
+2026-01-21 12:31:08,Energy-Aware A*,32,3,1,7,"vnf17_0,vnf19_0,vnf21_0,vnf23_0",4
+2026-01-21 12:31:08,Energy-Aware A*,32,3,1,11,"vnf25_2,vnf26_2,vnf27_2,vnf28_2,vnf29_2,vnf30_2,vnf31_2",7
+2026-01-21 12:31:08,MILP_Gurobi,32,3,1,6,"vnf0_0,vnf10_0,vnf11_0,vnf12_0,vnf13_0,vnf14_0,vnf15_0,vnf16_0,vnf17_0,vnf18_0,vnf19_0,vnf1_0,vnf20_0,vnf21_0,vnf22_0,vnf23_0,vnf24_0,vnf25_0,vnf26_0,vnf27_0,vnf28_0,vnf29_0,vnf2_0,vnf30_0,vnf31_0,vnf3_0,vnf4_0,vnf5_0,vnf6_0,vnf7_0,vnf8_0,vnf9_0",32
+2026-01-21 12:31:08,MILP_Gurobi,32,3,1,8,"vnf0_1,vnf10_1,vnf11_1,vnf12_1,vnf13_1,vnf14_1,vnf15_1,vnf19_1,vnf22_1,vnf24_1,vnf25_1,vnf28_1,vnf29_1,vnf4_1,vnf6_1,vnf7_1",16
+2026-01-21 12:31:08,MILP_Gurobi,32,3,1,11,"vnf0_2,vnf10_2,vnf11_2,vnf12_2,vnf13_2,vnf14_2,vnf15_2,vnf16_2,vnf17_2,vnf18_2,vnf19_2,vnf1_2,vnf20_2,vnf21_2,vnf22_2,vnf23_2,vnf24_2,vnf25_2,vnf26_2,vnf27_2,vnf28_2,vnf29_2,vnf2_2,vnf30_2,vnf31_2,vnf3_2,vnf4_2,vnf5_2,vnf6_2,vnf7_2,vnf8_2,vnf9_2",32
+2026-01-21 12:31:08,MILP_Gurobi,32,3,1,10,"vnf16_1,vnf17_1,vnf18_1,vnf1_1,vnf20_1,vnf21_1,vnf23_1,vnf26_1,vnf27_1,vnf2_1,vnf30_1,vnf31_1,vnf3_1,vnf5_1,vnf8_1,vnf9_1",16
+2026-01-21 12:34:52,A*,64,3,1,6,"vnf0_0,vnf10_0,vnf11_0,vnf12_0,vnf13_0,vnf14_0,vnf15_0,vnf16_0,vnf17_0,vnf18_0,vnf19_0,vnf1_0,vnf20_0,vnf21_0,vnf22_0,vnf23_0,vnf24_0,vnf25_0,vnf26_0,vnf27_0,vnf28_0,vnf29_0,vnf2_0,vnf30_0,vnf31_0,vnf32_0,vnf33_0,vnf34_0,vnf35_0,vnf36_0,vnf37_0,vnf38_0,vnf39_0,vnf3_0,vnf40_0,vnf41_0,vnf42_0,vnf43_0,vnf44_0,vnf45_0,vnf46_0,vnf47_0,vnf48_0,vnf49_0,vnf4_0,vnf50_0,vnf51_0,vnf52_0,vnf53_0,vnf54_0,vnf55_0,vnf56_0,vnf57_0,vnf58_0,vnf59_0,vnf5_0,vnf60_0,vnf61_0,vnf62_0,vnf63_0,vnf6_0,vnf7_0,vnf8_0,vnf9_0",64
+2026-01-21 12:34:52,A*,64,3,1,2,"vnf0_1,vnf12_1,vnf15_1,vnf18_1,vnf21_1,vnf24_1,vnf27_1,vnf30_1,vnf33_1,vnf36_1,vnf39_1,vnf3_1,vnf42_1,vnf45_1,vnf6_1,vnf9_1",16
+2026-01-21 12:34:52,A*,64,3,1,1,"vnf0_2,vnf12_2,vnf15_2,vnf18_2,vnf21_2,vnf24_2,vnf27_2,vnf30_2,vnf33_2,vnf36_2,vnf39_2,vnf3_2,vnf42_2,vnf45_2,vnf48_1,vnf49_1,vnf50_1,vnf51_1,vnf52_1,vnf53_1,vnf54_1,vnf55_1,vnf58_1,vnf59_1,vnf60_1,vnf61_1,vnf62_2,vnf63_2,vnf6_2,vnf9_2",30
+2026-01-21 12:34:52,A*,64,3,1,5,"vnf10_1,vnf13_1,vnf16_1,vnf19_1,vnf1_1,vnf22_1,vnf25_1,vnf28_1,vnf31_1,vnf34_1,vnf37_1,vnf40_1,vnf43_1,vnf47_1,vnf4_1,vnf7_1",16
+2026-01-21 12:34:52,A*,64,3,1,4,"vnf10_2,vnf16_2,vnf1_2,vnf22_2,vnf28_2,vnf34_2,vnf40_2,vnf4_2",8
+2026-01-21 12:34:52,A*,64,3,1,7,"vnf11_1,vnf14_1,vnf17_1,vnf20_1,vnf23_1,vnf26_1,vnf29_1,vnf2_1,vnf32_1,vnf35_1,vnf38_1,vnf41_1,vnf44_1,vnf46_1,vnf5_1,vnf8_1",16
+2026-01-21 12:34:52,A*,64,3,1,8,"vnf13_2,vnf19_2,vnf25_2,vnf2_2,vnf31_2,vnf37_2,vnf43_2,vnf7_2",8
+2026-01-21 12:34:52,A*,64,3,1,9,"vnf11_2,vnf17_2,vnf23_2,vnf29_2,vnf35_2,vnf41_2,vnf46_2,vnf5_2",8
+2026-01-21 12:34:52,A*,64,3,1,10,"vnf14_2,vnf20_2,vnf26_2,vnf32_2,vnf38_2,vnf44_2,vnf56_1,vnf57_1,vnf8_2",9
+2026-01-21 12:34:52,A*,64,3,1,11,"vnf47_2,vnf56_2,vnf57_2,vnf58_2,vnf59_2,vnf60_2,vnf61_2,vnf62_1,vnf63_1",9
+2026-01-21 12:34:52,A*,64,3,1,3,"vnf48_2,vnf49_2,vnf50_2,vnf51_2,vnf52_2,vnf53_2,vnf54_2,vnf55_2",8
+2026-01-21 12:34:52,ABO,64,3,1,2,"vnf0_0,vnf10_0,vnf11_0,vnf12_0,vnf13_0,vnf14_0,vnf15_0,vnf1_0,vnf2_0,vnf3_0,vnf4_0,vnf5_0,vnf6_0,vnf7_0,vnf8_0,vnf9_0",16
+2026-01-21 12:34:52,ABO,64,3,1,4,"vnf0_1,vnf10_1,vnf12_1,vnf14_1,vnf24_0,vnf28_0,vnf29_0,vnf2_1,vnf30_0,vnf31_0,vnf32_0,vnf33_0,vnf35_1,vnf4_1,vnf6_1,vnf8_1",16
+2026-01-21 12:34:52,ABO,64,3,1,3,"vnf0_2,vnf12_2,vnf24_1,vnf25_2,vnf26_2,vnf27_2,vnf37_0,vnf4_2,vnf8_2",9
+2026-01-21 12:34:52,ABO,64,3,1,6,"vnf11_1,vnf13_1,vnf15_1,vnf1_1,vnf35_2,vnf36_1,vnf38_1,vnf39_1,vnf3_1,vnf40_2,vnf41_1,vnf42_1,vnf43_1,vnf44_1,vnf45_1,vnf46_1,vnf47_1,vnf48_1,vnf49_1,vnf50_1,vnf51_1,vnf52_1,vnf53_1,vnf54_1,vnf55_1,vnf56_1,vnf57_1,vnf58_1,vnf59_1,vnf5_1,vnf60_1,vnf61_1,vnf62_1,vnf63_1,vnf7_1,vnf9_1",36
+2026-01-21 12:34:52,ABO,64,3,1,5,"vnf10_2,vnf13_2,vnf14_2,vnf1_2,vnf2_2,vnf5_2,vnf6_2,vnf9_2",8
+2026-01-21 12:34:52,ABO,64,3,1,7,"vnf11_2,vnf15_2,vnf16_0,vnf17_0,vnf18_0,vnf19_0,vnf20_0,vnf21_0,vnf22_0,vnf23_0,vnf3_2,vnf7_2",12
+2026-01-21 12:34:52,ABO,64,3,1,9,"vnf16_1,vnf17_1,vnf18_1,vnf19_1,vnf20_1,vnf21_1,vnf22_1,vnf23_1,vnf34_0,vnf36_2,vnf37_2,vnf38_2,vnf39_0",13
+2026-01-21 12:34:52,ABO,64,3,1,8,"vnf16_2,vnf17_2,vnf18_2,vnf19_2,vnf20_2,vnf21_2,vnf22_2,vnf23_2",8
+2026-01-21 12:34:52,ABO,64,3,1,11,"vnf24_2,vnf25_1,vnf37_1,vnf40_0,vnf41_0,vnf42_0,vnf43_0,vnf44_0,vnf45_0,vnf46_0,vnf47_0,vnf48_2,vnf49_0,vnf50_0,vnf51_0,vnf52_0,vnf53_0,vnf54_0,vnf55_0,vnf56_0,vnf57_2,vnf58_0,vnf59_0,vnf60_2,vnf61_0,vnf62_0,vnf63_2",27
+2026-01-21 12:34:52,ABO,64,3,1,10,"vnf25_0,vnf26_0,vnf27_0,vnf28_2,vnf29_2,vnf30_2,vnf31_2,vnf32_2,vnf33_2,vnf34_1",10
+2026-01-21 12:34:52,ABO,64,3,1,12,"vnf26_1,vnf27_1,vnf28_1,vnf29_1,vnf30_1,vnf31_1,vnf32_1,vnf33_1,vnf34_2,vnf40_1,vnf46_2,vnf47_2,vnf48_0",13
+2026-01-21 12:34:52,ABO,64,3,1,1,"vnf35_0,vnf36_0,vnf38_0,vnf39_2,vnf41_2,vnf42_2,vnf43_2,vnf44_2,vnf45_2,vnf49_2,vnf50_2,vnf51_2,vnf52_2,vnf53_2,vnf54_2,vnf55_2,vnf56_2,vnf57_0,vnf58_2,vnf59_2,vnf60_0,vnf61_2,vnf62_2,vnf63_0",24
+2026-01-21 12:34:52,FABO,64,3,1,2,"vnf0_0,vnf10_0,vnf11_0,vnf13_0,vnf15_0,vnf16_0,vnf17_0,vnf18_2,vnf21_0,vnf2_0,vnf3_0,vnf4_0,vnf5_0,vnf7_0,vnf9_0",15
+2026-01-21 12:34:52,FABO,64,3,1,4,"vnf0_1,vnf10_1,vnf13_1,vnf16_1,vnf21_1,vnf32_2,vnf33_0,vnf34_0,vnf35_0,vnf38_0,vnf40_2,vnf43_1,vnf4_1,vnf7_1",14
+2026-01-21 12:34:52,FABO,64,3,1,3,"vnf0_2,vnf13_2,vnf21_2,vnf24_2,vnf36_2,vnf37_1,vnf39_2,vnf44_0,vnf7_2",9
+2026-01-21 12:34:52,FABO,64,3,1,5,"vnf10_2,vnf11_2,vnf16_2,vnf17_2,vnf1_0,vnf22_0,vnf2_2,vnf4_2,vnf5_2",9
+2026-01-21 12:34:52,FABO,64,3,1,6,"vnf11_1,vnf15_1,vnf17_1,vnf18_1,vnf1_1,vnf2_1,vnf3_1,vnf42_1,vnf43_2,vnf45_1,vnf46_1,vnf47_1,vnf48_1,vnf49_1,vnf50_1,vnf51_1,vnf52_1,vnf53_1,vnf54_1,vnf55_1,vnf56_1,vnf57_1,vnf58_1,vnf59_1,vnf5_1,vnf60_1,vnf61_1,vnf62_1,vnf63_1,vnf9_1",30
+2026-01-21 12:34:52,FABO,64,3,1,7,"vnf12_0,vnf14_0,vnf15_2,vnf18_0,vnf19_0,vnf1_2,vnf20_0,vnf23_0,vnf3_2,vnf6_0,vnf8_0,vnf9_2",12
+2026-01-21 12:34:52,FABO,64,3,1,9,"vnf12_1,vnf19_1,vnf23_1,vnf25_0,vnf26_0,vnf27_0,vnf28_0,vnf29_0,vnf30_0,vnf31_0,vnf36_0,vnf39_0,vnf41_0,vnf42_2,vnf6_1",15
+2026-01-21 12:34:52,FABO,64,3,1,8,"vnf12_2,vnf19_2,vnf22_1,vnf23_2,vnf25_1,vnf26_1,vnf27_1,vnf28_1,vnf29_1,vnf30_1,vnf31_1,vnf6_2",12
+2026-01-21 12:34:52,FABO,64,3,1,10,"vnf14_1,vnf20_1,vnf24_0,vnf32_0,vnf33_2,vnf34_2,vnf35_2,vnf37_0,vnf38_2,vnf40_0,vnf41_1,vnf8_1",12
+2026-01-21 12:34:52,FABO,64,3,1,11,"vnf22_2,vnf25_2,vnf26_2,vnf27_2,vnf28_2,vnf29_2,vnf30_2,vnf31_2,vnf36_1,vnf37_2,vnf39_1,vnf44_1,vnf45_2,vnf46_0,vnf47_0,vnf48_0,vnf49_0,vnf50_0,vnf51_2,vnf52_0,vnf53_0,vnf54_0,vnf55_0,vnf56_0,vnf57_0,vnf58_0,vnf59_0,vnf60_0,vnf61_2,vnf62_0,vnf63_0,vnf8_2",32
+2026-01-21 12:34:52,FABO,64,3,1,12,"vnf14_2,vnf20_2,vnf24_1,vnf32_1,vnf33_1,vnf34_1,vnf35_1,vnf38_1,vnf40_1,vnf41_2,vnf44_2,vnf51_0",12
+2026-01-21 12:34:52,FABO,64,3,1,1,"vnf42_0,vnf43_0,vnf45_0,vnf46_2,vnf47_2,vnf48_2,vnf49_2,vnf50_2,vnf52_2,vnf53_2,vnf54_2,vnf55_2,vnf56_2,vnf57_2,vnf58_2,vnf59_2,vnf60_2,vnf61_0,vnf62_2,vnf63_2",20
+2026-01-21 12:34:52,Best Fit,64,3,1,6,"vnf0_0,vnf10_0,vnf11_0,vnf12_0,vnf13_0,vnf14_0,vnf15_0,vnf16_0,vnf17_0,vnf18_0,vnf19_0,vnf1_0,vnf20_0,vnf21_0,vnf22_0,vnf23_0,vnf24_0,vnf25_0,vnf26_0,vnf27_0,vnf28_0,vnf29_0,vnf2_0,vnf30_0,vnf31_0,vnf32_0,vnf33_0,vnf34_0,vnf35_0,vnf36_0,vnf37_0,vnf38_0,vnf39_0,vnf3_0,vnf40_0,vnf41_0,vnf42_0,vnf43_0,vnf44_0,vnf45_0,vnf46_0,vnf47_0,vnf48_0,vnf49_0,vnf4_0,vnf50_0,vnf51_0,vnf52_0,vnf53_0,vnf54_0,vnf55_0,vnf56_0,vnf57_0,vnf58_0,vnf59_0,vnf5_0,vnf6_0,vnf7_0,vnf8_0,vnf9_0",60
+2026-01-21 12:34:52,Best Fit,64,3,1,2,"vnf0_1,vnf10_1,vnf11_1,vnf12_1,vnf13_1,vnf14_1,vnf15_1,vnf1_1,vnf2_1,vnf3_1,vnf4_1,vnf5_1,vnf6_1,vnf7_1,vnf8_1,vnf9_1",16
+2026-01-21 12:34:52,Best Fit,64,3,1,1,"vnf0_2,vnf10_2,vnf11_2,vnf12_2,vnf13_2,vnf14_2,vnf15_2,vnf1_2,vnf2_2,vnf3_2,vnf48_1,vnf49_1,vnf4_2,vnf50_1,vnf51_1,vnf52_1,vnf53_1,vnf54_1,vnf55_1,vnf56_1,vnf57_1,vnf58_1,vnf59_1,vnf5_2,vnf6_2,vnf7_2,vnf8_2,vnf9_2",28
+2026-01-21 12:34:52,Best Fit,64,3,1,5,"vnf16_1,vnf17_1,vnf18_1,vnf19_1,vnf20_1,vnf21_1,vnf22_1,vnf23_1,vnf24_1,vnf25_1,vnf26_1,vnf27_1,vnf28_1,vnf29_1,vnf30_1,vnf31_1",16
+2026-01-21 12:34:52,Best Fit,64,3,1,4,"vnf16_2,vnf17_2,vnf18_2,vnf19_2,vnf20_2,vnf21_2,vnf22_2,vnf23_2",8
+2026-01-21 12:34:52,Best Fit,64,3,1,8,"vnf24_2,vnf25_2,vnf26_2,vnf27_2,vnf28_2,vnf29_2,vnf30_2,vnf31_2",8
+2026-01-21 12:34:52,Best Fit,64,3,1,7,"vnf32_1,vnf33_1,vnf34_1,vnf35_1,vnf36_1,vnf37_1,vnf38_1,vnf39_1,vnf40_1,vnf41_1,vnf42_1,vnf43_1,vnf44_1,vnf45_1,vnf46_1,vnf47_1",16
+2026-01-21 12:34:52,Best Fit,64,3,1,9,"vnf32_2,vnf33_2,vnf34_2,vnf35_2,vnf36_2,vnf37_2,vnf38_2,vnf39_2",8
+2026-01-21 12:34:52,Best Fit,64,3,1,10,"vnf40_2,vnf41_2,vnf42_2,vnf43_2,vnf44_2,vnf45_2,vnf46_2,vnf47_2",8
+2026-01-21 12:34:52,Best Fit,64,3,1,3,"vnf48_2,vnf49_2,vnf50_2,vnf51_2,vnf52_2,vnf53_2,vnf54_2,vnf55_2",8
+2026-01-21 12:34:52,Best Fit,64,3,1,11,"vnf56_2,vnf57_2,vnf58_2,vnf59_2",4
+2026-01-21 12:34:52,First Fit,64,3,1,1,"vnf0_0,vnf10_0,vnf11_0,vnf12_0,vnf13_0,vnf14_0,vnf15_0,vnf16_0,vnf17_0,vnf18_0,vnf19_0,vnf1_0,vnf20_0,vnf21_0,vnf22_0,vnf23_0,vnf24_0,vnf25_0,vnf26_0,vnf27_0,vnf28_0,vnf29_0,vnf2_0,vnf30_0,vnf31_0,vnf32_0,vnf3_0,vnf4_0,vnf51_2,vnf52_2,vnf53_2,vnf54_2,vnf55_2,vnf56_2,vnf57_2,vnf58_2,vnf59_2,vnf5_0,vnf60_2,vnf61_2,vnf62_2,vnf6_0,vnf7_0,vnf8_0,vnf9_0",45
+2026-01-21 12:34:52,First Fit,64,3,1,2,"vnf0_1,vnf10_1,vnf11_1,vnf12_1,vnf13_1,vnf14_1,vnf15_1,vnf1_1,vnf2_1,vnf3_1,vnf4_1,vnf5_1,vnf6_1,vnf7_1,vnf8_1,vnf9_1",16
+2026-01-21 12:34:52,First Fit,64,3,1,3,"vnf0_2,vnf1_2,vnf2_2,vnf3_2,vnf4_2,vnf5_2,vnf6_2,vnf7_2",8
+2026-01-21 12:34:52,First Fit,64,3,1,4,"vnf10_2,vnf11_2,vnf12_2,vnf13_2,vnf14_2,vnf15_2,vnf8_2,vnf9_2",8
+2026-01-21 12:34:52,First Fit,64,3,1,5,"vnf16_1,vnf17_1,vnf18_1,vnf19_1,vnf20_1,vnf21_1,vnf22_1,vnf23_1,vnf24_1,vnf25_1,vnf26_1,vnf27_1,vnf28_1,vnf29_1,vnf30_1,vnf31_1",16
+2026-01-21 12:34:52,First Fit,64,3,1,6,"vnf16_2,vnf17_2,vnf18_2,vnf19_2,vnf20_2,vnf21_2,vnf22_2,vnf23_2,vnf24_2,vnf25_2,vnf26_2,vnf27_2,vnf28_2,vnf29_2,vnf30_2,vnf31_2,vnf32_1,vnf33_0,vnf34_0,vnf35_0,vnf36_0,vnf37_0,vnf38_0,vnf39_0,vnf40_0,vnf41_0,vnf42_0,vnf43_0,vnf44_0,vnf45_0,vnf46_0,vnf47_0,vnf48_0,vnf49_0,vnf50_0,vnf51_0,vnf52_0,vnf53_0,vnf54_0,vnf55_0,vnf56_0,vnf57_0,vnf58_0,vnf59_0,vnf60_0,vnf61_0,vnf62_0,vnf63_0",48
+2026-01-21 12:34:52,First Fit,64,3,1,7,"vnf32_2,vnf33_1,vnf34_1,vnf35_1,vnf36_1,vnf37_1,vnf38_1,vnf39_1,vnf40_1,vnf41_1,vnf42_1,vnf43_1,vnf44_1,vnf45_1,vnf46_1",15
+2026-01-21 12:34:52,First Fit,64,3,1,8,"vnf33_2,vnf34_2,vnf35_2,vnf36_2,vnf37_2,vnf38_2,vnf39_2,vnf40_2",8
+2026-01-21 12:34:52,First Fit,64,3,1,9,"vnf41_2,vnf42_2,vnf43_2,vnf44_2,vnf45_2,vnf46_2,vnf47_1,vnf48_1,vnf49_1,vnf50_1",10
+2026-01-21 12:34:52,First Fit,64,3,1,10,"vnf47_2,vnf48_2,vnf49_2,vnf50_2,vnf51_1,vnf52_1,vnf53_1,vnf54_1,vnf55_1,vnf56_1,vnf57_1,vnf58_1",12
+2026-01-21 12:34:52,First Fit,64,3,1,11,"vnf59_1,vnf60_1,vnf61_1,vnf62_1,vnf63_1",5
+2026-01-21 12:34:52,First Fit,64,3,1,12,vnf63_2,1
+2026-01-21 12:34:52,Energy-Aware A*,64,3,1,1,"vnf0_0,vnf10_0,vnf11_0,vnf12_0,vnf13_0,vnf14_0,vnf15_0,vnf16_2,vnf17_2,vnf18_2,vnf19_2,vnf1_0,vnf20_2,vnf21_2,vnf22_2,vnf23_2,vnf24_2,vnf2_0,vnf3_0,vnf4_0,vnf5_0,vnf6_0,vnf7_0,vnf8_0,vnf9_0",25
+2026-01-21 12:34:52,Energy-Aware A*,64,3,1,2,"vnf0_1,vnf10_1,vnf11_1,vnf12_1,vnf13_1,vnf14_1,vnf15_1,vnf1_1,vnf2_1,vnf3_1,vnf4_1,vnf5_1,vnf6_1,vnf7_1,vnf8_1,vnf9_1",16
+2026-01-21 12:34:52,Energy-Aware A*,64,3,1,6,"vnf0_2,vnf10_2,vnf11_2,vnf12_2,vnf13_2,vnf14_2,vnf15_2,vnf16_1,vnf17_1,vnf18_1,vnf19_1,vnf1_2,vnf20_1,vnf21_1,vnf22_1,vnf23_1,vnf24_1,vnf25_1,vnf26_1,vnf27_1,vnf28_1,vnf29_1,vnf2_2,vnf30_1,vnf31_1,vnf32_1,vnf33_1,vnf34_1,vnf35_1,vnf36_2,vnf37_2,vnf38_2,vnf39_2,vnf3_2,vnf40_2,vnf41_2,vnf4_2,vnf5_2,vnf6_2,vnf7_2,vnf8_2,vnf9_2",42
+2026-01-21 12:34:52,Energy-Aware A*,64,3,1,5,"vnf16_0,vnf18_0,vnf20_0,vnf22_0,vnf24_0,vnf25_0,vnf26_0,vnf27_0,vnf28_0,vnf29_0,vnf30_0,vnf31_0,vnf32_0,vnf33_0,vnf34_0,vnf35_0",16
+2026-01-21 12:34:52,Energy-Aware A*,64,3,1,7,"vnf17_0,vnf19_0,vnf21_0,vnf23_0,vnf36_1,vnf37_1,vnf38_1,vnf39_1,vnf40_1,vnf41_1,vnf42_0,vnf43_0,vnf44_0,vnf45_0,vnf46_0,vnf47_0",16
+2026-01-21 12:34:52,Energy-Aware A*,64,3,1,11,"vnf25_2,vnf26_2,vnf27_2,vnf28_2,vnf29_2,vnf30_2,vnf31_2,vnf32_2,vnf33_2,vnf34_2,vnf35_2,vnf42_1,vnf43_1,vnf44_1,vnf45_1,vnf46_1,vnf47_1,vnf48_2,vnf49_2,vnf50_2,vnf51_2,vnf52_2,vnf53_2,vnf54_2,vnf55_2,vnf56_2,vnf57_2,vnf58_2,vnf59_2,vnf60_2,vnf61_2",31
+2026-01-21 12:34:52,Energy-Aware A*,64,3,1,9,"vnf36_0,vnf38_0,vnf40_0,vnf52_0,vnf53_0,vnf54_0,vnf55_0,vnf56_0,vnf57_0,vnf58_0,vnf59_0,vnf60_0,vnf61_0,vnf62_0,vnf63_0",15
+2026-01-21 12:34:52,Energy-Aware A*,64,3,1,10,"vnf37_0,vnf39_0,vnf41_0,vnf62_2,vnf63_2",5
+2026-01-21 12:34:52,Energy-Aware A*,64,3,1,8,"vnf42_2,vnf43_2,vnf44_2,vnf45_2,vnf46_2,vnf47_2,vnf48_0,vnf49_0,vnf50_0,vnf51_0",10
+2026-01-21 12:34:52,Energy-Aware A*,64,3,1,3,"vnf48_1,vnf49_1,vnf50_1,vnf51_1,vnf52_1,vnf53_1,vnf54_1,vnf55_1,vnf56_1,vnf57_1,vnf58_1,vnf59_1,vnf60_1,vnf61_1",14
+2026-01-21 12:34:52,Energy-Aware A*,64,3,1,12,"vnf62_1,vnf63_1",2
+2026-01-21 12:34:52,MILP_Gurobi,64,3,1,6,"vnf10_0,vnf13_0,vnf14_0,vnf16_0,vnf18_0,vnf19_0,vnf22_0,vnf23_0,vnf28_0,vnf29_0,vnf2_0,vnf31_0,vnf32_0,vnf34_0,vnf37_0,vnf39_0,vnf3_0,vnf40_0,vnf41_0,vnf44_0,vnf45_0,vnf47_0,vnf48_0,vnf4_0,vnf50_0,vnf51_0,vnf54_0,vnf58_0,vnf59_0,vnf60_0,vnf61_0,vnf7_0,vnf9_0",33
+2026-01-21 12:34:52,MILP_Gurobi,64,3,1,10,"vnf10_1,vnf14_1,vnf16_1,vnf28_1,vnf2_1,vnf32_1,vnf37_1,vnf3_1,vnf40_1,vnf41_1,vnf44_1,vnf47_2,vnf4_1,vnf51_1,vnf54_1",15
+2026-01-21 12:34:52,MILP_Gurobi,64,3,1,11,"vnf10_2,vnf13_2,vnf14_2,vnf16_2,vnf18_2,vnf19_2,vnf22_2,vnf23_2,vnf28_2,vnf29_2,vnf2_2,vnf31_2,vnf32_2,vnf34_2,vnf37_2,vnf39_2,vnf3_2,vnf40_2,vnf41_2,vnf44_2,vnf45_2,vnf48_2,vnf4_2,vnf50_2,vnf51_2,vnf54_2,vnf58_2,vnf59_2,vnf60_2,vnf61_2,vnf7_2,vnf9_2",32
+2026-01-21 12:34:52,MILP_Gurobi,64,3,1,8,"vnf13_1,vnf18_1,vnf19_1,vnf22_1,vnf23_1,vnf29_1,vnf31_1,vnf34_1,vnf39_1,vnf48_1,vnf58_1,vnf59_1,vnf60_1,vnf61_1,vnf7_1,vnf9_1",16
+2026-01-21 12:34:52,MILP_Gurobi,64,3,1,7,"vnf45_1,vnf47_1,vnf50_1",3
+2026-01-21 12:39:41,A*,128,3,1,6,"vnf0_0,vnf10_0,vnf11_0,vnf12_0,vnf13_0,vnf14_0,vnf15_0,vnf16_0,vnf17_0,vnf18_0,vnf19_0,vnf1_0,vnf20_0,vnf21_0,vnf22_0,vnf23_0,vnf24_0,vnf25_0,vnf26_0,vnf27_0,vnf28_0,vnf29_0,vnf2_0,vnf30_0,vnf31_0,vnf32_0,vnf33_0,vnf34_0,vnf35_0,vnf36_0,vnf37_0,vnf38_0,vnf39_0,vnf3_0,vnf40_0,vnf41_0,vnf42_0,vnf43_0,vnf44_0,vnf45_0,vnf46_0,vnf47_0,vnf48_0,vnf49_0,vnf4_0,vnf50_0,vnf51_0,vnf52_0,vnf53_0,vnf54_0,vnf55_0,vnf56_0,vnf57_0,vnf58_0,vnf59_0,vnf5_0,vnf60_0,vnf61_0,vnf62_0,vnf63_0,vnf6_0,vnf7_0,vnf8_0,vnf9_0",64
+2026-01-21 12:39:41,A*,128,3,1,2,"vnf0_1,vnf12_1,vnf15_1,vnf18_1,vnf21_1,vnf24_1,vnf27_1,vnf30_1,vnf33_1,vnf36_1,vnf39_1,vnf3_1,vnf42_1,vnf45_1,vnf6_1,vnf9_1",16
+2026-01-21 12:39:41,A*,128,3,1,1,"vnf0_2,vnf12_2,vnf15_2,vnf18_2,vnf21_2,vnf24_2,vnf27_2,vnf30_2,vnf33_2,vnf36_2,vnf39_2,vnf3_2,vnf42_2,vnf45_2,vnf48_1,vnf49_1,vnf50_1,vnf51_1,vnf52_1,vnf53_1,vnf54_1,vnf55_1,vnf58_1,vnf59_1,vnf60_1,vnf61_1,vnf62_2,vnf63_2,vnf64_2,vnf65_2,vnf66_2,vnf67_2,vnf68_2,vnf69_2,vnf6_2,vnf70_2,vnf71_2,vnf9_2",38
+2026-01-21 12:39:41,A*,128,3,1,5,"vnf10_1,vnf13_1,vnf16_1,vnf19_1,vnf1_1,vnf22_1,vnf25_1,vnf28_1,vnf31_1,vnf34_1,vnf37_1,vnf40_1,vnf43_1,vnf47_1,vnf4_1,vnf7_1",16
+2026-01-21 12:39:41,A*,128,3,1,4,"vnf10_2,vnf16_2,vnf1_2,vnf22_2,vnf28_2,vnf34_2,vnf40_2,vnf4_2",8
+2026-01-21 12:39:41,A*,128,3,1,7,"vnf11_1,vnf14_1,vnf17_1,vnf20_1,vnf23_1,vnf26_1,vnf29_1,vnf2_1,vnf32_1,vnf35_1,vnf38_1,vnf41_1,vnf44_1,vnf46_1,vnf5_1,vnf8_1",16
+2026-01-21 12:39:41,A*,128,3,1,8,"vnf13_2,vnf19_2,vnf25_2,vnf2_2,vnf31_2,vnf37_2,vnf43_2,vnf7_2",8
+2026-01-21 12:39:41,A*,128,3,1,9,"vnf11_2,vnf17_2,vnf23_2,vnf29_2,vnf35_2,vnf41_2,vnf46_2,vnf5_2",8
+2026-01-21 12:39:41,A*,128,3,1,10,"vnf14_2,vnf20_2,vnf26_2,vnf32_2,vnf38_2,vnf44_2,vnf56_1,vnf57_1,vnf8_2",9
+2026-01-21 12:39:41,A*,128,3,1,11,"vnf47_2,vnf56_2,vnf57_2,vnf58_2,vnf59_2,vnf60_2,vnf61_2,vnf62_1,vnf63_1,vnf64_0,vnf65_0,vnf66_0,vnf67_0,vnf68_0,vnf69_0,vnf70_0,vnf71_0",17
+2026-01-21 12:39:41,A*,128,3,1,3,"vnf48_2,vnf49_2,vnf50_2,vnf51_2,vnf52_2,vnf53_2,vnf54_2,vnf55_2",8
+2026-01-21 12:39:41,A*,128,3,1,12,"vnf64_1,vnf65_1,vnf66_1,vnf67_1,vnf68_1,vnf69_1,vnf70_1,vnf71_1",8
+2026-01-21 12:39:41,ABO,128,3,1,2,"vnf0_0,vnf10_0,vnf11_0,vnf12_0,vnf13_0,vnf14_0,vnf15_0,vnf1_0,vnf2_0,vnf3_0,vnf4_0,vnf5_0,vnf6_0,vnf7_0,vnf8_0,vnf9_0",16
+2026-01-21 12:39:41,ABO,128,3,1,4,"vnf0_1,vnf10_1,vnf12_1,vnf14_1,vnf24_0,vnf28_0,vnf29_0,vnf2_1,vnf30_0,vnf31_0,vnf32_0,vnf33_0,vnf35_1,vnf4_1,vnf6_1,vnf8_1",16
+2026-01-21 12:39:41,ABO,128,3,1,3,"vnf0_2,vnf12_2,vnf24_1,vnf25_2,vnf26_2,vnf27_2,vnf37_0,vnf4_2,vnf8_2",9
+2026-01-21 12:39:41,ABO,128,3,1,6,"vnf11_1,vnf13_1,vnf15_1,vnf1_1,vnf35_2,vnf36_1,vnf38_1,vnf39_1,vnf3_1,vnf40_2,vnf41_1,vnf42_1,vnf43_1,vnf44_1,vnf45_1,vnf46_1,vnf47_1,vnf48_1,vnf49_1,vnf50_1,vnf51_1,vnf52_1,vnf53_1,vnf54_1,vnf55_1,vnf56_1,vnf57_1,vnf58_1,vnf59_1,vnf5_1,vnf60_1,vnf61_1,vnf62_1,vnf63_1,vnf64_1,vnf65_1,vnf66_1,vnf67_1,vnf68_1,vnf69_1,vnf70_1,vnf71_1,vnf72_1,vnf73_1,vnf74_1,vnf75_1,vnf76_1,vnf7_1,vnf9_1",49
+2026-01-21 12:39:41,ABO,128,3,1,5,"vnf10_2,vnf13_2,vnf14_2,vnf1_2,vnf2_2,vnf5_2,vnf6_2,vnf9_2",8
+2026-01-21 12:39:41,ABO,128,3,1,7,"vnf11_2,vnf15_2,vnf16_0,vnf17_0,vnf18_0,vnf19_0,vnf20_0,vnf21_0,vnf22_0,vnf23_0,vnf3_2,vnf7_2",12
+2026-01-21 12:39:41,ABO,128,3,1,9,"vnf16_1,vnf17_1,vnf18_1,vnf19_1,vnf20_1,vnf21_1,vnf22_1,vnf23_1,vnf34_0,vnf36_2,vnf37_2,vnf38_2,vnf39_0",13
+2026-01-21 12:39:41,ABO,128,3,1,8,"vnf16_2,vnf17_2,vnf18_2,vnf19_2,vnf20_2,vnf21_2,vnf22_2,vnf23_2",8
+2026-01-21 12:39:41,ABO,128,3,1,11,"vnf24_2,vnf25_1,vnf37_1,vnf40_0,vnf41_0,vnf42_0,vnf43_0,vnf44_0,vnf45_0,vnf46_0,vnf47_0,vnf48_2,vnf49_0,vnf50_0,vnf51_0,vnf52_0,vnf53_0,vnf54_0,vnf55_0,vnf56_0,vnf57_2,vnf58_0,vnf59_0,vnf60_2,vnf61_0,vnf62_0,vnf63_2,vnf64_0,vnf65_0,vnf66_2,vnf67_0,vnf68_0,vnf69_2,vnf70_0,vnf71_0,vnf72_2,vnf73_0,vnf74_0,vnf75_2,vnf76_0",40
+2026-01-21 12:39:41,ABO,128,3,1,10,"vnf25_0,vnf26_0,vnf27_0,vnf28_2,vnf29_2,vnf30_2,vnf31_2,vnf32_2,vnf33_2,vnf34_1",10
+2026-01-21 12:39:41,ABO,128,3,1,12,"vnf26_1,vnf27_1,vnf28_1,vnf29_1,vnf30_1,vnf31_1,vnf32_1,vnf33_1,vnf34_2,vnf40_1,vnf46_2,vnf47_2,vnf48_0",13
+2026-01-21 12:39:41,ABO,128,3,1,1,"vnf35_0,vnf36_0,vnf38_0,vnf39_2,vnf41_2,vnf42_2,vnf43_2,vnf44_2,vnf45_2,vnf49_2,vnf50_2,vnf51_2,vnf52_2,vnf53_2,vnf54_2,vnf55_2,vnf56_2,vnf57_0,vnf58_2,vnf59_2,vnf60_0,vnf61_2,vnf62_2,vnf63_0,vnf64_2,vnf65_2,vnf66_0,vnf67_2,vnf68_2,vnf69_0,vnf70_2,vnf71_2,vnf72_0,vnf73_2,vnf74_2,vnf75_0,vnf76_2",37
+2026-01-21 12:39:41,FABO,128,3,1,2,"vnf0_0,vnf10_0,vnf11_0,vnf13_0,vnf15_0,vnf16_0,vnf17_0,vnf18_2,vnf21_0,vnf2_0,vnf3_0,vnf4_0,vnf5_0,vnf7_0,vnf9_0",15
+2026-01-21 12:39:41,FABO,128,3,1,4,"vnf0_1,vnf10_1,vnf13_1,vnf16_1,vnf21_1,vnf32_2,vnf33_0,vnf34_0,vnf35_0,vnf38_0,vnf40_2,vnf43_1,vnf4_1,vnf7_1",14
+2026-01-21 12:39:41,FABO,128,3,1,3,"vnf0_2,vnf13_2,vnf21_2,vnf24_2,vnf36_2,vnf37_1,vnf39_2,vnf44_0,vnf7_2",9
+2026-01-21 12:39:41,FABO,128,3,1,5,"vnf10_2,vnf11_2,vnf16_2,vnf17_2,vnf1_0,vnf22_0,vnf2_2,vnf4_2,vnf5_2",9
+2026-01-21 12:39:41,FABO,128,3,1,6,"vnf11_1,vnf15_1,vnf17_1,vnf18_1,vnf1_1,vnf2_1,vnf3_1,vnf42_1,vnf43_2,vnf45_1,vnf46_1,vnf47_1,vnf48_1,vnf49_1,vnf50_1,vnf51_1,vnf52_1,vnf53_1,vnf54_1,vnf55_1,vnf56_1,vnf57_1,vnf58_1,vnf59_1,vnf5_1,vnf60_1,vnf61_1,vnf62_1,vnf63_1,vnf64_1,vnf65_1,vnf66_1,vnf67_1,vnf68_1,vnf69_1,vnf70_1,vnf71_1,vnf72_1,vnf73_1,vnf74_1,vnf75_1,vnf76_1,vnf77_1,vnf9_1",44
+2026-01-21 12:39:41,FABO,128,3,1,7,"vnf12_0,vnf14_0,vnf15_2,vnf18_0,vnf19_0,vnf1_2,vnf20_0,vnf23_0,vnf3_2,vnf6_0,vnf8_0,vnf9_2",12
+2026-01-21 12:39:41,FABO,128,3,1,9,"vnf12_1,vnf19_1,vnf23_1,vnf25_0,vnf26_0,vnf27_0,vnf28_0,vnf29_0,vnf30_0,vnf31_0,vnf36_0,vnf39_0,vnf41_0,vnf42_2,vnf6_1",15
+2026-01-21 12:39:41,FABO,128,3,1,8,"vnf12_2,vnf19_2,vnf22_1,vnf23_2,vnf25_1,vnf26_1,vnf27_1,vnf28_1,vnf29_1,vnf30_1,vnf31_1,vnf6_2",12
+2026-01-21 12:39:41,FABO,128,3,1,10,"vnf14_1,vnf20_1,vnf24_0,vnf32_0,vnf33_2,vnf34_2,vnf35_2,vnf37_0,vnf38_2,vnf40_0,vnf41_1,vnf8_1",12
+2026-01-21 12:39:41,FABO,128,3,1,11,"vnf22_2,vnf25_2,vnf26_2,vnf27_2,vnf28_2,vnf29_2,vnf30_2,vnf31_2,vnf36_1,vnf37_2,vnf39_1,vnf44_1,vnf45_2,vnf46_0,vnf47_0,vnf48_0,vnf49_0,vnf50_0,vnf51_2,vnf52_0,vnf53_0,vnf54_0,vnf55_0,vnf56_0,vnf57_0,vnf58_0,vnf59_0,vnf60_0,vnf61_2,vnf62_0,vnf63_0,vnf64_2,vnf65_0,vnf66_0,vnf67_2,vnf68_0,vnf69_0,vnf70_2,vnf71_0,vnf72_0,vnf73_2,vnf74_0,vnf75_0,vnf76_2,vnf77_0,vnf8_2",46
+2026-01-21 12:39:41,FABO,128,3,1,12,"vnf14_2,vnf20_2,vnf24_1,vnf32_1,vnf33_1,vnf34_1,vnf35_1,vnf38_1,vnf40_1,vnf41_2,vnf44_2,vnf51_0",12
+2026-01-21 12:39:41,FABO,128,3,1,1,"vnf42_0,vnf43_0,vnf45_0,vnf46_2,vnf47_2,vnf48_2,vnf49_2,vnf50_2,vnf52_2,vnf53_2,vnf54_2,vnf55_2,vnf56_2,vnf57_2,vnf58_2,vnf59_2,vnf60_2,vnf61_0,vnf62_2,vnf63_2,vnf64_0,vnf65_2,vnf66_2,vnf67_0,vnf68_2,vnf69_2,vnf70_0,vnf71_2,vnf72_2,vnf73_0,vnf74_2,vnf75_2,vnf76_0,vnf77_2",34
+2026-01-21 12:39:41,Best Fit,128,3,1,6,"vnf0_0,vnf10_0,vnf11_0,vnf12_0,vnf13_0,vnf14_0,vnf15_0,vnf16_0,vnf17_0,vnf18_0,vnf19_0,vnf1_0,vnf20_0,vnf21_0,vnf22_0,vnf23_0,vnf24_0,vnf25_0,vnf26_0,vnf27_0,vnf28_0,vnf29_0,vnf2_0,vnf30_0,vnf31_0,vnf32_0,vnf33_0,vnf34_0,vnf35_0,vnf36_0,vnf37_0,vnf38_0,vnf39_0,vnf3_0,vnf40_0,vnf41_0,vnf42_0,vnf43_0,vnf44_0,vnf45_0,vnf46_0,vnf47_0,vnf48_0,vnf49_0,vnf4_0,vnf50_0,vnf51_0,vnf52_0,vnf53_0,vnf54_0,vnf55_0,vnf56_0,vnf57_0,vnf58_0,vnf59_0,vnf5_0,vnf6_0,vnf7_0,vnf8_0,vnf9_0",60
+2026-01-21 12:39:41,Best Fit,128,3,1,2,"vnf0_1,vnf10_1,vnf11_1,vnf12_1,vnf13_1,vnf14_1,vnf15_1,vnf1_1,vnf2_1,vnf3_1,vnf4_1,vnf5_1,vnf6_1,vnf7_1,vnf8_1,vnf9_1",16
+2026-01-21 12:39:41,Best Fit,128,3,1,1,"vnf0_2,vnf10_2,vnf11_2,vnf12_2,vnf13_2,vnf14_2,vnf15_2,vnf1_2,vnf2_2,vnf3_2,vnf48_1,vnf49_1,vnf4_2,vnf50_1,vnf51_1,vnf52_1,vnf53_1,vnf54_1,vnf55_1,vnf56_1,vnf57_1,vnf58_1,vnf59_1,vnf5_2,vnf6_2,vnf7_2,vnf8_2,vnf9_2",28
+2026-01-21 12:39:41,Best Fit,128,3,1,5,"vnf16_1,vnf17_1,vnf18_1,vnf19_1,vnf20_1,vnf21_1,vnf22_1,vnf23_1,vnf24_1,vnf25_1,vnf26_1,vnf27_1,vnf28_1,vnf29_1,vnf30_1,vnf31_1",16
+2026-01-21 12:39:41,Best Fit,128,3,1,4,"vnf16_2,vnf17_2,vnf18_2,vnf19_2,vnf20_2,vnf21_2,vnf22_2,vnf23_2",8
+2026-01-21 12:39:41,Best Fit,128,3,1,8,"vnf24_2,vnf25_2,vnf26_2,vnf27_2,vnf28_2,vnf29_2,vnf30_2,vnf31_2",8
+2026-01-21 12:39:41,Best Fit,128,3,1,7,"vnf32_1,vnf33_1,vnf34_1,vnf35_1,vnf36_1,vnf37_1,vnf38_1,vnf39_1,vnf40_1,vnf41_1,vnf42_1,vnf43_1,vnf44_1,vnf45_1,vnf46_1,vnf47_1",16
+2026-01-21 12:39:41,Best Fit,128,3,1,9,"vnf32_2,vnf33_2,vnf34_2,vnf35_2,vnf36_2,vnf37_2,vnf38_2,vnf39_2",8
+2026-01-21 12:39:41,Best Fit,128,3,1,10,"vnf40_2,vnf41_2,vnf42_2,vnf43_2,vnf44_2,vnf45_2,vnf46_2,vnf47_2",8
+2026-01-21 12:39:41,Best Fit,128,3,1,3,"vnf48_2,vnf49_2,vnf50_2,vnf51_2,vnf52_2,vnf53_2,vnf54_2,vnf55_2",8
+2026-01-21 12:39:41,Best Fit,128,3,1,11,"vnf56_2,vnf57_2,vnf58_2,vnf59_2",4
+2026-01-21 12:39:41,First Fit,128,3,1,1,"vnf0_0,vnf10_0,vnf11_0,vnf12_0,vnf13_0,vnf14_0,vnf15_0,vnf16_0,vnf17_0,vnf18_0,vnf19_0,vnf1_0,vnf20_0,vnf21_0,vnf22_0,vnf23_0,vnf24_0,vnf25_0,vnf26_0,vnf27_0,vnf28_0,vnf29_0,vnf2_0,vnf30_0,vnf31_0,vnf32_0,vnf3_0,vnf4_0,vnf51_2,vnf52_2,vnf53_2,vnf54_2,vnf55_2,vnf56_2,vnf57_2,vnf58_2,vnf59_2,vnf5_0,vnf60_2,vnf61_2,vnf62_2,vnf6_0,vnf7_0,vnf8_0,vnf9_0",45
+2026-01-21 12:39:41,First Fit,128,3,1,2,"vnf0_1,vnf10_1,vnf11_1,vnf12_1,vnf13_1,vnf14_1,vnf15_1,vnf1_1,vnf2_1,vnf3_1,vnf4_1,vnf5_1,vnf6_1,vnf7_1,vnf8_1,vnf9_1",16
+2026-01-21 12:39:41,First Fit,128,3,1,3,"vnf0_2,vnf1_2,vnf2_2,vnf3_2,vnf4_2,vnf5_2,vnf6_2,vnf7_2",8
+2026-01-21 12:39:41,First Fit,128,3,1,4,"vnf10_2,vnf11_2,vnf12_2,vnf13_2,vnf14_2,vnf15_2,vnf8_2,vnf9_2",8
+2026-01-21 12:39:41,First Fit,128,3,1,5,"vnf16_1,vnf17_1,vnf18_1,vnf19_1,vnf20_1,vnf21_1,vnf22_1,vnf23_1,vnf24_1,vnf25_1,vnf26_1,vnf27_1,vnf28_1,vnf29_1,vnf30_1,vnf31_1",16
+2026-01-21 12:39:41,First Fit,128,3,1,6,"vnf16_2,vnf17_2,vnf18_2,vnf19_2,vnf20_2,vnf21_2,vnf22_2,vnf23_2,vnf24_2,vnf25_2,vnf26_2,vnf27_2,vnf28_2,vnf29_2,vnf30_2,vnf31_2,vnf32_1,vnf33_0,vnf34_0,vnf35_0,vnf36_0,vnf37_0,vnf38_0,vnf39_0,vnf40_0,vnf41_0,vnf42_0,vnf43_0,vnf44_0,vnf45_0,vnf46_0,vnf47_0,vnf48_0,vnf49_0,vnf50_0,vnf51_0,vnf52_0,vnf53_0,vnf54_0,vnf55_0,vnf56_0,vnf57_0,vnf58_0,vnf59_0,vnf60_0,vnf61_0,vnf62_0,vnf63_0",48
+2026-01-21 12:39:41,First Fit,128,3,1,7,"vnf32_2,vnf33_1,vnf34_1,vnf35_1,vnf36_1,vnf37_1,vnf38_1,vnf39_1,vnf40_1,vnf41_1,vnf42_1,vnf43_1,vnf44_1,vnf45_1,vnf46_1",15
+2026-01-21 12:39:41,First Fit,128,3,1,8,"vnf33_2,vnf34_2,vnf35_2,vnf36_2,vnf37_2,vnf38_2,vnf39_2,vnf40_2",8
+2026-01-21 12:39:41,First Fit,128,3,1,9,"vnf41_2,vnf42_2,vnf43_2,vnf44_2,vnf45_2,vnf46_2,vnf47_1,vnf48_1,vnf49_1,vnf50_1",10
+2026-01-21 12:39:41,First Fit,128,3,1,10,"vnf47_2,vnf48_2,vnf49_2,vnf50_2,vnf51_1,vnf52_1,vnf53_1,vnf54_1,vnf55_1,vnf56_1,vnf57_1,vnf58_1",12
+2026-01-21 12:39:41,First Fit,128,3,1,11,"vnf59_1,vnf60_1,vnf61_1,vnf62_1,vnf63_1",5
+2026-01-21 12:39:41,First Fit,128,3,1,12,vnf63_2,1
+2026-01-21 12:39:41,Energy-Aware A*,128,3,1,1,"vnf0_0,vnf10_0,vnf11_0,vnf12_0,vnf13_0,vnf14_0,vnf15_0,vnf16_2,vnf17_2,vnf18_2,vnf19_2,vnf1_0,vnf20_2,vnf21_2,vnf22_2,vnf23_2,vnf24_2,vnf2_0,vnf3_0,vnf4_0,vnf5_0,vnf67_1,vnf68_1,vnf69_1,vnf6_0,vnf70_1,vnf72_1,vnf73_1,vnf74_1,vnf7_0,vnf8_0,vnf9_0",32
+2026-01-21 12:39:41,Energy-Aware A*,128,3,1,2,"vnf0_1,vnf10_1,vnf11_1,vnf12_1,vnf13_1,vnf14_1,vnf15_1,vnf1_1,vnf2_1,vnf3_1,vnf4_1,vnf5_1,vnf6_1,vnf7_1,vnf8_1,vnf9_1",16
+2026-01-21 12:39:41,Energy-Aware A*,128,3,1,6,"vnf0_2,vnf10_2,vnf11_2,vnf12_2,vnf13_2,vnf14_2,vnf15_2,vnf16_1,vnf17_1,vnf18_1,vnf19_1,vnf1_2,vnf20_1,vnf21_1,vnf22_1,vnf23_1,vnf24_1,vnf25_1,vnf26_1,vnf27_1,vnf28_1,vnf29_1,vnf2_2,vnf30_1,vnf31_1,vnf32_1,vnf33_1,vnf34_1,vnf35_1,vnf36_2,vnf37_2,vnf38_2,vnf39_2,vnf3_2,vnf40_2,vnf41_2,vnf4_2,vnf5_2,vnf6_2,vnf7_2,vnf8_2,vnf9_2",42
+2026-01-21 12:39:41,Energy-Aware A*,128,3,1,5,"vnf16_0,vnf18_0,vnf20_0,vnf22_0,vnf24_0,vnf25_0,vnf26_0,vnf27_0,vnf28_0,vnf29_0,vnf30_0,vnf31_0,vnf32_0,vnf33_0,vnf34_0,vnf35_0",16
+2026-01-21 12:39:41,Energy-Aware A*,128,3,1,7,"vnf17_0,vnf19_0,vnf21_0,vnf23_0,vnf36_1,vnf37_1,vnf38_1,vnf39_1,vnf40_1,vnf41_1,vnf42_0,vnf43_0,vnf44_0,vnf45_0,vnf46_0,vnf47_0",16
+2026-01-21 12:39:41,Energy-Aware A*,128,3,1,11,"vnf25_2,vnf26_2,vnf27_2,vnf28_2,vnf29_2,vnf30_2,vnf31_2,vnf32_2,vnf33_2,vnf34_2,vnf35_2,vnf42_1,vnf43_1,vnf44_1,vnf45_1,vnf46_1,vnf47_1,vnf48_2,vnf49_2,vnf50_2,vnf51_2,vnf52_2,vnf53_2,vnf54_2,vnf55_2,vnf56_2,vnf57_2,vnf58_2,vnf59_2,vnf60_2,vnf61_2,vnf71_2,vnf72_2,vnf73_2,vnf74_2",35
+2026-01-21 12:39:41,Energy-Aware A*,128,3,1,9,"vnf36_0,vnf38_0,vnf40_0,vnf52_0,vnf53_0,vnf54_0,vnf55_0,vnf56_0,vnf57_0,vnf58_0,vnf59_0,vnf60_0,vnf61_0,vnf62_0,vnf63_0,vnf64_0",16
+2026-01-21 12:39:41,Energy-Aware A*,128,3,1,10,"vnf37_0,vnf39_0,vnf41_0,vnf62_2,vnf63_2,vnf64_2,vnf65_0,vnf66_0,vnf67_0,vnf68_0,vnf69_0,vnf70_0,vnf71_1",13
+2026-01-21 12:39:41,Energy-Aware A*,128,3,1,8,"vnf42_2,vnf43_2,vnf44_2,vnf45_2,vnf46_2,vnf47_2,vnf48_0,vnf49_0,vnf50_0,vnf51_0",10
+2026-01-21 12:39:41,Energy-Aware A*,128,3,1,3,"vnf48_1,vnf49_1,vnf50_1,vnf51_1,vnf52_1,vnf53_1,vnf54_1,vnf55_1,vnf56_1,vnf57_1,vnf58_1,vnf59_1,vnf60_1,vnf61_1,vnf65_1,vnf66_1",16
+2026-01-21 12:39:41,Energy-Aware A*,128,3,1,12,"vnf62_1,vnf63_1,vnf64_1,vnf65_2,vnf66_2,vnf67_2,vnf68_2,vnf69_2,vnf70_2,vnf71_0",10
+2026-01-21 12:39:41,Energy-Aware A*,128,3,1,4,"vnf72_0,vnf73_0,vnf74_0",3
+2026-01-21 12:39:41,MILP_Gurobi,128,3,1,6,"vnf104_0,vnf112_0,vnf117_0,vnf120_0,vnf124_0,vnf12_0,vnf14_0,vnf18_0,vnf1_0,vnf24_0,vnf25_0,vnf28_0,vnf2_0,vnf30_0,vnf34_0,vnf3_0,vnf45_0,vnf48_0,vnf57_0,vnf61_0,vnf64_0,vnf72_0,vnf75_0,vnf7_0,vnf81_0,vnf82_0,vnf84_0,vnf85_0,vnf89_0,vnf90_0,vnf93_0,vnf96_0,vnf98_0",33
+2026-01-21 12:39:41,MILP_Gurobi,128,3,1,8,"vnf104_1,vnf120_1,vnf14_1,vnf1_1,vnf25_1,vnf28_1,vnf30_1,vnf48_1,vnf61_1,vnf72_1,vnf82_1,vnf84_1,vnf85_1,vnf90_1,vnf93_1,vnf98_1",16
+2026-01-21 12:39:41,MILP_Gurobi,128,3,1,11,"vnf104_2,vnf112_2,vnf117_2,vnf120_2,vnf124_2,vnf12_2,vnf14_2,vnf18_2,vnf1_2,vnf24_2,vnf25_2,vnf28_2,vnf2_2,vnf30_2,vnf34_2,vnf3_2,vnf48_2,vnf57_2,vnf61_2,vnf64_2,vnf72_2,vnf75_2,vnf7_2,vnf81_2,vnf82_2,vnf84_2,vnf85_2,vnf89_2,vnf90_2,vnf93_2,vnf96_2,vnf98_2",32
+2026-01-21 12:39:41,MILP_Gurobi,128,3,1,10,"vnf117_1,vnf124_1,vnf12_1,vnf18_1,vnf24_1,vnf2_1,vnf34_1,vnf45_2,vnf57_1,vnf64_1,vnf75_1,vnf7_1,vnf81_1,vnf89_1,vnf96_1",15
+2026-01-21 12:39:41,MILP_Gurobi,128,3,1,7,"vnf112_1,vnf3_1,vnf45_1",3
+2026-01-21 12:44:38,A*,4,4,1,6,"vnf0_0,vnf1_0,vnf2_0,vnf3_0",4
+2026-01-21 12:44:38,A*,4,4,1,2,"vnf0_1,vnf1_3",2
+2026-01-21 12:44:38,A*,4,4,1,1,vnf0_2,1
+2026-01-21 12:44:38,A*,4,4,1,3,"vnf0_3,vnf3_3",2
+2026-01-21 12:44:38,A*,4,4,1,5,"vnf1_1,vnf3_1",2
+2026-01-21 12:44:38,A*,4,4,1,4,"vnf1_2,vnf3_2",2
+2026-01-21 12:44:38,A*,4,4,1,7,vnf2_1,1
+2026-01-21 12:44:38,A*,4,4,1,8,vnf2_2,1
+2026-01-21 12:44:38,A*,4,4,1,11,vnf2_3,1
+2026-01-21 12:44:38,ABO,4,4,1,2,"vnf0_0,vnf1_0,vnf2_0,vnf3_0",4
+2026-01-21 12:44:38,ABO,4,4,1,4,"vnf0_1,vnf1_3,vnf2_1",3
+2026-01-21 12:44:38,ABO,4,4,1,3,vnf0_2,1
+2026-01-21 12:44:38,ABO,4,4,1,11,vnf0_3,1
+2026-01-21 12:44:38,ABO,4,4,1,6,"vnf1_1,vnf2_3,vnf3_1",3
+2026-01-21 12:44:38,ABO,4,4,1,5,"vnf1_2,vnf2_2",2
+2026-01-21 12:44:38,ABO,4,4,1,7,vnf3_2,1
+2026-01-21 12:44:38,ABO,4,4,1,9,vnf3_3,1
+2026-01-21 12:44:38,FABO,4,4,1,2,"vnf0_0,vnf2_0,vnf3_0",3
+2026-01-21 12:44:38,FABO,4,4,1,4,vnf0_1,1
+2026-01-21 12:44:38,FABO,4,4,1,3,vnf0_2,1
+2026-01-21 12:44:38,FABO,4,4,1,11,vnf0_3,1
+2026-01-21 12:44:38,FABO,4,4,1,5,"vnf1_0,vnf2_2",2
+2026-01-21 12:44:38,FABO,4,4,1,6,"vnf1_1,vnf2_1,vnf3_1",3
+2026-01-21 12:44:38,FABO,4,4,1,7,"vnf1_2,vnf3_2",2
+2026-01-21 12:44:38,FABO,4,4,1,9,vnf1_3,1
+2026-01-21 12:44:38,FABO,4,4,1,8,vnf2_3,1
+2026-01-21 12:44:38,FABO,4,4,1,10,vnf3_3,1
+2026-01-21 12:44:38,Best Fit,4,4,1,6,"vnf0_0,vnf1_0,vnf2_0,vnf3_0",4
+2026-01-21 12:44:38,Best Fit,4,4,1,2,"vnf0_1,vnf1_1,vnf2_1,vnf3_1",4
+2026-01-21 12:44:38,Best Fit,4,4,1,1,"vnf0_2,vnf1_2,vnf2_2,vnf3_2",4
+2026-01-21 12:44:38,Best Fit,4,4,1,3,"vnf0_3,vnf1_3,vnf2_3,vnf3_3",4
+2026-01-21 12:44:38,First Fit,4,4,1,1,"vnf0_0,vnf1_0,vnf2_0,vnf3_0",4
+2026-01-21 12:44:38,First Fit,4,4,1,2,"vnf0_1,vnf1_1,vnf2_1,vnf3_1",4
+2026-01-21 12:44:38,First Fit,4,4,1,3,"vnf0_2,vnf1_2,vnf2_2,vnf3_2",4
+2026-01-21 12:44:38,First Fit,4,4,1,4,"vnf0_3,vnf1_3,vnf2_3,vnf3_3",4
+2026-01-21 12:44:38,Energy-Aware A*,4,4,1,5,"vnf0_0,vnf1_0,vnf2_0,vnf3_0",4
+2026-01-21 12:44:38,Energy-Aware A*,4,4,1,11,"vnf0_1,vnf1_1,vnf2_1,vnf3_1",4
+2026-01-21 12:44:38,Energy-Aware A*,4,4,1,8,"vnf0_2,vnf1_2,vnf2_2,vnf3_2",4
+2026-01-21 12:44:38,Energy-Aware A*,4,4,1,6,"vnf0_3,vnf1_3,vnf2_3,vnf3_3",4
+2026-01-21 12:44:38,MILP_Gurobi,4,4,1,6,"vnf0_0,vnf1_0,vnf2_0,vnf3_0",4
+2026-01-21 12:44:38,MILP_Gurobi,4,4,1,7,"vnf0_1,vnf1_1,vnf2_1,vnf3_1",4
+2026-01-21 12:44:38,MILP_Gurobi,4,4,1,10,"vnf0_2,vnf1_2,vnf2_2,vnf3_2",4
+2026-01-21 12:44:38,MILP_Gurobi,4,4,1,11,"vnf0_3,vnf1_3,vnf2_3,vnf3_3",4
+2026-01-21 12:46:43,A*,8,4,1,6,"vnf0_0,vnf1_0,vnf2_0,vnf3_0,vnf4_0,vnf5_0,vnf6_0,vnf7_0",8
+2026-01-21 12:46:43,A*,8,4,1,2,"vnf0_1,vnf1_3,vnf7_3",3
+2026-01-21 12:46:43,A*,8,4,1,1,vnf0_2,1
+2026-01-21 12:46:43,A*,8,4,1,3,"vnf0_3,vnf3_3",2
+2026-01-21 12:46:43,A*,8,4,1,5,"vnf1_1,vnf3_1,vnf5_1,vnf7_1",4
+2026-01-21 12:46:43,A*,8,4,1,4,"vnf1_2,vnf3_2,vnf7_2",3
+2026-01-21 12:46:43,A*,8,4,1,7,"vnf2_1,vnf4_1,vnf6_1",3
+2026-01-21 12:46:43,A*,8,4,1,8,"vnf2_2,vnf5_2",2
+2026-01-21 12:46:43,A*,8,4,1,11,"vnf2_3,vnf5_3",2
+2026-01-21 12:46:43,A*,8,4,1,9,"vnf4_2,vnf6_2",2
+2026-01-21 12:46:43,A*,8,4,1,10,"vnf4_3,vnf6_3",2
+2026-01-21 12:46:43,ABO,8,4,1,2,"vnf0_0,vnf1_0,vnf2_0,vnf3_0,vnf4_0,vnf5_0,vnf6_0,vnf7_0",8
+2026-01-21 12:46:43,ABO,8,4,1,4,"vnf0_1,vnf1_3,vnf2_1,vnf4_1,vnf6_1",5
+2026-01-21 12:46:43,ABO,8,4,1,3,"vnf0_2,vnf4_2",2
+2026-01-21 12:46:43,ABO,8,4,1,11,vnf0_3,1
+2026-01-21 12:46:43,ABO,8,4,1,6,"vnf1_1,vnf2_3,vnf3_1,vnf5_1,vnf7_1",5
+2026-01-21 12:46:43,ABO,8,4,1,5,"vnf1_2,vnf2_2,vnf5_2,vnf6_2",4
+2026-01-21 12:46:43,ABO,8,4,1,7,"vnf3_2,vnf7_2",2
+2026-01-21 12:46:43,ABO,8,4,1,9,"vnf3_3,vnf7_3",2
+2026-01-21 12:46:43,ABO,8,4,1,12,vnf4_3,1
+2026-01-21 12:46:43,ABO,8,4,1,8,"vnf5_3,vnf6_3",2
+2026-01-21 12:46:43,FABO,8,4,1,2,"vnf0_0,vnf2_0,vnf3_0,vnf4_0,vnf5_0,vnf6_2,vnf7_2",7
+2026-01-21 12:46:43,FABO,8,4,1,4,"vnf0_1,vnf4_1,vnf5_3",3
+2026-01-21 12:46:43,FABO,8,4,1,3,vnf0_2,1
+2026-01-21 12:46:43,FABO,8,4,1,11,vnf0_3,1
+2026-01-21 12:46:43,FABO,8,4,1,5,"vnf1_0,vnf2_2,vnf4_2,vnf5_2",4
+2026-01-21 12:46:43,FABO,8,4,1,6,"vnf1_1,vnf2_1,vnf3_1,vnf5_1,vnf6_1,vnf7_1",6
+2026-01-21 12:46:43,FABO,8,4,1,7,"vnf1_2,vnf3_2,vnf6_0,vnf7_0",4
+2026-01-21 12:46:43,FABO,8,4,1,9,vnf1_3,1
+2026-01-21 12:46:43,FABO,8,4,1,8,"vnf2_3,vnf4_3",2
+2026-01-21 12:46:43,FABO,8,4,1,10,vnf3_3,1
+2026-01-21 12:46:43,FABO,8,4,1,1,"vnf6_3,vnf7_3",2
+2026-01-21 12:46:43,Best Fit,8,4,1,6,"vnf0_0,vnf1_0,vnf2_0,vnf3_0,vnf4_0,vnf5_0,vnf6_0,vnf7_0",8
+2026-01-21 12:46:43,Best Fit,8,4,1,2,"vnf0_1,vnf1_1,vnf2_1,vnf3_1,vnf4_1,vnf5_1,vnf6_1,vnf7_1",8
+2026-01-21 12:46:43,Best Fit,8,4,1,1,"vnf0_2,vnf1_2,vnf2_2,vnf3_2,vnf4_2,vnf5_2,vnf6_2,vnf7_2",8
+2026-01-21 12:46:43,Best Fit,8,4,1,3,"vnf0_3,vnf1_3,vnf2_3,vnf3_3,vnf4_3",5
+2026-01-21 12:46:43,Best Fit,8,4,1,4,"vnf5_3,vnf6_3,vnf7_3",3
+2026-01-21 12:46:43,First Fit,8,4,1,1,"vnf0_0,vnf1_0,vnf2_0,vnf3_0,vnf4_0,vnf5_0,vnf6_0,vnf7_0",8
+2026-01-21 12:46:43,First Fit,8,4,1,2,"vnf0_1,vnf1_1,vnf2_1,vnf3_1,vnf4_1,vnf5_1,vnf6_1,vnf7_1",8
+2026-01-21 12:46:43,First Fit,8,4,1,3,"vnf0_2,vnf1_2,vnf2_2,vnf3_2,vnf4_2,vnf5_2,vnf6_2,vnf7_2",8
+2026-01-21 12:46:43,First Fit,8,4,1,4,"vnf0_3,vnf1_3,vnf2_3,vnf3_3,vnf4_3",5
+2026-01-21 12:46:43,First Fit,8,4,1,5,"vnf5_3,vnf6_3,vnf7_3",3
+2026-01-21 12:46:43,Energy-Aware A*,8,4,1,5,"vnf0_0,vnf1_0,vnf2_0,vnf3_0,vnf4_0,vnf5_0,vnf6_0,vnf7_0",8
+2026-01-21 12:46:43,Energy-Aware A*,8,4,1,11,"vnf0_1,vnf1_1,vnf2_1,vnf3_1,vnf4_1,vnf5_1,vnf6_1,vnf7_1",8
+2026-01-21 12:46:43,Energy-Aware A*,8,4,1,8,"vnf0_2,vnf1_2,vnf2_2,vnf3_2,vnf4_2,vnf5_2,vnf6_2,vnf7_2",8
+2026-01-21 12:46:43,Energy-Aware A*,8,4,1,6,"vnf0_3,vnf1_3,vnf2_3,vnf3_3,vnf4_3,vnf5_3,vnf6_3,vnf7_3",8
+2026-01-21 12:46:43,MILP_Gurobi,8,4,1,6,"vnf0_0,vnf1_0,vnf2_0,vnf3_0,vnf4_0,vnf5_0,vnf6_0,vnf7_0",8
+2026-01-21 12:46:43,MILP_Gurobi,8,4,1,7,"vnf0_1,vnf1_1,vnf2_1,vnf3_1,vnf4_1,vnf5_1,vnf6_1,vnf7_1",8
+2026-01-21 12:46:43,MILP_Gurobi,8,4,1,8,"vnf0_2,vnf1_2,vnf2_2,vnf3_2,vnf4_2,vnf5_2,vnf6_2,vnf7_2",8
+2026-01-21 12:46:43,MILP_Gurobi,8,4,1,11,"vnf0_3,vnf1_3,vnf2_3,vnf3_3,vnf4_3,vnf5_3,vnf6_3,vnf7_3",8
+2026-01-21 12:50:33,A*,16,4,1,6,"vnf0_0,vnf10_0,vnf11_0,vnf12_0,vnf13_0,vnf14_0,vnf15_0,vnf1_0,vnf2_0,vnf3_0,vnf4_0,vnf5_0,vnf6_0,vnf7_0,vnf8_0,vnf9_0",16
+2026-01-21 12:50:33,A*,16,4,1,2,"vnf0_1,vnf11_3,vnf1_3,vnf7_3",4
+2026-01-21 12:50:33,A*,16,4,1,1,vnf0_2,1
+2026-01-21 12:50:33,A*,16,4,1,3,"vnf0_3,vnf15_3,vnf3_3,vnf9_3",4
+2026-01-21 12:50:33,A*,16,4,1,5,"vnf11_1,vnf13_1,vnf15_1,vnf1_1,vnf3_1,vnf5_1,vnf7_1,vnf9_1",8
+2026-01-21 12:50:33,A*,16,4,1,4,"vnf11_2,vnf15_2,vnf1_2,vnf3_2,vnf7_2,vnf9_2",6
+2026-01-21 12:50:33,A*,16,4,1,7,"vnf10_1,vnf12_1,vnf14_1,vnf2_1,vnf4_1,vnf6_1,vnf8_1",7
+2026-01-21 12:50:33,A*,16,4,1,8,"vnf10_3,vnf13_2,vnf2_2,vnf5_2,vnf8_2",5
+2026-01-21 12:50:33,A*,16,4,1,11,"vnf13_3,vnf2_3,vnf5_3,vnf8_3",4
+2026-01-21 12:50:33,A*,16,4,1,9,"vnf10_2,vnf12_2,vnf14_2,vnf4_2,vnf6_2",5
+2026-01-21 12:50:33,A*,16,4,1,10,"vnf12_3,vnf14_3,vnf4_3,vnf6_3",4
+2026-01-21 12:50:33,ABO,16,4,1,2,"vnf0_0,vnf10_0,vnf11_0,vnf12_0,vnf13_0,vnf14_0,vnf1_0,vnf2_0,vnf3_0,vnf4_0,vnf5_0,vnf6_0,vnf7_0,vnf8_0,vnf9_0",15
+2026-01-21 12:50:33,ABO,16,4,1,4,"vnf0_1,vnf10_1,vnf12_1,vnf1_3,vnf2_1,vnf4_1,vnf6_1,vnf8_1",8
+2026-01-21 12:50:33,ABO,16,4,1,3,"vnf0_2,vnf12_2,vnf4_2,vnf8_2",4
+2026-01-21 12:50:33,ABO,16,4,1,11,"vnf0_3,vnf8_3",2
+2026-01-21 12:50:33,ABO,16,4,1,6,"vnf11_1,vnf13_1,vnf14_1,vnf1_1,vnf2_3,vnf3_1,vnf5_1,vnf7_1,vnf9_1",9
+2026-01-21 12:50:33,ABO,16,4,1,5,"vnf10_2,vnf13_2,vnf15_0,vnf1_2,vnf2_2,vnf5_2,vnf6_2,vnf9_2",8
+2026-01-21 12:50:33,ABO,16,4,1,7,"vnf11_2,vnf14_2,vnf15_3,vnf3_2,vnf7_2",5
+2026-01-21 12:50:33,ABO,16,4,1,9,"vnf11_3,vnf14_3,vnf15_2,vnf3_3,vnf7_3",5
+2026-01-21 12:50:33,ABO,16,4,1,12,"vnf12_3,vnf4_3",2
+2026-01-21 12:50:33,ABO,16,4,1,8,"vnf10_3,vnf13_3,vnf15_1,vnf5_3,vnf6_3,vnf9_3",6
+2026-01-21 12:50:33,FABO,16,4,1,2,"vnf0_0,vnf10_2,vnf2_0,vnf3_0,vnf4_0,vnf5_0,vnf6_2,vnf7_2",8
+2026-01-21 12:50:33,FABO,16,4,1,4,"vnf0_1,vnf12_1,vnf15_1,vnf4_1,vnf5_3",5
+2026-01-21 12:50:33,FABO,16,4,1,3,"vnf0_2,vnf11_3,vnf12_2,vnf14_3,vnf15_2",5
+2026-01-21 12:50:33,FABO,16,4,1,11,"vnf0_3,vnf11_2,vnf13_2,vnf14_2,vnf8_3",5
+2026-01-21 12:50:33,FABO,16,4,1,5,"vnf10_0,vnf11_0,vnf12_0,vnf13_0,vnf14_0,vnf15_0,vnf1_0,vnf2_2,vnf4_2,vnf5_2,vnf9_0",11
+2026-01-21 12:50:33,FABO,16,4,1,6,"vnf10_1,vnf1_1,vnf2_1,vnf3_1,vnf5_1,vnf6_1,vnf7_1,vnf9_1",8
+2026-01-21 12:50:33,FABO,16,4,1,7,"vnf1_2,vnf3_2,vnf6_0,vnf7_0,vnf8_0,vnf9_2",6
+2026-01-21 12:50:33,FABO,16,4,1,9,"vnf1_3,vnf8_1",2
+2026-01-21 12:50:33,FABO,16,4,1,8,"vnf11_1,vnf13_1,vnf14_1,vnf2_3,vnf4_3,vnf8_2",6
+2026-01-21 12:50:33,FABO,16,4,1,10,"vnf13_3,vnf3_3,vnf9_3",3
+2026-01-21 12:50:33,FABO,16,4,1,1,"vnf10_3,vnf6_3,vnf7_3",3
+2026-01-21 12:50:33,FABO,16,4,1,12,"vnf12_3,vnf15_3",2
+2026-01-21 12:50:33,Best Fit,16,4,1,6,"vnf0_0,vnf10_0,vnf11_0,vnf12_0,vnf13_0,vnf14_0,vnf15_0,vnf1_0,vnf2_0,vnf3_0,vnf4_0,vnf5_0,vnf6_0,vnf7_0,vnf8_0,vnf9_0",16
+2026-01-21 12:50:33,Best Fit,16,4,1,2,"vnf0_1,vnf10_1,vnf11_1,vnf12_1,vnf13_1,vnf14_1,vnf15_1,vnf1_1,vnf2_1,vnf3_1,vnf4_1,vnf5_1,vnf6_1,vnf7_1,vnf8_1,vnf9_1",16
+2026-01-21 12:50:33,Best Fit,16,4,1,1,"vnf0_2,vnf10_2,vnf11_2,vnf12_2,vnf13_2,vnf14_2,vnf15_2,vnf1_2,vnf2_2,vnf3_2,vnf4_2,vnf5_2,vnf6_2,vnf7_2,vnf8_2,vnf9_2",16
+2026-01-21 12:50:33,Best Fit,16,4,1,3,"vnf0_3,vnf1_3,vnf2_3,vnf3_3,vnf4_3",5
+2026-01-21 12:50:33,Best Fit,16,4,1,4,"vnf5_3,vnf6_3,vnf7_3,vnf8_3,vnf9_3",5
+2026-01-21 12:50:33,Best Fit,16,4,1,11,"vnf10_3,vnf11_3,vnf12_3,vnf13_3,vnf14_3",5
+2026-01-21 12:50:33,Best Fit,16,4,1,5,vnf15_3,1
+2026-01-21 12:50:33,First Fit,16,4,1,1,"vnf0_0,vnf10_0,vnf11_0,vnf12_0,vnf13_0,vnf14_0,vnf15_0,vnf1_0,vnf2_0,vnf3_0,vnf4_0,vnf5_0,vnf6_0,vnf7_0,vnf8_0,vnf9_0",16
+2026-01-21 12:50:33,First Fit,16,4,1,2,"vnf0_1,vnf10_1,vnf11_1,vnf12_1,vnf13_1,vnf14_1,vnf15_1,vnf1_1,vnf2_1,vnf3_1,vnf4_1,vnf5_1,vnf6_1,vnf7_1,vnf8_1,vnf9_1",16
+2026-01-21 12:50:33,First Fit,16,4,1,3,"vnf0_2,vnf1_2,vnf2_2,vnf3_2,vnf4_2,vnf5_2,vnf6_2,vnf7_2",8
+2026-01-21 12:50:33,First Fit,16,4,1,4,"vnf0_3,vnf1_3,vnf2_3,vnf3_3,vnf4_3",5
+2026-01-21 12:50:33,First Fit,16,4,1,5,"vnf10_2,vnf5_3,vnf6_3,vnf7_3,vnf8_2,vnf9_2",6
+2026-01-21 12:50:33,First Fit,16,4,1,6,"vnf10_3,vnf11_2,vnf12_2,vnf13_2,vnf14_2,vnf15_2,vnf8_3,vnf9_3",8
+2026-01-21 12:50:33,First Fit,16,4,1,7,"vnf11_3,vnf12_3,vnf13_3,vnf14_3,vnf15_3",5
+2026-01-21 12:50:33,Energy-Aware A*,16,4,1,5,"vnf0_0,vnf1_0,vnf2_0,vnf3_0,vnf4_0,vnf5_0,vnf6_0,vnf7_0",8
+2026-01-21 12:50:33,Energy-Aware A*,16,4,1,11,"vnf0_1,vnf1_1,vnf2_1,vnf3_1,vnf4_1,vnf5_1,vnf6_1,vnf7_1",8
+2026-01-21 12:50:33,Energy-Aware A*,16,4,1,8,"vnf0_2,vnf1_2,vnf2_2,vnf3_2,vnf4_2,vnf5_2,vnf6_2,vnf7_2",8
+2026-01-21 12:50:33,Energy-Aware A*,16,4,1,6,"vnf0_3,vnf10_3,vnf11_3,vnf12_3,vnf13_3,vnf14_3,vnf15_3,vnf1_3,vnf2_3,vnf3_3,vnf4_3,vnf5_3,vnf6_3,vnf7_3,vnf8_3,vnf9_3",16
+2026-01-21 12:50:33,Energy-Aware A*,16,4,1,7,"vnf10_0,vnf11_0,vnf12_0,vnf13_0,vnf14_0,vnf15_0,vnf8_0,vnf9_0",8
+2026-01-21 12:50:33,Energy-Aware A*,16,4,1,1,"vnf10_1,vnf11_1,vnf12_1,vnf13_1,vnf14_1,vnf15_1,vnf8_1,vnf9_1",8
+2026-01-21 12:50:33,Energy-Aware A*,16,4,1,2,"vnf10_2,vnf11_2,vnf12_2,vnf13_2,vnf14_2,vnf15_2,vnf8_2,vnf9_2",8
+2026-01-21 12:50:33,MILP_Gurobi,16,4,1,6,"vnf0_0,vnf10_0,vnf11_0,vnf12_0,vnf13_0,vnf14_0,vnf15_0,vnf1_0,vnf2_0,vnf3_0,vnf4_0,vnf5_0,vnf6_0,vnf7_0,vnf8_0,vnf9_0",16
+2026-01-21 12:50:33,MILP_Gurobi,16,4,1,7,"vnf0_1,vnf10_1,vnf11_1,vnf12_1,vnf13_1,vnf14_1,vnf15_1,vnf1_1,vnf2_1,vnf3_1,vnf4_1,vnf5_1,vnf6_1,vnf7_1,vnf8_1,vnf9_1",16
+2026-01-21 12:50:33,MILP_Gurobi,16,4,1,9,"vnf0_2,vnf12_2,vnf13_2,vnf1_2,vnf2_2,vnf4_2,vnf6_2,vnf9_2",8
+2026-01-21 12:50:33,MILP_Gurobi,16,4,1,11,"vnf0_3,vnf10_3,vnf11_3,vnf12_3,vnf13_3,vnf14_3,vnf15_3,vnf1_3,vnf2_3,vnf3_3,vnf4_3,vnf5_3,vnf6_3,vnf7_3,vnf8_3,vnf9_3",16
+2026-01-21 12:50:33,MILP_Gurobi,16,4,1,10,"vnf10_2,vnf11_2,vnf14_2,vnf15_2,vnf3_2,vnf5_2,vnf7_2,vnf8_2",8
+2026-01-21 12:57:37,A*,32,4,1,6,"vnf0_0,vnf10_0,vnf11_0,vnf12_0,vnf13_0,vnf14_0,vnf15_0,vnf16_0,vnf17_0,vnf18_0,vnf19_0,vnf1_0,vnf20_0,vnf21_0,vnf22_0,vnf23_0,vnf24_0,vnf25_0,vnf26_0,vnf27_0,vnf28_0,vnf29_0,vnf2_0,vnf30_0,vnf31_0,vnf3_0,vnf4_0,vnf5_0,vnf6_0,vnf7_0,vnf8_0,vnf9_0",32
+2026-01-21 12:57:37,A*,32,4,1,2,"vnf0_1,vnf11_3,vnf17_3,vnf1_3,vnf22_1,vnf23_1,vnf24_1,vnf7_3",8
+2026-01-21 12:57:37,A*,32,4,1,1,"vnf0_2,vnf22_2,vnf23_2,vnf24_2,vnf25_3,vnf26_3,vnf27_3,vnf28_3,vnf29_3,vnf30_3,vnf31_3",11
+2026-01-21 12:57:37,A*,32,4,1,3,"vnf0_3,vnf15_3,vnf19_3,vnf3_3,vnf9_3",5
+2026-01-21 12:57:37,A*,32,4,1,5,"vnf11_1,vnf13_1,vnf15_1,vnf17_1,vnf19_1,vnf1_1,vnf25_1,vnf26_1,vnf28_1,vnf30_1,vnf3_1,vnf5_1,vnf7_1,vnf9_1",14
+2026-01-21 12:57:37,A*,32,4,1,4,"vnf11_2,vnf15_2,vnf17_2,vnf19_2,vnf1_2,vnf3_2,vnf7_2,vnf9_2",8
+2026-01-21 12:57:37,A*,32,4,1,7,"vnf10_1,vnf12_1,vnf14_1,vnf16_1,vnf18_1,vnf20_1,vnf21_1,vnf27_1,vnf29_1,vnf2_1,vnf31_1,vnf4_1,vnf6_1,vnf8_1",14
+2026-01-21 12:57:37,A*,32,4,1,8,"vnf10_3,vnf13_2,vnf16_3,vnf20_2,vnf2_2,vnf5_2,vnf8_2",7
+2026-01-21 12:57:37,A*,32,4,1,11,"vnf13_3,vnf20_3,vnf21_3,vnf22_3,vnf23_3,vnf24_3,vnf25_2,vnf26_2,vnf27_2,vnf28_2,vnf29_2,vnf2_3,vnf30_2,vnf31_2,vnf5_3,vnf8_3",16
+2026-01-21 12:57:37,A*,32,4,1,9,"vnf10_2,vnf12_2,vnf14_2,vnf16_2,vnf18_2,vnf21_2,vnf4_2,vnf6_2",8
+2026-01-21 12:57:37,A*,32,4,1,10,"vnf12_3,vnf14_3,vnf18_3,vnf4_3,vnf6_3",5
+2026-01-21 12:57:37,ABO,32,4,1,2,"vnf0_0,vnf10_0,vnf11_0,vnf12_0,vnf13_0,vnf14_0,vnf19_0,vnf1_0,vnf2_0,vnf3_0,vnf4_0,vnf5_0,vnf6_0,vnf7_0,vnf8_0,vnf9_0",16
+2026-01-21 12:57:37,ABO,32,4,1,4,"vnf0_1,vnf10_1,vnf12_1,vnf18_3,vnf19_1,vnf1_3,vnf20_1,vnf23_0,vnf2_1,vnf4_1,vnf6_1,vnf8_1",12
+2026-01-21 12:57:37,ABO,32,4,1,3,"vnf0_2,vnf12_2,vnf16_3,vnf17_3,vnf22_2,vnf4_2,vnf8_2",7
+2026-01-21 12:57:37,ABO,32,4,1,11,"vnf0_3,vnf16_2,vnf21_2,vnf22_3,vnf25_1,vnf8_3",6
+2026-01-21 12:57:37,ABO,32,4,1,6,"vnf11_1,vnf13_1,vnf14_1,vnf1_1,vnf23_3,vnf24_2,vnf25_2,vnf2_3,vnf3_1,vnf5_1,vnf7_1,vnf9_1",12
+2026-01-21 12:57:37,ABO,32,4,1,5,"vnf10_2,vnf13_2,vnf15_0,vnf1_2,vnf20_0,vnf2_2,vnf5_2,vnf6_2,vnf9_2",9
+2026-01-21 12:57:37,ABO,32,4,1,7,"vnf11_2,vnf14_2,vnf15_3,vnf16_0,vnf17_0,vnf18_0,vnf21_0,vnf22_0,vnf3_2,vnf7_2",10
+2026-01-21 12:57:37,ABO,32,4,1,9,"vnf11_3,vnf14_3,vnf15_2,vnf21_1,vnf25_0,vnf3_3,vnf7_3",7
+2026-01-21 12:57:37,ABO,32,4,1,12,"vnf12_3,vnf17_2,vnf18_2,vnf19_2,vnf20_2,vnf23_1,vnf24_1,vnf4_3",8
+2026-01-21 12:57:37,ABO,32,4,1,8,"vnf10_3,vnf13_3,vnf15_1,vnf5_3,vnf6_3,vnf9_3",6
+2026-01-21 12:57:37,ABO,32,4,1,10,"vnf16_1,vnf17_1,vnf18_1,vnf19_3,vnf20_3,vnf21_3,vnf22_1,vnf23_2,vnf24_0",9
+2026-01-21 12:57:37,ABO,32,4,1,1,"vnf24_3,vnf25_3",2
+2026-01-21 12:57:37,FABO,32,4,1,2,"vnf0_0,vnf10_2,vnf18_1,vnf19_3,vnf24_1,vnf2_0,vnf3_0,vnf4_0,vnf5_0,vnf6_2,vnf7_2",11
+2026-01-21 12:57:37,FABO,32,4,1,4,"vnf0_1,vnf12_1,vnf15_1,vnf18_0,vnf19_2,vnf20_0,vnf24_0,vnf25_0,vnf26_2,vnf27_1,vnf4_1,vnf5_3",12
+2026-01-21 12:57:37,FABO,32,4,1,3,"vnf0_2,vnf11_3,vnf12_2,vnf14_3,vnf15_2,vnf20_1,vnf23_3",7
+2026-01-21 12:57:37,FABO,32,4,1,11,"vnf0_3,vnf11_2,vnf13_2,vnf14_2,vnf19_1,vnf20_3,vnf25_3,vnf28_3,vnf29_3,vnf30_2,vnf8_3",11
+2026-01-21 12:57:37,FABO,32,4,1,5,"vnf10_0,vnf11_0,vnf12_0,vnf13_0,vnf14_0,vnf15_0,vnf16_0,vnf17_0,vnf1_0,vnf2_2,vnf4_2,vnf5_2,vnf9_0",13
+2026-01-21 12:57:37,FABO,32,4,1,6,"vnf10_1,vnf18_2,vnf1_1,vnf24_3,vnf25_2,vnf26_1,vnf27_2,vnf28_1,vnf29_1,vnf2_1,vnf30_1,vnf3_1,vnf5_1,vnf6_1,vnf7_1,vnf9_1",16
+2026-01-21 12:57:37,FABO,32,4,1,7,"vnf16_3,vnf17_3,vnf1_2,vnf23_0,vnf3_2,vnf6_0,vnf7_0,vnf8_0,vnf9_2",9
+2026-01-21 12:57:37,FABO,32,4,1,9,"vnf16_2,vnf17_2,vnf1_3,vnf21_1,vnf22_1,vnf26_0,vnf27_3,vnf28_2,vnf8_1",9
+2026-01-21 12:57:37,FABO,32,4,1,8,"vnf11_1,vnf13_1,vnf14_1,vnf16_1,vnf17_1,vnf19_0,vnf21_0,vnf22_0,vnf2_3,vnf4_3,vnf8_2",11
+2026-01-21 12:57:37,FABO,32,4,1,10,"vnf13_3,vnf20_2,vnf21_2,vnf22_2,vnf23_1,vnf3_3,vnf9_3",7
+2026-01-21 12:57:37,FABO,32,4,1,1,"vnf10_3,vnf18_3,vnf24_2,vnf25_1,vnf26_3,vnf27_0,vnf28_0,vnf29_2,vnf30_3,vnf6_3,vnf7_3",11
+2026-01-21 12:57:37,FABO,32,4,1,12,"vnf12_3,vnf15_3,vnf21_3,vnf22_3,vnf23_2,vnf29_0,vnf30_0",7
+2026-01-21 12:57:37,Best Fit,32,4,1,6,"vnf0_0,vnf10_0,vnf11_0,vnf12_0,vnf13_0,vnf14_0,vnf15_0,vnf16_0,vnf17_0,vnf18_0,vnf19_0,vnf1_0,vnf20_0,vnf21_0,vnf22_0,vnf23_0,vnf24_0,vnf25_0,vnf26_0,vnf27_0,vnf28_0,vnf29_0,vnf2_0,vnf3_0,vnf4_0,vnf5_0,vnf6_0,vnf7_0,vnf8_0,vnf9_0",30
+2026-01-21 12:57:37,Best Fit,32,4,1,2,"vnf0_1,vnf10_1,vnf11_1,vnf12_1,vnf13_1,vnf14_1,vnf15_1,vnf1_1,vnf2_1,vnf3_1,vnf4_1,vnf5_1,vnf6_1,vnf7_1,vnf8_1,vnf9_1",16
+2026-01-21 12:57:37,Best Fit,32,4,1,1,"vnf0_2,vnf10_2,vnf11_2,vnf12_2,vnf13_2,vnf14_2,vnf15_2,vnf1_2,vnf29_3,vnf2_2,vnf3_2,vnf4_2,vnf5_2,vnf6_2,vnf7_2,vnf8_2,vnf9_2",17
+2026-01-21 12:57:37,Best Fit,32,4,1,3,"vnf0_3,vnf1_3,vnf2_3,vnf3_3,vnf4_3",5
+2026-01-21 12:57:37,Best Fit,32,4,1,4,"vnf5_3,vnf6_3,vnf7_3,vnf8_3,vnf9_3",5
+2026-01-21 12:57:37,Best Fit,32,4,1,11,"vnf10_3,vnf11_3,vnf12_3,vnf13_3,vnf14_3,vnf27_2,vnf28_2,vnf29_2",8
+2026-01-21 12:57:37,Best Fit,32,4,1,5,"vnf15_3,vnf16_1,vnf17_1,vnf18_1,vnf19_1,vnf20_1,vnf21_1,vnf22_1,vnf23_1,vnf24_1,vnf25_1,vnf26_1,vnf27_1,vnf28_1",14
+2026-01-21 12:57:37,Best Fit,32,4,1,8,"vnf16_2,vnf17_2,vnf18_2,vnf19_2,vnf20_2,vnf21_2,vnf22_2,vnf23_2",8
+2026-01-21 12:57:37,Best Fit,32,4,1,7,"vnf16_3,vnf17_3,vnf18_3,vnf19_3,vnf20_3,vnf29_1",6
+2026-01-21 12:57:37,Best Fit,32,4,1,9,"vnf21_3,vnf22_3,vnf23_3,vnf24_2,vnf25_2,vnf26_2",6
+2026-01-21 12:57:37,Best Fit,32,4,1,10,"vnf24_3,vnf25_3,vnf26_3,vnf27_3,vnf28_3",5
+2026-01-21 12:57:37,First Fit,32,4,1,1,"vnf0_0,vnf10_0,vnf11_0,vnf12_0,vnf13_0,vnf14_0,vnf15_0,vnf16_0,vnf17_0,vnf18_0,vnf19_0,vnf1_0,vnf20_0,vnf21_0,vnf22_0,vnf23_0,vnf24_0,vnf25_0,vnf26_0,vnf27_0,vnf28_0,vnf29_0,vnf2_0,vnf30_0,vnf31_0,vnf3_0,vnf4_0,vnf5_0,vnf6_0,vnf7_0,vnf8_0,vnf9_0",32
+2026-01-21 12:57:37,First Fit,32,4,1,2,"vnf0_1,vnf10_1,vnf11_1,vnf12_1,vnf13_1,vnf14_1,vnf15_1,vnf1_1,vnf2_1,vnf3_1,vnf4_1,vnf5_1,vnf6_1,vnf7_1,vnf8_1,vnf9_1",16
+2026-01-21 12:57:37,First Fit,32,4,1,3,"vnf0_2,vnf1_2,vnf2_2,vnf3_2,vnf4_2,vnf5_2,vnf6_2,vnf7_2",8
+2026-01-21 12:57:37,First Fit,32,4,1,4,"vnf0_3,vnf16_1,vnf1_3,vnf2_3,vnf3_3,vnf4_3",6
+2026-01-21 12:57:37,First Fit,32,4,1,5,"vnf10_2,vnf17_1,vnf5_3,vnf6_3,vnf7_3,vnf8_2,vnf9_2",7
+2026-01-21 12:57:37,First Fit,32,4,1,6,"vnf10_3,vnf11_2,vnf12_2,vnf13_2,vnf14_2,vnf15_2,vnf16_2,vnf17_2,vnf18_1,vnf19_1,vnf20_1,vnf21_1,vnf22_1,vnf23_1,vnf24_1,vnf25_1,vnf26_1,vnf27_1,vnf28_1,vnf29_1,vnf30_1,vnf31_1,vnf8_3,vnf9_3",24
+2026-01-21 12:57:37,First Fit,32,4,1,7,"vnf11_3,vnf12_3,vnf13_3,vnf14_3,vnf15_3",5
+2026-01-21 12:57:37,First Fit,32,4,1,8,"vnf16_3,vnf17_3,vnf18_2,vnf19_2,vnf20_2,vnf21_2,vnf22_2",7
+2026-01-21 12:57:37,First Fit,32,4,1,9,"vnf18_3,vnf19_3,vnf20_3,vnf21_3,vnf22_3",5
+2026-01-21 12:57:37,First Fit,32,4,1,10,"vnf23_2,vnf24_2,vnf25_2,vnf26_2,vnf27_2,vnf28_2,vnf29_2,vnf30_2",8
+2026-01-21 12:57:37,First Fit,32,4,1,11,"vnf23_3,vnf24_3,vnf25_3,vnf26_3,vnf27_3,vnf28_3,vnf29_3,vnf30_3,vnf31_2",9
+2026-01-21 12:57:37,First Fit,32,4,1,12,vnf31_3,1
+2026-01-21 12:57:37,Energy-Aware A*,32,4,1,5,"vnf0_0,vnf1_0,vnf21_0,vnf22_0,vnf23_0,vnf24_0,vnf25_0,vnf26_0,vnf27_0,vnf28_0,vnf2_0,vnf3_0,vnf4_0,vnf5_0,vnf6_0,vnf7_0",16
+2026-01-21 12:57:37,Energy-Aware A*,32,4,1,11,"vnf0_1,vnf1_1,vnf22_3,vnf23_3,vnf24_3,vnf25_3,vnf26_3,vnf27_3,vnf28_3,vnf29_3,vnf2_1,vnf30_3,vnf31_3,vnf3_1,vnf4_1,vnf5_1,vnf6_1,vnf7_1",18
+2026-01-21 12:57:37,Energy-Aware A*,32,4,1,8,"vnf0_2,vnf1_2,vnf2_2,vnf3_2,vnf4_2,vnf5_2,vnf6_2,vnf7_2",8
+2026-01-21 12:57:37,Energy-Aware A*,32,4,1,6,"vnf0_3,vnf10_3,vnf11_3,vnf12_3,vnf13_3,vnf14_3,vnf15_3,vnf16_3,vnf17_3,vnf18_3,vnf19_3,vnf1_3,vnf20_3,vnf21_1,vnf2_3,vnf3_3,vnf4_3,vnf5_3,vnf6_3,vnf7_3,vnf8_3,vnf9_3",22
+2026-01-21 12:57:37,Energy-Aware A*,32,4,1,7,"vnf10_0,vnf11_0,vnf12_0,vnf13_0,vnf14_0,vnf15_0,vnf16_0,vnf17_0,vnf18_0,vnf19_0,vnf20_0,vnf21_3,vnf8_0,vnf9_0",14
+2026-01-21 12:57:37,Energy-Aware A*,32,4,1,1,"vnf10_1,vnf11_1,vnf12_1,vnf13_1,vnf14_1,vnf15_1,vnf29_0,vnf30_0,vnf31_0,vnf8_1,vnf9_1",11
+2026-01-21 12:57:37,Energy-Aware A*,32,4,1,2,"vnf10_2,vnf11_2,vnf12_2,vnf13_2,vnf14_2,vnf15_2,vnf8_2,vnf9_2",8
+2026-01-21 12:57:37,Energy-Aware A*,32,4,1,12,"vnf16_1,vnf17_1,vnf18_1,vnf19_1,vnf20_1,vnf22_1,vnf23_1,vnf24_1,vnf29_1,vnf30_1,vnf31_1",11
+2026-01-21 12:57:37,Energy-Aware A*,32,4,1,10,"vnf16_2,vnf17_2,vnf18_2,vnf19_2,vnf20_2,vnf22_2,vnf23_2,vnf24_2",8
+2026-01-21 12:57:37,Energy-Aware A*,32,4,1,9,"vnf21_2,vnf25_1,vnf26_1,vnf27_1,vnf28_1",5
+2026-01-21 12:57:37,Energy-Aware A*,32,4,1,3,"vnf25_2,vnf26_2,vnf27_2,vnf28_2,vnf29_2,vnf30_2,vnf31_2",7
+2026-01-21 12:57:37,MILP_Gurobi,32,4,1,6,"vnf0_0,vnf12_0,vnf13_0,vnf14_0,vnf16_0,vnf17_0,vnf19_0,vnf20_0,vnf21_0,vnf23_0,vnf24_0,vnf26_0,vnf28_0,vnf29_0,vnf2_0,vnf31_0,vnf4_0,vnf5_0,vnf7_0,vnf8_0,vnf9_0",21
+2026-01-21 12:57:37,MILP_Gurobi,32,4,1,7,"vnf0_1,vnf13_1,vnf14_1,vnf19_1,vnf20_1,vnf23_1,vnf24_1,vnf26_1,vnf29_1,vnf2_1,vnf31_1,vnf4_1,vnf5_1,vnf8_1,vnf9_1",15
+2026-01-21 12:57:37,MILP_Gurobi,32,4,1,8,"vnf0_2,vnf14_2,vnf20_2,vnf24_2,vnf31_2,vnf4_2,vnf8_2,vnf9_2",8
+2026-01-21 12:57:37,MILP_Gurobi,32,4,1,11,"vnf0_3,vnf12_3,vnf13_3,vnf14_3,vnf16_3,vnf17_3,vnf19_3,vnf20_3,vnf21_3,vnf23_3,vnf24_3,vnf26_3,vnf28_3,vnf29_3,vnf2_3,vnf31_3,vnf4_3,vnf5_3,vnf7_3,vnf8_3,vnf9_3",21
+2026-01-21 12:57:37,MILP_Gurobi,32,4,1,9,"vnf12_1,vnf16_1,vnf17_1,vnf21_1,vnf23_2,vnf26_2,vnf28_1,vnf29_2,vnf2_2,vnf5_2,vnf7_1",11
+2026-01-21 12:57:37,MILP_Gurobi,32,4,1,10,"vnf12_2,vnf13_2,vnf16_2,vnf17_2,vnf19_2,vnf21_2,vnf28_2,vnf7_2",8
+2026-01-21 13:07:39,A*,64,4,1,6,"vnf0_0,vnf10_0,vnf11_0,vnf12_0,vnf13_0,vnf14_0,vnf15_0,vnf16_0,vnf17_0,vnf18_0,vnf19_0,vnf1_0,vnf20_0,vnf21_0,vnf22_0,vnf23_0,vnf24_0,vnf25_0,vnf26_0,vnf27_0,vnf28_0,vnf29_0,vnf2_0,vnf30_0,vnf31_0,vnf32_0,vnf33_0,vnf34_0,vnf35_0,vnf36_0,vnf37_0,vnf38_0,vnf39_0,vnf3_0,vnf40_3,vnf41_3,vnf4_0,vnf5_0,vnf6_0,vnf7_0,vnf8_0,vnf9_0",42
+2026-01-21 13:07:39,A*,64,4,1,2,"vnf0_1,vnf11_3,vnf17_3,vnf1_3,vnf22_1,vnf23_1,vnf24_1,vnf7_3",8
+2026-01-21 13:07:39,A*,64,4,1,1,"vnf0_2,vnf22_2,vnf23_2,vnf24_2,vnf25_3,vnf26_3,vnf27_3,vnf28_3,vnf29_3,vnf30_3,vnf31_3,vnf32_3,vnf33_3,vnf34_3,vnf37_1,vnf38_1,vnf39_1,vnf40_0,vnf41_0",19
+2026-01-21 13:07:39,A*,64,4,1,3,"vnf0_3,vnf15_3,vnf19_3,vnf3_3,vnf40_1,vnf9_3",6
+2026-01-21 13:07:39,A*,64,4,1,5,"vnf11_1,vnf13_1,vnf15_1,vnf17_1,vnf19_1,vnf1_1,vnf25_1,vnf26_1,vnf28_1,vnf30_1,vnf32_1,vnf34_1,vnf3_1,vnf5_1,vnf7_1,vnf9_1",16
+2026-01-21 13:07:39,A*,64,4,1,4,"vnf11_2,vnf15_2,vnf17_2,vnf19_2,vnf1_2,vnf3_2,vnf7_2,vnf9_2",8
+2026-01-21 13:07:39,A*,64,4,1,7,"vnf10_1,vnf12_1,vnf14_1,vnf16_1,vnf18_1,vnf20_1,vnf21_1,vnf27_1,vnf29_1,vnf2_1,vnf31_1,vnf33_1,vnf35_1,vnf4_1,vnf6_1,vnf8_1",16
+2026-01-21 13:07:39,A*,64,4,1,8,"vnf10_3,vnf13_2,vnf16_3,vnf20_2,vnf2_2,vnf5_2,vnf8_2",7
+2026-01-21 13:07:39,A*,64,4,1,11,"vnf13_3,vnf20_3,vnf21_3,vnf22_3,vnf23_3,vnf24_3,vnf25_2,vnf26_2,vnf27_2,vnf28_2,vnf29_2,vnf2_3,vnf30_2,vnf31_2,vnf32_2,vnf33_2,vnf34_2,vnf35_2,vnf36_2,vnf37_2,vnf38_2,vnf39_2,vnf40_2,vnf41_2,vnf5_3,vnf8_3",26
+2026-01-21 13:07:39,A*,64,4,1,9,"vnf10_2,vnf12_2,vnf14_2,vnf16_2,vnf18_2,vnf21_2,vnf4_2,vnf6_2",8
+2026-01-21 13:07:39,A*,64,4,1,10,"vnf12_3,vnf14_3,vnf18_3,vnf36_1,vnf4_3,vnf6_3",6
+2026-01-21 13:07:39,A*,64,4,1,12,"vnf35_3,vnf36_3,vnf37_3,vnf38_3,vnf39_3,vnf41_1",6
+2026-01-21 13:07:39,ABO,64,4,1,2,"vnf0_0,vnf10_0,vnf11_0,vnf12_0,vnf13_0,vnf14_0,vnf19_0,vnf1_0,vnf2_0,vnf3_0,vnf4_0,vnf5_0,vnf6_0,vnf7_0,vnf8_0,vnf9_0",16
+2026-01-21 13:07:39,ABO,64,4,1,4,"vnf0_1,vnf10_1,vnf12_1,vnf18_3,vnf19_1,vnf1_3,vnf20_1,vnf23_0,vnf2_1,vnf4_1,vnf6_1,vnf8_1",12
+2026-01-21 13:07:39,ABO,64,4,1,3,"vnf0_2,vnf12_2,vnf16_3,vnf17_3,vnf22_2,vnf4_2,vnf8_2",7
+2026-01-21 13:07:39,ABO,64,4,1,11,"vnf0_3,vnf16_2,vnf21_2,vnf22_3,vnf25_1,vnf8_3",6
+2026-01-21 13:07:39,ABO,64,4,1,6,"vnf11_1,vnf13_1,vnf14_1,vnf1_1,vnf23_3,vnf24_2,vnf25_2,vnf2_3,vnf3_1,vnf5_1,vnf7_1,vnf9_1",12
+2026-01-21 13:07:39,ABO,64,4,1,5,"vnf10_2,vnf13_2,vnf15_0,vnf1_2,vnf20_0,vnf2_2,vnf5_2,vnf6_2,vnf9_2",9
+2026-01-21 13:07:39,ABO,64,4,1,7,"vnf11_2,vnf14_2,vnf15_3,vnf16_0,vnf17_0,vnf18_0,vnf21_0,vnf22_0,vnf3_2,vnf7_2",10
+2026-01-21 13:07:39,ABO,64,4,1,9,"vnf11_3,vnf14_3,vnf15_2,vnf21_1,vnf25_0,vnf3_3,vnf7_3",7
+2026-01-21 13:07:39,ABO,64,4,1,12,"vnf12_3,vnf17_2,vnf18_2,vnf19_2,vnf20_2,vnf23_1,vnf24_1,vnf4_3",8
+2026-01-21 13:07:39,ABO,64,4,1,8,"vnf10_3,vnf13_3,vnf15_1,vnf5_3,vnf6_3,vnf9_3",6
+2026-01-21 13:07:39,ABO,64,4,1,10,"vnf16_1,vnf17_1,vnf18_1,vnf19_3,vnf20_3,vnf21_3,vnf22_1,vnf23_2,vnf24_0",9
+2026-01-21 13:07:39,ABO,64,4,1,1,"vnf24_3,vnf25_3",2
+2026-01-21 13:07:39,FABO,64,4,1,2,"vnf0_0,vnf10_2,vnf18_1,vnf19_3,vnf24_1,vnf2_0,vnf3_0,vnf4_0,vnf5_0,vnf6_2,vnf7_2",11
+2026-01-21 13:07:39,FABO,64,4,1,4,"vnf0_1,vnf12_1,vnf15_1,vnf18_0,vnf19_2,vnf20_0,vnf24_0,vnf25_0,vnf26_2,vnf27_1,vnf4_1,vnf5_3",12
+2026-01-21 13:07:39,FABO,64,4,1,3,"vnf0_2,vnf11_3,vnf12_2,vnf14_3,vnf15_2,vnf20_1,vnf23_3",7
+2026-01-21 13:07:39,FABO,64,4,1,11,"vnf0_3,vnf11_2,vnf13_2,vnf14_2,vnf19_1,vnf20_3,vnf25_3,vnf28_3,vnf29_3,vnf30_2,vnf8_3",11
+2026-01-21 13:07:39,FABO,64,4,1,5,"vnf10_0,vnf11_0,vnf12_0,vnf13_0,vnf14_0,vnf15_0,vnf16_0,vnf17_0,vnf1_0,vnf2_2,vnf4_2,vnf5_2,vnf9_0",13
+2026-01-21 13:07:39,FABO,64,4,1,6,"vnf10_1,vnf18_2,vnf1_1,vnf24_3,vnf25_2,vnf26_1,vnf27_2,vnf28_1,vnf29_1,vnf2_1,vnf30_1,vnf3_1,vnf5_1,vnf6_1,vnf7_1,vnf9_1",16
+2026-01-21 13:07:39,FABO,64,4,1,7,"vnf16_3,vnf17_3,vnf1_2,vnf23_0,vnf3_2,vnf6_0,vnf7_0,vnf8_0,vnf9_2",9
+2026-01-21 13:07:39,FABO,64,4,1,9,"vnf16_2,vnf17_2,vnf1_3,vnf21_1,vnf22_1,vnf26_0,vnf27_3,vnf28_2,vnf8_1",9
+2026-01-21 13:07:39,FABO,64,4,1,8,"vnf11_1,vnf13_1,vnf14_1,vnf16_1,vnf17_1,vnf19_0,vnf21_0,vnf22_0,vnf2_3,vnf4_3,vnf8_2",11
+2026-01-21 13:07:39,FABO,64,4,1,10,"vnf13_3,vnf20_2,vnf21_2,vnf22_2,vnf23_1,vnf3_3,vnf9_3",7
+2026-01-21 13:07:39,FABO,64,4,1,1,"vnf10_3,vnf18_3,vnf24_2,vnf25_1,vnf26_3,vnf27_0,vnf28_0,vnf29_2,vnf30_3,vnf6_3,vnf7_3",11
+2026-01-21 13:07:39,FABO,64,4,1,12,"vnf12_3,vnf15_3,vnf21_3,vnf22_3,vnf23_2,vnf29_0,vnf30_0",7
+2026-01-21 13:07:39,Best Fit,64,4,1,6,"vnf0_0,vnf10_0,vnf11_0,vnf12_0,vnf13_0,vnf14_0,vnf15_0,vnf16_0,vnf17_0,vnf18_0,vnf19_0,vnf1_0,vnf20_0,vnf21_0,vnf22_0,vnf23_0,vnf24_0,vnf25_0,vnf26_0,vnf27_0,vnf28_0,vnf29_0,vnf2_0,vnf3_0,vnf4_0,vnf5_0,vnf6_0,vnf7_0,vnf8_0,vnf9_0",30
+2026-01-21 13:07:39,Best Fit,64,4,1,2,"vnf0_1,vnf10_1,vnf11_1,vnf12_1,vnf13_1,vnf14_1,vnf15_1,vnf1_1,vnf2_1,vnf3_1,vnf4_1,vnf5_1,vnf6_1,vnf7_1,vnf8_1,vnf9_1",16
+2026-01-21 13:07:39,Best Fit,64,4,1,1,"vnf0_2,vnf10_2,vnf11_2,vnf12_2,vnf13_2,vnf14_2,vnf15_2,vnf1_2,vnf29_3,vnf2_2,vnf3_2,vnf4_2,vnf5_2,vnf6_2,vnf7_2,vnf8_2,vnf9_2",17
+2026-01-21 13:07:39,Best Fit,64,4,1,3,"vnf0_3,vnf1_3,vnf2_3,vnf3_3,vnf4_3",5
+2026-01-21 13:07:39,Best Fit,64,4,1,4,"vnf5_3,vnf6_3,vnf7_3,vnf8_3,vnf9_3",5
+2026-01-21 13:07:39,Best Fit,64,4,1,11,"vnf10_3,vnf11_3,vnf12_3,vnf13_3,vnf14_3,vnf27_2,vnf28_2,vnf29_2",8
+2026-01-21 13:07:39,Best Fit,64,4,1,5,"vnf15_3,vnf16_1,vnf17_1,vnf18_1,vnf19_1,vnf20_1,vnf21_1,vnf22_1,vnf23_1,vnf24_1,vnf25_1,vnf26_1,vnf27_1,vnf28_1",14
+2026-01-21 13:07:39,Best Fit,64,4,1,8,"vnf16_2,vnf17_2,vnf18_2,vnf19_2,vnf20_2,vnf21_2,vnf22_2,vnf23_2",8
+2026-01-21 13:07:39,Best Fit,64,4,1,7,"vnf16_3,vnf17_3,vnf18_3,vnf19_3,vnf20_3,vnf29_1",6
+2026-01-21 13:07:39,Best Fit,64,4,1,9,"vnf21_3,vnf22_3,vnf23_3,vnf24_2,vnf25_2,vnf26_2",6
+2026-01-21 13:07:39,Best Fit,64,4,1,10,"vnf24_3,vnf25_3,vnf26_3,vnf27_3,vnf28_3",5
+2026-01-21 13:07:39,First Fit,64,4,1,1,"vnf0_0,vnf10_0,vnf11_0,vnf12_0,vnf13_0,vnf14_0,vnf15_0,vnf16_0,vnf17_0,vnf18_0,vnf19_0,vnf1_0,vnf20_0,vnf21_0,vnf22_0,vnf23_0,vnf24_0,vnf25_0,vnf26_0,vnf27_0,vnf28_0,vnf29_0,vnf2_0,vnf30_0,vnf31_0,vnf32_0,vnf33_3,vnf34_3,vnf35_2,vnf36_2,vnf37_2,vnf3_0,vnf4_0,vnf5_0,vnf6_0,vnf7_0,vnf8_0,vnf9_0",38
+2026-01-21 13:07:39,First Fit,64,4,1,2,"vnf0_1,vnf10_1,vnf11_1,vnf12_1,vnf13_1,vnf14_1,vnf15_1,vnf1_1,vnf2_1,vnf3_1,vnf4_1,vnf5_1,vnf6_1,vnf7_1,vnf8_1,vnf9_1",16
+2026-01-21 13:07:39,First Fit,64,4,1,3,"vnf0_2,vnf1_2,vnf2_2,vnf3_2,vnf4_2,vnf5_2,vnf6_2,vnf7_2",8
+2026-01-21 13:07:39,First Fit,64,4,1,4,"vnf0_3,vnf16_1,vnf1_3,vnf2_3,vnf3_3,vnf4_3",6
+2026-01-21 13:07:39,First Fit,64,4,1,5,"vnf10_2,vnf17_1,vnf5_3,vnf6_3,vnf7_3,vnf8_2,vnf9_2",7
+2026-01-21 13:07:39,First Fit,64,4,1,6,"vnf10_3,vnf11_2,vnf12_2,vnf13_2,vnf14_2,vnf15_2,vnf16_2,vnf17_2,vnf18_1,vnf19_1,vnf20_1,vnf21_1,vnf22_1,vnf23_1,vnf24_1,vnf25_1,vnf26_1,vnf27_1,vnf28_1,vnf29_1,vnf30_1,vnf31_1,vnf32_1,vnf33_0,vnf34_0,vnf35_0,vnf36_0,vnf37_0,vnf8_3,vnf9_3",30
+2026-01-21 13:07:39,First Fit,64,4,1,7,"vnf11_3,vnf12_3,vnf13_3,vnf14_3,vnf15_3,vnf33_1",6
+2026-01-21 13:07:39,First Fit,64,4,1,8,"vnf16_3,vnf17_3,vnf18_2,vnf19_2,vnf20_2,vnf21_2,vnf22_2",7
+2026-01-21 13:07:39,First Fit,64,4,1,9,"vnf18_3,vnf19_3,vnf20_3,vnf21_3,vnf22_3,vnf34_1",6
+2026-01-21 13:07:39,First Fit,64,4,1,10,"vnf23_2,vnf24_2,vnf25_2,vnf26_2,vnf27_2,vnf28_2,vnf29_2,vnf30_2",8
+2026-01-21 13:07:39,First Fit,64,4,1,11,"vnf23_3,vnf24_3,vnf25_3,vnf26_3,vnf27_3,vnf28_3,vnf29_3,vnf30_3,vnf31_2,vnf32_2,vnf33_2,vnf34_2,vnf35_1,vnf36_1,vnf37_1",15
+2026-01-21 13:07:39,First Fit,64,4,1,12,"vnf31_3,vnf32_3,vnf35_3,vnf36_3,vnf37_3",5
+2026-01-21 13:07:39,Energy-Aware A*,64,4,1,5,"vnf0_0,vnf1_0,vnf21_0,vnf22_0,vnf23_0,vnf24_0,vnf25_0,vnf26_0,vnf27_0,vnf28_0,vnf2_0,vnf3_0,vnf4_0,vnf5_0,vnf6_0,vnf7_0",16
+2026-01-21 13:07:39,Energy-Aware A*,64,4,1,11,"vnf0_1,vnf1_1,vnf22_3,vnf23_3,vnf24_3,vnf25_3,vnf26_3,vnf27_3,vnf28_3,vnf29_3,vnf2_1,vnf30_3,vnf31_3,vnf32_3,vnf33_2,vnf34_2,vnf35_2,vnf36_2,vnf37_2,vnf38_2,vnf3_1,vnf4_1,vnf5_1,vnf6_1,vnf7_1",25
+2026-01-21 13:07:39,Energy-Aware A*,64,4,1,8,"vnf0_2,vnf1_2,vnf2_2,vnf3_2,vnf4_2,vnf5_2,vnf6_2,vnf7_2",8
+2026-01-21 13:07:39,Energy-Aware A*,64,4,1,6,"vnf0_3,vnf10_3,vnf11_3,vnf12_3,vnf13_3,vnf14_3,vnf15_3,vnf16_3,vnf17_3,vnf18_3,vnf19_3,vnf1_3,vnf20_3,vnf21_1,vnf2_3,vnf3_3,vnf4_3,vnf5_3,vnf6_3,vnf7_3,vnf8_3,vnf9_3",22
+2026-01-21 13:07:39,Energy-Aware A*,64,4,1,7,"vnf10_0,vnf11_0,vnf12_0,vnf13_0,vnf14_0,vnf15_0,vnf16_0,vnf17_0,vnf18_0,vnf19_0,vnf20_0,vnf21_3,vnf8_0,vnf9_0",14
+2026-01-21 13:07:39,Energy-Aware A*,64,4,1,1,"vnf10_1,vnf11_1,vnf12_1,vnf13_1,vnf14_1,vnf15_1,vnf29_0,vnf30_0,vnf31_0,vnf32_0,vnf33_3,vnf34_3,vnf35_3,vnf36_3,vnf37_0,vnf38_0,vnf8_1,vnf9_1",18
+2026-01-21 13:07:39,Energy-Aware A*,64,4,1,2,"vnf10_2,vnf11_2,vnf12_2,vnf13_2,vnf14_2,vnf15_2,vnf8_2,vnf9_2",8
+2026-01-21 13:07:39,Energy-Aware A*,64,4,1,12,"vnf16_1,vnf17_1,vnf18_1,vnf19_1,vnf20_1,vnf22_1,vnf23_1,vnf24_1,vnf29_1,vnf30_1,vnf31_1,vnf32_1,vnf33_1,vnf34_1,vnf35_1,vnf36_1",16
+2026-01-21 13:07:39,Energy-Aware A*,64,4,1,10,"vnf16_2,vnf17_2,vnf18_2,vnf19_2,vnf20_2,vnf22_2,vnf23_2,vnf24_2",8
+2026-01-21 13:07:39,Energy-Aware A*,64,4,1,9,"vnf21_2,vnf25_1,vnf26_1,vnf27_1,vnf28_1,vnf33_0,vnf34_0,vnf35_0,vnf36_0,vnf37_3,vnf38_3",11
+2026-01-21 13:07:39,Energy-Aware A*,64,4,1,3,"vnf25_2,vnf26_2,vnf27_2,vnf28_2,vnf29_2,vnf30_2,vnf31_2,vnf32_2",8
+2026-01-21 13:07:39,Energy-Aware A*,64,4,1,4,"vnf37_1,vnf38_1",2
+2026-01-21 13:07:39,MILP_Gurobi,64,4,1,6,"vnf11_0,vnf12_0,vnf14_0,vnf17_0,vnf20_0,vnf21_0,vnf24_0,vnf27_0,vnf28_0,vnf29_0,vnf34_0,vnf39_0,vnf3_0,vnf40_0,vnf41_0,vnf47_0,vnf52_0,vnf54_0,vnf57_0,vnf62_0,vnf63_0",21
+2026-01-21 13:07:39,MILP_Gurobi,64,4,1,7,"vnf11_1,vnf12_1,vnf17_1,vnf20_1,vnf21_1,vnf24_1,vnf27_1,vnf29_1,vnf3_1,vnf41_1,vnf47_1,vnf52_1,vnf54_1,vnf57_1,vnf63_1",15
+2026-01-21 13:07:39,MILP_Gurobi,64,4,1,8,"vnf11_2,vnf12_2,vnf3_2,vnf41_2,vnf47_2,vnf52_2,vnf54_2,vnf57_2",8
+2026-01-21 13:07:39,MILP_Gurobi,64,4,1,11,"vnf11_3,vnf12_3,vnf14_3,vnf17_3,vnf20_3,vnf21_3,vnf24_3,vnf27_3,vnf28_3,vnf29_3,vnf34_3,vnf39_3,vnf3_3,vnf40_3,vnf41_3,vnf47_3,vnf52_3,vnf54_3,vnf57_3,vnf62_3,vnf63_3",21
+2026-01-21 13:07:39,MILP_Gurobi,64,4,1,9,"vnf14_1,vnf17_2,vnf20_2,vnf24_2,vnf27_2,vnf28_1,vnf34_1,vnf39_1,vnf40_1,vnf62_1,vnf63_2",11
+2026-01-21 13:07:39,MILP_Gurobi,64,4,1,10,"vnf14_2,vnf21_2,vnf28_2,vnf29_2,vnf34_2,vnf39_2,vnf40_2,vnf62_2",8
+2026-01-21 13:17:55,A*,128,4,1,6,"vnf0_0,vnf10_0,vnf11_0,vnf12_0,vnf13_0,vnf14_0,vnf15_0,vnf16_0,vnf17_0,vnf18_0,vnf19_0,vnf1_0,vnf20_0,vnf21_0,vnf22_0,vnf23_0,vnf24_0,vnf25_0,vnf26_0,vnf27_0,vnf28_0,vnf29_0,vnf2_0,vnf30_0,vnf31_0,vnf32_0,vnf33_0,vnf34_0,vnf35_0,vnf36_0,vnf37_0,vnf38_0,vnf39_0,vnf3_0,vnf40_3,vnf41_3,vnf4_0,vnf5_0,vnf6_0,vnf7_0,vnf8_0,vnf9_0",42
+2026-01-21 13:17:55,A*,128,4,1,2,"vnf0_1,vnf11_3,vnf17_3,vnf1_3,vnf22_1,vnf23_1,vnf24_1,vnf7_3",8
+2026-01-21 13:17:55,A*,128,4,1,1,"vnf0_2,vnf22_2,vnf23_2,vnf24_2,vnf25_3,vnf26_3,vnf27_3,vnf28_3,vnf29_3,vnf30_3,vnf31_3,vnf32_3,vnf33_3,vnf34_3,vnf37_1,vnf38_1,vnf39_1,vnf40_0,vnf41_0",19
+2026-01-21 13:17:55,A*,128,4,1,3,"vnf0_3,vnf15_3,vnf19_3,vnf3_3,vnf40_1,vnf9_3",6
+2026-01-21 13:17:55,A*,128,4,1,5,"vnf11_1,vnf13_1,vnf15_1,vnf17_1,vnf19_1,vnf1_1,vnf25_1,vnf26_1,vnf28_1,vnf30_1,vnf32_1,vnf34_1,vnf3_1,vnf5_1,vnf7_1,vnf9_1",16
+2026-01-21 13:17:55,A*,128,4,1,4,"vnf11_2,vnf15_2,vnf17_2,vnf19_2,vnf1_2,vnf3_2,vnf7_2,vnf9_2",8
+2026-01-21 13:17:55,A*,128,4,1,7,"vnf10_1,vnf12_1,vnf14_1,vnf16_1,vnf18_1,vnf20_1,vnf21_1,vnf27_1,vnf29_1,vnf2_1,vnf31_1,vnf33_1,vnf35_1,vnf4_1,vnf6_1,vnf8_1",16
+2026-01-21 13:17:55,A*,128,4,1,8,"vnf10_3,vnf13_2,vnf16_3,vnf20_2,vnf2_2,vnf5_2,vnf8_2",7
+2026-01-21 13:17:55,A*,128,4,1,11,"vnf13_3,vnf20_3,vnf21_3,vnf22_3,vnf23_3,vnf24_3,vnf25_2,vnf26_2,vnf27_2,vnf28_2,vnf29_2,vnf2_3,vnf30_2,vnf31_2,vnf32_2,vnf33_2,vnf34_2,vnf35_2,vnf36_2,vnf37_2,vnf38_2,vnf39_2,vnf40_2,vnf41_2,vnf5_3,vnf8_3",26
+2026-01-21 13:17:55,A*,128,4,1,9,"vnf10_2,vnf12_2,vnf14_2,vnf16_2,vnf18_2,vnf21_2,vnf4_2,vnf6_2",8
+2026-01-21 13:17:55,A*,128,4,1,10,"vnf12_3,vnf14_3,vnf18_3,vnf36_1,vnf4_3,vnf6_3",6
+2026-01-21 13:17:55,A*,128,4,1,12,"vnf35_3,vnf36_3,vnf37_3,vnf38_3,vnf39_3,vnf41_1",6
+2026-01-21 13:17:55,ABO,128,4,1,2,"vnf0_0,vnf10_0,vnf11_0,vnf12_0,vnf13_0,vnf14_0,vnf19_0,vnf1_0,vnf2_0,vnf3_0,vnf4_0,vnf5_0,vnf6_0,vnf7_0,vnf8_0,vnf9_0",16
+2026-01-21 13:17:55,ABO,128,4,1,4,"vnf0_1,vnf10_1,vnf12_1,vnf18_3,vnf19_1,vnf1_3,vnf20_1,vnf23_0,vnf2_1,vnf4_1,vnf6_1,vnf8_1",12
+2026-01-21 13:17:55,ABO,128,4,1,3,"vnf0_2,vnf12_2,vnf16_3,vnf17_3,vnf22_2,vnf4_2,vnf8_2",7
+2026-01-21 13:17:55,ABO,128,4,1,11,"vnf0_3,vnf16_2,vnf21_2,vnf22_3,vnf25_1,vnf8_3",6
+2026-01-21 13:17:55,ABO,128,4,1,6,"vnf11_1,vnf13_1,vnf14_1,vnf1_1,vnf23_3,vnf24_2,vnf25_2,vnf2_3,vnf3_1,vnf5_1,vnf7_1,vnf9_1",12
+2026-01-21 13:17:55,ABO,128,4,1,5,"vnf10_2,vnf13_2,vnf15_0,vnf1_2,vnf20_0,vnf2_2,vnf5_2,vnf6_2,vnf9_2",9
+2026-01-21 13:17:55,ABO,128,4,1,7,"vnf11_2,vnf14_2,vnf15_3,vnf16_0,vnf17_0,vnf18_0,vnf21_0,vnf22_0,vnf3_2,vnf7_2",10
+2026-01-21 13:17:55,ABO,128,4,1,9,"vnf11_3,vnf14_3,vnf15_2,vnf21_1,vnf25_0,vnf3_3,vnf7_3",7
+2026-01-21 13:17:55,ABO,128,4,1,12,"vnf12_3,vnf17_2,vnf18_2,vnf19_2,vnf20_2,vnf23_1,vnf24_1,vnf4_3",8
+2026-01-21 13:17:55,ABO,128,4,1,8,"vnf10_3,vnf13_3,vnf15_1,vnf5_3,vnf6_3,vnf9_3",6
+2026-01-21 13:17:55,ABO,128,4,1,10,"vnf16_1,vnf17_1,vnf18_1,vnf19_3,vnf20_3,vnf21_3,vnf22_1,vnf23_2,vnf24_0",9
+2026-01-21 13:17:55,ABO,128,4,1,1,"vnf24_3,vnf25_3",2
+2026-01-21 13:17:55,FABO,128,4,1,2,"vnf0_0,vnf10_2,vnf18_1,vnf19_3,vnf24_1,vnf2_0,vnf3_0,vnf4_0,vnf5_0,vnf6_2,vnf7_2",11
+2026-01-21 13:17:55,FABO,128,4,1,4,"vnf0_1,vnf12_1,vnf15_1,vnf18_0,vnf19_2,vnf20_0,vnf24_0,vnf25_0,vnf26_2,vnf27_1,vnf4_1,vnf5_3",12
+2026-01-21 13:17:55,FABO,128,4,1,3,"vnf0_2,vnf11_3,vnf12_2,vnf14_3,vnf15_2,vnf20_1,vnf23_3",7
+2026-01-21 13:17:55,FABO,128,4,1,11,"vnf0_3,vnf11_2,vnf13_2,vnf14_2,vnf19_1,vnf20_3,vnf25_3,vnf28_3,vnf29_3,vnf30_2,vnf8_3",11
+2026-01-21 13:17:55,FABO,128,4,1,5,"vnf10_0,vnf11_0,vnf12_0,vnf13_0,vnf14_0,vnf15_0,vnf16_0,vnf17_0,vnf1_0,vnf2_2,vnf4_2,vnf5_2,vnf9_0",13
+2026-01-21 13:17:55,FABO,128,4,1,6,"vnf10_1,vnf18_2,vnf1_1,vnf24_3,vnf25_2,vnf26_1,vnf27_2,vnf28_1,vnf29_1,vnf2_1,vnf30_1,vnf3_1,vnf5_1,vnf6_1,vnf7_1,vnf9_1",16
+2026-01-21 13:17:55,FABO,128,4,1,7,"vnf16_3,vnf17_3,vnf1_2,vnf23_0,vnf3_2,vnf6_0,vnf7_0,vnf8_0,vnf9_2",9
+2026-01-21 13:17:55,FABO,128,4,1,9,"vnf16_2,vnf17_2,vnf1_3,vnf21_1,vnf22_1,vnf26_0,vnf27_3,vnf28_2,vnf8_1",9
+2026-01-21 13:17:55,FABO,128,4,1,8,"vnf11_1,vnf13_1,vnf14_1,vnf16_1,vnf17_1,vnf19_0,vnf21_0,vnf22_0,vnf2_3,vnf4_3,vnf8_2",11
+2026-01-21 13:17:55,FABO,128,4,1,10,"vnf13_3,vnf20_2,vnf21_2,vnf22_2,vnf23_1,vnf3_3,vnf9_3",7
+2026-01-21 13:17:55,FABO,128,4,1,1,"vnf10_3,vnf18_3,vnf24_2,vnf25_1,vnf26_3,vnf27_0,vnf28_0,vnf29_2,vnf30_3,vnf6_3,vnf7_3",11
+2026-01-21 13:17:55,FABO,128,4,1,12,"vnf12_3,vnf15_3,vnf21_3,vnf22_3,vnf23_2,vnf29_0,vnf30_0",7
+2026-01-21 13:17:55,Best Fit,128,4,1,6,"vnf0_0,vnf10_0,vnf11_0,vnf12_0,vnf13_0,vnf14_0,vnf15_0,vnf16_0,vnf17_0,vnf18_0,vnf19_0,vnf1_0,vnf20_0,vnf21_0,vnf22_0,vnf23_0,vnf24_0,vnf25_0,vnf26_0,vnf27_0,vnf28_0,vnf29_0,vnf2_0,vnf3_0,vnf4_0,vnf5_0,vnf6_0,vnf7_0,vnf8_0,vnf9_0",30
+2026-01-21 13:17:55,Best Fit,128,4,1,2,"vnf0_1,vnf10_1,vnf11_1,vnf12_1,vnf13_1,vnf14_1,vnf15_1,vnf1_1,vnf2_1,vnf3_1,vnf4_1,vnf5_1,vnf6_1,vnf7_1,vnf8_1,vnf9_1",16
+2026-01-21 13:17:55,Best Fit,128,4,1,1,"vnf0_2,vnf10_2,vnf11_2,vnf12_2,vnf13_2,vnf14_2,vnf15_2,vnf1_2,vnf29_3,vnf2_2,vnf3_2,vnf4_2,vnf5_2,vnf6_2,vnf7_2,vnf8_2,vnf9_2",17
+2026-01-21 13:17:55,Best Fit,128,4,1,3,"vnf0_3,vnf1_3,vnf2_3,vnf3_3,vnf4_3",5
+2026-01-21 13:17:55,Best Fit,128,4,1,4,"vnf5_3,vnf6_3,vnf7_3,vnf8_3,vnf9_3",5
+2026-01-21 13:17:55,Best Fit,128,4,1,11,"vnf10_3,vnf11_3,vnf12_3,vnf13_3,vnf14_3,vnf27_2,vnf28_2,vnf29_2",8
+2026-01-21 13:17:55,Best Fit,128,4,1,5,"vnf15_3,vnf16_1,vnf17_1,vnf18_1,vnf19_1,vnf20_1,vnf21_1,vnf22_1,vnf23_1,vnf24_1,vnf25_1,vnf26_1,vnf27_1,vnf28_1",14
+2026-01-21 13:17:55,Best Fit,128,4,1,8,"vnf16_2,vnf17_2,vnf18_2,vnf19_2,vnf20_2,vnf21_2,vnf22_2,vnf23_2",8
+2026-01-21 13:17:55,Best Fit,128,4,1,7,"vnf16_3,vnf17_3,vnf18_3,vnf19_3,vnf20_3,vnf29_1",6
+2026-01-21 13:17:55,Best Fit,128,4,1,9,"vnf21_3,vnf22_3,vnf23_3,vnf24_2,vnf25_2,vnf26_2",6
+2026-01-21 13:17:55,Best Fit,128,4,1,10,"vnf24_3,vnf25_3,vnf26_3,vnf27_3,vnf28_3",5
+2026-01-21 13:17:55,First Fit,128,4,1,1,"vnf0_0,vnf10_0,vnf11_0,vnf12_0,vnf13_0,vnf14_0,vnf15_0,vnf16_0,vnf17_0,vnf18_0,vnf19_0,vnf1_0,vnf20_0,vnf21_0,vnf22_0,vnf23_0,vnf24_0,vnf25_0,vnf26_0,vnf27_0,vnf28_0,vnf29_0,vnf2_0,vnf30_0,vnf31_0,vnf32_0,vnf33_3,vnf34_3,vnf35_2,vnf36_2,vnf37_2,vnf3_0,vnf4_0,vnf5_0,vnf6_0,vnf7_0,vnf8_0,vnf9_0",38
+2026-01-21 13:17:55,First Fit,128,4,1,2,"vnf0_1,vnf10_1,vnf11_1,vnf12_1,vnf13_1,vnf14_1,vnf15_1,vnf1_1,vnf2_1,vnf3_1,vnf4_1,vnf5_1,vnf6_1,vnf7_1,vnf8_1,vnf9_1",16
+2026-01-21 13:17:55,First Fit,128,4,1,3,"vnf0_2,vnf1_2,vnf2_2,vnf3_2,vnf4_2,vnf5_2,vnf6_2,vnf7_2",8
+2026-01-21 13:17:55,First Fit,128,4,1,4,"vnf0_3,vnf16_1,vnf1_3,vnf2_3,vnf3_3,vnf4_3",6
+2026-01-21 13:17:55,First Fit,128,4,1,5,"vnf10_2,vnf17_1,vnf5_3,vnf6_3,vnf7_3,vnf8_2,vnf9_2",7
+2026-01-21 13:17:55,First Fit,128,4,1,6,"vnf10_3,vnf11_2,vnf12_2,vnf13_2,vnf14_2,vnf15_2,vnf16_2,vnf17_2,vnf18_1,vnf19_1,vnf20_1,vnf21_1,vnf22_1,vnf23_1,vnf24_1,vnf25_1,vnf26_1,vnf27_1,vnf28_1,vnf29_1,vnf30_1,vnf31_1,vnf32_1,vnf33_0,vnf34_0,vnf35_0,vnf36_0,vnf37_0,vnf8_3,vnf9_3",30
+2026-01-21 13:17:55,First Fit,128,4,1,7,"vnf11_3,vnf12_3,vnf13_3,vnf14_3,vnf15_3,vnf33_1",6
+2026-01-21 13:17:55,First Fit,128,4,1,8,"vnf16_3,vnf17_3,vnf18_2,vnf19_2,vnf20_2,vnf21_2,vnf22_2",7
+2026-01-21 13:17:55,First Fit,128,4,1,9,"vnf18_3,vnf19_3,vnf20_3,vnf21_3,vnf22_3,vnf34_1",6
+2026-01-21 13:17:55,First Fit,128,4,1,10,"vnf23_2,vnf24_2,vnf25_2,vnf26_2,vnf27_2,vnf28_2,vnf29_2,vnf30_2",8
+2026-01-21 13:17:55,First Fit,128,4,1,11,"vnf23_3,vnf24_3,vnf25_3,vnf26_3,vnf27_3,vnf28_3,vnf29_3,vnf30_3,vnf31_2,vnf32_2,vnf33_2,vnf34_2,vnf35_1,vnf36_1,vnf37_1",15
+2026-01-21 13:17:55,First Fit,128,4,1,12,"vnf31_3,vnf32_3,vnf35_3,vnf36_3,vnf37_3",5
+2026-01-21 13:17:55,Energy-Aware A*,128,4,1,5,"vnf0_0,vnf1_0,vnf21_0,vnf22_0,vnf23_0,vnf24_0,vnf25_0,vnf26_0,vnf27_0,vnf28_0,vnf2_0,vnf3_0,vnf4_0,vnf5_0,vnf6_0,vnf7_0",16
+2026-01-21 13:17:55,Energy-Aware A*,128,4,1,11,"vnf0_1,vnf1_1,vnf22_3,vnf23_3,vnf24_3,vnf25_3,vnf26_3,vnf27_3,vnf28_3,vnf29_3,vnf2_1,vnf30_3,vnf31_3,vnf32_3,vnf33_2,vnf34_2,vnf35_2,vnf36_2,vnf37_2,vnf38_2,vnf3_1,vnf4_1,vnf5_1,vnf6_1,vnf7_1",25
+2026-01-21 13:17:55,Energy-Aware A*,128,4,1,8,"vnf0_2,vnf1_2,vnf2_2,vnf3_2,vnf4_2,vnf5_2,vnf6_2,vnf7_2",8
+2026-01-21 13:17:55,Energy-Aware A*,128,4,1,6,"vnf0_3,vnf10_3,vnf11_3,vnf12_3,vnf13_3,vnf14_3,vnf15_3,vnf16_3,vnf17_3,vnf18_3,vnf19_3,vnf1_3,vnf20_3,vnf21_1,vnf2_3,vnf3_3,vnf4_3,vnf5_3,vnf6_3,vnf7_3,vnf8_3,vnf9_3",22
+2026-01-21 13:17:55,Energy-Aware A*,128,4,1,7,"vnf10_0,vnf11_0,vnf12_0,vnf13_0,vnf14_0,vnf15_0,vnf16_0,vnf17_0,vnf18_0,vnf19_0,vnf20_0,vnf21_3,vnf8_0,vnf9_0",14
+2026-01-21 13:17:55,Energy-Aware A*,128,4,1,1,"vnf10_1,vnf11_1,vnf12_1,vnf13_1,vnf14_1,vnf15_1,vnf29_0,vnf30_0,vnf31_0,vnf32_0,vnf33_3,vnf34_3,vnf35_3,vnf36_3,vnf37_0,vnf38_0,vnf8_1,vnf9_1",18
+2026-01-21 13:17:55,Energy-Aware A*,128,4,1,2,"vnf10_2,vnf11_2,vnf12_2,vnf13_2,vnf14_2,vnf15_2,vnf8_2,vnf9_2",8
+2026-01-21 13:17:55,Energy-Aware A*,128,4,1,12,"vnf16_1,vnf17_1,vnf18_1,vnf19_1,vnf20_1,vnf22_1,vnf23_1,vnf24_1,vnf29_1,vnf30_1,vnf31_1,vnf32_1,vnf33_1,vnf34_1,vnf35_1,vnf36_1",16
+2026-01-21 13:17:55,Energy-Aware A*,128,4,1,10,"vnf16_2,vnf17_2,vnf18_2,vnf19_2,vnf20_2,vnf22_2,vnf23_2,vnf24_2",8
+2026-01-21 13:17:55,Energy-Aware A*,128,4,1,9,"vnf21_2,vnf25_1,vnf26_1,vnf27_1,vnf28_1,vnf33_0,vnf34_0,vnf35_0,vnf36_0,vnf37_3,vnf38_3",11
+2026-01-21 13:17:55,Energy-Aware A*,128,4,1,3,"vnf25_2,vnf26_2,vnf27_2,vnf28_2,vnf29_2,vnf30_2,vnf31_2,vnf32_2",8
+2026-01-21 13:17:55,Energy-Aware A*,128,4,1,4,"vnf37_1,vnf38_1",2
+2026-01-21 13:17:55,MILP_Gurobi,128,4,1,6,"vnf107_0,vnf115_0,vnf126_0,vnf127_0,vnf14_0,vnf16_0,vnf18_0,vnf24_0,vnf29_0,vnf34_0,vnf37_0,vnf3_0,vnf40_0,vnf44_0,vnf46_0,vnf50_0,vnf52_0,vnf68_0,vnf85_0,vnf8_0,vnf94_0",21
+2026-01-21 13:17:55,MILP_Gurobi,128,4,1,7,"vnf107_1,vnf115_1,vnf127_1,vnf14_1,vnf16_1,vnf18_1,vnf24_1,vnf29_1,vnf37_1,vnf3_1,vnf46_1,vnf50_1,vnf52_1,vnf68_1,vnf8_1",15
+2026-01-21 13:17:55,MILP_Gurobi,128,4,1,9,"vnf115_2,vnf126_1,vnf14_2,vnf24_2,vnf34_1,vnf3_2,vnf40_1,vnf44_1,vnf46_2,vnf85_1,vnf94_1",11
+2026-01-21 13:17:55,MILP_Gurobi,128,4,1,11,"vnf107_3,vnf115_3,vnf126_3,vnf127_3,vnf14_3,vnf16_3,vnf18_3,vnf24_3,vnf29_3,vnf34_3,vnf37_3,vnf3_3,vnf40_3,vnf44_3,vnf46_3,vnf50_3,vnf52_3,vnf68_3,vnf85_3,vnf8_3,vnf94_3",21
+2026-01-21 13:17:55,MILP_Gurobi,128,4,1,8,"vnf107_2,vnf16_2,vnf18_2,vnf29_2,vnf37_2,vnf50_2,vnf52_2,vnf8_2",8
+2026-01-21 13:17:55,MILP_Gurobi,128,4,1,10,"vnf126_2,vnf127_2,vnf34_2,vnf40_2,vnf44_2,vnf68_2,vnf85_2,vnf94_2",8
+2026-01-21 13:28:32,A*,4,5,1,6,"vnf0_0,vnf1_0,vnf2_0,vnf3_0",4
+2026-01-21 13:28:32,A*,4,5,1,2,"vnf0_1,vnf1_3",2
+2026-01-21 13:28:32,A*,4,5,1,1,"vnf0_2,vnf1_4,vnf3_4",3
+2026-01-21 13:28:32,A*,4,5,1,3,"vnf0_3,vnf3_3",2
+2026-01-21 13:28:32,A*,4,5,1,11,"vnf0_4,vnf2_3",2
+2026-01-21 13:28:32,A*,4,5,1,5,"vnf1_1,vnf3_1",2
+2026-01-21 13:28:32,A*,4,5,1,4,"vnf1_2,vnf3_2",2
+2026-01-21 13:28:32,A*,4,5,1,7,vnf2_1,1
+2026-01-21 13:28:32,A*,4,5,1,8,vnf2_2,1
+2026-01-21 13:28:32,A*,4,5,1,10,vnf2_4,1
+2026-01-21 13:28:32,ABO,4,5,1,2,"vnf0_0,vnf1_0,vnf2_0,vnf3_0",4
+2026-01-21 13:28:32,ABO,4,5,1,4,"vnf0_1,vnf2_1,vnf3_3",3
+2026-01-21 13:28:32,ABO,4,5,1,3,"vnf0_2,vnf3_4",2
+2026-01-21 13:28:32,ABO,4,5,1,11,vnf0_3,1
+2026-01-21 13:28:32,ABO,4,5,1,8,"vnf0_4,vnf1_3",2
+2026-01-21 13:28:32,ABO,4,5,1,6,"vnf1_1,vnf2_3,vnf3_1",3
+2026-01-21 13:28:32,ABO,4,5,1,5,"vnf1_2,vnf2_2,vnf3_2",3
+2026-01-21 13:28:32,ABO,4,5,1,9,vnf1_4,1
+2026-01-21 13:28:32,ABO,4,5,1,7,vnf2_4,1
+2026-01-21 13:28:32,FABO,4,5,1,2,"vnf0_0,vnf2_0,vnf3_0",3
+2026-01-21 13:28:32,FABO,4,5,1,4,vnf0_1,1
+2026-01-21 13:28:32,FABO,4,5,1,3,vnf0_2,1
+2026-01-21 13:28:32,FABO,4,5,1,11,"vnf0_3,vnf2_4",2
+2026-01-21 13:28:32,FABO,4,5,1,8,"vnf0_4,vnf1_4,vnf2_3",3
+2026-01-21 13:28:32,FABO,4,5,1,5,"vnf1_0,vnf2_2",2
+2026-01-21 13:28:32,FABO,4,5,1,6,"vnf1_1,vnf2_1,vnf3_1",3
+2026-01-21 13:28:32,FABO,4,5,1,7,"vnf1_2,vnf3_2",2
+2026-01-21 13:28:32,FABO,4,5,1,9,vnf1_3,1
+2026-01-21 13:28:32,FABO,4,5,1,10,vnf3_3,1
+2026-01-21 13:28:32,FABO,4,5,1,12,vnf3_4,1
+2026-01-21 13:28:32,Best Fit,4,5,1,6,"vnf0_0,vnf1_0,vnf2_0,vnf3_0",4
+2026-01-21 13:28:32,Best Fit,4,5,1,2,"vnf0_1,vnf1_1,vnf2_1,vnf3_1",4
+2026-01-21 13:28:32,Best Fit,4,5,1,1,"vnf0_2,vnf1_2,vnf2_2,vnf3_2",4
+2026-01-21 13:28:32,Best Fit,4,5,1,3,"vnf0_3,vnf1_3,vnf2_3,vnf3_3",4
+2026-01-21 13:28:32,Best Fit,4,5,1,4,"vnf0_4,vnf1_4,vnf2_4,vnf3_4",4
+2026-01-21 13:28:32,First Fit,4,5,1,1,"vnf0_0,vnf1_0,vnf2_0,vnf3_0",4
+2026-01-21 13:28:32,First Fit,4,5,1,2,"vnf0_1,vnf1_1,vnf2_1,vnf3_1",4
+2026-01-21 13:28:32,First Fit,4,5,1,3,"vnf0_2,vnf1_2,vnf2_2,vnf3_2",4
+2026-01-21 13:28:32,First Fit,4,5,1,4,"vnf0_3,vnf1_3,vnf2_3,vnf3_3",4
+2026-01-21 13:28:32,First Fit,4,5,1,5,"vnf0_4,vnf1_4,vnf2_4,vnf3_4",4
+2026-01-21 13:28:32,Energy-Aware A*,4,5,1,2,"vnf0_0,vnf1_0,vnf2_0,vnf3_0",4
+2026-01-21 13:28:32,Energy-Aware A*,4,5,1,11,"vnf0_1,vnf1_1,vnf2_1,vnf3_1",4
+2026-01-21 13:28:32,Energy-Aware A*,4,5,1,8,"vnf0_2,vnf1_2,vnf2_2,vnf3_2",4
+2026-01-21 13:28:32,Energy-Aware A*,4,5,1,5,"vnf0_3,vnf1_3,vnf2_3,vnf3_3",4
+2026-01-21 13:28:32,Energy-Aware A*,4,5,1,6,"vnf0_4,vnf1_4,vnf2_4,vnf3_4",4
+2026-01-21 13:28:32,MILP_Gurobi,4,5,1,6,"vnf0_0,vnf1_0,vnf2_0,vnf3_0",4
+2026-01-21 13:28:32,MILP_Gurobi,4,5,1,7,"vnf0_1,vnf1_1,vnf2_1,vnf3_1",4
+2026-01-21 13:28:32,MILP_Gurobi,4,5,1,9,"vnf0_2,vnf1_2,vnf2_2,vnf3_2",4
+2026-01-21 13:28:32,MILP_Gurobi,4,5,1,10,"vnf0_3,vnf1_3,vnf2_3,vnf3_3",4
+2026-01-21 13:28:32,MILP_Gurobi,4,5,1,11,"vnf0_4,vnf1_4,vnf2_4,vnf3_4",4
+2026-01-21 13:34:16,A*,8,5,1,6,"vnf0_0,vnf1_0,vnf2_0,vnf3_0,vnf4_0,vnf5_0,vnf6_0,vnf7_0",8
+2026-01-21 13:34:16,A*,8,5,1,2,"vnf0_1,vnf1_3,vnf5_3",3
+2026-01-21 13:34:16,A*,8,5,1,1,"vnf0_2,vnf1_4,vnf3_4,vnf5_4",4
+2026-01-21 13:34:16,A*,8,5,1,3,"vnf0_3,vnf3_3,vnf7_4",3
+2026-01-21 13:34:16,A*,8,5,1,11,"vnf0_4,vnf2_3,vnf4_4,vnf6_4,vnf7_3",5
+2026-01-21 13:34:16,A*,8,5,1,5,"vnf1_1,vnf3_1,vnf5_1,vnf7_1",4
+2026-01-21 13:34:16,A*,8,5,1,4,"vnf1_2,vnf3_2,vnf5_2",3
+2026-01-21 13:34:16,A*,8,5,1,7,"vnf2_1,vnf4_1,vnf6_1",3
+2026-01-21 13:34:16,A*,8,5,1,8,"vnf2_2,vnf4_3,vnf7_2",3
+2026-01-21 13:34:16,A*,8,5,1,10,"vnf2_4,vnf6_3",2
+2026-01-21 13:34:16,A*,8,5,1,9,"vnf4_2,vnf6_2",2
+2026-01-21 13:34:16,ABO,8,5,1,2,"vnf0_0,vnf1_0,vnf2_0,vnf3_0,vnf4_0,vnf5_0",6
+2026-01-21 13:34:16,ABO,8,5,1,4,"vnf0_1,vnf2_1,vnf3_3,vnf4_1",4
+2026-01-21 13:34:16,ABO,8,5,1,3,"vnf0_2,vnf3_4",2
+2026-01-21 13:34:16,ABO,8,5,1,11,vnf0_3,1
+2026-01-21 13:34:16,ABO,8,5,1,8,"vnf0_4,vnf1_3,vnf4_3,vnf5_4,vnf6_1,vnf7_1",6
+2026-01-21 13:34:16,ABO,8,5,1,6,"vnf1_1,vnf2_3,vnf3_1,vnf5_1,vnf6_4",5
+2026-01-21 13:34:16,ABO,8,5,1,5,"vnf1_2,vnf2_2,vnf3_2,vnf4_2,vnf6_0,vnf7_0",6
+2026-01-21 13:34:16,ABO,8,5,1,9,"vnf1_4,vnf4_4,vnf5_3,vnf6_2,vnf7_2",5
+2026-01-21 13:34:16,ABO,8,5,1,7,"vnf2_4,vnf5_2,vnf6_3,vnf7_3",4
+2026-01-21 13:34:16,ABO,8,5,1,10,vnf7_4,1
+2026-01-21 13:34:16,FABO,8,5,1,2,"vnf0_0,vnf2_0,vnf3_0,vnf4_0,vnf5_0,vnf6_2",6
+2026-01-21 13:34:16,FABO,8,5,1,4,"vnf0_1,vnf4_1,vnf5_3,vnf6_3",4
+2026-01-21 13:34:16,FABO,8,5,1,3,"vnf0_2,vnf5_4",2
+2026-01-21 13:34:16,FABO,8,5,1,11,"vnf0_3,vnf2_4,vnf4_4,vnf7_3",4
+2026-01-21 13:34:16,FABO,8,5,1,8,"vnf0_4,vnf1_4,vnf2_3,vnf4_3,vnf7_2",5
+2026-01-21 13:34:16,FABO,8,5,1,5,"vnf1_0,vnf2_2,vnf4_2,vnf5_2,vnf6_4",5
+2026-01-21 13:34:16,FABO,8,5,1,6,"vnf1_1,vnf2_1,vnf3_1,vnf5_1,vnf6_1",5
+2026-01-21 13:34:16,FABO,8,5,1,7,"vnf1_2,vnf3_2,vnf6_0,vnf7_0",4
+2026-01-21 13:34:16,FABO,8,5,1,9,"vnf1_3,vnf7_1",2
+2026-01-21 13:34:16,FABO,8,5,1,10,"vnf3_3,vnf7_4",2
+2026-01-21 13:34:16,FABO,8,5,1,12,vnf3_4,1
+2026-01-21 13:34:16,Best Fit,8,5,1,6,"vnf0_0,vnf1_0,vnf2_0,vnf3_0,vnf4_0,vnf5_0,vnf6_0,vnf7_0",8
+2026-01-21 13:34:16,Best Fit,8,5,1,2,"vnf0_1,vnf1_1,vnf2_1,vnf3_1,vnf4_1,vnf5_1,vnf6_1,vnf7_1",8
+2026-01-21 13:34:16,Best Fit,8,5,1,1,"vnf0_2,vnf1_2,vnf2_2,vnf3_2,vnf4_2,vnf5_2,vnf6_2,vnf7_2",8
+2026-01-21 13:34:16,Best Fit,8,5,1,3,"vnf0_3,vnf1_3,vnf2_3,vnf3_3,vnf4_3",5
+2026-01-21 13:34:16,Best Fit,8,5,1,4,"vnf0_4,vnf1_4,vnf2_4,vnf3_4",4
+2026-01-21 13:34:16,Best Fit,8,5,1,11,"vnf4_4,vnf5_3,vnf6_3,vnf7_3",4
+2026-01-21 13:34:16,Best Fit,8,5,1,8,"vnf5_4,vnf6_4,vnf7_4",3
+2026-01-21 13:34:16,First Fit,8,5,1,1,"vnf0_0,vnf1_0,vnf2_0,vnf3_0,vnf4_0,vnf5_0,vnf6_0,vnf7_0",8
+2026-01-21 13:34:16,First Fit,8,5,1,2,"vnf0_1,vnf1_1,vnf2_1,vnf3_1,vnf4_1,vnf5_1,vnf6_1,vnf7_1",8
+2026-01-21 13:34:16,First Fit,8,5,1,3,"vnf0_2,vnf1_2,vnf2_2,vnf3_2,vnf4_2,vnf5_2,vnf6_2,vnf7_2",8
+2026-01-21 13:34:16,First Fit,8,5,1,4,"vnf0_3,vnf1_3,vnf2_3,vnf3_3,vnf4_3",5
+2026-01-21 13:34:16,First Fit,8,5,1,5,"vnf0_4,vnf1_4,vnf2_4,vnf3_4",4
+2026-01-21 13:34:16,First Fit,8,5,1,6,"vnf4_4,vnf5_3,vnf6_3,vnf7_3",4
+2026-01-21 13:34:16,First Fit,8,5,1,7,"vnf5_4,vnf6_4,vnf7_4",3
+2026-01-21 13:34:16,Energy-Aware A*,8,5,1,2,"vnf0_0,vnf1_0,vnf2_0,vnf3_0,vnf4_0,vnf5_0,vnf6_0,vnf7_0",8
+2026-01-21 13:34:16,Energy-Aware A*,8,5,1,11,"vnf0_1,vnf1_1,vnf2_1,vnf3_1,vnf4_1",5
+2026-01-21 13:34:16,Energy-Aware A*,8,5,1,8,"vnf0_2,vnf1_2,vnf2_2,vnf3_2,vnf4_2",5
+2026-01-21 13:34:16,Energy-Aware A*,8,5,1,5,"vnf0_3,vnf1_3,vnf2_3,vnf3_3,vnf4_3",5
+2026-01-21 13:34:16,Energy-Aware A*,8,5,1,6,"vnf0_4,vnf1_4,vnf2_4,vnf3_4,vnf4_4,vnf5_4,vnf6_4,vnf7_4",8
+2026-01-21 13:34:16,Energy-Aware A*,8,5,1,12,"vnf5_1,vnf6_1,vnf7_1",3
+2026-01-21 13:34:16,Energy-Aware A*,8,5,1,10,"vnf5_2,vnf6_2,vnf7_2",3
+2026-01-21 13:34:16,Energy-Aware A*,8,5,1,7,"vnf5_3,vnf6_3,vnf7_3",3
+2026-01-21 13:34:16,MILP_Gurobi,8,5,1,6,"vnf0_0,vnf1_0,vnf2_0,vnf3_0,vnf4_0,vnf5_0,vnf6_0,vnf7_0",8
+2026-01-21 13:34:16,MILP_Gurobi,8,5,1,8,"vnf0_1,vnf1_1,vnf2_2,vnf3_2,vnf4_2,vnf5_2,vnf6_1,vnf7_2",8
+2026-01-21 13:34:16,MILP_Gurobi,8,5,1,9,"vnf0_2,vnf1_2,vnf3_3,vnf4_3,vnf5_3,vnf6_2",6
+2026-01-21 13:34:16,MILP_Gurobi,8,5,1,10,"vnf0_3,vnf1_3,vnf2_3,vnf6_3,vnf7_3",5
+2026-01-21 13:34:16,MILP_Gurobi,8,5,1,11,"vnf0_4,vnf1_4,vnf2_4,vnf3_4,vnf4_4,vnf5_4,vnf6_4,vnf7_4",8
+2026-01-21 13:34:16,MILP_Gurobi,8,5,1,7,"vnf2_1,vnf3_1,vnf4_1,vnf5_1,vnf7_1",5
+2026-01-21 13:44:10,A*,16,5,1,6,"vnf0_0,vnf10_0,vnf11_0,vnf12_0,vnf13_0,vnf14_0,vnf15_0,vnf1_0,vnf2_0,vnf3_0,vnf4_0,vnf5_0,vnf6_0,vnf7_0,vnf8_0,vnf9_0",16
+2026-01-21 13:44:10,A*,16,5,1,2,"vnf0_1,vnf11_3,vnf15_3,vnf1_3,vnf5_3,vnf9_3",6
+2026-01-21 13:44:10,A*,16,5,1,1,"vnf0_2,vnf11_4,vnf13_4,vnf15_4,vnf1_4,vnf3_4,vnf5_4,vnf9_4",8
+2026-01-21 13:44:10,A*,16,5,1,3,"vnf0_3,vnf13_3,vnf3_3,vnf7_4",4
+2026-01-21 13:44:10,A*,16,5,1,11,"vnf0_4,vnf10_4,vnf12_4,vnf14_4,vnf2_3,vnf4_4,vnf6_4,vnf7_3,vnf8_4",9
+2026-01-21 13:44:10,A*,16,5,1,5,"vnf11_1,vnf13_1,vnf15_1,vnf1_1,vnf3_1,vnf5_1,vnf7_1,vnf9_1",8
+2026-01-21 13:44:10,A*,16,5,1,4,"vnf11_2,vnf13_2,vnf15_2,vnf1_2,vnf3_2,vnf5_2,vnf9_2",7
+2026-01-21 13:44:10,A*,16,5,1,7,"vnf10_1,vnf12_1,vnf14_1,vnf2_1,vnf4_1,vnf6_1,vnf8_1",7
+2026-01-21 13:44:10,A*,16,5,1,8,"vnf12_3,vnf2_2,vnf4_3,vnf7_2,vnf8_3",5
+2026-01-21 13:44:10,A*,16,5,1,10,"vnf10_3,vnf14_3,vnf2_4,vnf6_3",4
+2026-01-21 13:44:10,A*,16,5,1,9,"vnf10_2,vnf12_2,vnf14_2,vnf4_2,vnf6_2,vnf8_2",6
+2026-01-21 13:44:10,ABO,16,5,1,2,"vnf0_0,vnf10_0,vnf11_0,vnf12_0,vnf14_3,vnf15_0,vnf1_0,vnf2_0,vnf3_0,vnf4_0,vnf5_0,vnf8_0,vnf9_0",13
+2026-01-21 13:44:10,ABO,16,5,1,4,"vnf0_1,vnf10_1,vnf12_3,vnf13_4,vnf2_1,vnf3_3,vnf4_1,vnf8_1",8
+2026-01-21 13:44:10,ABO,16,5,1,3,"vnf0_2,vnf10_2,vnf13_3,vnf15_1,vnf3_4,vnf9_4",6
+2026-01-21 13:44:10,ABO,16,5,1,11,"vnf0_3,vnf11_4,vnf15_2,vnf9_3",4
+2026-01-21 13:44:10,ABO,16,5,1,8,"vnf0_4,vnf1_3,vnf4_3,vnf5_4,vnf6_1,vnf7_1",6
+2026-01-21 13:44:10,ABO,16,5,1,6,"vnf11_1,vnf12_1,vnf14_2,vnf1_1,vnf2_3,vnf3_1,vnf5_1,vnf6_4,vnf8_3,vnf9_1",10
+2026-01-21 13:44:10,ABO,16,5,1,5,"vnf12_2,vnf1_2,vnf2_2,vnf3_2,vnf4_2,vnf6_0,vnf7_0,vnf8_2,vnf9_2",9
+2026-01-21 13:44:10,ABO,16,5,1,9,"vnf14_1,vnf1_4,vnf4_4,vnf5_3,vnf6_2,vnf7_2",6
+2026-01-21 13:44:10,ABO,16,5,1,7,"vnf11_2,vnf13_0,vnf14_0,vnf2_4,vnf5_2,vnf6_3,vnf7_3",7
+2026-01-21 13:44:10,ABO,16,5,1,10,"vnf10_4,vnf11_3,vnf13_1,vnf15_3,vnf7_4",5
+2026-01-21 13:44:10,ABO,16,5,1,1,"vnf12_4,vnf14_4,vnf8_4",3
+2026-01-21 13:44:10,ABO,16,5,1,12,"vnf10_3,vnf13_2,vnf15_4",3
+2026-01-21 13:44:10,FABO,16,5,1,2,"vnf0_0,vnf10_2,vnf11_0,vnf13_0,vnf14_0,vnf15_0,vnf2_0,vnf3_0,vnf4_0,vnf5_0,vnf6_2,vnf9_0",12
+2026-01-21 13:44:10,FABO,16,5,1,4,"vnf0_1,vnf10_3,vnf11_3,vnf14_1,vnf4_1,vnf5_3,vnf6_3",7
+2026-01-21 13:44:10,FABO,16,5,1,3,"vnf0_2,vnf10_4,vnf12_3,vnf5_4,vnf8_3",5
+2026-01-21 13:44:10,FABO,16,5,1,11,"vnf0_3,vnf12_4,vnf13_4,vnf2_4,vnf4_4,vnf7_3,vnf8_2",7
+2026-01-21 13:44:10,FABO,16,5,1,8,"vnf0_4,vnf1_4,vnf2_3,vnf4_3,vnf7_2",5
+2026-01-21 13:44:10,FABO,16,5,1,5,"vnf10_0,vnf11_2,vnf14_2,vnf1_0,vnf2_2,vnf4_2,vnf5_2,vnf6_4",8
+2026-01-21 13:44:10,FABO,16,5,1,6,"vnf10_1,vnf11_1,vnf13_1,vnf15_1,vnf1_1,vnf2_1,vnf3_1,vnf5_1,vnf6_1,vnf9_1",10
+2026-01-21 13:44:10,FABO,16,5,1,7,"vnf12_0,vnf13_2,vnf14_4,vnf1_2,vnf3_2,vnf6_0,vnf7_0,vnf8_0,vnf9_2",9
+2026-01-21 13:44:10,FABO,16,5,1,9,"vnf13_3,vnf14_3,vnf15_4,vnf1_3,vnf7_1",5
+2026-01-21 13:44:10,FABO,16,5,1,10,"vnf12_1,vnf15_3,vnf3_3,vnf7_4,vnf8_1,vnf9_3",6
+2026-01-21 13:44:10,FABO,16,5,1,12,"vnf12_2,vnf15_2,vnf3_4,vnf8_4,vnf9_4",5
+2026-01-21 13:44:10,FABO,16,5,1,1,vnf11_4,1
+2026-01-21 13:44:10,Best Fit,16,5,1,6,"vnf0_0,vnf10_0,vnf11_0,vnf12_0,vnf13_0,vnf14_0,vnf15_0,vnf1_0,vnf2_0,vnf3_0,vnf4_0,vnf5_0,vnf6_0,vnf7_0,vnf8_0,vnf9_0",16
+2026-01-21 13:44:10,Best Fit,16,5,1,2,"vnf0_1,vnf10_1,vnf11_1,vnf12_1,vnf13_1,vnf14_1,vnf15_1,vnf1_1,vnf2_1,vnf3_1,vnf4_1,vnf5_1,vnf6_1,vnf7_1,vnf8_1,vnf9_1",16
+2026-01-21 13:44:10,Best Fit,16,5,1,1,"vnf0_2,vnf10_2,vnf11_2,vnf12_2,vnf13_2,vnf14_2,vnf15_2,vnf1_2,vnf2_2,vnf3_2,vnf4_2,vnf5_2,vnf6_2,vnf7_2,vnf8_2,vnf9_2",16
+2026-01-21 13:44:10,Best Fit,16,5,1,3,"vnf0_3,vnf1_3,vnf2_3,vnf3_3,vnf4_3",5
+2026-01-21 13:44:10,Best Fit,16,5,1,4,"vnf0_4,vnf1_4,vnf2_4,vnf3_4",4
+2026-01-21 13:44:10,Best Fit,16,5,1,11,"vnf4_4,vnf5_3,vnf6_3,vnf7_3,vnf8_3,vnf9_3",6
+2026-01-21 13:44:10,Best Fit,16,5,1,8,"vnf5_4,vnf6_4,vnf7_4,vnf8_4",4
+2026-01-21 13:44:10,Best Fit,16,5,1,10,"vnf15_4,vnf9_4",2
+2026-01-21 13:44:10,Best Fit,16,5,1,5,"vnf10_3,vnf11_3,vnf12_3,vnf13_3,vnf14_3",5
+2026-01-21 13:44:10,Best Fit,16,5,1,7,"vnf10_4,vnf11_4,vnf12_4,vnf13_4",4
+2026-01-21 13:44:10,Best Fit,16,5,1,9,"vnf14_4,vnf15_3",2
+2026-01-21 13:44:10,First Fit,16,5,1,1,"vnf0_0,vnf10_0,vnf11_0,vnf12_0,vnf13_0,vnf14_0,vnf15_0,vnf1_0,vnf2_0,vnf3_0,vnf4_0,vnf5_0,vnf6_0,vnf7_0,vnf8_0,vnf9_0",16
+2026-01-21 13:44:10,First Fit,16,5,1,2,"vnf0_1,vnf10_1,vnf11_1,vnf12_1,vnf13_1,vnf14_1,vnf15_1,vnf1_1,vnf2_1,vnf3_1,vnf4_1,vnf5_1,vnf6_1,vnf7_1,vnf8_1,vnf9_1",16
+2026-01-21 13:44:10,First Fit,16,5,1,3,"vnf0_2,vnf1_2,vnf2_2,vnf3_2,vnf4_2,vnf5_2,vnf6_2,vnf7_2",8
+2026-01-21 13:44:10,First Fit,16,5,1,4,"vnf0_3,vnf1_3,vnf2_3,vnf3_3,vnf4_3",5
+2026-01-21 13:44:10,First Fit,16,5,1,5,"vnf0_4,vnf1_4,vnf2_4,vnf3_4",4
+2026-01-21 13:44:10,First Fit,16,5,1,6,"vnf10_2,vnf11_2,vnf12_2,vnf13_2,vnf14_2,vnf15_2,vnf4_4,vnf5_3,vnf6_3,vnf7_3,vnf8_2,vnf9_2",12
+2026-01-21 13:44:10,First Fit,16,5,1,7,"vnf5_4,vnf6_4,vnf7_4,vnf8_3",4
+2026-01-21 13:44:10,First Fit,16,5,1,8,"vnf10_3,vnf11_3,vnf12_3,vnf8_4,vnf9_3",5
+2026-01-21 13:44:10,First Fit,16,5,1,9,"vnf10_4,vnf11_4,vnf12_4,vnf9_4",4
+2026-01-21 13:44:10,First Fit,16,5,1,10,"vnf13_3,vnf14_3,vnf15_3",3
+2026-01-21 13:44:10,First Fit,16,5,1,11,"vnf13_4,vnf14_4,vnf15_4",3
+2026-01-21 13:44:10,Energy-Aware A*,16,5,1,2,"vnf0_0,vnf12_0,vnf13_0,vnf14_0,vnf15_0,vnf1_0,vnf2_0,vnf3_0,vnf4_0,vnf5_0,vnf6_0,vnf7_0,vnf8_0,vnf9_0",14
+2026-01-21 13:44:10,Energy-Aware A*,16,5,1,11,"vnf0_1,vnf11_1,vnf12_1,vnf13_1,vnf1_1,vnf2_1,vnf3_1,vnf4_1",8
+2026-01-21 13:44:10,Energy-Aware A*,16,5,1,8,"vnf0_2,vnf11_2,vnf12_2,vnf13_2,vnf1_2,vnf2_2,vnf3_2,vnf4_2",8
+2026-01-21 13:44:10,Energy-Aware A*,16,5,1,5,"vnf0_3,vnf11_0,vnf1_3,vnf2_3,vnf3_3,vnf4_3",6
+2026-01-21 13:44:10,Energy-Aware A*,16,5,1,6,"vnf0_4,vnf10_4,vnf11_3,vnf12_3,vnf13_3,vnf14_4,vnf15_4,vnf1_4,vnf2_4,vnf3_4,vnf4_4,vnf5_4,vnf6_4,vnf7_4,vnf8_4,vnf9_4",16
+2026-01-21 13:44:10,Energy-Aware A*,16,5,1,12,"vnf10_2,vnf5_1,vnf6_1,vnf7_1,vnf8_1,vnf9_1",6
+2026-01-21 13:44:10,Energy-Aware A*,16,5,1,10,"vnf10_3,vnf5_2,vnf6_2,vnf7_2,vnf8_2,vnf9_2",6
+2026-01-21 13:44:10,Energy-Aware A*,16,5,1,7,"vnf10_0,vnf5_3,vnf6_3,vnf7_3,vnf8_3,vnf9_3",6
+2026-01-21 13:44:10,Energy-Aware A*,16,5,1,3,"vnf10_1,vnf14_1,vnf15_1",3
+2026-01-21 13:44:10,Energy-Aware A*,16,5,1,1,"vnf11_4,vnf12_4,vnf13_4,vnf14_3,vnf15_3",5
+2026-01-21 13:44:10,Energy-Aware A*,16,5,1,4,"vnf14_2,vnf15_2",2
+2026-01-21 13:44:10,MILP_Gurobi,16,5,1,6,"vnf0_0,vnf1_0,vnf2_0,vnf3_0,vnf4_0,vnf6_0,vnf7_0,vnf8_0,vnf9_0",9
+2026-01-21 13:44:10,MILP_Gurobi,16,5,1,7,"vnf0_1,vnf2_1,vnf3_1,vnf4_1,vnf6_1,vnf7_1,vnf8_1",7
+2026-01-21 13:44:10,MILP_Gurobi,16,5,1,8,"vnf0_2,vnf1_1,vnf2_2,vnf3_2,vnf4_2,vnf6_2,vnf7_2,vnf8_2,vnf9_1",9
+2026-01-21 13:44:10,MILP_Gurobi,16,5,1,9,"vnf0_3,vnf1_2,vnf2_3,vnf3_3,vnf4_3,vnf9_2",6
+2026-01-21 13:44:10,MILP_Gurobi,16,5,1,11,"vnf0_4,vnf1_4,vnf2_4,vnf3_4,vnf4_4,vnf6_4,vnf7_4,vnf8_4,vnf9_4",9
+2026-01-21 13:44:10,MILP_Gurobi,16,5,1,10,"vnf1_3,vnf6_3,vnf7_3,vnf8_3,vnf9_3",5
+2026-01-21 14:00:04,A*,32,5,1,6,"vnf0_0,vnf10_0,vnf11_0,vnf12_0,vnf13_0,vnf14_0,vnf15_0,vnf16_0,vnf17_0,vnf18_0,vnf19_0,vnf1_0,vnf20_0,vnf21_0,vnf22_0,vnf23_0,vnf24_0,vnf25_0,vnf2_0,vnf3_0,vnf4_0,vnf5_0,vnf6_0,vnf7_0,vnf8_0,vnf9_0",26
+2026-01-21 14:00:04,A*,32,5,1,2,"vnf0_1,vnf11_3,vnf15_3,vnf1_3,vnf5_3,vnf9_3",6
+2026-01-21 14:00:04,A*,32,5,1,1,"vnf0_2,vnf11_4,vnf13_4,vnf15_4,vnf17_4,vnf19_3,vnf1_4,vnf20_3,vnf21_3,vnf22_3,vnf23_4,vnf24_4,vnf25_4,vnf3_4,vnf5_4,vnf9_4",16
+2026-01-21 14:00:04,A*,32,5,1,3,"vnf0_3,vnf13_3,vnf17_3,vnf3_3,vnf7_4",5
+2026-01-21 14:00:04,A*,32,5,1,11,"vnf0_4,vnf10_4,vnf12_4,vnf14_4,vnf16_4,vnf18_4,vnf19_2,vnf20_2,vnf21_2,vnf22_2,vnf23_3,vnf24_3,vnf25_2,vnf2_3,vnf4_4,vnf6_4,vnf7_3,vnf8_4",18
+2026-01-21 14:00:04,A*,32,5,1,5,"vnf11_1,vnf13_1,vnf15_1,vnf17_1,vnf19_1,vnf1_1,vnf21_1,vnf23_1,vnf24_1,vnf25_3,vnf3_1,vnf5_1,vnf7_1,vnf9_1",14
+2026-01-21 14:00:04,A*,32,5,1,4,"vnf11_2,vnf13_2,vnf15_2,vnf17_2,vnf1_2,vnf3_2,vnf5_2,vnf9_2",8
+2026-01-21 14:00:04,A*,32,5,1,7,"vnf10_1,vnf12_1,vnf14_1,vnf16_1,vnf18_1,vnf20_1,vnf22_1,vnf23_2,vnf24_2,vnf25_1,vnf2_1,vnf4_1,vnf6_1,vnf8_1",14
+2026-01-21 14:00:04,A*,32,5,1,8,"vnf12_3,vnf16_3,vnf2_2,vnf4_3,vnf7_2,vnf8_3",6
+2026-01-21 14:00:04,A*,32,5,1,10,"vnf10_3,vnf14_3,vnf18_3,vnf2_4,vnf6_3",5
+2026-01-21 14:00:04,A*,32,5,1,9,"vnf10_2,vnf12_2,vnf14_2,vnf16_2,vnf18_2,vnf4_2,vnf6_2,vnf8_2",8
+2026-01-21 14:00:04,A*,32,5,1,12,"vnf19_4,vnf20_4,vnf21_4,vnf22_4",4
+2026-01-21 14:00:04,ABO,32,5,1,2,"vnf0_0,vnf10_0,vnf11_0,vnf12_0,vnf14_3,vnf15_0,vnf16_0,vnf1_0,vnf2_0,vnf3_0,vnf4_0,vnf5_0,vnf8_0,vnf9_0",14
+2026-01-21 14:00:04,ABO,32,5,1,4,"vnf0_1,vnf10_1,vnf12_3,vnf13_4,vnf16_1,vnf2_1,vnf3_3,vnf4_1,vnf8_1",9
+2026-01-21 14:00:04,ABO,32,5,1,3,"vnf0_2,vnf10_2,vnf13_3,vnf15_1,vnf3_4,vnf9_4",6
+2026-01-21 14:00:04,ABO,32,5,1,11,"vnf0_3,vnf11_4,vnf15_2,vnf16_4,vnf17_4,vnf9_3",6
+2026-01-21 14:00:04,ABO,32,5,1,8,"vnf0_4,vnf1_3,vnf4_3,vnf5_4,vnf6_1,vnf7_1",6
+2026-01-21 14:00:04,ABO,32,5,1,6,"vnf11_1,vnf12_1,vnf14_2,vnf16_3,vnf17_2,vnf1_1,vnf2_3,vnf3_1,vnf5_1,vnf6_4,vnf8_3,vnf9_1",12
+2026-01-21 14:00:04,ABO,32,5,1,5,"vnf12_2,vnf1_2,vnf2_2,vnf3_2,vnf4_2,vnf6_0,vnf7_0,vnf8_2,vnf9_2",9
+2026-01-21 14:00:04,ABO,32,5,1,9,"vnf14_1,vnf1_4,vnf4_4,vnf5_3,vnf6_2,vnf7_2",6
+2026-01-21 14:00:04,ABO,32,5,1,7,"vnf11_2,vnf13_0,vnf14_0,vnf2_4,vnf5_2,vnf6_3,vnf7_3",7
+2026-01-21 14:00:04,ABO,32,5,1,10,"vnf10_4,vnf11_3,vnf13_1,vnf15_3,vnf17_1,vnf7_4",6
+2026-01-21 14:00:04,ABO,32,5,1,1,"vnf12_4,vnf14_4,vnf16_2,vnf17_3,vnf8_4",5
+2026-01-21 14:00:04,ABO,32,5,1,12,"vnf10_3,vnf13_2,vnf15_4,vnf17_0",4
+2026-01-21 14:00:04,FABO,32,5,1,2,"vnf0_0,vnf10_2,vnf11_0,vnf13_0,vnf14_0,vnf15_0,vnf16_0,vnf17_0,vnf2_0,vnf3_0,vnf4_0,vnf5_0,vnf6_2,vnf9_0",14
+2026-01-21 14:00:04,FABO,32,5,1,4,"vnf0_1,vnf10_3,vnf11_3,vnf14_1,vnf16_1,vnf4_1,vnf5_3,vnf6_3",8
+2026-01-21 14:00:04,FABO,32,5,1,3,"vnf0_2,vnf10_4,vnf12_3,vnf5_4,vnf8_3",5
+2026-01-21 14:00:04,FABO,32,5,1,11,"vnf0_3,vnf12_4,vnf13_4,vnf16_4,vnf17_1,vnf2_4,vnf4_4,vnf7_3,vnf8_2",9
+2026-01-21 14:00:04,FABO,32,5,1,8,"vnf0_4,vnf1_4,vnf2_3,vnf4_3,vnf7_2",5
+2026-01-21 14:00:04,FABO,32,5,1,5,"vnf10_0,vnf11_2,vnf14_2,vnf1_0,vnf2_2,vnf4_2,vnf5_2,vnf6_4",8
+2026-01-21 14:00:04,FABO,32,5,1,6,"vnf10_1,vnf11_1,vnf13_1,vnf15_1,vnf16_3,vnf17_3,vnf1_1,vnf2_1,vnf3_1,vnf5_1,vnf6_1,vnf9_1",12
+2026-01-21 14:00:04,FABO,32,5,1,7,"vnf12_0,vnf13_2,vnf14_4,vnf1_2,vnf3_2,vnf6_0,vnf7_0,vnf8_0,vnf9_2",9
+2026-01-21 14:00:04,FABO,32,5,1,9,"vnf13_3,vnf14_3,vnf15_4,vnf17_2,vnf1_3,vnf7_1",6
+2026-01-21 14:00:04,FABO,32,5,1,10,"vnf12_1,vnf15_3,vnf3_3,vnf7_4,vnf8_1,vnf9_3",6
+2026-01-21 14:00:04,FABO,32,5,1,12,"vnf12_2,vnf15_2,vnf3_4,vnf8_4,vnf9_4",5
+2026-01-21 14:00:04,FABO,32,5,1,1,"vnf11_4,vnf16_2,vnf17_4",3
+2026-01-21 14:00:04,Best Fit,32,5,1,6,"vnf0_0,vnf10_0,vnf11_0,vnf12_0,vnf13_0,vnf14_0,vnf15_0,vnf16_0,vnf17_0,vnf18_0,vnf19_0,vnf1_0,vnf2_0,vnf3_0,vnf4_0,vnf5_0,vnf6_0,vnf7_0,vnf8_0,vnf9_0",20
+2026-01-21 14:00:04,Best Fit,32,5,1,2,"vnf0_1,vnf10_1,vnf11_1,vnf12_1,vnf13_1,vnf14_1,vnf15_1,vnf1_1,vnf2_1,vnf3_1,vnf4_1,vnf5_1,vnf6_1,vnf7_1,vnf8_1,vnf9_1",16
+2026-01-21 14:00:04,Best Fit,32,5,1,1,"vnf0_2,vnf10_2,vnf11_2,vnf12_2,vnf13_2,vnf14_2,vnf15_2,vnf17_1,vnf18_1,vnf19_1,vnf1_2,vnf2_2,vnf3_2,vnf4_2,vnf5_2,vnf6_2,vnf7_2,vnf8_2,vnf9_2",19
+2026-01-21 14:00:04,Best Fit,32,5,1,3,"vnf0_3,vnf1_3,vnf2_3,vnf3_3,vnf4_3",5
+2026-01-21 14:00:04,Best Fit,32,5,1,4,"vnf0_4,vnf1_4,vnf2_4,vnf3_4",4
+2026-01-21 14:00:04,Best Fit,32,5,1,11,"vnf16_4,vnf17_4,vnf18_3,vnf19_3,vnf4_4,vnf5_3,vnf6_3,vnf7_3,vnf8_3,vnf9_3",10
+2026-01-21 14:00:04,Best Fit,32,5,1,8,"vnf5_4,vnf6_4,vnf7_4,vnf8_4",4
+2026-01-21 14:00:04,Best Fit,32,5,1,10,"vnf15_4,vnf16_3,vnf17_3,vnf9_4",4
+2026-01-21 14:00:04,Best Fit,32,5,1,5,"vnf10_3,vnf11_3,vnf12_3,vnf13_3,vnf14_3,vnf16_1",6
+2026-01-21 14:00:04,Best Fit,32,5,1,7,"vnf10_4,vnf11_4,vnf12_4,vnf13_4",4
+2026-01-21 14:00:04,Best Fit,32,5,1,9,"vnf14_4,vnf15_3,vnf16_2,vnf17_2,vnf18_2,vnf19_2",6
+2026-01-21 14:00:04,Best Fit,32,5,1,12,"vnf18_4,vnf19_4",2
+2026-01-21 14:00:04,First Fit,32,5,1,1,"vnf0_0,vnf10_0,vnf11_0,vnf12_0,vnf13_0,vnf14_0,vnf15_0,vnf16_0,vnf17_0,vnf18_0,vnf1_0,vnf2_0,vnf3_0,vnf4_0,vnf5_0,vnf6_0,vnf7_0,vnf8_0,vnf9_0",19
+2026-01-21 14:00:04,First Fit,32,5,1,2,"vnf0_1,vnf10_1,vnf11_1,vnf12_1,vnf13_1,vnf14_1,vnf15_1,vnf1_1,vnf2_1,vnf3_1,vnf4_1,vnf5_1,vnf6_1,vnf7_1,vnf8_1,vnf9_1",16
+2026-01-21 14:00:04,First Fit,32,5,1,3,"vnf0_2,vnf1_2,vnf2_2,vnf3_2,vnf4_2,vnf5_2,vnf6_2,vnf7_2",8
+2026-01-21 14:00:04,First Fit,32,5,1,4,"vnf0_3,vnf16_1,vnf1_3,vnf2_3,vnf3_3,vnf4_3",6
+2026-01-21 14:00:04,First Fit,32,5,1,5,"vnf0_4,vnf1_4,vnf2_4,vnf3_4",4
+2026-01-21 14:00:04,First Fit,32,5,1,6,"vnf10_2,vnf11_2,vnf12_2,vnf13_2,vnf14_2,vnf15_2,vnf16_2,vnf17_1,vnf18_1,vnf4_4,vnf5_3,vnf6_3,vnf7_3,vnf8_2,vnf9_2",15
+2026-01-21 14:00:04,First Fit,32,5,1,7,"vnf5_4,vnf6_4,vnf7_4,vnf8_3",4
+2026-01-21 14:00:04,First Fit,32,5,1,8,"vnf10_3,vnf11_3,vnf12_3,vnf8_4,vnf9_3",5
+2026-01-21 14:00:04,First Fit,32,5,1,9,"vnf10_4,vnf11_4,vnf12_4,vnf9_4",4
+2026-01-21 14:00:04,First Fit,32,5,1,10,"vnf13_3,vnf14_3,vnf15_3,vnf16_3,vnf17_2,vnf18_2",6
+2026-01-21 14:00:04,First Fit,32,5,1,11,"vnf13_4,vnf14_4,vnf15_4,vnf16_4,vnf17_3,vnf18_3",6
+2026-01-21 14:00:04,First Fit,32,5,1,12,"vnf17_4,vnf18_4",2
+2026-01-21 14:00:04,Energy-Aware A*,32,5,1,2,"vnf0_0,vnf12_0,vnf13_0,vnf14_0,vnf15_0,vnf16_0,vnf17_0,vnf1_0,vnf2_0,vnf3_0,vnf4_0,vnf5_0,vnf6_0,vnf7_0,vnf8_0,vnf9_0",16
+2026-01-21 14:00:04,Energy-Aware A*,32,5,1,11,"vnf0_1,vnf11_1,vnf12_1,vnf13_1,vnf17_2,vnf18_4,vnf19_4,vnf1_1,vnf20_4,vnf21_3,vnf22_3,vnf2_1,vnf3_1,vnf4_1",14
+2026-01-21 14:00:04,Energy-Aware A*,32,5,1,8,"vnf0_2,vnf11_2,vnf12_2,vnf13_2,vnf1_2,vnf2_2,vnf3_2,vnf4_2",8
+2026-01-21 14:00:04,Energy-Aware A*,32,5,1,5,"vnf0_3,vnf11_0,vnf1_3,vnf2_3,vnf3_3,vnf4_3",6
+2026-01-21 14:00:04,Energy-Aware A*,32,5,1,6,"vnf0_4,vnf10_4,vnf11_3,vnf12_3,vnf13_3,vnf14_4,vnf15_4,vnf16_3,vnf1_4,vnf2_4,vnf3_4,vnf4_4,vnf5_4,vnf6_4,vnf7_4,vnf8_4,vnf9_4",17
+2026-01-21 14:00:04,Energy-Aware A*,32,5,1,12,"vnf10_2,vnf16_1,vnf18_2,vnf19_2,vnf20_2,vnf22_2,vnf5_1,vnf6_1,vnf7_1,vnf8_1,vnf9_1",11
+2026-01-21 14:00:04,Energy-Aware A*,32,5,1,10,"vnf10_3,vnf16_2,vnf22_1,vnf5_2,vnf6_2,vnf7_2,vnf8_2,vnf9_2",8
+2026-01-21 14:00:04,Energy-Aware A*,32,5,1,7,"vnf10_0,vnf5_3,vnf6_3,vnf7_3,vnf8_3,vnf9_3",6
+2026-01-21 14:00:04,Energy-Aware A*,32,5,1,3,"vnf10_1,vnf14_1,vnf15_1,vnf17_3,vnf18_3,vnf19_3,vnf20_3,vnf21_1",8
+2026-01-21 14:00:04,Energy-Aware A*,32,5,1,1,"vnf11_4,vnf12_4,vnf13_4,vnf14_3,vnf15_3,vnf16_4,vnf17_4,vnf18_0,vnf19_0,vnf20_0,vnf21_4,vnf22_4",12
+2026-01-21 14:00:04,Energy-Aware A*,32,5,1,4,"vnf14_2,vnf15_2,vnf17_1,vnf18_1,vnf19_1,vnf20_1,vnf21_2",7
+2026-01-21 14:00:04,Energy-Aware A*,32,5,1,9,"vnf21_0,vnf22_0",2
+2026-01-21 14:00:04,MILP_Gurobi,32,5,1,6,"vnf11_0,vnf13_0,vnf14_0,vnf16_0,vnf19_0,vnf20_0,vnf26_0,vnf31_0,vnf5_0",9
+2026-01-21 14:00:04,MILP_Gurobi,32,5,1,7,"vnf11_1,vnf13_1,vnf14_1,vnf20_1,vnf26_1,vnf31_1,vnf5_1",7
+2026-01-21 14:00:04,MILP_Gurobi,32,5,1,8,"vnf11_2,vnf13_2,vnf14_2,vnf16_1,vnf19_1,vnf20_2,vnf26_2,vnf31_2,vnf5_2",9
+2026-01-21 14:00:04,MILP_Gurobi,32,5,1,10,"vnf13_3,vnf14_3,vnf16_3,vnf19_3,vnf5_3",5
+2026-01-21 14:00:04,MILP_Gurobi,32,5,1,11,"vnf11_4,vnf13_4,vnf14_4,vnf16_4,vnf19_4,vnf20_4,vnf26_4,vnf31_4,vnf5_4",9
+2026-01-21 14:00:04,MILP_Gurobi,32,5,1,9,"vnf11_3,vnf16_2,vnf19_2,vnf20_3,vnf26_3,vnf31_3",6
+2026-01-21 14:17:08,A*,64,5,1,6,"vnf0_0,vnf10_0,vnf11_0,vnf12_0,vnf13_0,vnf14_0,vnf15_0,vnf16_0,vnf17_0,vnf18_0,vnf19_0,vnf1_0,vnf20_0,vnf21_0,vnf22_0,vnf23_0,vnf24_0,vnf25_0,vnf2_0,vnf3_0,vnf4_0,vnf5_0,vnf6_0,vnf7_0,vnf8_0,vnf9_0",26
+2026-01-21 14:17:08,A*,64,5,1,2,"vnf0_1,vnf11_3,vnf15_3,vnf1_3,vnf5_3,vnf9_3",6
+2026-01-21 14:17:08,A*,64,5,1,1,"vnf0_2,vnf11_4,vnf13_4,vnf15_4,vnf17_4,vnf19_3,vnf1_4,vnf20_3,vnf21_3,vnf22_3,vnf23_4,vnf24_4,vnf25_4,vnf3_4,vnf5_4,vnf9_4",16
+2026-01-21 14:17:08,A*,64,5,1,3,"vnf0_3,vnf13_3,vnf17_3,vnf3_3,vnf7_4",5
+2026-01-21 14:17:08,A*,64,5,1,11,"vnf0_4,vnf10_4,vnf12_4,vnf14_4,vnf16_4,vnf18_4,vnf19_2,vnf20_2,vnf21_2,vnf22_2,vnf23_3,vnf24_3,vnf25_2,vnf2_3,vnf4_4,vnf6_4,vnf7_3,vnf8_4",18
+2026-01-21 14:17:08,A*,64,5,1,5,"vnf11_1,vnf13_1,vnf15_1,vnf17_1,vnf19_1,vnf1_1,vnf21_1,vnf23_1,vnf24_1,vnf25_3,vnf3_1,vnf5_1,vnf7_1,vnf9_1",14
+2026-01-21 14:17:08,A*,64,5,1,4,"vnf11_2,vnf13_2,vnf15_2,vnf17_2,vnf1_2,vnf3_2,vnf5_2,vnf9_2",8
+2026-01-21 14:17:08,A*,64,5,1,7,"vnf10_1,vnf12_1,vnf14_1,vnf16_1,vnf18_1,vnf20_1,vnf22_1,vnf23_2,vnf24_2,vnf25_1,vnf2_1,vnf4_1,vnf6_1,vnf8_1",14
+2026-01-21 14:17:08,A*,64,5,1,8,"vnf12_3,vnf16_3,vnf2_2,vnf4_3,vnf7_2,vnf8_3",6
+2026-01-21 14:17:08,A*,64,5,1,10,"vnf10_3,vnf14_3,vnf18_3,vnf2_4,vnf6_3",5
+2026-01-21 14:17:08,A*,64,5,1,9,"vnf10_2,vnf12_2,vnf14_2,vnf16_2,vnf18_2,vnf4_2,vnf6_2,vnf8_2",8
+2026-01-21 14:17:08,A*,64,5,1,12,"vnf19_4,vnf20_4,vnf21_4,vnf22_4",4
+2026-01-21 14:17:08,ABO,64,5,1,2,"vnf0_0,vnf10_0,vnf11_0,vnf12_0,vnf14_3,vnf15_0,vnf16_0,vnf1_0,vnf2_0,vnf3_0,vnf4_0,vnf5_0,vnf8_0,vnf9_0",14
+2026-01-21 14:17:08,ABO,64,5,1,4,"vnf0_1,vnf10_1,vnf12_3,vnf13_4,vnf16_1,vnf2_1,vnf3_3,vnf4_1,vnf8_1",9
+2026-01-21 14:17:08,ABO,64,5,1,3,"vnf0_2,vnf10_2,vnf13_3,vnf15_1,vnf3_4,vnf9_4",6
+2026-01-21 14:17:08,ABO,64,5,1,11,"vnf0_3,vnf11_4,vnf15_2,vnf16_4,vnf17_4,vnf9_3",6
+2026-01-21 14:17:08,ABO,64,5,1,8,"vnf0_4,vnf1_3,vnf4_3,vnf5_4,vnf6_1,vnf7_1",6
+2026-01-21 14:17:08,ABO,64,5,1,6,"vnf11_1,vnf12_1,vnf14_2,vnf16_3,vnf17_2,vnf1_1,vnf2_3,vnf3_1,vnf5_1,vnf6_4,vnf8_3,vnf9_1",12
+2026-01-21 14:17:08,ABO,64,5,1,5,"vnf12_2,vnf1_2,vnf2_2,vnf3_2,vnf4_2,vnf6_0,vnf7_0,vnf8_2,vnf9_2",9
+2026-01-21 14:17:08,ABO,64,5,1,9,"vnf14_1,vnf1_4,vnf4_4,vnf5_3,vnf6_2,vnf7_2",6
+2026-01-21 14:17:08,ABO,64,5,1,7,"vnf11_2,vnf13_0,vnf14_0,vnf2_4,vnf5_2,vnf6_3,vnf7_3",7
+2026-01-21 14:17:08,ABO,64,5,1,10,"vnf10_4,vnf11_3,vnf13_1,vnf15_3,vnf17_1,vnf7_4",6
+2026-01-21 14:17:08,ABO,64,5,1,1,"vnf12_4,vnf14_4,vnf16_2,vnf17_3,vnf8_4",5
+2026-01-21 14:17:08,ABO,64,5,1,12,"vnf10_3,vnf13_2,vnf15_4,vnf17_0",4
+2026-01-21 14:17:08,FABO,64,5,1,2,"vnf0_0,vnf10_2,vnf11_0,vnf13_0,vnf14_0,vnf15_0,vnf16_0,vnf17_0,vnf2_0,vnf3_0,vnf4_0,vnf5_0,vnf6_2,vnf9_0",14
+2026-01-21 14:17:08,FABO,64,5,1,4,"vnf0_1,vnf10_3,vnf11_3,vnf14_1,vnf16_1,vnf4_1,vnf5_3,vnf6_3",8
+2026-01-21 14:17:08,FABO,64,5,1,3,"vnf0_2,vnf10_4,vnf12_3,vnf5_4,vnf8_3",5
+2026-01-21 14:17:08,FABO,64,5,1,11,"vnf0_3,vnf12_4,vnf13_4,vnf16_4,vnf17_1,vnf2_4,vnf4_4,vnf7_3,vnf8_2",9
+2026-01-21 14:17:08,FABO,64,5,1,8,"vnf0_4,vnf1_4,vnf2_3,vnf4_3,vnf7_2",5
+2026-01-21 14:17:08,FABO,64,5,1,5,"vnf10_0,vnf11_2,vnf14_2,vnf1_0,vnf2_2,vnf4_2,vnf5_2,vnf6_4",8
+2026-01-21 14:17:08,FABO,64,5,1,6,"vnf10_1,vnf11_1,vnf13_1,vnf15_1,vnf16_3,vnf17_3,vnf1_1,vnf2_1,vnf3_1,vnf5_1,vnf6_1,vnf9_1",12
+2026-01-21 14:17:08,FABO,64,5,1,7,"vnf12_0,vnf13_2,vnf14_4,vnf1_2,vnf3_2,vnf6_0,vnf7_0,vnf8_0,vnf9_2",9
+2026-01-21 14:17:08,FABO,64,5,1,9,"vnf13_3,vnf14_3,vnf15_4,vnf17_2,vnf1_3,vnf7_1",6
+2026-01-21 14:17:08,FABO,64,5,1,10,"vnf12_1,vnf15_3,vnf3_3,vnf7_4,vnf8_1,vnf9_3",6
+2026-01-21 14:17:08,FABO,64,5,1,12,"vnf12_2,vnf15_2,vnf3_4,vnf8_4,vnf9_4",5
+2026-01-21 14:17:08,FABO,64,5,1,1,"vnf11_4,vnf16_2,vnf17_4",3
+2026-01-21 14:17:08,Best Fit,64,5,1,6,"vnf0_0,vnf10_0,vnf11_0,vnf12_0,vnf13_0,vnf14_0,vnf15_0,vnf16_0,vnf17_0,vnf18_0,vnf19_0,vnf1_0,vnf2_0,vnf3_0,vnf4_0,vnf5_0,vnf6_0,vnf7_0,vnf8_0,vnf9_0",20
+2026-01-21 14:17:08,Best Fit,64,5,1,2,"vnf0_1,vnf10_1,vnf11_1,vnf12_1,vnf13_1,vnf14_1,vnf15_1,vnf1_1,vnf2_1,vnf3_1,vnf4_1,vnf5_1,vnf6_1,vnf7_1,vnf8_1,vnf9_1",16
+2026-01-21 14:17:08,Best Fit,64,5,1,1,"vnf0_2,vnf10_2,vnf11_2,vnf12_2,vnf13_2,vnf14_2,vnf15_2,vnf17_1,vnf18_1,vnf19_1,vnf1_2,vnf2_2,vnf3_2,vnf4_2,vnf5_2,vnf6_2,vnf7_2,vnf8_2,vnf9_2",19
+2026-01-21 14:17:08,Best Fit,64,5,1,3,"vnf0_3,vnf1_3,vnf2_3,vnf3_3,vnf4_3",5
+2026-01-21 14:17:08,Best Fit,64,5,1,4,"vnf0_4,vnf1_4,vnf2_4,vnf3_4",4
+2026-01-21 14:17:08,Best Fit,64,5,1,11,"vnf16_4,vnf17_4,vnf18_3,vnf19_3,vnf4_4,vnf5_3,vnf6_3,vnf7_3,vnf8_3,vnf9_3",10
+2026-01-21 14:17:08,Best Fit,64,5,1,8,"vnf5_4,vnf6_4,vnf7_4,vnf8_4",4
+2026-01-21 14:17:08,Best Fit,64,5,1,10,"vnf15_4,vnf16_3,vnf17_3,vnf9_4",4
+2026-01-21 14:17:08,Best Fit,64,5,1,5,"vnf10_3,vnf11_3,vnf12_3,vnf13_3,vnf14_3,vnf16_1",6
+2026-01-21 14:17:08,Best Fit,64,5,1,7,"vnf10_4,vnf11_4,vnf12_4,vnf13_4",4
+2026-01-21 14:17:08,Best Fit,64,5,1,9,"vnf14_4,vnf15_3,vnf16_2,vnf17_2,vnf18_2,vnf19_2",6
+2026-01-21 14:17:08,Best Fit,64,5,1,12,"vnf18_4,vnf19_4",2
+2026-01-21 14:17:08,First Fit,64,5,1,1,"vnf0_0,vnf10_0,vnf11_0,vnf12_0,vnf13_0,vnf14_0,vnf15_0,vnf16_0,vnf17_0,vnf18_0,vnf1_0,vnf2_0,vnf3_0,vnf4_0,vnf5_0,vnf6_0,vnf7_0,vnf8_0,vnf9_0",19
+2026-01-21 14:17:08,First Fit,64,5,1,2,"vnf0_1,vnf10_1,vnf11_1,vnf12_1,vnf13_1,vnf14_1,vnf15_1,vnf1_1,vnf2_1,vnf3_1,vnf4_1,vnf5_1,vnf6_1,vnf7_1,vnf8_1,vnf9_1",16
+2026-01-21 14:17:08,First Fit,64,5,1,3,"vnf0_2,vnf1_2,vnf2_2,vnf3_2,vnf4_2,vnf5_2,vnf6_2,vnf7_2",8
+2026-01-21 14:17:08,First Fit,64,5,1,4,"vnf0_3,vnf16_1,vnf1_3,vnf2_3,vnf3_3,vnf4_3",6
+2026-01-21 14:17:08,First Fit,64,5,1,5,"vnf0_4,vnf1_4,vnf2_4,vnf3_4",4
+2026-01-21 14:17:08,First Fit,64,5,1,6,"vnf10_2,vnf11_2,vnf12_2,vnf13_2,vnf14_2,vnf15_2,vnf16_2,vnf17_1,vnf18_1,vnf4_4,vnf5_3,vnf6_3,vnf7_3,vnf8_2,vnf9_2",15
+2026-01-21 14:17:08,First Fit,64,5,1,7,"vnf5_4,vnf6_4,vnf7_4,vnf8_3",4
+2026-01-21 14:17:08,First Fit,64,5,1,8,"vnf10_3,vnf11_3,vnf12_3,vnf8_4,vnf9_3",5
+2026-01-21 14:17:08,First Fit,64,5,1,9,"vnf10_4,vnf11_4,vnf12_4,vnf9_4",4
+2026-01-21 14:17:08,First Fit,64,5,1,10,"vnf13_3,vnf14_3,vnf15_3,vnf16_3,vnf17_2,vnf18_2",6
+2026-01-21 14:17:08,First Fit,64,5,1,11,"vnf13_4,vnf14_4,vnf15_4,vnf16_4,vnf17_3,vnf18_3",6
+2026-01-21 14:17:08,First Fit,64,5,1,12,"vnf17_4,vnf18_4",2
+2026-01-21 14:17:08,Energy-Aware A*,64,5,1,2,"vnf0_0,vnf12_0,vnf13_0,vnf14_0,vnf15_0,vnf16_0,vnf17_0,vnf1_0,vnf2_0,vnf3_0,vnf4_0,vnf5_0,vnf6_0,vnf7_0,vnf8_0,vnf9_0",16
+2026-01-21 14:17:08,Energy-Aware A*,64,5,1,11,"vnf0_1,vnf11_1,vnf12_1,vnf13_1,vnf17_2,vnf18_4,vnf19_4,vnf1_1,vnf20_4,vnf21_3,vnf22_3,vnf2_1,vnf3_1,vnf4_1",14
+2026-01-21 14:17:08,Energy-Aware A*,64,5,1,8,"vnf0_2,vnf11_2,vnf12_2,vnf13_2,vnf1_2,vnf2_2,vnf3_2,vnf4_2",8
+2026-01-21 14:17:08,Energy-Aware A*,64,5,1,5,"vnf0_3,vnf11_0,vnf1_3,vnf2_3,vnf3_3,vnf4_3",6
+2026-01-21 14:17:08,Energy-Aware A*,64,5,1,6,"vnf0_4,vnf10_4,vnf11_3,vnf12_3,vnf13_3,vnf14_4,vnf15_4,vnf16_3,vnf1_4,vnf2_4,vnf3_4,vnf4_4,vnf5_4,vnf6_4,vnf7_4,vnf8_4,vnf9_4",17
+2026-01-21 14:17:08,Energy-Aware A*,64,5,1,12,"vnf10_2,vnf16_1,vnf18_2,vnf19_2,vnf20_2,vnf22_2,vnf5_1,vnf6_1,vnf7_1,vnf8_1,vnf9_1",11
+2026-01-21 14:17:08,Energy-Aware A*,64,5,1,10,"vnf10_3,vnf16_2,vnf22_1,vnf5_2,vnf6_2,vnf7_2,vnf8_2,vnf9_2",8
+2026-01-21 14:17:08,Energy-Aware A*,64,5,1,7,"vnf10_0,vnf5_3,vnf6_3,vnf7_3,vnf8_3,vnf9_3",6
+2026-01-21 14:17:08,Energy-Aware A*,64,5,1,3,"vnf10_1,vnf14_1,vnf15_1,vnf17_3,vnf18_3,vnf19_3,vnf20_3,vnf21_1",8
+2026-01-21 14:17:08,Energy-Aware A*,64,5,1,1,"vnf11_4,vnf12_4,vnf13_4,vnf14_3,vnf15_3,vnf16_4,vnf17_4,vnf18_0,vnf19_0,vnf20_0,vnf21_4,vnf22_4",12
+2026-01-21 14:17:08,Energy-Aware A*,64,5,1,4,"vnf14_2,vnf15_2,vnf17_1,vnf18_1,vnf19_1,vnf20_1,vnf21_2",7
+2026-01-21 14:17:08,Energy-Aware A*,64,5,1,9,"vnf21_0,vnf22_0",2
+2026-01-21 14:17:08,MILP_Gurobi,64,5,1,6,"vnf13_0,vnf18_0,vnf1_0,vnf20_0,vnf27_0,vnf44_0,vnf46_0,vnf62_0,vnf6_0",9
+2026-01-21 14:17:08,MILP_Gurobi,64,5,1,7,"vnf13_1,vnf18_1,vnf1_1,vnf20_1,vnf27_1,vnf62_1,vnf6_1",7
+2026-01-21 14:17:08,MILP_Gurobi,64,5,1,8,"vnf13_2,vnf18_2,vnf1_2,vnf20_2,vnf27_2,vnf44_1,vnf46_1,vnf62_2,vnf6_2",9
+2026-01-21 14:17:08,MILP_Gurobi,64,5,1,10,"vnf13_3,vnf1_3,vnf20_3,vnf44_3,vnf46_3",5
+2026-01-21 14:17:08,MILP_Gurobi,64,5,1,11,"vnf13_4,vnf18_4,vnf1_4,vnf20_4,vnf27_4,vnf44_4,vnf46_4,vnf62_4,vnf6_4",9
+2026-01-21 14:17:08,MILP_Gurobi,64,5,1,9,"vnf18_3,vnf27_3,vnf44_2,vnf46_2,vnf62_3,vnf6_3",6
+2026-01-21 14:34:53,A*,128,5,1,6,"vnf0_0,vnf10_0,vnf11_0,vnf12_0,vnf13_0,vnf14_0,vnf15_0,vnf16_0,vnf17_0,vnf18_0,vnf19_0,vnf1_0,vnf20_0,vnf21_0,vnf22_0,vnf23_0,vnf24_0,vnf25_0,vnf2_0,vnf3_0,vnf4_0,vnf5_0,vnf6_0,vnf7_0,vnf8_0,vnf9_0",26
+2026-01-21 14:34:53,A*,128,5,1,2,"vnf0_1,vnf11_3,vnf15_3,vnf1_3,vnf5_3,vnf9_3",6
+2026-01-21 14:34:53,A*,128,5,1,1,"vnf0_2,vnf11_4,vnf13_4,vnf15_4,vnf17_4,vnf19_3,vnf1_4,vnf20_3,vnf21_3,vnf22_3,vnf23_4,vnf24_4,vnf25_4,vnf3_4,vnf5_4,vnf9_4",16
+2026-01-21 14:34:53,A*,128,5,1,3,"vnf0_3,vnf13_3,vnf17_3,vnf3_3,vnf7_4",5
+2026-01-21 14:34:53,A*,128,5,1,11,"vnf0_4,vnf10_4,vnf12_4,vnf14_4,vnf16_4,vnf18_4,vnf19_2,vnf20_2,vnf21_2,vnf22_2,vnf23_3,vnf24_3,vnf25_2,vnf2_3,vnf4_4,vnf6_4,vnf7_3,vnf8_4",18
+2026-01-21 14:34:53,A*,128,5,1,5,"vnf11_1,vnf13_1,vnf15_1,vnf17_1,vnf19_1,vnf1_1,vnf21_1,vnf23_1,vnf24_1,vnf25_3,vnf3_1,vnf5_1,vnf7_1,vnf9_1",14
+2026-01-21 14:34:53,A*,128,5,1,4,"vnf11_2,vnf13_2,vnf15_2,vnf17_2,vnf1_2,vnf3_2,vnf5_2,vnf9_2",8
+2026-01-21 14:34:53,A*,128,5,1,7,"vnf10_1,vnf12_1,vnf14_1,vnf16_1,vnf18_1,vnf20_1,vnf22_1,vnf23_2,vnf24_2,vnf25_1,vnf2_1,vnf4_1,vnf6_1,vnf8_1",14
+2026-01-21 14:34:53,A*,128,5,1,8,"vnf12_3,vnf16_3,vnf2_2,vnf4_3,vnf7_2,vnf8_3",6
+2026-01-21 14:34:53,A*,128,5,1,10,"vnf10_3,vnf14_3,vnf18_3,vnf2_4,vnf6_3",5
+2026-01-21 14:34:53,A*,128,5,1,9,"vnf10_2,vnf12_2,vnf14_2,vnf16_2,vnf18_2,vnf4_2,vnf6_2,vnf8_2",8
+2026-01-21 14:34:53,A*,128,5,1,12,"vnf19_4,vnf20_4,vnf21_4,vnf22_4",4
+2026-01-21 14:34:53,ABO,128,5,1,2,"vnf0_0,vnf10_0,vnf11_0,vnf12_0,vnf14_3,vnf15_0,vnf16_0,vnf1_0,vnf2_0,vnf3_0,vnf4_0,vnf5_0,vnf8_0,vnf9_0",14
+2026-01-21 14:34:53,ABO,128,5,1,4,"vnf0_1,vnf10_1,vnf12_3,vnf13_4,vnf16_1,vnf2_1,vnf3_3,vnf4_1,vnf8_1",9
+2026-01-21 14:34:53,ABO,128,5,1,3,"vnf0_2,vnf10_2,vnf13_3,vnf15_1,vnf3_4,vnf9_4",6
+2026-01-21 14:34:53,ABO,128,5,1,11,"vnf0_3,vnf11_4,vnf15_2,vnf16_4,vnf17_4,vnf9_3",6
+2026-01-21 14:34:53,ABO,128,5,1,8,"vnf0_4,vnf1_3,vnf4_3,vnf5_4,vnf6_1,vnf7_1",6
+2026-01-21 14:34:53,ABO,128,5,1,6,"vnf11_1,vnf12_1,vnf14_2,vnf16_3,vnf17_2,vnf1_1,vnf2_3,vnf3_1,vnf5_1,vnf6_4,vnf8_3,vnf9_1",12
+2026-01-21 14:34:53,ABO,128,5,1,5,"vnf12_2,vnf1_2,vnf2_2,vnf3_2,vnf4_2,vnf6_0,vnf7_0,vnf8_2,vnf9_2",9
+2026-01-21 14:34:53,ABO,128,5,1,9,"vnf14_1,vnf1_4,vnf4_4,vnf5_3,vnf6_2,vnf7_2",6
+2026-01-21 14:34:53,ABO,128,5,1,7,"vnf11_2,vnf13_0,vnf14_0,vnf2_4,vnf5_2,vnf6_3,vnf7_3",7
+2026-01-21 14:34:53,ABO,128,5,1,10,"vnf10_4,vnf11_3,vnf13_1,vnf15_3,vnf17_1,vnf7_4",6
+2026-01-21 14:34:53,ABO,128,5,1,1,"vnf12_4,vnf14_4,vnf16_2,vnf17_3,vnf8_4",5
+2026-01-21 14:34:53,ABO,128,5,1,12,"vnf10_3,vnf13_2,vnf15_4,vnf17_0",4
+2026-01-21 14:34:53,FABO,128,5,1,2,"vnf0_0,vnf10_2,vnf11_0,vnf13_0,vnf14_0,vnf15_0,vnf16_0,vnf17_0,vnf2_0,vnf3_0,vnf4_0,vnf5_0,vnf6_2,vnf9_0",14
+2026-01-21 14:34:53,FABO,128,5,1,4,"vnf0_1,vnf10_3,vnf11_3,vnf14_1,vnf16_1,vnf4_1,vnf5_3,vnf6_3",8
+2026-01-21 14:34:53,FABO,128,5,1,3,"vnf0_2,vnf10_4,vnf12_3,vnf5_4,vnf8_3",5
+2026-01-21 14:34:53,FABO,128,5,1,11,"vnf0_3,vnf12_4,vnf13_4,vnf16_4,vnf17_1,vnf2_4,vnf4_4,vnf7_3,vnf8_2",9
+2026-01-21 14:34:53,FABO,128,5,1,8,"vnf0_4,vnf1_4,vnf2_3,vnf4_3,vnf7_2",5
+2026-01-21 14:34:53,FABO,128,5,1,5,"vnf10_0,vnf11_2,vnf14_2,vnf1_0,vnf2_2,vnf4_2,vnf5_2,vnf6_4",8
+2026-01-21 14:34:53,FABO,128,5,1,6,"vnf10_1,vnf11_1,vnf13_1,vnf15_1,vnf16_3,vnf17_3,vnf1_1,vnf2_1,vnf3_1,vnf5_1,vnf6_1,vnf9_1",12
+2026-01-21 14:34:53,FABO,128,5,1,7,"vnf12_0,vnf13_2,vnf14_4,vnf1_2,vnf3_2,vnf6_0,vnf7_0,vnf8_0,vnf9_2",9
+2026-01-21 14:34:53,FABO,128,5,1,9,"vnf13_3,vnf14_3,vnf15_4,vnf17_2,vnf1_3,vnf7_1",6
+2026-01-21 14:34:53,FABO,128,5,1,10,"vnf12_1,vnf15_3,vnf3_3,vnf7_4,vnf8_1,vnf9_3",6
+2026-01-21 14:34:53,FABO,128,5,1,12,"vnf12_2,vnf15_2,vnf3_4,vnf8_4,vnf9_4",5
+2026-01-21 14:34:53,FABO,128,5,1,1,"vnf11_4,vnf16_2,vnf17_4",3
+2026-01-21 14:34:53,Best Fit,128,5,1,6,"vnf0_0,vnf10_0,vnf11_0,vnf12_0,vnf13_0,vnf14_0,vnf15_0,vnf16_0,vnf17_0,vnf18_0,vnf19_0,vnf1_0,vnf2_0,vnf3_0,vnf4_0,vnf5_0,vnf6_0,vnf7_0,vnf8_0,vnf9_0",20
+2026-01-21 14:34:53,Best Fit,128,5,1,2,"vnf0_1,vnf10_1,vnf11_1,vnf12_1,vnf13_1,vnf14_1,vnf15_1,vnf1_1,vnf2_1,vnf3_1,vnf4_1,vnf5_1,vnf6_1,vnf7_1,vnf8_1,vnf9_1",16
+2026-01-21 14:34:53,Best Fit,128,5,1,1,"vnf0_2,vnf10_2,vnf11_2,vnf12_2,vnf13_2,vnf14_2,vnf15_2,vnf17_1,vnf18_1,vnf19_1,vnf1_2,vnf2_2,vnf3_2,vnf4_2,vnf5_2,vnf6_2,vnf7_2,vnf8_2,vnf9_2",19
+2026-01-21 14:34:53,Best Fit,128,5,1,3,"vnf0_3,vnf1_3,vnf2_3,vnf3_3,vnf4_3",5
+2026-01-21 14:34:53,Best Fit,128,5,1,4,"vnf0_4,vnf1_4,vnf2_4,vnf3_4",4
+2026-01-21 14:34:53,Best Fit,128,5,1,11,"vnf16_4,vnf17_4,vnf18_3,vnf19_3,vnf4_4,vnf5_3,vnf6_3,vnf7_3,vnf8_3,vnf9_3",10
+2026-01-21 14:34:53,Best Fit,128,5,1,8,"vnf5_4,vnf6_4,vnf7_4,vnf8_4",4
+2026-01-21 14:34:53,Best Fit,128,5,1,10,"vnf15_4,vnf16_3,vnf17_3,vnf9_4",4
+2026-01-21 14:34:53,Best Fit,128,5,1,5,"vnf10_3,vnf11_3,vnf12_3,vnf13_3,vnf14_3,vnf16_1",6
+2026-01-21 14:34:53,Best Fit,128,5,1,7,"vnf10_4,vnf11_4,vnf12_4,vnf13_4",4
+2026-01-21 14:34:53,Best Fit,128,5,1,9,"vnf14_4,vnf15_3,vnf16_2,vnf17_2,vnf18_2,vnf19_2",6
+2026-01-21 14:34:53,Best Fit,128,5,1,12,"vnf18_4,vnf19_4",2
+2026-01-21 14:34:53,First Fit,128,5,1,1,"vnf0_0,vnf10_0,vnf11_0,vnf12_0,vnf13_0,vnf14_0,vnf15_0,vnf16_0,vnf17_0,vnf18_0,vnf1_0,vnf2_0,vnf3_0,vnf4_0,vnf5_0,vnf6_0,vnf7_0,vnf8_0,vnf9_0",19
+2026-01-21 14:34:53,First Fit,128,5,1,2,"vnf0_1,vnf10_1,vnf11_1,vnf12_1,vnf13_1,vnf14_1,vnf15_1,vnf1_1,vnf2_1,vnf3_1,vnf4_1,vnf5_1,vnf6_1,vnf7_1,vnf8_1,vnf9_1",16
+2026-01-21 14:34:53,First Fit,128,5,1,3,"vnf0_2,vnf1_2,vnf2_2,vnf3_2,vnf4_2,vnf5_2,vnf6_2,vnf7_2",8
+2026-01-21 14:34:53,First Fit,128,5,1,4,"vnf0_3,vnf16_1,vnf1_3,vnf2_3,vnf3_3,vnf4_3",6
+2026-01-21 14:34:53,First Fit,128,5,1,5,"vnf0_4,vnf1_4,vnf2_4,vnf3_4",4
+2026-01-21 14:34:53,First Fit,128,5,1,6,"vnf10_2,vnf11_2,vnf12_2,vnf13_2,vnf14_2,vnf15_2,vnf16_2,vnf17_1,vnf18_1,vnf4_4,vnf5_3,vnf6_3,vnf7_3,vnf8_2,vnf9_2",15
+2026-01-21 14:34:53,First Fit,128,5,1,7,"vnf5_4,vnf6_4,vnf7_4,vnf8_3",4
+2026-01-21 14:34:53,First Fit,128,5,1,8,"vnf10_3,vnf11_3,vnf12_3,vnf8_4,vnf9_3",5
+2026-01-21 14:34:53,First Fit,128,5,1,9,"vnf10_4,vnf11_4,vnf12_4,vnf9_4",4
+2026-01-21 14:34:53,First Fit,128,5,1,10,"vnf13_3,vnf14_3,vnf15_3,vnf16_3,vnf17_2,vnf18_2",6
+2026-01-21 14:34:53,First Fit,128,5,1,11,"vnf13_4,vnf14_4,vnf15_4,vnf16_4,vnf17_3,vnf18_3",6
+2026-01-21 14:34:53,First Fit,128,5,1,12,"vnf17_4,vnf18_4",2
+2026-01-21 14:34:53,Energy-Aware A*,128,5,1,2,"vnf0_0,vnf12_0,vnf13_0,vnf14_0,vnf15_0,vnf16_0,vnf17_0,vnf1_0,vnf2_0,vnf3_0,vnf4_0,vnf5_0,vnf6_0,vnf7_0,vnf8_0,vnf9_0",16
+2026-01-21 14:34:53,Energy-Aware A*,128,5,1,11,"vnf0_1,vnf11_1,vnf12_1,vnf13_1,vnf17_2,vnf18_4,vnf19_4,vnf1_1,vnf20_4,vnf21_3,vnf22_3,vnf2_1,vnf3_1,vnf4_1",14
+2026-01-21 14:34:53,Energy-Aware A*,128,5,1,8,"vnf0_2,vnf11_2,vnf12_2,vnf13_2,vnf1_2,vnf2_2,vnf3_2,vnf4_2",8
+2026-01-21 14:34:53,Energy-Aware A*,128,5,1,5,"vnf0_3,vnf11_0,vnf1_3,vnf2_3,vnf3_3,vnf4_3",6
+2026-01-21 14:34:53,Energy-Aware A*,128,5,1,6,"vnf0_4,vnf10_4,vnf11_3,vnf12_3,vnf13_3,vnf14_4,vnf15_4,vnf16_3,vnf1_4,vnf2_4,vnf3_4,vnf4_4,vnf5_4,vnf6_4,vnf7_4,vnf8_4,vnf9_4",17
+2026-01-21 14:34:53,Energy-Aware A*,128,5,1,12,"vnf10_2,vnf16_1,vnf18_2,vnf19_2,vnf20_2,vnf22_2,vnf5_1,vnf6_1,vnf7_1,vnf8_1,vnf9_1",11
+2026-01-21 14:34:53,Energy-Aware A*,128,5,1,10,"vnf10_3,vnf16_2,vnf22_1,vnf5_2,vnf6_2,vnf7_2,vnf8_2,vnf9_2",8
+2026-01-21 14:34:53,Energy-Aware A*,128,5,1,7,"vnf10_0,vnf5_3,vnf6_3,vnf7_3,vnf8_3,vnf9_3",6
+2026-01-21 14:34:53,Energy-Aware A*,128,5,1,3,"vnf10_1,vnf14_1,vnf15_1,vnf17_3,vnf18_3,vnf19_3,vnf20_3,vnf21_1",8
+2026-01-21 14:34:53,Energy-Aware A*,128,5,1,1,"vnf11_4,vnf12_4,vnf13_4,vnf14_3,vnf15_3,vnf16_4,vnf17_4,vnf18_0,vnf19_0,vnf20_0,vnf21_4,vnf22_4",12
+2026-01-21 14:34:53,Energy-Aware A*,128,5,1,4,"vnf14_2,vnf15_2,vnf17_1,vnf18_1,vnf19_1,vnf20_1,vnf21_2",7
+2026-01-21 14:34:53,Energy-Aware A*,128,5,1,9,"vnf21_0,vnf22_0",2
+2026-01-21 14:34:53,MILP_Gurobi,128,5,1,6,"vnf103_0,vnf109_0,vnf122_0,vnf127_0,vnf46_0,vnf60_0,vnf89_0,vnf90_0,vnf94_0",9
+2026-01-21 14:34:53,MILP_Gurobi,128,5,1,7,"vnf109_1,vnf122_1,vnf127_1,vnf46_1,vnf60_1,vnf90_1,vnf94_1",7
+2026-01-21 14:34:53,MILP_Gurobi,128,5,1,8,"vnf103_1,vnf109_2,vnf122_2,vnf127_2,vnf46_2,vnf60_2,vnf89_1,vnf90_2,vnf94_2",9
+2026-01-21 14:34:53,MILP_Gurobi,128,5,1,9,"vnf103_2,vnf127_3,vnf46_3,vnf60_3,vnf89_2,vnf90_3",6
+2026-01-21 14:34:53,MILP_Gurobi,128,5,1,11,"vnf103_4,vnf109_4,vnf122_4,vnf127_4,vnf46_4,vnf60_4,vnf89_4,vnf90_4,vnf94_4",9
+2026-01-21 14:34:53,MILP_Gurobi,128,5,1,10,"vnf103_3,vnf109_3,vnf122_3,vnf89_3,vnf94_3",5
+2026-01-21 14:53:58,A*,4,6,1,6,"vnf0_0,vnf1_0,vnf2_0,vnf3_0",4
+2026-01-21 14:53:58,A*,4,6,1,2,"vnf0_1,vnf1_3,vnf3_3",3
+2026-01-21 14:53:58,A*,4,6,1,1,"vnf0_2,vnf1_4,vnf3_4",3
+2026-01-21 14:53:58,A*,4,6,1,3,"vnf0_3,vnf1_5,vnf3_5",3
+2026-01-21 14:53:58,A*,4,6,1,11,"vnf0_4,vnf2_4",2
+2026-01-21 14:53:58,A*,4,6,1,8,"vnf0_5,vnf2_5",2
+2026-01-21 14:53:58,A*,4,6,1,5,"vnf1_1,vnf3_1",2
+2026-01-21 14:53:58,A*,4,6,1,4,"vnf1_2,vnf3_2",2
+2026-01-21 14:53:58,A*,4,6,1,7,vnf2_1,1
+2026-01-21 14:53:58,A*,4,6,1,9,vnf2_2,1
+2026-01-21 14:53:58,A*,4,6,1,10,vnf2_3,1
+2026-01-21 14:53:58,ABO,4,6,1,2,"vnf0_0,vnf1_0,vnf2_0,vnf3_0",4
+2026-01-21 14:53:58,ABO,4,6,1,4,"vnf0_1,vnf2_1,vnf3_3",3
+2026-01-21 14:53:58,ABO,4,6,1,3,"vnf0_2,vnf3_4",2
+2026-01-21 14:53:58,ABO,4,6,1,11,vnf0_3,1
+2026-01-21 14:53:58,ABO,4,6,1,8,"vnf0_4,vnf1_3",2
+2026-01-21 14:53:58,ABO,4,6,1,5,"vnf0_5,vnf1_2,vnf2_2,vnf3_2",4
+2026-01-21 14:53:58,ABO,4,6,1,6,"vnf1_1,vnf2_3,vnf3_1",3
+2026-01-21 14:53:58,ABO,4,6,1,9,"vnf1_4,vnf2_5",2
+2026-01-21 14:53:58,ABO,4,6,1,7,"vnf1_5,vnf2_4",2
+2026-01-21 14:53:58,ABO,4,6,1,12,vnf3_5,1
+2026-01-21 14:53:58,FABO,4,6,1,2,"vnf0_0,vnf1_4",2
+2026-01-21 14:53:58,FABO,4,6,1,4,"vnf0_1,vnf1_3,vnf3_5",3
+2026-01-21 14:53:58,FABO,4,6,1,3,"vnf0_2,vnf3_4",2
+2026-01-21 14:53:58,FABO,4,6,1,11,"vnf0_3,vnf2_3,vnf3_3",3
+2026-01-21 14:53:58,FABO,4,6,1,8,"vnf0_4,vnf2_2,vnf3_2",3
+2026-01-21 14:53:58,FABO,4,6,1,5,"vnf0_5,vnf1_2",2
+2026-01-21 14:53:58,FABO,4,6,1,7,"vnf1_0,vnf2_0,vnf3_0",3
+2026-01-21 14:53:58,FABO,4,6,1,6,vnf1_1,1
+2026-01-21 14:53:58,FABO,4,6,1,1,vnf1_5,1
+2026-01-21 14:53:58,FABO,4,6,1,9,"vnf2_1,vnf3_1",2
+2026-01-21 14:53:58,FABO,4,6,1,10,vnf2_4,1
+2026-01-21 14:53:58,FABO,4,6,1,12,vnf2_5,1
+2026-01-21 14:53:58,Best Fit,4,6,1,6,"vnf0_0,vnf1_0,vnf2_0,vnf3_0",4
+2026-01-21 14:53:58,Best Fit,4,6,1,2,"vnf0_1,vnf1_1,vnf2_1,vnf3_1",4
+2026-01-21 14:53:58,Best Fit,4,6,1,1,"vnf0_2,vnf1_2,vnf2_2,vnf3_2",4
+2026-01-21 14:53:58,Best Fit,4,6,1,3,"vnf0_3,vnf1_3,vnf2_3,vnf3_3",4
+2026-01-21 14:53:58,Best Fit,4,6,1,4,"vnf0_4,vnf1_4,vnf2_4,vnf3_4",4
+2026-01-21 14:53:58,Best Fit,4,6,1,5,"vnf0_5,vnf1_5",2
+2026-01-21 14:53:58,Best Fit,4,6,1,8,"vnf2_5,vnf3_5",2
+2026-01-21 14:53:58,First Fit,4,6,1,1,"vnf0_0,vnf1_0,vnf2_0,vnf3_0",4
+2026-01-21 14:53:58,First Fit,4,6,1,2,"vnf0_1,vnf1_1,vnf2_1,vnf3_1",4
+2026-01-21 14:53:58,First Fit,4,6,1,3,"vnf0_2,vnf1_2,vnf2_2,vnf3_2",4
+2026-01-21 14:53:58,First Fit,4,6,1,4,"vnf0_3,vnf1_3,vnf2_3,vnf3_3",4
+2026-01-21 14:53:58,First Fit,4,6,1,5,"vnf0_4,vnf1_4,vnf2_4,vnf3_4",4
+2026-01-21 14:53:58,First Fit,4,6,1,6,"vnf0_5,vnf1_5,vnf2_5,vnf3_5",4
+2026-01-21 14:53:58,Energy-Aware A*,4,6,1,2,"vnf0_0,vnf1_0,vnf2_0,vnf3_0",4
+2026-01-21 14:53:58,Energy-Aware A*,4,6,1,11,"vnf0_1,vnf1_1,vnf2_1,vnf3_1",4
+2026-01-21 14:53:58,Energy-Aware A*,4,6,1,8,"vnf0_2,vnf1_2,vnf2_2,vnf3_2",4
+2026-01-21 14:53:58,Energy-Aware A*,4,6,1,5,"vnf0_3,vnf1_3,vnf2_3,vnf3_3",4
+2026-01-21 14:53:58,Energy-Aware A*,4,6,1,6,"vnf0_4,vnf1_4,vnf2_4,vnf3_4",4
+2026-01-21 14:53:58,Energy-Aware A*,4,6,1,1,"vnf0_5,vnf1_5,vnf2_5,vnf3_5",4
+2026-01-21 14:53:58,MILP_Gurobi,4,6,1,6,"vnf0_0,vnf1_0,vnf2_0,vnf3_0",4
+2026-01-21 14:53:58,MILP_Gurobi,4,6,1,7,"vnf0_1,vnf1_1,vnf2_1,vnf3_1",4
+2026-01-21 14:53:58,MILP_Gurobi,4,6,1,8,"vnf0_2,vnf1_2,vnf2_2,vnf3_2",4
+2026-01-21 14:53:58,MILP_Gurobi,4,6,1,9,"vnf0_3,vnf1_3,vnf2_3,vnf3_3",4
+2026-01-21 14:53:58,MILP_Gurobi,4,6,1,10,"vnf0_4,vnf1_4,vnf2_4,vnf3_4",4
+2026-01-21 14:53:58,MILP_Gurobi,4,6,1,11,"vnf0_5,vnf1_5,vnf2_5,vnf3_5",4
+2026-01-21 15:17:22,A*,8,6,1,6,"vnf0_0,vnf1_0,vnf2_0,vnf3_0,vnf4_0,vnf5_0,vnf6_0,vnf7_0",8
+2026-01-21 15:17:22,A*,8,6,1,2,"vnf0_1,vnf1_3,vnf3_3,vnf5_3,vnf7_3",5
+2026-01-21 15:17:22,A*,8,6,1,1,"vnf0_2,vnf1_4,vnf3_4,vnf5_4,vnf6_5,vnf7_4",6
+2026-01-21 15:17:22,A*,8,6,1,3,"vnf0_3,vnf1_5,vnf3_5",3
+2026-01-21 15:17:22,A*,8,6,1,11,"vnf0_4,vnf2_4,vnf4_4,vnf5_5,vnf6_4,vnf7_5",6
+2026-01-21 15:17:22,A*,8,6,1,8,"vnf0_5,vnf2_5,vnf4_3",3
+2026-01-21 15:17:22,A*,8,6,1,5,"vnf1_1,vnf3_1,vnf5_1,vnf7_1",4
+2026-01-21 15:17:22,A*,8,6,1,4,"vnf1_2,vnf3_2,vnf5_2,vnf7_2",4
+2026-01-21 15:17:22,A*,8,6,1,7,"vnf2_1,vnf4_1,vnf6_1",3
+2026-01-21 15:17:22,A*,8,6,1,9,"vnf2_2,vnf4_2,vnf6_2",3
+2026-01-21 15:17:22,A*,8,6,1,10,"vnf2_3,vnf4_5,vnf6_3",3
+2026-01-21 15:17:22,ABO,8,6,1,2,"vnf0_0,vnf1_0,vnf2_0,vnf3_0,vnf4_0,vnf5_0,vnf6_0,vnf7_0",8
+2026-01-21 15:17:22,ABO,8,6,1,4,"vnf0_1,vnf2_1,vnf3_3,vnf4_1,vnf5_5,vnf6_1,vnf7_3",7
+2026-01-21 15:17:22,ABO,8,6,1,3,"vnf0_2,vnf3_4,vnf5_4,vnf7_4",4
+2026-01-21 15:17:22,ABO,8,6,1,11,"vnf0_3,vnf5_3,vnf6_4,vnf7_5",4
+2026-01-21 15:17:22,ABO,8,6,1,8,"vnf0_4,vnf1_3,vnf4_3,vnf5_2,vnf6_3",5
+2026-01-21 15:17:22,ABO,8,6,1,5,"vnf0_5,vnf1_2,vnf2_2,vnf3_2,vnf4_2,vnf6_2",6
+2026-01-21 15:17:22,ABO,8,6,1,6,"vnf1_1,vnf2_3,vnf3_1,vnf5_1,vnf7_2",5
+2026-01-21 15:17:22,ABO,8,6,1,9,"vnf1_4,vnf2_5,vnf4_4",3
+2026-01-21 15:17:22,ABO,8,6,1,7,"vnf1_5,vnf2_4,vnf4_5",3
+2026-01-21 15:17:22,ABO,8,6,1,12,vnf3_5,1
+2026-01-21 15:17:22,ABO,8,6,1,10,vnf6_5,1
+2026-01-21 15:17:22,ABO,8,6,1,1,vnf7_1,1
+2026-01-21 15:17:22,FABO,8,6,1,2,"vnf0_0,vnf1_4,vnf4_5,vnf7_0",4
+2026-01-21 15:17:22,FABO,8,6,1,4,"vnf0_1,vnf1_3,vnf3_5,vnf5_4",4
+2026-01-21 15:17:22,FABO,8,6,1,3,"vnf0_2,vnf3_4,vnf5_5,vnf6_4",4
+2026-01-21 15:17:22,FABO,8,6,1,11,"vnf0_3,vnf2_3,vnf3_3,vnf6_3,vnf7_4",5
+2026-01-21 15:17:22,FABO,8,6,1,8,"vnf0_4,vnf2_2,vnf3_2,vnf4_2,vnf5_2,vnf6_2",6
+2026-01-21 15:17:22,FABO,8,6,1,5,"vnf0_5,vnf1_2,vnf4_3,vnf5_3",4
+2026-01-21 15:17:22,FABO,8,6,1,7,"vnf1_0,vnf2_0,vnf3_0,vnf4_0,vnf5_0,vnf6_0,vnf7_2",7
+2026-01-21 15:17:22,FABO,8,6,1,6,"vnf1_1,vnf4_4,vnf7_1",3
+2026-01-21 15:17:22,FABO,8,6,1,1,vnf1_5,1
+2026-01-21 15:17:22,FABO,8,6,1,9,"vnf2_1,vnf3_1,vnf4_1,vnf5_1,vnf6_1,vnf7_5",6
+2026-01-21 15:17:22,FABO,8,6,1,10,"vnf2_4,vnf7_3",2
+2026-01-21 15:17:22,FABO,8,6,1,12,"vnf2_5,vnf6_5",2
+2026-01-21 15:17:22,Best Fit,8,6,1,6,"vnf0_0,vnf1_0,vnf2_0,vnf3_0,vnf4_0,vnf5_0,vnf6_0,vnf7_0",8
+2026-01-21 15:17:22,Best Fit,8,6,1,2,"vnf0_1,vnf1_1,vnf2_1,vnf3_1,vnf4_1,vnf5_1,vnf6_1,vnf7_1",8
+2026-01-21 15:17:22,Best Fit,8,6,1,1,"vnf0_2,vnf1_2,vnf2_2,vnf3_2,vnf4_2,vnf5_2,vnf6_2,vnf7_2",8
+2026-01-21 15:17:22,Best Fit,8,6,1,3,"vnf0_3,vnf1_3,vnf2_3,vnf3_3,vnf4_3",5
+2026-01-21 15:17:22,Best Fit,8,6,1,4,"vnf0_4,vnf1_4,vnf2_4,vnf3_4",4
+2026-01-21 15:17:22,Best Fit,8,6,1,5,"vnf0_5,vnf1_5",2
+2026-01-21 15:17:22,Best Fit,8,6,1,8,"vnf2_5,vnf3_5,vnf5_4",3
+2026-01-21 15:17:22,Best Fit,8,6,1,11,"vnf4_4,vnf5_3,vnf6_3,vnf7_3",4
+2026-01-21 15:17:22,Best Fit,8,6,1,10,"vnf4_5,vnf6_4,vnf7_4",3
+2026-01-21 15:17:22,Best Fit,8,6,1,7,"vnf5_5,vnf6_5",2
+2026-01-21 15:17:22,Best Fit,8,6,1,9,vnf7_5,1
+2026-01-21 15:17:22,First Fit,8,6,1,1,"vnf0_0,vnf1_0,vnf2_0,vnf3_0,vnf4_0,vnf5_0,vnf6_0,vnf7_0",8
+2026-01-21 15:17:22,First Fit,8,6,1,2,"vnf0_1,vnf1_1,vnf2_1,vnf3_1,vnf4_1,vnf5_1,vnf6_1,vnf7_1",8
+2026-01-21 15:17:22,First Fit,8,6,1,3,"vnf0_2,vnf1_2,vnf2_2,vnf3_2,vnf4_2,vnf5_2,vnf6_2,vnf7_2",8
+2026-01-21 15:17:22,First Fit,8,6,1,4,"vnf0_3,vnf1_3,vnf2_3,vnf3_3,vnf4_3",5
+2026-01-21 15:17:22,First Fit,8,6,1,5,"vnf0_4,vnf1_4,vnf2_4,vnf3_4",4
+2026-01-21 15:17:22,First Fit,8,6,1,6,"vnf0_5,vnf1_5,vnf2_5,vnf3_5,vnf4_4,vnf5_3,vnf6_3,vnf7_3",8
+2026-01-21 15:17:22,First Fit,8,6,1,7,"vnf4_5,vnf5_4,vnf6_4",3
+2026-01-21 15:17:22,First Fit,8,6,1,8,"vnf5_5,vnf6_5,vnf7_4",3
+2026-01-21 15:17:22,First Fit,8,6,1,9,vnf7_5,1
+2026-01-21 15:17:22,Energy-Aware A*,8,6,1,2,"vnf0_0,vnf1_0,vnf2_0,vnf3_0,vnf4_0,vnf5_0,vnf6_0,vnf7_0",8
+2026-01-21 15:17:22,Energy-Aware A*,8,6,1,11,"vnf0_1,vnf1_1,vnf2_1,vnf3_1,vnf4_1",5
+2026-01-21 15:17:22,Energy-Aware A*,8,6,1,8,"vnf0_2,vnf1_2,vnf2_2,vnf3_2,vnf4_2",5
+2026-01-21 15:17:22,Energy-Aware A*,8,6,1,5,"vnf0_3,vnf1_3,vnf2_3,vnf3_3,vnf4_3",5
+2026-01-21 15:17:22,Energy-Aware A*,8,6,1,6,"vnf0_4,vnf1_4,vnf2_4,vnf3_4,vnf4_4,vnf5_4,vnf6_4,vnf7_4",8
+2026-01-21 15:17:22,Energy-Aware A*,8,6,1,1,"vnf0_5,vnf1_5,vnf2_5,vnf3_5,vnf4_5,vnf5_5,vnf6_5,vnf7_5",8
+2026-01-21 15:17:22,Energy-Aware A*,8,6,1,12,"vnf5_1,vnf6_1,vnf7_1",3
+2026-01-21 15:17:22,Energy-Aware A*,8,6,1,10,"vnf5_2,vnf6_2,vnf7_2",3
+2026-01-21 15:17:22,Energy-Aware A*,8,6,1,7,"vnf5_3,vnf6_3,vnf7_3",3
+2026-01-21 15:17:22,MILP_Gurobi,8,6,1,6,"vnf0_0,vnf2_0,vnf3_0,vnf4_0",4
+2026-01-21 15:17:22,MILP_Gurobi,8,6,1,7,"vnf0_1,vnf2_1,vnf3_1,vnf4_1",4
+2026-01-21 15:17:22,MILP_Gurobi,8,6,1,8,"vnf0_2,vnf2_2,vnf3_2,vnf4_2",4
+2026-01-21 15:17:22,MILP_Gurobi,8,6,1,9,"vnf0_3,vnf2_3,vnf3_3,vnf4_3",4
+2026-01-21 15:17:22,MILP_Gurobi,8,6,1,10,"vnf0_4,vnf2_4,vnf3_4,vnf4_4",4
+2026-01-21 15:17:22,MILP_Gurobi,8,6,1,11,"vnf0_5,vnf2_5,vnf3_5,vnf4_5",4
+2026-01-21 15:56:29,A*,16,6,1,6,"vnf0_0,vnf10_0,vnf11_4,vnf12_0,vnf13_4,vnf14_0,vnf15_5,vnf1_0,vnf2_0,vnf3_0,vnf4_0,vnf5_0,vnf6_0,vnf7_0,vnf8_0,vnf9_0",16
+2026-01-21 15:56:29,A*,16,6,1,2,"vnf0_1,vnf1_3,vnf3_3,vnf5_3,vnf7_3,vnf9_3",6
+2026-01-21 15:56:29,A*,16,6,1,1,"vnf0_2,vnf10_5,vnf11_5,vnf13_5,vnf14_5,vnf15_4,vnf1_4,vnf3_4,vnf5_4,vnf6_5,vnf7_4,vnf8_5,vnf9_4",13
+2026-01-21 15:56:29,A*,16,6,1,3,"vnf0_3,vnf15_1,vnf1_5,vnf3_5",4
+2026-01-21 15:56:29,A*,16,6,1,11,"vnf0_4,vnf12_3,vnf13_2,vnf14_3,vnf15_2,vnf2_4,vnf4_4,vnf5_5,vnf6_4,vnf7_5,vnf8_4,vnf9_5",12
+2026-01-21 15:56:29,A*,16,6,1,8,"vnf0_5,vnf11_1,vnf2_5,vnf4_3",4
+2026-01-21 15:56:29,A*,16,6,1,5,"vnf10_3,vnf11_0,vnf12_1,vnf13_3,vnf14_2,vnf15_0,vnf1_1,vnf3_1,vnf5_1,vnf7_1,vnf9_1",11
+2026-01-21 15:56:29,A*,16,6,1,4,"vnf10_4,vnf12_2,vnf1_2,vnf3_2,vnf5_2,vnf7_2,vnf9_2",7
+2026-01-21 15:56:29,A*,16,6,1,7,"vnf10_1,vnf11_3,vnf12_5,vnf13_0,vnf14_1,vnf2_1,vnf4_1,vnf6_1,vnf8_1",9
+2026-01-21 15:56:29,A*,16,6,1,9,"vnf10_2,vnf11_2,vnf12_4,vnf2_2,vnf4_2,vnf6_2,vnf8_2",7
+2026-01-21 15:56:29,A*,16,6,1,10,"vnf13_1,vnf2_3,vnf4_5,vnf6_3,vnf8_3",5
+2026-01-21 15:56:29,A*,16,6,1,12,"vnf14_4,vnf15_3",2
+2026-01-21 15:56:29,ABO,16,6,1,2,"vnf0_0,vnf10_4,vnf1_0,vnf2_0,vnf3_0,vnf4_0,vnf5_0,vnf6_0,vnf7_0,vnf9_4",10
+2026-01-21 15:56:29,ABO,16,6,1,4,"vnf0_1,vnf2_1,vnf3_3,vnf4_1,vnf5_5,vnf6_1,vnf7_3",7
+2026-01-21 15:56:29,ABO,16,6,1,3,"vnf0_2,vnf3_4,vnf5_4,vnf7_4,vnf8_2",5
+2026-01-21 15:56:29,ABO,16,6,1,11,"vnf0_3,vnf10_2,vnf5_3,vnf6_4,vnf7_5,vnf8_1,vnf9_1",7
+2026-01-21 15:56:29,ABO,16,6,1,8,"vnf0_4,vnf1_3,vnf4_3,vnf5_2,vnf6_3,vnf8_0",6
+2026-01-21 15:56:29,ABO,16,6,1,5,"vnf0_5,vnf1_2,vnf2_2,vnf3_2,vnf4_2,vnf6_2",6
+2026-01-21 15:56:29,ABO,16,6,1,6,"vnf10_3,vnf1_1,vnf2_3,vnf3_1,vnf5_1,vnf7_2,vnf8_5,vnf9_3",8
+2026-01-21 15:56:29,ABO,16,6,1,9,"vnf1_4,vnf2_5,vnf4_4,vnf9_2",4
+2026-01-21 15:56:29,ABO,16,6,1,7,"vnf1_5,vnf2_4,vnf4_5",3
+2026-01-21 15:56:29,ABO,16,6,1,12,"vnf10_1,vnf3_5,vnf8_3",3
+2026-01-21 15:56:29,ABO,16,6,1,10,"vnf10_0,vnf6_5,vnf8_4,vnf9_0",4
+2026-01-21 15:56:29,ABO,16,6,1,1,"vnf10_5,vnf7_1,vnf9_5",3
+2026-01-21 15:56:29,FABO,16,6,1,2,"vnf0_0,vnf10_0,vnf12_0,vnf1_4,vnf4_5,vnf7_0,vnf9_2",7
+2026-01-21 15:56:29,FABO,16,6,1,4,"vnf0_1,vnf10_1,vnf1_3,vnf3_5,vnf5_4,vnf9_1",6
+2026-01-21 15:56:29,FABO,16,6,1,3,"vnf0_2,vnf3_4,vnf5_5,vnf6_4",4
+2026-01-21 15:56:29,FABO,16,6,1,11,"vnf0_3,vnf10_4,vnf11_3,vnf12_3,vnf2_3,vnf3_3,vnf6_3,vnf7_4",8
+2026-01-21 15:56:29,FABO,16,6,1,8,"vnf0_4,vnf11_0,vnf2_2,vnf3_2,vnf4_2,vnf5_2,vnf6_2,vnf8_1",8
+2026-01-21 15:56:29,FABO,16,6,1,5,"vnf0_5,vnf1_2,vnf4_3,vnf5_3,vnf8_0,vnf9_0",6
+2026-01-21 15:56:29,FABO,16,6,1,7,"vnf11_1,vnf1_0,vnf2_0,vnf3_0,vnf4_0,vnf5_0,vnf6_0,vnf7_2,vnf8_3,vnf9_4",10
+2026-01-21 15:56:29,FABO,16,6,1,6,"vnf10_5,vnf11_4,vnf12_5,vnf1_1,vnf4_4,vnf7_1,vnf8_4,vnf9_3",8
+2026-01-21 15:56:29,FABO,16,6,1,1,"vnf11_5,vnf12_4,vnf1_5,vnf8_5",4
+2026-01-21 15:56:29,FABO,16,6,1,9,"vnf11_2,vnf12_1,vnf2_1,vnf3_1,vnf4_1,vnf5_1,vnf6_1,vnf7_5,vnf8_2",9
+2026-01-21 15:56:29,FABO,16,6,1,10,"vnf10_3,vnf2_4,vnf7_3,vnf9_5",4
+2026-01-21 15:56:29,FABO,16,6,1,12,"vnf10_2,vnf12_2,vnf2_5,vnf6_5",4
+2026-01-21 15:56:29,Best Fit,16,6,1,6,"vnf0_0,vnf10_0,vnf1_0,vnf2_0,vnf3_0,vnf4_0,vnf5_0,vnf6_0,vnf7_0,vnf8_0,vnf9_0",11
+2026-01-21 15:56:29,Best Fit,16,6,1,2,"vnf0_1,vnf10_1,vnf1_1,vnf2_1,vnf3_1,vnf4_1,vnf5_1,vnf6_1,vnf7_1,vnf8_1,vnf9_1",11
+2026-01-21 15:56:29,Best Fit,16,6,1,1,"vnf0_2,vnf10_2,vnf1_2,vnf2_2,vnf3_2,vnf4_2,vnf5_2,vnf6_2,vnf7_2,vnf8_2,vnf9_2",11
+2026-01-21 15:56:29,Best Fit,16,6,1,3,"vnf0_3,vnf1_3,vnf2_3,vnf3_3,vnf4_3",5
+2026-01-21 15:56:29,Best Fit,16,6,1,4,"vnf0_4,vnf1_4,vnf2_4,vnf3_4",4
+2026-01-21 15:56:29,Best Fit,16,6,1,5,"vnf0_5,vnf1_5,vnf8_4",3
+2026-01-21 15:56:29,Best Fit,16,6,1,8,"vnf2_5,vnf3_5,vnf5_4",3
+2026-01-21 15:56:29,Best Fit,16,6,1,11,"vnf10_4,vnf4_4,vnf5_3,vnf6_3,vnf7_3,vnf8_3,vnf9_3",7
+2026-01-21 15:56:29,Best Fit,16,6,1,10,"vnf4_5,vnf6_4,vnf7_4",3
+2026-01-21 15:56:29,Best Fit,16,6,1,7,"vnf5_5,vnf6_5,vnf9_4",3
+2026-01-21 15:56:29,Best Fit,16,6,1,9,"vnf10_3,vnf7_5,vnf8_5",3
+2026-01-21 15:56:29,Best Fit,16,6,1,12,"vnf10_5,vnf9_5",2
+2026-01-21 15:56:29,First Fit,16,6,1,1,"vnf0_0,vnf10_0,vnf11_0,vnf1_0,vnf2_0,vnf3_0,vnf4_0,vnf5_0,vnf6_0,vnf7_0,vnf8_0,vnf9_0",12
+2026-01-21 15:56:29,First Fit,16,6,1,2,"vnf0_1,vnf10_1,vnf11_1,vnf1_1,vnf2_1,vnf3_1,vnf4_1,vnf5_1,vnf6_1,vnf7_1,vnf8_1,vnf9_1",12
+2026-01-21 15:56:29,First Fit,16,6,1,3,"vnf0_2,vnf1_2,vnf2_2,vnf3_2,vnf4_2,vnf5_2,vnf6_2,vnf7_2",8
+2026-01-21 15:56:29,First Fit,16,6,1,4,"vnf0_3,vnf1_3,vnf2_3,vnf3_3,vnf4_3",5
+2026-01-21 15:56:29,First Fit,16,6,1,5,"vnf0_4,vnf1_4,vnf2_4,vnf3_4",4
+2026-01-21 15:56:29,First Fit,16,6,1,6,"vnf0_5,vnf10_2,vnf11_2,vnf1_5,vnf2_5,vnf3_5,vnf4_4,vnf5_3,vnf6_3,vnf7_3,vnf8_2,vnf9_2",12
+2026-01-21 15:56:29,First Fit,16,6,1,7,"vnf4_5,vnf5_4,vnf6_4",3
+2026-01-21 15:56:29,First Fit,16,6,1,8,"vnf5_5,vnf6_5,vnf7_4",3
+2026-01-21 15:56:29,First Fit,16,6,1,9,"vnf10_3,vnf7_5,vnf8_3,vnf9_3",4
+2026-01-21 15:56:29,First Fit,16,6,1,10,"vnf10_4,vnf11_3,vnf8_4,vnf9_4",4
+2026-01-21 15:56:29,First Fit,16,6,1,11,"vnf10_5,vnf11_4,vnf8_5,vnf9_5",4
+2026-01-21 15:56:29,First Fit,16,6,1,12,vnf11_5,1
+2026-01-21 15:56:29,Energy-Aware A*,16,6,1,2,"vnf0_0,vnf10_0,vnf11_0,vnf12_0,vnf13_0,vnf14_0,vnf1_0,vnf2_0,vnf3_0,vnf4_0,vnf5_0,vnf6_0,vnf7_0,vnf8_0",14
+2026-01-21 15:56:29,Energy-Aware A*,16,6,1,11,"vnf0_1,vnf14_5,vnf15_5,vnf1_1,vnf2_1,vnf3_1,vnf4_1",7
+2026-01-21 15:56:29,Energy-Aware A*,16,6,1,8,"vnf0_2,vnf14_4,vnf15_2,vnf1_2,vnf2_2,vnf3_2,vnf4_2",7
+2026-01-21 15:56:29,Energy-Aware A*,16,6,1,5,"vnf0_3,vnf1_3,vnf2_3,vnf3_3,vnf4_3,vnf9_0",6
+2026-01-21 15:56:29,Energy-Aware A*,16,6,1,6,"vnf0_4,vnf10_5,vnf11_5,vnf12_5,vnf13_5,vnf1_4,vnf2_4,vnf3_4,vnf4_4,vnf5_4,vnf6_4,vnf7_4,vnf8_4,vnf9_4",14
+2026-01-21 15:56:29,Energy-Aware A*,16,6,1,1,"vnf0_5,vnf15_4,vnf1_5,vnf2_5,vnf3_5,vnf4_5,vnf5_5,vnf6_5,vnf7_5,vnf8_5,vnf9_5",11
+2026-01-21 15:56:29,Energy-Aware A*,16,6,1,12,"vnf10_2,vnf11_2,vnf12_2,vnf13_2,vnf14_2,vnf5_1,vnf6_1,vnf7_1,vnf8_1,vnf9_1",10
+2026-01-21 15:56:29,Energy-Aware A*,16,6,1,10,"vnf10_1,vnf11_1,vnf12_1,vnf13_1,vnf14_1,vnf15_0,vnf5_2,vnf6_2,vnf7_2,vnf8_2,vnf9_2",11
+2026-01-21 15:56:29,Energy-Aware A*,16,6,1,7,"vnf15_1,vnf5_3,vnf6_3,vnf7_3,vnf8_3,vnf9_3",6
+2026-01-21 15:56:29,Energy-Aware A*,16,6,1,3,"vnf10_3,vnf11_3,vnf12_3,vnf13_3,vnf14_3",5
+2026-01-21 15:56:29,Energy-Aware A*,16,6,1,4,"vnf10_4,vnf11_4,vnf12_4,vnf13_4",4
+2026-01-21 15:56:29,Energy-Aware A*,16,6,1,9,vnf15_3,1
+2026-01-21 15:56:29,MILP_Gurobi,16,6,1,6,"vnf0_0,vnf1_0,vnf2_0,vnf3_0",4
+2026-01-21 15:56:29,MILP_Gurobi,16,6,1,7,"vnf0_1,vnf1_1,vnf2_1,vnf3_1",4
+2026-01-21 15:56:29,MILP_Gurobi,16,6,1,8,"vnf0_2,vnf1_2,vnf2_2,vnf3_2",4
+2026-01-21 15:56:29,MILP_Gurobi,16,6,1,9,"vnf0_3,vnf1_3,vnf2_3,vnf3_3",4
+2026-01-21 15:56:29,MILP_Gurobi,16,6,1,10,"vnf0_4,vnf1_4,vnf2_4,vnf3_4",4
+2026-01-21 15:56:29,MILP_Gurobi,16,6,1,11,"vnf0_5,vnf1_5,vnf2_5,vnf3_5",4
+2026-01-21 16:43:19,A*,32,6,1,6,"vnf0_0,vnf10_0,vnf11_4,vnf12_0,vnf13_4,vnf14_0,vnf15_5,vnf1_0,vnf2_0,vnf3_0,vnf4_0,vnf5_0,vnf6_0,vnf7_0,vnf8_0,vnf9_0",16
+2026-01-21 16:43:19,A*,32,6,1,2,"vnf0_1,vnf1_3,vnf3_3,vnf5_3,vnf7_3,vnf9_3",6
+2026-01-21 16:43:19,A*,32,6,1,1,"vnf0_2,vnf10_5,vnf11_5,vnf13_5,vnf14_5,vnf15_4,vnf1_4,vnf3_4,vnf5_4,vnf6_5,vnf7_4,vnf8_5,vnf9_4",13
+2026-01-21 16:43:19,A*,32,6,1,3,"vnf0_3,vnf15_1,vnf1_5,vnf3_5",4
+2026-01-21 16:43:19,A*,32,6,1,11,"vnf0_4,vnf12_3,vnf13_2,vnf14_3,vnf15_2,vnf2_4,vnf4_4,vnf5_5,vnf6_4,vnf7_5,vnf8_4,vnf9_5",12
+2026-01-21 16:43:19,A*,32,6,1,8,"vnf0_5,vnf11_1,vnf2_5,vnf4_3",4
+2026-01-21 16:43:19,A*,32,6,1,5,"vnf10_3,vnf11_0,vnf12_1,vnf13_3,vnf14_2,vnf15_0,vnf1_1,vnf3_1,vnf5_1,vnf7_1,vnf9_1",11
+2026-01-21 16:43:19,A*,32,6,1,4,"vnf10_4,vnf12_2,vnf1_2,vnf3_2,vnf5_2,vnf7_2,vnf9_2",7
+2026-01-21 16:43:19,A*,32,6,1,7,"vnf10_1,vnf11_3,vnf12_5,vnf13_0,vnf14_1,vnf2_1,vnf4_1,vnf6_1,vnf8_1",9
+2026-01-21 16:43:19,A*,32,6,1,9,"vnf10_2,vnf11_2,vnf12_4,vnf2_2,vnf4_2,vnf6_2,vnf8_2",7
+2026-01-21 16:43:19,A*,32,6,1,10,"vnf13_1,vnf2_3,vnf4_5,vnf6_3,vnf8_3",5
+2026-01-21 16:43:19,A*,32,6,1,12,"vnf14_4,vnf15_3",2
+2026-01-21 16:43:19,ABO,32,6,1,2,"vnf0_0,vnf10_4,vnf1_0,vnf2_0,vnf3_0,vnf4_0,vnf5_0,vnf6_0,vnf7_0,vnf9_4",10
+2026-01-21 16:43:19,ABO,32,6,1,4,"vnf0_1,vnf2_1,vnf3_3,vnf4_1,vnf5_5,vnf6_1,vnf7_3",7
+2026-01-21 16:43:19,ABO,32,6,1,3,"vnf0_2,vnf3_4,vnf5_4,vnf7_4,vnf8_2",5
+2026-01-21 16:43:19,ABO,32,6,1,11,"vnf0_3,vnf10_2,vnf5_3,vnf6_4,vnf7_5,vnf8_1,vnf9_1",7
+2026-01-21 16:43:19,ABO,32,6,1,8,"vnf0_4,vnf1_3,vnf4_3,vnf5_2,vnf6_3,vnf8_0",6
+2026-01-21 16:43:19,ABO,32,6,1,5,"vnf0_5,vnf1_2,vnf2_2,vnf3_2,vnf4_2,vnf6_2",6
+2026-01-21 16:43:19,ABO,32,6,1,6,"vnf10_3,vnf1_1,vnf2_3,vnf3_1,vnf5_1,vnf7_2,vnf8_5,vnf9_3",8
+2026-01-21 16:43:19,ABO,32,6,1,9,"vnf1_4,vnf2_5,vnf4_4,vnf9_2",4
+2026-01-21 16:43:19,ABO,32,6,1,7,"vnf1_5,vnf2_4,vnf4_5",3
+2026-01-21 16:43:19,ABO,32,6,1,12,"vnf10_1,vnf3_5,vnf8_3",3
+2026-01-21 16:43:19,ABO,32,6,1,10,"vnf10_0,vnf6_5,vnf8_4,vnf9_0",4
+2026-01-21 16:43:19,ABO,32,6,1,1,"vnf10_5,vnf7_1,vnf9_5",3
+2026-01-21 16:43:19,FABO,32,6,1,2,"vnf0_0,vnf10_0,vnf12_0,vnf1_4,vnf4_5,vnf7_0,vnf9_2",7
+2026-01-21 16:43:19,FABO,32,6,1,4,"vnf0_1,vnf10_1,vnf1_3,vnf3_5,vnf5_4,vnf9_1",6
+2026-01-21 16:43:19,FABO,32,6,1,3,"vnf0_2,vnf3_4,vnf5_5,vnf6_4",4
+2026-01-21 16:43:19,FABO,32,6,1,11,"vnf0_3,vnf10_4,vnf11_3,vnf12_3,vnf2_3,vnf3_3,vnf6_3,vnf7_4",8
+2026-01-21 16:43:19,FABO,32,6,1,8,"vnf0_4,vnf11_0,vnf2_2,vnf3_2,vnf4_2,vnf5_2,vnf6_2,vnf8_1",8
+2026-01-21 16:43:19,FABO,32,6,1,5,"vnf0_5,vnf1_2,vnf4_3,vnf5_3,vnf8_0,vnf9_0",6
+2026-01-21 16:43:19,FABO,32,6,1,7,"vnf11_1,vnf1_0,vnf2_0,vnf3_0,vnf4_0,vnf5_0,vnf6_0,vnf7_2,vnf8_3,vnf9_4",10
+2026-01-21 16:43:19,FABO,32,6,1,6,"vnf10_5,vnf11_4,vnf12_5,vnf1_1,vnf4_4,vnf7_1,vnf8_4,vnf9_3",8
+2026-01-21 16:43:19,FABO,32,6,1,1,"vnf11_5,vnf12_4,vnf1_5,vnf8_5",4
+2026-01-21 16:43:19,FABO,32,6,1,9,"vnf11_2,vnf12_1,vnf2_1,vnf3_1,vnf4_1,vnf5_1,vnf6_1,vnf7_5,vnf8_2",9
+2026-01-21 16:43:19,FABO,32,6,1,10,"vnf10_3,vnf2_4,vnf7_3,vnf9_5",4
+2026-01-21 16:43:19,FABO,32,6,1,12,"vnf10_2,vnf12_2,vnf2_5,vnf6_5",4
+2026-01-21 16:43:19,Best Fit,32,6,1,6,"vnf0_0,vnf10_0,vnf1_0,vnf2_0,vnf3_0,vnf4_0,vnf5_0,vnf6_0,vnf7_0,vnf8_0,vnf9_0",11
+2026-01-21 16:43:19,Best Fit,32,6,1,2,"vnf0_1,vnf10_1,vnf1_1,vnf2_1,vnf3_1,vnf4_1,vnf5_1,vnf6_1,vnf7_1,vnf8_1,vnf9_1",11
+2026-01-21 16:43:19,Best Fit,32,6,1,1,"vnf0_2,vnf10_2,vnf1_2,vnf2_2,vnf3_2,vnf4_2,vnf5_2,vnf6_2,vnf7_2,vnf8_2,vnf9_2",11
+2026-01-21 16:43:19,Best Fit,32,6,1,3,"vnf0_3,vnf1_3,vnf2_3,vnf3_3,vnf4_3",5
+2026-01-21 16:43:19,Best Fit,32,6,1,4,"vnf0_4,vnf1_4,vnf2_4,vnf3_4",4
+2026-01-21 16:43:19,Best Fit,32,6,1,5,"vnf0_5,vnf1_5,vnf8_4",3
+2026-01-21 16:43:19,Best Fit,32,6,1,8,"vnf2_5,vnf3_5,vnf5_4",3
+2026-01-21 16:43:19,Best Fit,32,6,1,11,"vnf10_4,vnf4_4,vnf5_3,vnf6_3,vnf7_3,vnf8_3,vnf9_3",7
+2026-01-21 16:43:19,Best Fit,32,6,1,10,"vnf4_5,vnf6_4,vnf7_4",3
+2026-01-21 16:43:19,Best Fit,32,6,1,7,"vnf5_5,vnf6_5,vnf9_4",3
+2026-01-21 16:43:19,Best Fit,32,6,1,9,"vnf10_3,vnf7_5,vnf8_5",3
+2026-01-21 16:43:19,Best Fit,32,6,1,12,"vnf10_5,vnf9_5",2
+2026-01-21 16:43:19,First Fit,32,6,1,1,"vnf0_0,vnf10_0,vnf11_0,vnf1_0,vnf2_0,vnf3_0,vnf4_0,vnf5_0,vnf6_0,vnf7_0,vnf8_0,vnf9_0",12
+2026-01-21 16:43:19,First Fit,32,6,1,2,"vnf0_1,vnf10_1,vnf11_1,vnf1_1,vnf2_1,vnf3_1,vnf4_1,vnf5_1,vnf6_1,vnf7_1,vnf8_1,vnf9_1",12
+2026-01-21 16:43:19,First Fit,32,6,1,3,"vnf0_2,vnf1_2,vnf2_2,vnf3_2,vnf4_2,vnf5_2,vnf6_2,vnf7_2",8
+2026-01-21 16:43:19,First Fit,32,6,1,4,"vnf0_3,vnf1_3,vnf2_3,vnf3_3,vnf4_3",5
+2026-01-21 16:43:19,First Fit,32,6,1,5,"vnf0_4,vnf1_4,vnf2_4,vnf3_4",4
+2026-01-21 16:43:19,First Fit,32,6,1,6,"vnf0_5,vnf10_2,vnf11_2,vnf1_5,vnf2_5,vnf3_5,vnf4_4,vnf5_3,vnf6_3,vnf7_3,vnf8_2,vnf9_2",12
+2026-01-21 16:43:19,First Fit,32,6,1,7,"vnf4_5,vnf5_4,vnf6_4",3
+2026-01-21 16:43:19,First Fit,32,6,1,8,"vnf5_5,vnf6_5,vnf7_4",3
+2026-01-21 16:43:19,First Fit,32,6,1,9,"vnf10_3,vnf7_5,vnf8_3,vnf9_3",4
+2026-01-21 16:43:19,First Fit,32,6,1,10,"vnf10_4,vnf11_3,vnf8_4,vnf9_4",4
+2026-01-21 16:43:19,First Fit,32,6,1,11,"vnf10_5,vnf11_4,vnf8_5,vnf9_5",4
+2026-01-21 16:43:19,First Fit,32,6,1,12,vnf11_5,1
+2026-01-21 16:43:19,Energy-Aware A*,32,6,1,2,"vnf0_0,vnf10_0,vnf11_0,vnf12_0,vnf13_0,vnf14_0,vnf1_0,vnf2_0,vnf3_0,vnf4_0,vnf5_0,vnf6_0,vnf7_0,vnf8_0",14
+2026-01-21 16:43:19,Energy-Aware A*,32,6,1,11,"vnf0_1,vnf14_5,vnf15_5,vnf1_1,vnf2_1,vnf3_1,vnf4_1",7
+2026-01-21 16:43:19,Energy-Aware A*,32,6,1,8,"vnf0_2,vnf14_4,vnf15_2,vnf1_2,vnf2_2,vnf3_2,vnf4_2",7
+2026-01-21 16:43:19,Energy-Aware A*,32,6,1,5,"vnf0_3,vnf1_3,vnf2_3,vnf3_3,vnf4_3,vnf9_0",6
+2026-01-21 16:43:19,Energy-Aware A*,32,6,1,6,"vnf0_4,vnf10_5,vnf11_5,vnf12_5,vnf13_5,vnf1_4,vnf2_4,vnf3_4,vnf4_4,vnf5_4,vnf6_4,vnf7_4,vnf8_4,vnf9_4",14
+2026-01-21 16:43:19,Energy-Aware A*,32,6,1,1,"vnf0_5,vnf15_4,vnf1_5,vnf2_5,vnf3_5,vnf4_5,vnf5_5,vnf6_5,vnf7_5,vnf8_5,vnf9_5",11
+2026-01-21 16:43:19,Energy-Aware A*,32,6,1,12,"vnf10_2,vnf11_2,vnf12_2,vnf13_2,vnf14_2,vnf5_1,vnf6_1,vnf7_1,vnf8_1,vnf9_1",10
+2026-01-21 16:43:19,Energy-Aware A*,32,6,1,10,"vnf10_1,vnf11_1,vnf12_1,vnf13_1,vnf14_1,vnf15_0,vnf5_2,vnf6_2,vnf7_2,vnf8_2,vnf9_2",11
+2026-01-21 16:43:19,Energy-Aware A*,32,6,1,7,"vnf15_1,vnf5_3,vnf6_3,vnf7_3,vnf8_3,vnf9_3",6
+2026-01-21 16:43:19,Energy-Aware A*,32,6,1,3,"vnf10_3,vnf11_3,vnf12_3,vnf13_3,vnf14_3",5
+2026-01-21 16:43:19,Energy-Aware A*,32,6,1,4,"vnf10_4,vnf11_4,vnf12_4,vnf13_4",4
+2026-01-21 16:43:19,Energy-Aware A*,32,6,1,9,vnf15_3,1
+2026-01-21 16:43:19,MILP_Gurobi,32,6,1,6,"vnf0_0,vnf2_0,vnf3_0,vnf4_0",4
+2026-01-21 16:43:19,MILP_Gurobi,32,6,1,7,"vnf0_1,vnf2_1,vnf3_1,vnf4_1",4
+2026-01-21 16:43:19,MILP_Gurobi,32,6,1,8,"vnf0_2,vnf2_2,vnf3_2,vnf4_2",4
+2026-01-21 16:43:19,MILP_Gurobi,32,6,1,9,"vnf0_3,vnf2_3,vnf3_3,vnf4_3",4
+2026-01-21 16:43:19,MILP_Gurobi,32,6,1,10,"vnf0_4,vnf2_4,vnf3_4,vnf4_4",4
+2026-01-21 16:43:19,MILP_Gurobi,32,6,1,11,"vnf0_5,vnf2_5,vnf3_5,vnf4_5",4
+2026-01-21 17:30:59,A*,64,6,1,6,"vnf0_0,vnf10_0,vnf11_4,vnf12_0,vnf13_4,vnf14_0,vnf15_5,vnf1_0,vnf2_0,vnf3_0,vnf4_0,vnf5_0,vnf6_0,vnf7_0,vnf8_0,vnf9_0",16
+2026-01-21 17:30:59,A*,64,6,1,2,"vnf0_1,vnf1_3,vnf3_3,vnf5_3,vnf7_3,vnf9_3",6
+2026-01-21 17:30:59,A*,64,6,1,1,"vnf0_2,vnf10_5,vnf11_5,vnf13_5,vnf14_5,vnf15_4,vnf1_4,vnf3_4,vnf5_4,vnf6_5,vnf7_4,vnf8_5,vnf9_4",13
+2026-01-21 17:30:59,A*,64,6,1,3,"vnf0_3,vnf15_1,vnf1_5,vnf3_5",4
+2026-01-21 17:30:59,A*,64,6,1,11,"vnf0_4,vnf12_3,vnf13_2,vnf14_3,vnf15_2,vnf2_4,vnf4_4,vnf5_5,vnf6_4,vnf7_5,vnf8_4,vnf9_5",12
+2026-01-21 17:30:59,A*,64,6,1,8,"vnf0_5,vnf11_1,vnf2_5,vnf4_3",4
+2026-01-21 17:30:59,A*,64,6,1,5,"vnf10_3,vnf11_0,vnf12_1,vnf13_3,vnf14_2,vnf15_0,vnf1_1,vnf3_1,vnf5_1,vnf7_1,vnf9_1",11
+2026-01-21 17:30:59,A*,64,6,1,4,"vnf10_4,vnf12_2,vnf1_2,vnf3_2,vnf5_2,vnf7_2,vnf9_2",7
+2026-01-21 17:30:59,A*,64,6,1,7,"vnf10_1,vnf11_3,vnf12_5,vnf13_0,vnf14_1,vnf2_1,vnf4_1,vnf6_1,vnf8_1",9
+2026-01-21 17:30:59,A*,64,6,1,9,"vnf10_2,vnf11_2,vnf12_4,vnf2_2,vnf4_2,vnf6_2,vnf8_2",7
+2026-01-21 17:30:59,A*,64,6,1,10,"vnf13_1,vnf2_3,vnf4_5,vnf6_3,vnf8_3",5
+2026-01-21 17:30:59,A*,64,6,1,12,"vnf14_4,vnf15_3",2
+2026-01-21 17:30:59,ABO,64,6,1,2,"vnf0_0,vnf10_4,vnf1_0,vnf2_0,vnf3_0,vnf4_0,vnf5_0,vnf6_0,vnf7_0,vnf9_4",10
+2026-01-21 17:30:59,ABO,64,6,1,4,"vnf0_1,vnf2_1,vnf3_3,vnf4_1,vnf5_5,vnf6_1,vnf7_3",7
+2026-01-21 17:30:59,ABO,64,6,1,3,"vnf0_2,vnf3_4,vnf5_4,vnf7_4,vnf8_2",5
+2026-01-21 17:30:59,ABO,64,6,1,11,"vnf0_3,vnf10_2,vnf5_3,vnf6_4,vnf7_5,vnf8_1,vnf9_1",7
+2026-01-21 17:30:59,ABO,64,6,1,8,"vnf0_4,vnf1_3,vnf4_3,vnf5_2,vnf6_3,vnf8_0",6
+2026-01-21 17:30:59,ABO,64,6,1,5,"vnf0_5,vnf1_2,vnf2_2,vnf3_2,vnf4_2,vnf6_2",6
+2026-01-21 17:30:59,ABO,64,6,1,6,"vnf10_3,vnf1_1,vnf2_3,vnf3_1,vnf5_1,vnf7_2,vnf8_5,vnf9_3",8
+2026-01-21 17:30:59,ABO,64,6,1,9,"vnf1_4,vnf2_5,vnf4_4,vnf9_2",4
+2026-01-21 17:30:59,ABO,64,6,1,7,"vnf1_5,vnf2_4,vnf4_5",3
+2026-01-21 17:30:59,ABO,64,6,1,12,"vnf10_1,vnf3_5,vnf8_3",3
+2026-01-21 17:30:59,ABO,64,6,1,10,"vnf10_0,vnf6_5,vnf8_4,vnf9_0",4
+2026-01-21 17:30:59,ABO,64,6,1,1,"vnf10_5,vnf7_1,vnf9_5",3
+2026-01-21 17:30:59,FABO,64,6,1,2,"vnf0_0,vnf10_0,vnf12_0,vnf1_4,vnf4_5,vnf7_0,vnf9_2",7
+2026-01-21 17:30:59,FABO,64,6,1,4,"vnf0_1,vnf10_1,vnf1_3,vnf3_5,vnf5_4,vnf9_1",6
+2026-01-21 17:30:59,FABO,64,6,1,3,"vnf0_2,vnf3_4,vnf5_5,vnf6_4",4
+2026-01-21 17:30:59,FABO,64,6,1,11,"vnf0_3,vnf10_4,vnf11_3,vnf12_3,vnf2_3,vnf3_3,vnf6_3,vnf7_4",8
+2026-01-21 17:30:59,FABO,64,6,1,8,"vnf0_4,vnf11_0,vnf2_2,vnf3_2,vnf4_2,vnf5_2,vnf6_2,vnf8_1",8
+2026-01-21 17:30:59,FABO,64,6,1,5,"vnf0_5,vnf1_2,vnf4_3,vnf5_3,vnf8_0,vnf9_0",6
+2026-01-21 17:30:59,FABO,64,6,1,7,"vnf11_1,vnf1_0,vnf2_0,vnf3_0,vnf4_0,vnf5_0,vnf6_0,vnf7_2,vnf8_3,vnf9_4",10
+2026-01-21 17:30:59,FABO,64,6,1,6,"vnf10_5,vnf11_4,vnf12_5,vnf1_1,vnf4_4,vnf7_1,vnf8_4,vnf9_3",8
+2026-01-21 17:30:59,FABO,64,6,1,1,"vnf11_5,vnf12_4,vnf1_5,vnf8_5",4
+2026-01-21 17:30:59,FABO,64,6,1,9,"vnf11_2,vnf12_1,vnf2_1,vnf3_1,vnf4_1,vnf5_1,vnf6_1,vnf7_5,vnf8_2",9
+2026-01-21 17:30:59,FABO,64,6,1,10,"vnf10_3,vnf2_4,vnf7_3,vnf9_5",4
+2026-01-21 17:30:59,FABO,64,6,1,12,"vnf10_2,vnf12_2,vnf2_5,vnf6_5",4
+2026-01-21 17:30:59,Best Fit,64,6,1,6,"vnf0_0,vnf10_0,vnf1_0,vnf2_0,vnf3_0,vnf4_0,vnf5_0,vnf6_0,vnf7_0,vnf8_0,vnf9_0",11
+2026-01-21 17:30:59,Best Fit,64,6,1,2,"vnf0_1,vnf10_1,vnf1_1,vnf2_1,vnf3_1,vnf4_1,vnf5_1,vnf6_1,vnf7_1,vnf8_1,vnf9_1",11
+2026-01-21 17:30:59,Best Fit,64,6,1,1,"vnf0_2,vnf10_2,vnf1_2,vnf2_2,vnf3_2,vnf4_2,vnf5_2,vnf6_2,vnf7_2,vnf8_2,vnf9_2",11
+2026-01-21 17:30:59,Best Fit,64,6,1,3,"vnf0_3,vnf1_3,vnf2_3,vnf3_3,vnf4_3",5
+2026-01-21 17:30:59,Best Fit,64,6,1,4,"vnf0_4,vnf1_4,vnf2_4,vnf3_4",4
+2026-01-21 17:30:59,Best Fit,64,6,1,5,"vnf0_5,vnf1_5,vnf8_4",3
+2026-01-21 17:30:59,Best Fit,64,6,1,8,"vnf2_5,vnf3_5,vnf5_4",3
+2026-01-21 17:30:59,Best Fit,64,6,1,11,"vnf10_4,vnf4_4,vnf5_3,vnf6_3,vnf7_3,vnf8_3,vnf9_3",7
+2026-01-21 17:30:59,Best Fit,64,6,1,10,"vnf4_5,vnf6_4,vnf7_4",3
+2026-01-21 17:30:59,Best Fit,64,6,1,7,"vnf5_5,vnf6_5,vnf9_4",3
+2026-01-21 17:30:59,Best Fit,64,6,1,9,"vnf10_3,vnf7_5,vnf8_5",3
+2026-01-21 17:30:59,Best Fit,64,6,1,12,"vnf10_5,vnf9_5",2
+2026-01-21 17:30:59,First Fit,64,6,1,1,"vnf0_0,vnf10_0,vnf11_0,vnf1_0,vnf2_0,vnf3_0,vnf4_0,vnf5_0,vnf6_0,vnf7_0,vnf8_0,vnf9_0",12
+2026-01-21 17:30:59,First Fit,64,6,1,2,"vnf0_1,vnf10_1,vnf11_1,vnf1_1,vnf2_1,vnf3_1,vnf4_1,vnf5_1,vnf6_1,vnf7_1,vnf8_1,vnf9_1",12
+2026-01-21 17:30:59,First Fit,64,6,1,3,"vnf0_2,vnf1_2,vnf2_2,vnf3_2,vnf4_2,vnf5_2,vnf6_2,vnf7_2",8
+2026-01-21 17:30:59,First Fit,64,6,1,4,"vnf0_3,vnf1_3,vnf2_3,vnf3_3,vnf4_3",5
+2026-01-21 17:30:59,First Fit,64,6,1,5,"vnf0_4,vnf1_4,vnf2_4,vnf3_4",4
+2026-01-21 17:30:59,First Fit,64,6,1,6,"vnf0_5,vnf10_2,vnf11_2,vnf1_5,vnf2_5,vnf3_5,vnf4_4,vnf5_3,vnf6_3,vnf7_3,vnf8_2,vnf9_2",12
+2026-01-21 17:30:59,First Fit,64,6,1,7,"vnf4_5,vnf5_4,vnf6_4",3
+2026-01-21 17:30:59,First Fit,64,6,1,8,"vnf5_5,vnf6_5,vnf7_4",3
+2026-01-21 17:30:59,First Fit,64,6,1,9,"vnf10_3,vnf7_5,vnf8_3,vnf9_3",4
+2026-01-21 17:30:59,First Fit,64,6,1,10,"vnf10_4,vnf11_3,vnf8_4,vnf9_4",4
+2026-01-21 17:30:59,First Fit,64,6,1,11,"vnf10_5,vnf11_4,vnf8_5,vnf9_5",4
+2026-01-21 17:30:59,First Fit,64,6,1,12,vnf11_5,1
+2026-01-21 17:30:59,Energy-Aware A*,64,6,1,2,"vnf0_0,vnf10_0,vnf11_0,vnf12_0,vnf13_0,vnf14_0,vnf1_0,vnf2_0,vnf3_0,vnf4_0,vnf5_0,vnf6_0,vnf7_0,vnf8_0",14
+2026-01-21 17:30:59,Energy-Aware A*,64,6,1,11,"vnf0_1,vnf14_5,vnf15_5,vnf1_1,vnf2_1,vnf3_1,vnf4_1",7
+2026-01-21 17:30:59,Energy-Aware A*,64,6,1,8,"vnf0_2,vnf14_4,vnf15_2,vnf1_2,vnf2_2,vnf3_2,vnf4_2",7
+2026-01-21 17:30:59,Energy-Aware A*,64,6,1,5,"vnf0_3,vnf1_3,vnf2_3,vnf3_3,vnf4_3,vnf9_0",6
+2026-01-21 17:30:59,Energy-Aware A*,64,6,1,6,"vnf0_4,vnf10_5,vnf11_5,vnf12_5,vnf13_5,vnf1_4,vnf2_4,vnf3_4,vnf4_4,vnf5_4,vnf6_4,vnf7_4,vnf8_4,vnf9_4",14
+2026-01-21 17:30:59,Energy-Aware A*,64,6,1,1,"vnf0_5,vnf15_4,vnf1_5,vnf2_5,vnf3_5,vnf4_5,vnf5_5,vnf6_5,vnf7_5,vnf8_5,vnf9_5",11
+2026-01-21 17:30:59,Energy-Aware A*,64,6,1,12,"vnf10_2,vnf11_2,vnf12_2,vnf13_2,vnf14_2,vnf5_1,vnf6_1,vnf7_1,vnf8_1,vnf9_1",10
+2026-01-21 17:30:59,Energy-Aware A*,64,6,1,10,"vnf10_1,vnf11_1,vnf12_1,vnf13_1,vnf14_1,vnf15_0,vnf5_2,vnf6_2,vnf7_2,vnf8_2,vnf9_2",11
+2026-01-21 17:30:59,Energy-Aware A*,64,6,1,7,"vnf15_1,vnf5_3,vnf6_3,vnf7_3,vnf8_3,vnf9_3",6
+2026-01-21 17:30:59,Energy-Aware A*,64,6,1,3,"vnf10_3,vnf11_3,vnf12_3,vnf13_3,vnf14_3",5
+2026-01-21 17:30:59,Energy-Aware A*,64,6,1,4,"vnf10_4,vnf11_4,vnf12_4,vnf13_4",4
+2026-01-21 17:30:59,Energy-Aware A*,64,6,1,9,vnf15_3,1
+2026-01-21 17:30:59,MILP_Gurobi,64,6,1,6,"vnf0_0,vnf1_0,vnf2_0,vnf53_0",4
+2026-01-21 17:30:59,MILP_Gurobi,64,6,1,7,"vnf0_1,vnf1_1,vnf2_1,vnf53_1",4
+2026-01-21 17:30:59,MILP_Gurobi,64,6,1,8,"vnf0_2,vnf1_2,vnf2_2,vnf53_2",4
+2026-01-21 17:30:59,MILP_Gurobi,64,6,1,9,"vnf0_3,vnf1_3,vnf2_3,vnf53_3",4
+2026-01-21 17:30:59,MILP_Gurobi,64,6,1,10,"vnf0_4,vnf1_4,vnf2_4,vnf53_4",4
+2026-01-21 17:30:59,MILP_Gurobi,64,6,1,11,"vnf0_5,vnf1_5,vnf2_5,vnf53_5",4
+2026-01-21 18:20:23,A*,128,6,1,6,"vnf0_0,vnf10_0,vnf11_4,vnf12_0,vnf13_4,vnf14_0,vnf15_5,vnf1_0,vnf2_0,vnf3_0,vnf4_0,vnf5_0,vnf6_0,vnf7_0,vnf8_0,vnf9_0",16
+2026-01-21 18:20:23,A*,128,6,1,2,"vnf0_1,vnf1_3,vnf3_3,vnf5_3,vnf7_3,vnf9_3",6
+2026-01-21 18:20:23,A*,128,6,1,1,"vnf0_2,vnf10_5,vnf11_5,vnf13_5,vnf14_5,vnf15_4,vnf1_4,vnf3_4,vnf5_4,vnf6_5,vnf7_4,vnf8_5,vnf9_4",13
+2026-01-21 18:20:23,A*,128,6,1,3,"vnf0_3,vnf15_1,vnf1_5,vnf3_5",4
+2026-01-21 18:20:23,A*,128,6,1,11,"vnf0_4,vnf12_3,vnf13_2,vnf14_3,vnf15_2,vnf2_4,vnf4_4,vnf5_5,vnf6_4,vnf7_5,vnf8_4,vnf9_5",12
+2026-01-21 18:20:23,A*,128,6,1,8,"vnf0_5,vnf11_1,vnf2_5,vnf4_3",4
+2026-01-21 18:20:23,A*,128,6,1,5,"vnf10_3,vnf11_0,vnf12_1,vnf13_3,vnf14_2,vnf15_0,vnf1_1,vnf3_1,vnf5_1,vnf7_1,vnf9_1",11
+2026-01-21 18:20:23,A*,128,6,1,4,"vnf10_4,vnf12_2,vnf1_2,vnf3_2,vnf5_2,vnf7_2,vnf9_2",7
+2026-01-21 18:20:23,A*,128,6,1,7,"vnf10_1,vnf11_3,vnf12_5,vnf13_0,vnf14_1,vnf2_1,vnf4_1,vnf6_1,vnf8_1",9
+2026-01-21 18:20:23,A*,128,6,1,9,"vnf10_2,vnf11_2,vnf12_4,vnf2_2,vnf4_2,vnf6_2,vnf8_2",7
+2026-01-21 18:20:23,A*,128,6,1,10,"vnf13_1,vnf2_3,vnf4_5,vnf6_3,vnf8_3",5
+2026-01-21 18:20:23,A*,128,6,1,12,"vnf14_4,vnf15_3",2
+2026-01-21 18:20:23,ABO,128,6,1,2,"vnf0_0,vnf10_4,vnf1_0,vnf2_0,vnf3_0,vnf4_0,vnf5_0,vnf6_0,vnf7_0,vnf9_4",10
+2026-01-21 18:20:23,ABO,128,6,1,4,"vnf0_1,vnf2_1,vnf3_3,vnf4_1,vnf5_5,vnf6_1,vnf7_3",7
+2026-01-21 18:20:23,ABO,128,6,1,3,"vnf0_2,vnf3_4,vnf5_4,vnf7_4,vnf8_2",5
+2026-01-21 18:20:23,ABO,128,6,1,11,"vnf0_3,vnf10_2,vnf5_3,vnf6_4,vnf7_5,vnf8_1,vnf9_1",7
+2026-01-21 18:20:23,ABO,128,6,1,8,"vnf0_4,vnf1_3,vnf4_3,vnf5_2,vnf6_3,vnf8_0",6
+2026-01-21 18:20:23,ABO,128,6,1,5,"vnf0_5,vnf1_2,vnf2_2,vnf3_2,vnf4_2,vnf6_2",6
+2026-01-21 18:20:23,ABO,128,6,1,6,"vnf10_3,vnf1_1,vnf2_3,vnf3_1,vnf5_1,vnf7_2,vnf8_5,vnf9_3",8
+2026-01-21 18:20:23,ABO,128,6,1,9,"vnf1_4,vnf2_5,vnf4_4,vnf9_2",4
+2026-01-21 18:20:23,ABO,128,6,1,7,"vnf1_5,vnf2_4,vnf4_5",3
+2026-01-21 18:20:23,ABO,128,6,1,12,"vnf10_1,vnf3_5,vnf8_3",3
+2026-01-21 18:20:23,ABO,128,6,1,10,"vnf10_0,vnf6_5,vnf8_4,vnf9_0",4
+2026-01-21 18:20:23,ABO,128,6,1,1,"vnf10_5,vnf7_1,vnf9_5",3
+2026-01-21 18:20:23,FABO,128,6,1,2,"vnf0_0,vnf10_0,vnf12_0,vnf1_4,vnf4_5,vnf7_0,vnf9_2",7
+2026-01-21 18:20:23,FABO,128,6,1,4,"vnf0_1,vnf10_1,vnf1_3,vnf3_5,vnf5_4,vnf9_1",6
+2026-01-21 18:20:23,FABO,128,6,1,3,"vnf0_2,vnf3_4,vnf5_5,vnf6_4",4
+2026-01-21 18:20:23,FABO,128,6,1,11,"vnf0_3,vnf10_4,vnf11_3,vnf12_3,vnf2_3,vnf3_3,vnf6_3,vnf7_4",8
+2026-01-21 18:20:23,FABO,128,6,1,8,"vnf0_4,vnf11_0,vnf2_2,vnf3_2,vnf4_2,vnf5_2,vnf6_2,vnf8_1",8
+2026-01-21 18:20:23,FABO,128,6,1,5,"vnf0_5,vnf1_2,vnf4_3,vnf5_3,vnf8_0,vnf9_0",6
+2026-01-21 18:20:23,FABO,128,6,1,7,"vnf11_1,vnf1_0,vnf2_0,vnf3_0,vnf4_0,vnf5_0,vnf6_0,vnf7_2,vnf8_3,vnf9_4",10
+2026-01-21 18:20:23,FABO,128,6,1,6,"vnf10_5,vnf11_4,vnf12_5,vnf1_1,vnf4_4,vnf7_1,vnf8_4,vnf9_3",8
+2026-01-21 18:20:23,FABO,128,6,1,1,"vnf11_5,vnf12_4,vnf1_5,vnf8_5",4
+2026-01-21 18:20:23,FABO,128,6,1,9,"vnf11_2,vnf12_1,vnf2_1,vnf3_1,vnf4_1,vnf5_1,vnf6_1,vnf7_5,vnf8_2",9
+2026-01-21 18:20:23,FABO,128,6,1,10,"vnf10_3,vnf2_4,vnf7_3,vnf9_5",4
+2026-01-21 18:20:23,FABO,128,6,1,12,"vnf10_2,vnf12_2,vnf2_5,vnf6_5",4
+2026-01-21 18:20:23,Best Fit,128,6,1,6,"vnf0_0,vnf10_0,vnf1_0,vnf2_0,vnf3_0,vnf4_0,vnf5_0,vnf6_0,vnf7_0,vnf8_0,vnf9_0",11
+2026-01-21 18:20:23,Best Fit,128,6,1,2,"vnf0_1,vnf10_1,vnf1_1,vnf2_1,vnf3_1,vnf4_1,vnf5_1,vnf6_1,vnf7_1,vnf8_1,vnf9_1",11
+2026-01-21 18:20:23,Best Fit,128,6,1,1,"vnf0_2,vnf10_2,vnf1_2,vnf2_2,vnf3_2,vnf4_2,vnf5_2,vnf6_2,vnf7_2,vnf8_2,vnf9_2",11
+2026-01-21 18:20:23,Best Fit,128,6,1,3,"vnf0_3,vnf1_3,vnf2_3,vnf3_3,vnf4_3",5
+2026-01-21 18:20:23,Best Fit,128,6,1,4,"vnf0_4,vnf1_4,vnf2_4,vnf3_4",4
+2026-01-21 18:20:23,Best Fit,128,6,1,5,"vnf0_5,vnf1_5,vnf8_4",3
+2026-01-21 18:20:23,Best Fit,128,6,1,8,"vnf2_5,vnf3_5,vnf5_4",3
+2026-01-21 18:20:23,Best Fit,128,6,1,11,"vnf10_4,vnf4_4,vnf5_3,vnf6_3,vnf7_3,vnf8_3,vnf9_3",7
+2026-01-21 18:20:23,Best Fit,128,6,1,10,"vnf4_5,vnf6_4,vnf7_4",3
+2026-01-21 18:20:23,Best Fit,128,6,1,7,"vnf5_5,vnf6_5,vnf9_4",3
+2026-01-21 18:20:23,Best Fit,128,6,1,9,"vnf10_3,vnf7_5,vnf8_5",3
+2026-01-21 18:20:23,Best Fit,128,6,1,12,"vnf10_5,vnf9_5",2
+2026-01-21 18:20:23,First Fit,128,6,1,1,"vnf0_0,vnf10_0,vnf11_0,vnf1_0,vnf2_0,vnf3_0,vnf4_0,vnf5_0,vnf6_0,vnf7_0,vnf8_0,vnf9_0",12
+2026-01-21 18:20:23,First Fit,128,6,1,2,"vnf0_1,vnf10_1,vnf11_1,vnf1_1,vnf2_1,vnf3_1,vnf4_1,vnf5_1,vnf6_1,vnf7_1,vnf8_1,vnf9_1",12
+2026-01-21 18:20:23,First Fit,128,6,1,3,"vnf0_2,vnf1_2,vnf2_2,vnf3_2,vnf4_2,vnf5_2,vnf6_2,vnf7_2",8
+2026-01-21 18:20:23,First Fit,128,6,1,4,"vnf0_3,vnf1_3,vnf2_3,vnf3_3,vnf4_3",5
+2026-01-21 18:20:23,First Fit,128,6,1,5,"vnf0_4,vnf1_4,vnf2_4,vnf3_4",4
+2026-01-21 18:20:23,First Fit,128,6,1,6,"vnf0_5,vnf10_2,vnf11_2,vnf1_5,vnf2_5,vnf3_5,vnf4_4,vnf5_3,vnf6_3,vnf7_3,vnf8_2,vnf9_2",12
+2026-01-21 18:20:23,First Fit,128,6,1,7,"vnf4_5,vnf5_4,vnf6_4",3
+2026-01-21 18:20:23,First Fit,128,6,1,8,"vnf5_5,vnf6_5,vnf7_4",3
+2026-01-21 18:20:23,First Fit,128,6,1,9,"vnf10_3,vnf7_5,vnf8_3,vnf9_3",4
+2026-01-21 18:20:23,First Fit,128,6,1,10,"vnf10_4,vnf11_3,vnf8_4,vnf9_4",4
+2026-01-21 18:20:23,First Fit,128,6,1,11,"vnf10_5,vnf11_4,vnf8_5,vnf9_5",4
+2026-01-21 18:20:23,First Fit,128,6,1,12,vnf11_5,1
+2026-01-21 18:20:23,Energy-Aware A*,128,6,1,2,"vnf0_0,vnf10_0,vnf11_0,vnf12_0,vnf13_0,vnf14_0,vnf1_0,vnf2_0,vnf3_0,vnf4_0,vnf5_0,vnf6_0,vnf7_0,vnf8_0",14
+2026-01-21 18:20:23,Energy-Aware A*,128,6,1,11,"vnf0_1,vnf14_5,vnf15_5,vnf1_1,vnf2_1,vnf3_1,vnf4_1",7
+2026-01-21 18:20:23,Energy-Aware A*,128,6,1,8,"vnf0_2,vnf14_4,vnf15_2,vnf1_2,vnf2_2,vnf3_2,vnf4_2",7
+2026-01-21 18:20:23,Energy-Aware A*,128,6,1,5,"vnf0_3,vnf1_3,vnf2_3,vnf3_3,vnf4_3,vnf9_0",6
+2026-01-21 18:20:23,Energy-Aware A*,128,6,1,6,"vnf0_4,vnf10_5,vnf11_5,vnf12_5,vnf13_5,vnf1_4,vnf2_4,vnf3_4,vnf4_4,vnf5_4,vnf6_4,vnf7_4,vnf8_4,vnf9_4",14
+2026-01-21 18:20:23,Energy-Aware A*,128,6,1,1,"vnf0_5,vnf15_4,vnf1_5,vnf2_5,vnf3_5,vnf4_5,vnf5_5,vnf6_5,vnf7_5,vnf8_5,vnf9_5",11
+2026-01-21 18:20:23,Energy-Aware A*,128,6,1,12,"vnf10_2,vnf11_2,vnf12_2,vnf13_2,vnf14_2,vnf5_1,vnf6_1,vnf7_1,vnf8_1,vnf9_1",10
+2026-01-21 18:20:23,Energy-Aware A*,128,6,1,10,"vnf10_1,vnf11_1,vnf12_1,vnf13_1,vnf14_1,vnf15_0,vnf5_2,vnf6_2,vnf7_2,vnf8_2,vnf9_2",11
+2026-01-21 18:20:23,Energy-Aware A*,128,6,1,7,"vnf15_1,vnf5_3,vnf6_3,vnf7_3,vnf8_3,vnf9_3",6
+2026-01-21 18:20:23,Energy-Aware A*,128,6,1,3,"vnf10_3,vnf11_3,vnf12_3,vnf13_3,vnf14_3",5
+2026-01-21 18:20:23,Energy-Aware A*,128,6,1,4,"vnf10_4,vnf11_4,vnf12_4,vnf13_4",4
+2026-01-21 18:20:23,Energy-Aware A*,128,6,1,9,vnf15_3,1
+2026-01-21 18:20:23,MILP_Gurobi,128,6,1,6,"vnf0_0,vnf2_0,vnf3_0,vnf4_0",4
+2026-01-21 18:20:23,MILP_Gurobi,128,6,1,7,"vnf0_1,vnf2_1,vnf3_1,vnf4_1",4
+2026-01-21 18:20:23,MILP_Gurobi,128,6,1,8,"vnf0_2,vnf2_2,vnf3_2,vnf4_2",4
+2026-01-21 18:20:23,MILP_Gurobi,128,6,1,9,"vnf0_3,vnf2_3,vnf3_3,vnf4_3",4
+2026-01-21 18:20:23,MILP_Gurobi,128,6,1,10,"vnf0_4,vnf2_4,vnf3_4,vnf4_4",4
+2026-01-21 18:20:23,MILP_Gurobi,128,6,1,11,"vnf0_5,vnf2_5,vnf3_5,vnf4_5",4
