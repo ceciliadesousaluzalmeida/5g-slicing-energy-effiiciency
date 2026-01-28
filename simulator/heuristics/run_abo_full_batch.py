@@ -11,9 +11,30 @@ class ABOState:
         self.g_cost = g_cost
 
     def is_goal(self, vnf_chain, vl_chain, entry=None):
-        """Goal: all VNFs placed and VLs routed."""
-        return (len(self.placed_vnfs) == len(vnf_chain)
-                and len(self.routed_vls) >= len(vl_chain))
+        if len(self.placed_vnfs) != len(vnf_chain):
+            return False
+
+        for vl in vl_chain:
+            key = (vl["from"], vl["to"])
+            src_node = self.placed_vnfs.get(vl["from"])
+            dst_node = self.placed_vnfs.get(vl["to"])
+            if src_node is None or dst_node is None:
+                return False
+            if src_node == dst_node:
+                continue
+            if key not in self.routed_vls:
+                return False
+
+            # Optional but recommended: endpoint consistency check
+            path = self.routed_vls[key]
+            if not path or path[0] != src_node or path[-1] != dst_node:
+                return False
+            if path[0] != src_node or path[-1] != dst_node:
+                routing_ok = False
+                break
+
+        return True
+
 
     def __lt__(self, other):
         return self.g_cost < other.g_cost
@@ -26,13 +47,10 @@ def run_abo_full_batch(G, slices, node_capacity_base, link_latency, link_capacit
 
     # ---- helper: choose path with best residual bandwidth among k-shortest ----
     def best_bandwidth_path(G, u, v, link_capacity, bandwidth, k=3):
-        """
-        Returns the feasible path (up to k-shortest by latency)
-        that maximizes the minimum residual bandwidth.
-        """
-        # --- safety check ---
-        if u is None or v is None or u == v:
+        if u is None or v is None:
             return None, None
+        if u == v:
+            return [u], 0.0
 
         try:
             paths = list(nx.shortest_simple_paths(G, u, v, weight="latency"))
@@ -42,32 +60,32 @@ def run_abo_full_batch(G, slices, node_capacity_base, link_latency, link_capacit
         best_path, best_score, best_latency = None, -1, None
 
         for path in paths[:k]:
-            # skip invalid or trivial paths
             if len(path) < 2:
                 continue
 
-            # compute minimum residual bandwidth on this path
-            bw_values = [
-                link_capacity.get((a, b), link_capacity.get((b, a), 0))
-                for a, b in zip(path[:-1], path[1:])
-            ]
-            if not bw_values:
+            bw_values = []
+            feasible = True
+            for a, b in zip(path[:-1], path[1:]):
+                cap = link_capacity.get((a, b), None)
+                if cap is None or cap < bandwidth:
+                    feasible = False
+                    break
+                bw_values.append(cap)
+            if not feasible:
                 continue
 
             min_bw = min(bw_values)
-            if min_bw < bandwidth:
-                continue
 
             latency = sum(
-                link_latency.get((a, b), link_latency.get((b, a), 1.0))
+                link_latency.get((a, b), 1.0)
                 for a, b in zip(path[:-1], path[1:])
             )
 
-            # choose best: higher min_bw, then lower latency
             if min_bw > best_score or (min_bw == best_score and (best_latency is None or latency < best_latency)):
                 best_path, best_score, best_latency = path, min_bw, latency
 
         return (best_path, best_latency) if best_path else (None, None)
+
 
 
     # ---- heuristic ----
@@ -132,6 +150,10 @@ def run_abo_full_batch(G, slices, node_capacity_base, link_latency, link_capacit
                 dst_node = new_placed.get(vl["to"])
                 if src_node is None or dst_node is None:
                     continue
+                if src_node == dst_node:
+                    new_routed[key] = [src_node]
+                    continue
+
 
                 # pick path maximizing min residual bandwidth
                 path, lat = best_bandwidth_path(G, src_node, dst_node, new_link_capacity, vl["bandwidth"])
@@ -141,10 +163,10 @@ def run_abo_full_batch(G, slices, node_capacity_base, link_latency, link_capacit
 
                 for u, v in zip(path[:-1], path[1:]):
                     bw = vl["bandwidth"]
-                    if (u, v) in new_link_capacity:
-                        new_link_capacity[(u, v)] -= bw
-                    else:
-                        new_link_capacity[(v, u)] -= bw
+                    if (u, v) not in new_link_capacity:
+                        routing_ok = False
+                        break
+                    new_link_capacity[(u, v)] -= bw
                 new_routed[key] = path
                 new_cost += lat
 
@@ -160,16 +182,13 @@ def run_abo_full_batch(G, slices, node_capacity_base, link_latency, link_capacit
                                                     vl_chain[0]["bandwidth"] if vl_chain else 0)
                     if path:
                         for u, v in zip(path[:-1], path[1:]):
-                            bw = vl_chain[0]["bandwidth"] if vl_chain else 0
-                            if (u, v) in new_link_capacity:
-                                new_link_capacity[(u, v)] -= bw
-                            else:
-                                new_link_capacity[(v, u)] -= bw
-                        new_routed[("ENTRY", first_id)] = path
-                        new_cost += lat
-                    else:
-                        routing_ok = False
-
+                            bw = vl["bandwidth"]
+                            if (u, v) not in new_link_capacity:
+                                routing_ok = False
+                                break
+                            new_link_capacity[(u, v)] -= bw
+                        if not routing_ok:
+                            break
             if routing_ok:
                 expansions.append(ABOState(new_placed, new_routed, new_cost))
         return expansions

@@ -1,0 +1,13 @@
+timestamp,method,num_slices,num_vnfs_per_slice,seed,type,slice,vnf_src,vnf_dst,node,u,v,path_nodes,path_edges,value
+2026-01-28 10:17:24,MILP_Gurobi,4,2,1,placement,0,vnf0_0,,6.0,,,,,1.0
+2026-01-28 10:17:24,MILP_Gurobi,4,2,1,placement,0,vnf0_1,,7.0,,,,,1.0
+2026-01-28 10:17:24,MILP_Gurobi,4,2,1,placement,1,vnf1_0,,6.0,,,,,1.0
+2026-01-28 10:17:24,MILP_Gurobi,4,2,1,placement,1,vnf1_1,,7.0,,,,,1.0
+2026-01-28 10:17:24,MILP_Gurobi,4,2,1,placement,2,vnf2_0,,6.0,,,,,1.0
+2026-01-28 10:17:24,MILP_Gurobi,4,2,1,placement,2,vnf2_1,,7.0,,,,,1.0
+2026-01-28 10:17:24,MILP_Gurobi,4,2,1,placement,3,vnf3_0,,6.0,,,,,1.0
+2026-01-28 10:17:24,MILP_Gurobi,4,2,1,placement,3,vnf3_1,,7.0,,,,,1.0
+2026-01-28 10:17:24,MILP_Gurobi,4,2,1,flow_edge,0,vnf0_0,vnf0_1,,6.0,7.0,,,1.0
+2026-01-28 10:17:24,MILP_Gurobi,4,2,1,flow_edge,1,vnf1_0,vnf1_1,,6.0,7.0,,,1.0
+2026-01-28 10:17:24,MILP_Gurobi,4,2,1,flow_edge,2,vnf2_0,vnf2_1,,6.0,7.0,,,1.0
+2026-01-28 10:17:24,MILP_Gurobi,4,2,1,flow_edge,3,vnf3_0,vnf3_1,,6.0,7.0,,,1.0

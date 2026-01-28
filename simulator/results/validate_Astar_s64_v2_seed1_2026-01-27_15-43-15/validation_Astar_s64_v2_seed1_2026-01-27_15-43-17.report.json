@@ -1,0 +1,35 @@
+{
+  "timestamp": "2026-01-27T15:43:17.600695",
+  "heuristic": "A*",
+  "seed": 1,
+  "num_slices": 64,
+  "vnfs_per_slice": 2,
+  "entry_node": 6,
+  "heur_runtime_s": 1.4141042232513428,
+  "heur_accepted": 64,
+  "endpoint_check": {
+    "ok": true,
+    "n_violations": 0,
+    "violations": [],
+    "reason": "VALID (paths match endpoints and hops)."
+  },
+  "mipstart_validation": {
+    "ok": true,
+    "n_violations": 0,
+    "by_family": {},
+    "top": [],
+    "reason": "VALID (all MILP constraints satisfied by heuristic MIP start)."
+  },
+  "milp": {
+    "status": "OPTIMAL",
+    "solcount": 1,
+    "mip_gap": 0.0,
+    "accepted": 10,
+    "runtime_wall_s": 0.0005936622619628906
+  },
+  "paths": {
+    "report_txt": "./results/validate_Astar_s64_v2_seed1_2026-01-27_15-43-15/validation_Astar_s64_v2_seed1_2026-01-27_15-43-17.report.txt",
+    "report_json": "./results/validate_Astar_s64_v2_seed1_2026-01-27_15-43-15/validation_Astar_s64_v2_seed1_2026-01-27_15-43-17.report.json",
+    "gurobi_log": "./results/validate_Astar_s64_v2_seed1_2026-01-27_15-43-15/validation_Astar_s64_v2_seed1_2026-01-27_15-43-17.gurobi.log"
+  }
+}

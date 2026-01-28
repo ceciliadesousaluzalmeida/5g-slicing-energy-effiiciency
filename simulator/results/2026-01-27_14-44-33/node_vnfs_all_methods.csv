@@ -1,0 +1,47 @@
+timestamp,method,num_slices,num_vnfs_per_slice,seed,node,hosted_vnfs,num_hosted_vnfs
+2026-01-27 14:44:33,A*,64,2,1,1,"vnf0_0,vnf12_0,vnf15_0,vnf18_0,vnf21_0,vnf24_0,vnf27_0,vnf30_0,vnf33_0,vnf36_0,vnf39_0,vnf3_0,vnf42_0,vnf45_0,vnf48_0,vnf51_0,vnf54_0,vnf57_0,vnf60_0,vnf63_0,vnf6_0,vnf9_0",22
+2026-01-27 14:44:33,A*,64,2,1,2,"vnf0_1,vnf15_1,vnf21_1,vnf27_1,vnf33_1,vnf39_1,vnf3_1,vnf45_1,vnf51_1,vnf57_1,vnf63_1,vnf9_1",12
+2026-01-27 14:44:33,A*,64,2,1,6,"vnf10_0,vnf13_0,vnf16_0,vnf19_0,vnf1_0,vnf22_0,vnf25_0,vnf28_0,vnf31_0,vnf34_0,vnf37_0,vnf40_0,vnf43_0,vnf46_0,vnf49_0,vnf4_0,vnf52_0,vnf55_0,vnf58_0,vnf61_0,vnf7_0",21
+2026-01-27 14:44:33,A*,64,2,1,5,"vnf13_1,vnf19_1,vnf1_1,vnf25_1,vnf31_1,vnf37_1,vnf43_1,vnf49_1,vnf55_1,vnf61_1,vnf7_1",11
+2026-01-27 14:44:33,A*,64,2,1,11,"vnf11_0,vnf14_0,vnf17_0,vnf20_0,vnf23_0,vnf26_0,vnf29_0,vnf2_0,vnf32_0,vnf35_0,vnf38_0,vnf41_0,vnf44_0,vnf47_0,vnf50_0,vnf53_0,vnf56_0,vnf59_0,vnf5_0,vnf62_0,vnf8_0",21
+2026-01-27 14:44:33,A*,64,2,1,3,"vnf12_1,vnf18_1,vnf24_1,vnf2_1,vnf30_1,vnf36_1,vnf42_1,vnf48_1,vnf54_1,vnf60_1,vnf6_1",11
+2026-01-27 14:44:33,A*,64,2,1,7,"vnf10_1,vnf16_1,vnf22_1,vnf28_1,vnf34_1,vnf40_1,vnf46_1,vnf4_1,vnf52_1,vnf58_1",10
+2026-01-27 14:44:33,A*,64,2,1,8,"vnf11_1,vnf17_1,vnf23_1,vnf29_1,vnf35_1,vnf41_1,vnf47_1,vnf53_1,vnf59_1,vnf5_1",10
+2026-01-27 14:44:33,A*,64,2,1,10,"vnf14_1,vnf20_1,vnf26_1,vnf32_1,vnf38_1,vnf44_1,vnf50_1,vnf56_1,vnf62_1,vnf8_1",10
+2026-01-27 14:44:33,ABO,64,2,1,6,"vnf0_0,vnf10_0,vnf11_0,vnf12_0,vnf13_0,vnf14_0,vnf15_0,vnf16_0,vnf17_0,vnf18_0,vnf19_0,vnf1_0,vnf20_0,vnf21_0,vnf22_0,vnf23_0,vnf24_0,vnf25_0,vnf26_0,vnf27_0,vnf28_0,vnf29_0,vnf2_0,vnf30_0,vnf31_0,vnf32_0,vnf33_0,vnf34_0,vnf35_0,vnf36_0,vnf37_0,vnf38_0,vnf39_0,vnf3_0,vnf40_0,vnf41_0,vnf42_0,vnf43_0,vnf44_0,vnf45_0,vnf46_0,vnf47_0,vnf48_0,vnf49_0,vnf4_0,vnf50_0,vnf51_0,vnf52_0,vnf53_0,vnf54_0,vnf55_0,vnf56_0,vnf57_0,vnf58_0,vnf59_0,vnf5_0,vnf60_0,vnf61_0,vnf62_0,vnf63_0,vnf6_0,vnf7_0,vnf8_0,vnf9_0",64
+2026-01-27 14:44:33,ABO,64,2,1,2,"vnf0_1,vnf12_1,vnf15_1,vnf18_1,vnf21_1,vnf24_1,vnf27_1,vnf30_1,vnf33_1,vnf36_1,vnf39_1,vnf3_1,vnf42_1,vnf45_1,vnf6_1,vnf9_1",16
+2026-01-27 14:44:33,ABO,64,2,1,5,"vnf10_1,vnf13_1,vnf16_1,vnf19_1,vnf1_1,vnf22_1,vnf25_1,vnf28_1,vnf31_1,vnf34_1,vnf37_1,vnf40_1,vnf43_1,vnf46_1,vnf4_1,vnf7_1",16
+2026-01-27 14:44:33,ABO,64,2,1,7,"vnf11_1,vnf14_1,vnf17_1,vnf20_1,vnf23_1,vnf26_1,vnf29_1,vnf2_1,vnf32_1,vnf35_1,vnf38_1,vnf41_1,vnf44_1,vnf47_1,vnf5_1,vnf8_1",16
+2026-01-27 14:44:33,ABO,64,2,1,1,"vnf48_1,vnf50_1,vnf52_1,vnf54_1,vnf56_1,vnf58_1,vnf60_1,vnf62_1",8
+2026-01-27 14:44:33,ABO,64,2,1,4,"vnf49_1,vnf51_1,vnf53_1,vnf55_1,vnf57_1,vnf59_1,vnf61_1,vnf63_1",8
+2026-01-27 14:44:33,FABO,64,2,1,1,"vnf0_0,vnf12_0,vnf15_0,vnf21_0,vnf24_0,vnf27_0,vnf30_0,vnf36_0,vnf39_0,vnf42_0,vnf45_0,vnf6_0,vnf9_0",13
+2026-01-27 14:44:33,FABO,64,2,1,2,"vnf0_1,vnf12_1,vnf15_1,vnf17_1,vnf21_1,vnf24_1,vnf27_1,vnf28_1,vnf30_1,vnf36_1,vnf39_1,vnf40_1,vnf42_1,vnf45_1,vnf6_1,vnf9_1",16
+2026-01-27 14:44:33,FABO,64,2,1,3,"vnf16_1,vnf19_1,vnf1_0,vnf46_1,vnf54_1,vnf61_1,vnf8_1",7
+2026-01-27 14:44:33,FABO,64,2,1,4,"vnf16_0,vnf1_1,vnf31_0,vnf46_0,vnf54_0,vnf59_0,vnf62_0",7
+2026-01-27 14:44:33,FABO,64,2,1,5,"vnf22_1,vnf2_0,vnf31_1,vnf32_1,vnf43_1,vnf59_1,vnf62_1,vnf7_1",8
+2026-01-27 14:44:33,FABO,64,2,1,6,"vnf10_0,vnf13_0,vnf17_0,vnf22_0,vnf25_0,vnf28_0,vnf2_1,vnf32_0,vnf37_0,vnf40_0,vnf43_0,vnf47_0,vnf7_0",13
+2026-01-27 14:44:33,FABO,64,2,1,7,"vnf10_1,vnf13_1,vnf25_1,vnf33_1,vnf37_1,vnf3_0,vnf47_1,vnf48_1,vnf55_1,vnf60_1,vnf63_1",11
+2026-01-27 14:44:33,FABO,64,2,1,9,"vnf18_0,vnf33_0,vnf3_1,vnf48_0,vnf55_0,vnf60_0,vnf63_0",7
+2026-01-27 14:44:33,FABO,64,2,1,8,"vnf11_1,vnf18_1,vnf23_1,vnf26_1,vnf29_1,vnf34_1,vnf38_1,vnf41_1,vnf44_1,vnf49_1,vnf4_0,vnf51_1,vnf52_1,vnf53_1,vnf56_1,vnf58_1",16
+2026-01-27 14:44:33,FABO,64,2,1,11,"vnf11_0,vnf14_0,vnf19_0,vnf23_0,vnf26_0,vnf29_0,vnf34_0,vnf38_0,vnf41_0,vnf44_0,vnf49_0,vnf4_1,vnf51_0,vnf52_0,vnf53_0,vnf56_0,vnf58_0,vnf8_0",18
+2026-01-27 14:44:33,FABO,64,2,1,10,"vnf14_1,vnf20_1,vnf35_1,vnf50_1,vnf57_1,vnf5_0",6
+2026-01-27 14:44:33,FABO,64,2,1,12,"vnf20_0,vnf35_0,vnf50_0,vnf57_0,vnf5_1,vnf61_0",6
+2026-01-27 14:44:33,Best Fit,64,2,1,6,"vnf0_0,vnf10_0,vnf11_0,vnf12_0,vnf13_0,vnf14_0,vnf15_0,vnf16_0,vnf17_0,vnf18_0,vnf19_0,vnf1_0,vnf20_0,vnf21_0,vnf22_0,vnf23_0,vnf24_0,vnf25_0,vnf26_0,vnf27_0,vnf28_0,vnf29_0,vnf2_0,vnf30_0,vnf31_0,vnf32_0,vnf33_0,vnf34_0,vnf35_0,vnf36_0,vnf37_0,vnf38_0,vnf39_0,vnf3_0,vnf40_0,vnf41_0,vnf42_0,vnf43_0,vnf44_0,vnf45_0,vnf46_0,vnf47_0,vnf48_0,vnf49_0,vnf4_0,vnf50_0,vnf51_0,vnf52_0,vnf53_0,vnf54_0,vnf55_0,vnf56_0,vnf57_0,vnf58_0,vnf59_0,vnf5_0,vnf60_0,vnf61_0,vnf62_0,vnf63_0,vnf6_0,vnf7_0,vnf8_0,vnf9_0",64
+2026-01-27 14:44:33,Best Fit,64,2,1,2,"vnf0_1,vnf10_1,vnf11_1,vnf12_1,vnf13_1,vnf14_1,vnf15_1,vnf1_1,vnf2_1,vnf3_1,vnf4_1,vnf5_1,vnf6_1,vnf7_1,vnf8_1,vnf9_1",16
+2026-01-27 14:44:33,Best Fit,64,2,1,5,"vnf16_1,vnf17_1,vnf18_1,vnf19_1,vnf20_1,vnf21_1,vnf22_1,vnf23_1,vnf24_1,vnf25_1,vnf26_1,vnf27_1,vnf28_1,vnf29_1,vnf30_1,vnf31_1",16
+2026-01-27 14:44:33,Best Fit,64,2,1,7,"vnf32_1,vnf33_1,vnf34_1,vnf35_1,vnf36_1,vnf37_1,vnf38_1,vnf39_1,vnf40_1,vnf41_1,vnf42_1,vnf43_1,vnf44_1,vnf45_1,vnf46_1,vnf47_1",16
+2026-01-27 14:44:33,Best Fit,64,2,1,1,"vnf48_1,vnf49_1,vnf50_1,vnf51_1,vnf52_1,vnf53_1,vnf54_1,vnf55_1,vnf56_1,vnf57_1,vnf58_1,vnf59_1,vnf60_1,vnf61_1,vnf62_1,vnf63_1",16
+2026-01-27 14:44:33,First Fit,64,2,1,1,"vnf0_0,vnf10_0,vnf11_0,vnf12_0,vnf13_0,vnf14_0,vnf15_0,vnf16_0,vnf17_0,vnf18_0,vnf19_0,vnf1_0,vnf20_0,vnf21_0,vnf22_0,vnf23_0,vnf24_0,vnf25_0,vnf26_0,vnf27_0,vnf28_0,vnf29_0,vnf2_0,vnf30_0,vnf31_0,vnf32_0,vnf33_1,vnf34_1,vnf35_1,vnf36_1,vnf37_1,vnf38_1,vnf39_1,vnf3_0,vnf40_1,vnf41_1,vnf42_1,vnf43_1,vnf44_1,vnf45_1,vnf46_1,vnf47_1,vnf48_1,vnf4_0,vnf5_0,vnf6_0,vnf7_0,vnf8_0,vnf9_0",49
+2026-01-27 14:44:33,First Fit,64,2,1,2,"vnf0_1,vnf10_1,vnf11_1,vnf12_1,vnf13_1,vnf14_1,vnf15_1,vnf1_1,vnf2_1,vnf3_1,vnf4_1,vnf5_1,vnf6_1,vnf7_1,vnf8_1,vnf9_1",16
+2026-01-27 14:44:33,First Fit,64,2,1,3,"vnf16_1,vnf17_1,vnf18_1,vnf19_1,vnf20_1,vnf21_1,vnf22_1,vnf23_1,vnf24_1,vnf25_1,vnf26_1,vnf27_1,vnf28_1,vnf29_1,vnf30_1,vnf31_1",16
+2026-01-27 14:44:33,First Fit,64,2,1,4,vnf32_1,1
+2026-01-27 14:44:33,First Fit,64,2,1,5,"vnf33_0,vnf34_0,vnf35_0,vnf36_0,vnf37_0,vnf38_0,vnf39_0,vnf40_0,vnf41_0,vnf42_0,vnf43_0,vnf44_0,vnf45_0,vnf46_0,vnf47_0,vnf48_0",16
+2026-01-27 14:44:33,First Fit,64,2,1,6,"vnf49_0,vnf50_0,vnf51_0,vnf52_0,vnf53_0,vnf54_0,vnf55_0,vnf56_0,vnf57_0,vnf58_0,vnf59_0,vnf60_0,vnf61_0,vnf62_0,vnf63_0",15
+2026-01-27 14:44:33,First Fit,64,2,1,7,"vnf49_1,vnf50_1,vnf51_1,vnf52_1,vnf53_1,vnf54_1,vnf55_1,vnf56_1,vnf57_1,vnf58_1,vnf59_1,vnf60_1,vnf61_1,vnf62_1,vnf63_1",15
+2026-01-27 14:44:33,Energy-Aware A*,64,2,1,2,"vnf0_0,vnf12_0,vnf15_0,vnf18_0,vnf21_0,vnf24_0,vnf27_0,vnf30_0,vnf33_0,vnf36_0,vnf39_0,vnf3_0,vnf42_0,vnf45_0,vnf6_0,vnf9_0",16
+2026-01-27 14:44:33,Energy-Aware A*,64,2,1,6,"vnf0_1,vnf10_1,vnf11_1,vnf12_1,vnf13_1,vnf14_1,vnf15_1,vnf16_1,vnf17_1,vnf18_1,vnf19_1,vnf1_1,vnf20_1,vnf21_1,vnf22_1,vnf23_1,vnf24_1,vnf25_1,vnf26_1,vnf27_1,vnf28_1,vnf29_1,vnf2_1,vnf30_1,vnf31_1,vnf32_1,vnf33_1,vnf34_1,vnf35_1,vnf36_1,vnf37_1,vnf38_1,vnf39_1,vnf3_1,vnf40_1,vnf41_1,vnf42_1,vnf43_1,vnf44_1,vnf45_1,vnf46_1,vnf47_1,vnf48_1,vnf49_1,vnf4_1,vnf50_1,vnf51_1,vnf52_1,vnf53_1,vnf54_1,vnf55_1,vnf56_1,vnf57_1,vnf58_1,vnf59_1,vnf5_1,vnf60_1,vnf61_1,vnf62_1,vnf63_1,vnf6_1,vnf7_1,vnf8_1,vnf9_1",64
+2026-01-27 14:44:33,Energy-Aware A*,64,2,1,5,"vnf10_0,vnf13_0,vnf16_0,vnf19_0,vnf1_0,vnf22_0,vnf25_0,vnf28_0,vnf31_0,vnf34_0,vnf37_0,vnf40_0,vnf43_0,vnf46_0,vnf4_0,vnf7_0",16
+2026-01-27 14:44:33,Energy-Aware A*,64,2,1,7,"vnf11_0,vnf14_0,vnf17_0,vnf20_0,vnf23_0,vnf26_0,vnf29_0,vnf2_0,vnf32_0,vnf35_0,vnf38_0,vnf41_0,vnf44_0,vnf47_0,vnf5_0,vnf8_0",16
+2026-01-27 14:44:33,Energy-Aware A*,64,2,1,1,"vnf48_0,vnf49_0,vnf50_0,vnf51_0,vnf52_0,vnf53_0,vnf54_0,vnf55_0,vnf56_0,vnf57_0,vnf58_0,vnf59_0,vnf60_0,vnf61_0,vnf62_0,vnf63_0",16
+2026-01-27 14:44:33,MILP_Gurobi,64,2,1,6,"vnf10_0,vnf11_0,vnf13_0,vnf15_0,vnf17_0,vnf19_0,vnf1_0,vnf21_0,vnf24_0,vnf26_0,vnf27_0,vnf29_0,vnf31_0,vnf33_0,vnf35_0,vnf37_0,vnf39_0,vnf3_0,vnf41_0,vnf43_0,vnf44_0,vnf46_0,vnf48_0,vnf50_0,vnf52_0,vnf54_0,vnf55_0,vnf57_0,vnf5_0,vnf60_0,vnf62_0,vnf7_0,vnf8_0",33
+2026-01-27 14:44:33,MILP_Gurobi,64,2,1,11,"vnf10_1,vnf11_1,vnf13_1,vnf15_1,vnf17_1,vnf19_1,vnf1_1,vnf21_1,vnf24_1,vnf26_1,vnf27_1,vnf29_1,vnf31_1,vnf33_1,vnf35_1,vnf37_1,vnf39_1,vnf3_1,vnf41_1,vnf43_1,vnf44_1,vnf46_1,vnf48_1,vnf50_1,vnf52_1,vnf54_1,vnf55_1,vnf57_1,vnf5_1,vnf60_1,vnf62_1,vnf7_1,vnf8_1",33

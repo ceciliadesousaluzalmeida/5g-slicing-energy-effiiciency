@@ -1,0 +1,23 @@
+=== Heuristic-to-YourMILP Validation Report ===
+Timestamp: 2026-01-27 15:43:17
+Heuristic: A*
+Seed: 1
+Num slices: 64
+VNFs per slice: 2
+Entry node: 6
+
+Heuristic runtime (s): 1.414104
+Heuristic accepted: 64/64
+
+Endpoint/Hops check: VALID
+Why: VALID (paths match endpoints and hops).
+Endpoint violations: 0
+
+MIP start validation: VALID
+Why: VALID (all MILP constraints satisfied by heuristic MIP start).
+Violated constraints: 0
+
+Gurobi log: ./results/validate_Astar_s64_v2_seed1_2026-01-27_15-43-15/validation_Astar_s64_v2_seed1_2026-01-27_15-43-17.gurobi.log
+MILP status: OPTIMAL, SolCount=1, MIPGap=0.0
+MILP accepted: 10/64
+MILP runtime (wall): 0.0006s

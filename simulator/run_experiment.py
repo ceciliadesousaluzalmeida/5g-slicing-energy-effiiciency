@@ -494,8 +494,9 @@ def main():
 
     # --- Imports that depend on your project structure ---
     from milp.create_instance import create_instance
-    from milp.solve_gurobi_sequential import solve_gurobi_max_accept
+    from milp.solve_gurobi_sequential import solve_two_phase_max_accept_then_min_energy
     from milp.adapter import MILPResultAdapterGurobi
+    from milp.milp_two_phase import build_multi_slice_model_with_accept
 
     from utils.topology import topologie_finlande
     from utils.generate_slices import generate_random_slices
@@ -525,9 +526,9 @@ def main():
     MAX_MILP_VNFS_TOTAL = 10**9
 
     param_grid = {
-        "num_slices": [4, 8, 16, 32, 64, 128],
-        "num_vnfs_per_slice": [2, 3, 4, 5, 6],
-        "seed": [1],
+        "num_slices": [4, 8, 12, 16, 20, 32, 64, 128],
+        "num_vnfs_per_slice": [2,4, 5, 6],
+        "seed": [1, 2, 3, 4, 5],
     }
 
     vnf_profiles = [
@@ -616,12 +617,6 @@ def main():
                             print(f"[DEBUG] slices[0]['{k}'] type:", type(slices[0][k]))
                             print(f"[DEBUG] slices[0]['{k}'] sample:", str(slices[0][k])[:MAX_MILP_VNFS_TOTAL])
 
-                # Show one heuristic placement id format
-                tmp_name = "ABO"
-                if tmp_name in method_results and method_results[tmp_name]:
-                    r0 = method_results[tmp_name][0]
-                    print("[DEBUG] placed_vnfs type:", type(r0.placed_vnfs))
-                    print("[DEBUG] placed_vnfs sample:", list(r0.placed_vnfs.items())[:5])
 
                
 
@@ -651,12 +646,16 @@ def main():
 
                         instance = create_instance(G, slices)
                         instance.entry_node = ENTRY  # keep if your create_instance uses it
+                        instance.entry_required_s = {s: False for s in instance.S}
 
-                        out = solve_gurobi_max_accept(
-                            instance,
+                        out = solve_two_phase_max_accept_then_min_energy(
+                            instance=instance,
+                            slice_set=list(instance.S),  
                             msg=False,
-                            time_limit=MILP_TIME_LIMIT,
+                            time_limit_phase1=MILP_TIME_LIMIT,
+                            time_limit_phase2=MILP_TIME_LIMIT,
                         )
+
 
                         if out.get("last_result") is not None:
                             adapter = MILPResultAdapterGurobi(out["last_result"], instance)

@@ -1,0 +1,20 @@
+{
+  "heuristic": "A*",
+  "seed": 1,
+  "num_slices": 64,
+  "vnfs_per_slice": 2,
+  "entry_node": 6,
+  "heur_runtime_s": 1.4141042232513428,
+  "heur_accepted": 64,
+  "endpoint_ok": true,
+  "endpoint_violations": 0,
+  "mipstart_ok": true,
+  "mipstart_violations": 0,
+  "milp_status": "OPTIMAL",
+  "milp_accepted": 10,
+  "milp_solcount": 1,
+  "milp_gap": 0.0,
+  "report_txt": "./results/validate_Astar_s64_v2_seed1_2026-01-27_15-43-15/validation_Astar_s64_v2_seed1_2026-01-27_15-43-17.report.txt",
+  "report_json": "./results/validate_Astar_s64_v2_seed1_2026-01-27_15-43-15/validation_Astar_s64_v2_seed1_2026-01-27_15-43-17.report.json",
+  "gurobi_log": "./results/validate_Astar_s64_v2_seed1_2026-01-27_15-43-15/validation_Astar_s64_v2_seed1_2026-01-27_15-43-17.gurobi.log"
+}
