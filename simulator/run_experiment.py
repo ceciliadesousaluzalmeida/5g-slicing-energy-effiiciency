@@ -519,15 +519,15 @@ def main():
     # Config (edit here)
     # ============================
 
-    MILP_TIME_LIMIT = 10**9 
+    MILP_TIME_LIMIT = 3600  # seconds per phase
     ENTRY = 6
 
     MAX_MILP_SLICES = 10**9
     MAX_MILP_VNFS_TOTAL = 10**9
 
     param_grid = {
-        "num_slices": [4, 8, 12, 16, 20, 32, 64, 128],
-        "num_vnfs_per_slice": [2,4, 5, 6],
+        "num_slices": [4, 8, 16, 32, 64],
+        "num_vnfs_per_slice": [2, 3, 4, 5, 6],
         "seed": [1, 2, 3, 4, 5],
     }
 
