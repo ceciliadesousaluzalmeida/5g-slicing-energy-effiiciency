@@ -1,9 +1,10 @@
 # All comments in English
+import heapq
+from copy import deepcopy  # kept for compatibility, but not used in hot path
+from itertools import count
+
 import networkx as nx
 import pandas as pd
-from queue import PriorityQueue
-from copy import deepcopy
-from itertools import count
 
 
 def _as_vnf_id(v):
@@ -82,49 +83,94 @@ def run_fabo_full_batch(G, slices, node_capacity_base, link_latency, link_capaci
         else:
             raise KeyError(f"Edge ({a},{b}) not found in link capacities.")
 
-    # --- Best bandwidth path ----------------------------------------------
-    def best_bandwidth_path(u, v, link_capacity, bw, k=3):
+    # --- Widest path with latency tie-break ------------------------------
+    def best_bandwidth_path(u, v, link_capacity, bw):
         """
-        Returns a feasible path (among up to k shortest by latency) maximizing min residual bandwidth.
+        Returns a feasible path maximizing bottleneck bandwidth (maximin),
+        tie-breaking on minimum latency.
+
+        This replaces networkx.shortest_simple_paths (KSP), which is expensive.
+        Complexity: O(E log V) per call, usually much faster than KSP.
         """
         if u is None or v is None:
             return None, None
         if u == v:
             return [u], 0.0
 
-        try:
-            paths_iter = nx.shortest_simple_paths(G, u, v, weight="latency")
-        except nx.NetworkXNoPath:
+        # Best known bottleneck and latency to each node
+        best_bottleneck = {u: float("inf")}
+        best_lat = {u: 0.0}
+        parent = {u: None}
+
+        # Max-heap on bottleneck, min-heap on latency (tie-break)
+        # We push (-bottleneck, latency, node)
+        heap = [(-float("inf"), 0.0, u)]
+
+        while heap:
+            neg_bn, cur_lat, x = heapq.heappop(heap)
+            cur_bn = -neg_bn
+
+            # Skip stale entries
+            if x in best_bottleneck:
+                if cur_bn < best_bottleneck[x]:
+                    continue
+                if cur_bn == best_bottleneck[x] and cur_lat > best_lat[x]:
+                    continue
+
+            if x == v:
+                break
+
+            # Iterate neighbors using networkx adjacency (cheap)
+            for y in G.adj[x]:
+                cap_xy = get_edge_value(link_capacity, x, y, 0.0)
+                if cap_xy <= 0.0:
+                    continue
+
+                # Bottleneck update
+                new_bn = min(cur_bn, cap_xy)
+                if new_bn < bw:
+                    continue
+
+                # Latency update
+                lat_xy = get_edge_value(link_latency, x, y, 1.0)
+                new_lat = cur_lat + float(lat_xy)
+
+                # Relaxation with tie-break
+                old_bn = best_bottleneck.get(y, -1.0)
+                old_lat = best_lat.get(y, float("inf"))
+
+                if (new_bn > old_bn) or (new_bn == old_bn and new_lat < old_lat):
+                    best_bottleneck[y] = new_bn
+                    best_lat[y] = new_lat
+                    parent[y] = x
+                    heapq.heappush(heap, (-new_bn, new_lat, y))
+
+        if v not in best_bottleneck or best_bottleneck[v] < bw:
             return None, None
 
-        best_path, best_score, best_latency = None, -1.0, None
+        # Reconstruct path
+        path = []
+        cur = v
+        while cur is not None:
+            path.append(cur)
+            cur = parent.get(cur)
+        path.reverse()
 
-        for idx, path in enumerate(paths_iter):
-            if idx >= k:
-                break
-            if not path or len(path) < 2:
-                continue
+        if not path or path[0] != u or path[-1] != v:
+            return None, None
 
-            bw_values = [get_edge_value(link_capacity, a, b, 0.0) for a, b in zip(path[:-1], path[1:])]
-            if not bw_values:
-                continue
-
-            min_bw = min(bw_values)
-            if min_bw < bw:
-                continue
-
-            latency = sum(get_edge_value(link_latency, a, b, 1.0) for a, b in zip(path[:-1], path[1:]))
-
-            if (min_bw > best_score) or (min_bw == best_score and (best_latency is None or latency < best_latency)):
-                best_path, best_score, best_latency = path, float(min_bw), float(latency)
-
-        return (best_path, best_latency) if best_path else (None, None)
+        return path, float(best_lat[v])
 
     # --- Global structures ------------------------------------------------
     fabo_results = []
-    node_capacity_global = deepcopy(node_capacity_base)
-    link_capacity_global = deepcopy(link_capacity_base)
-    total_capacity = deepcopy(node_capacity_base)
+
+    # Shallow copies are enough: values are numbers (immutable)
+    node_capacity_global = node_capacity_base.copy()
+    link_capacity_global = link_capacity_base.copy()
+    total_capacity = node_capacity_base.copy()
+
+    # Optional: cache shortest_path_length for heuristic to reduce repeated calls
+    dist_cache = {}
 
     # --- Heuristic --------------------------------------------------------
     def fabo_heuristic(state, vnf_chain, vl_chain, entry=None):
@@ -140,10 +186,14 @@ def run_fabo_full_batch(G, slices, node_capacity_base, link_latency, link_capaci
             if s_node is None or d_node is None or s_node == d_node:
                 continue
 
-            try:
-                h += nx.shortest_path_length(G, s_node, d_node, weight="latency")
-            except nx.NetworkXNoPath:
-                h += 10_000.0
+            key = (s_node, d_node)
+            if key not in dist_cache:
+                try:
+                    dist_cache[key] = float(nx.shortest_path_length(G, s_node, d_node, weight="latency"))
+                except nx.NetworkXNoPath:
+                    dist_cache[key] = 10_000.0
+
+            h += dist_cache[key]
 
         return float(h)
 
@@ -151,12 +201,15 @@ def run_fabo_full_batch(G, slices, node_capacity_base, link_latency, link_capaci
     def expand_state(state, vnf_chain, vl_chain, entry=None):
         expansions = []
 
-        unplaced = [_as_vnf_id(v["id"]) for v in vnf_chain if _as_vnf_id(v["id"]) not in state.placed_vnfs]
+        # Pre-index VNFs by id for faster lookups
+        vnf_by_id = {_as_vnf_id(v["id"]): v for v in vnf_chain}
+
+        unplaced = [vid for vid in vnf_by_id.keys() if vid not in state.placed_vnfs]
         if not unplaced:
             return expansions
 
         next_vnf_id = sorted(unplaced)[0]
-        vnf = next(v for v in vnf_chain if _as_vnf_id(v["id"]) == next_vnf_id)
+        vnf = vnf_by_id[next_vnf_id]
 
         # Node ordering by load-balance (prefer less loaded nodes)
         cpu_ratio = {
@@ -165,26 +218,30 @@ def run_fabo_full_batch(G, slices, node_capacity_base, link_latency, link_capaci
         }
         candidate_nodes = sorted(G.nodes, key=lambda n: cpu_ratio[n])
 
+        # Precompute slice id by placed vnf id (for anti-affinity)
+        slice_by_vnf_id = {vid: vnf_by_id[vid]["slice"] for vid in vnf_by_id}
+
         for node in candidate_nodes:
             avail = state.node_capacity.get(node, 0.0)
             if avail < vnf["cpu"]:
                 continue
 
             # Anti-affinity: no two VNFs of same slice on same node
+            target_slice = vnf["slice"]
             same_slice_on_node = any(
-                node == placed_node and
-                vnf["slice"] == next(v2["slice"] for v2 in vnf_chain if _as_vnf_id(v2["id"]) == pid)
+                node == placed_node and slice_by_vnf_id.get(pid) == target_slice
                 for pid, placed_node in state.placed_vnfs.items()
             )
             if same_slice_on_node:
                 continue
 
+            # Shallow copies are enough: numbers inside
             new_state = FABOState(
                 placed_vnfs=state.placed_vnfs.copy(),
                 routed_vls=state.routed_vls.copy(),
                 g_cost=state.g_cost,
-                node_capacity=deepcopy(state.node_capacity),
-                link_capacity=deepcopy(state.link_capacity),
+                node_capacity=state.node_capacity.copy(),
+                link_capacity=state.link_capacity.copy(),
             )
 
             new_state.node_capacity[node] -= vnf["cpu"]
@@ -192,7 +249,7 @@ def run_fabo_full_batch(G, slices, node_capacity_base, link_latency, link_capaci
 
             routing_ok = True
 
-            # Route internal VLs using best-bandwidth path
+            # Route VLs (only those now fully determined by placements)
             for vl in vl_chain:
                 k = _vl_key(vl)
                 if k in new_state.routed_vls:
@@ -244,18 +301,19 @@ def run_fabo_full_batch(G, slices, node_capacity_base, link_latency, link_capaci
             placed_vnfs={},
             routed_vls={},
             g_cost=0.0,
-            node_capacity=deepcopy(node_capacity_global),
-            link_capacity=deepcopy(link_capacity_global),
+            node_capacity=node_capacity_global.copy(),
+            link_capacity=link_capacity_global.copy(),
         )
 
-        pq = PriorityQueue()
-        counter = count()
-        pq.put((0.0, next(counter), init_state))
+        # heapq instead of PriorityQueue (no locks)
+        heap = []
+        tie = 0
+        heapq.heappush(heap, (0.0, tie, init_state))
         visited = 0
         result = None
 
-        while not pq.empty():
-            _, __, state = pq.get()
+        while heap:
+            _, __, state = heapq.heappop(heap)
             visited += 1
 
             if state.is_goal(vnf_chain, vl_chain, entry):
@@ -265,23 +323,22 @@ def run_fabo_full_batch(G, slices, node_capacity_base, link_latency, link_capaci
 
             for ns in expand_state(state, vnf_chain, vl_chain, entry):
                 f_score = ns.g_cost + fabo_heuristic(ns, vnf_chain, vl_chain, entry)
-                pq.put((f_score, next(counter), ns))
+                tie += 1
+                heapq.heappush(heap, (f_score, tie, ns))
 
         fabo_results.append(result)
 
         if result:
             # Commit global resources
+            vnf_by_id = {_as_vnf_id(v["id"]): v for v in vnf_chain}
+
             for vnf_id, node in result.placed_vnfs.items():
-                cpu = next(v["cpu"] for v in vnf_chain if _as_vnf_id(v["id"]) == vnf_id)
+                cpu = vnf_by_id[vnf_id]["cpu"]
                 node_capacity_global[node] -= cpu
 
             # Commit bandwidth using routed paths (internal VLs only)
             for (src, dst), path in result.routed_vls.items():
-                bw = next(
-                    vl["bandwidth"]
-                    for vl in vl_chain
-                    if _vl_key(vl) == (src, dst)
-                )
+                bw = next(vl["bandwidth"] for vl in vl_chain if _vl_key(vl) == (src, dst))
 
                 src_node = result.placed_vnfs[src]
                 dst_node = result.placed_vnfs[dst]
