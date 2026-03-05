@@ -322,7 +322,9 @@ def run_validation_once(
     heuristics_map = {
         "A*": (run_astar, (G, slices, node_capacity_base, link_capacity_base)),
         "ABO": (run_abo_full_batch, (G, slices, node_capacity_base, link_latency, link_capacity_base)),
-        "FABO": (run_fabo_full_batch, (G, slices, node_capacity_base, link_latency, link_capacity_base)),
+        "FABO": (run_fabo_full_batch,
+                     (G, slices, node_capacity_base, link_latency, link_capacity_base, None, True, 6)
+                    ),
         "EAA": (energy_aware_astar, (G, slices, node_capacity_base, link_capacity_base)),
         "BF": (run_best_fit, (G, slices, node_capacity_base, link_capacity_base, link_latency)),
         "FF": (run_first_fit, (G, slices, node_capacity_base, link_capacity_base, link_latency)),

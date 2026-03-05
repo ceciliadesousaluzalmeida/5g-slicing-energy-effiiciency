@@ -1,5 +1,0 @@
-timestamp,method,num_slices,num_vnfs_per_slice,seed,result_idx,slice,vnf_src,vnf_dst,path_nodes,path_edges,num_hops
-2026-02-11 10:14:26,A*,2,2,1,0,,vnf0_0,vnf0_1,1->2,1-2,1
-2026-02-11 10:14:26,A*,2,2,1,1,,vnf1_0,vnf1_1,6->5,6-5,1
-2026-02-11 10:14:26,MILP_Gurobi,2,2,1,0,,vnf0_0,vnf0_1,2->6,2-6,1
-2026-02-11 10:14:26,MILP_Gurobi,2,2,1,0,,vnf1_0,vnf1_1,2->6,2-6,1

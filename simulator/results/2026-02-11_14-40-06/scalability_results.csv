@@ -1,3 +1,0 @@
-timestamp,num_slices,num_vnfs_per_slice,total_vnfs,seed,method,accepted,total_energy,total_bandwidth,total_latency,runtime_sec
-2026-02-11 14:40:06,28,5,140,1,A*,28,42.763125,1960.0,112.0,10.345248222351074
-2026-02-11 14:40:06,28,5,140,1,MILP_Gurobi,28,22.607499999999998,70.0,152.0,8.490097999572754

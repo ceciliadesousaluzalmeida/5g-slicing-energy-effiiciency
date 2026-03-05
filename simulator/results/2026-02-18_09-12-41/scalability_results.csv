@@ -1,3 +1,0 @@
-timestamp          , num_slices, num_vnfs_per_slice, total_vnfs, seed, method     , accepted, total_energy     , total_bandwidth, total_latency, runtime_sec
-2026-02-18 09:12:41,         32,                  6,        192,    1, FABO       ,       31, 57.39062500000001,          3565.0,         178.0, 21.791517734527588
-2026-02-18 09:12:41,         32,                  6,        192,    1, MILP_Gurobi,       32, 33.95            ,           110.0,         176.0,  2.442368984222412

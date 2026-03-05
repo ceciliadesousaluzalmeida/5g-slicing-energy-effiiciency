@@ -519,7 +519,7 @@ def main():
     # Config (edit here)
     # ============================
 
-    MILP_TIME_LIMIT = 3600  # seconds per phase
+    MILP_TIME_LIMIT = 5  # seconds per phase
     ENTRY = 6
 
     MAX_MILP_SLICES = 10**9
@@ -625,7 +625,7 @@ def main():
                     ("A*", run_astar, (G, slices, node_capacity_base, link_capacity_base)),
                     ("ABO", run_abo_full_batch, (G, slices, node_capacity_base, link_latency, link_capacity_base)),
                     ("FABO", run_fabo_full_batch, (G, slices, node_capacity_base, link_latency, link_capacity_base)),
-                    ("Best Fit", run_best_fit, (G, slices, node_capacity_base, link_capacity_base, link_latency)),
+                    ("Best Fit", run_best_fit, (G, slices, node_capacity_base, link_capacity_base)),
                     ("First Fit", run_first_fit, (G, slices, node_capacity_base, link_capacity_base, link_latency)),
                     ("Energy-Aware A*", energy_aware_astar, (G, slices, node_capacity_base, link_capacity_base)),
                 ]:

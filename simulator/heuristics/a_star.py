@@ -1,8 +1,13 @@
 from heapq import heappush, heappop
-from copy import deepcopy
+
+import pandas as pd
+
+try:
+    from sage.all import Graph as SageGraph
+except Exception:
+    SageGraph = None
 
 import networkx as nx
-import pandas as pd
 
 
 # ------------------------- helpers: normalization -------------------------
@@ -33,29 +38,72 @@ def _assert_path_endpoints(path, src_node, dst_node):
         )
 
 
+# ------------------------- graph adapter (NX -> Sage) -------------------------
+def _to_sage_graph_if_needed(G):
+    """
+    Convert a NetworkX undirected graph into a Sage Graph once.
+    Edge label becomes the latency (float), so Sage weighted shortest path uses it directly.
+    """
+    if SageGraph is None:
+        raise RuntimeError("Sage is not available in this environment (cannot import sage.all).")
+
+    if isinstance(G, SageGraph):
+        return G
+
+    if not isinstance(G, (nx.Graph, nx.DiGraph)):
+        raise TypeError("G must be a Sage Graph or a NetworkX graph.")
+
+    if isinstance(G, nx.DiGraph):
+        raise ValueError("This implementation expects an undirected graph (use nx.Graph).")
+
+    sG = SageGraph()
+    sG.add_vertices(list(G.nodes))
+
+    # Put latency as edge label (weight)
+    for u, v, data in G.edges(data=True):
+        lat = float(data.get("latency", 1.0))
+        sG.add_edge(u, v, lat)
+
+    return sG
+
+
+def _build_edge_latency_from_sage(sG):
+    """
+    Build a canonical dict edge_latency[(min,max)] = latency.
+    """
+    edge_latency = {}
+    for u, v, lat in sG.edge_iterator(labels=True):
+        edge_latency[_edge_key(u, v)] = float(lat)
+    return edge_latency
+
+
 # ------------------------- helper: feasible shortest path -------------------------
-def shortest_path_with_capacity(G, u, v, link_capacity_canon, bandwidth, edge_latency=None):
+def shortest_path_with_capacity_sage(sG, u, v, link_capacity_canon, bandwidth):
+    """
+    Weighted shortest path in Sage (latency = edge label), then capacity check.
+    """
     if u == v:
         return [u], 0.0
 
+    # Sage returns a list of vertices; raises if no path in some versions.
     try:
-        path = nx.shortest_path(G, u, v, weight="latency")
-    except nx.NetworkXNoPath:
+        path = sG.shortest_path(u, v, by_weight=True)
+    except Exception:
         return None, None
 
+    if not path:
+        return None, None
+
+    # Capacity check
     for a, b in zip(path[:-1], path[1:]):
         cap = link_capacity_canon.get(_edge_key(a, b))
         if cap is None or cap < bandwidth:
             return None, None
 
-    if edge_latency is None:
-        latency = 0.0
-        for a, b in zip(path[:-1], path[1:]):
-            latency += float(G[a][b].get("latency", 1.0))
-    else:
-        latency = 0.0
-        for a, b in zip(path[:-1], path[1:]):
-            latency += edge_latency.get(_edge_key(a, b), 1.0)
+    # Latency is sum of edge labels along the path
+    latency = 0.0
+    for a, b in zip(path[:-1], path[1:]):
+        latency += float(sG.edge_label(a, b))
 
     return path, float(latency)
 
@@ -80,19 +128,18 @@ class AStarState:
         link_capacity=None,
         node_used_slices=None,
     ):
-        self.placed_vnfs = placed_vnfs or {}         # {vnf_id(str): node}
-        self.routed_vls = routed_vls or {}           # {(from_id,to_id): [path nodes]}
+        self.placed_vnfs = placed_vnfs or {}            # {vnf_id(str): node}
+        self.routed_vls = routed_vls or {}              # {(from_id,to_id): [path nodes]}
         self.g_cost = float(g_cost)
-        self.node_capacity = node_capacity or {}     # {node: remaining_cpu}
-        self.link_capacity = link_capacity or {}     # {(u,v) canon: remaining_bw}
+        self.node_capacity = node_capacity or {}        # {node: remaining_cpu}
+        self.link_capacity = link_capacity or {}        # {(u,v) canon: remaining_bw}
         self.node_used_slices = node_used_slices or {}  # {node: set(slice_ids)}
 
     def is_goal(self, vnf_chain_len, vl_list_norm):
         if len(self.placed_vnfs) != vnf_chain_len:
             return False
 
-        # All VLs that require routing must exist and be endpoint-consistent
-        for (v_from, v_to, bw) in vl_list_norm:
+        for (v_from, v_to, _bw) in vl_list_norm:
             src_node = self.placed_vnfs.get(v_from)
             dst_node = self.placed_vnfs.get(v_to)
             if src_node is None or dst_node is None:
@@ -106,9 +153,17 @@ class AStarState:
         return True
 
 
-# ---------------------------- A* ORCHESTRATOR ----------------------------
+# ---------------------------- A* ORCHESTRATOR (Sage) ----------------------------
 def run_astar(G, slices, node_capacity_base, link_capacity_base, csv_path=None):
+    """
+    A* using Sage weighted shortest paths (latency as edge label).
+    Accepts either a Sage Graph or a NetworkX undirected graph (converted once).
+    """
     astar_results = []
+
+    # Prepare Sage graph + edge latency
+    sG = _to_sage_graph_if_needed(G)
+    edge_latency = _build_edge_latency_from_sage(sG)
 
     # Canonicalize global capacities once
     node_capacity_global = dict(node_capacity_base)
@@ -117,21 +172,15 @@ def run_astar(G, slices, node_capacity_base, link_capacity_base, csv_path=None):
     for (u, v), cap in link_capacity_base.items():
         ek = _edge_key(u, v)
         if ek in link_capacity_global:
-            # If both directions exist, keep consistent value
             if abs(link_capacity_global[ek] - float(cap)) > 1e-9:
                 raise ValueError(f"Conflicting capacities for edge {ek}")
         else:
             link_capacity_global[ek] = float(cap)
 
-    # Precompute canonical edge latencies
-    edge_latency = {}
-    for u, v, data in G.edges(data=True):
-        edge_latency[_edge_key(u, v)] = float(data.get("latency", 1.0))
-
     # ---------- Heuristic ----------
     def heuristic_for_slice(state, vl_list_norm):
         h = 0.0
-        for (v_from, v_to, bw) in vl_list_norm:
+        for (v_from, v_to, _bw) in vl_list_norm:
             if (v_from, v_to) in state.routed_vls:
                 continue
             src_node = state.placed_vnfs.get(v_from)
@@ -139,8 +188,9 @@ def run_astar(G, slices, node_capacity_base, link_capacity_base, csv_path=None):
             if src_node is None or dst_node is None or src_node == dst_node:
                 continue
             try:
-                h += nx.shortest_path_length(G, src_node, dst_node, weight="latency")
-            except nx.NetworkXNoPath:
+                # Sage shortest path length by weight
+                h += float(sG.shortest_path_length(src_node, dst_node, by_weight=True))
+            except Exception:
                 h += 10_000.0
         return float(h)
 
@@ -148,7 +198,7 @@ def run_astar(G, slices, node_capacity_base, link_capacity_base, csv_path=None):
     def expand_state(state, vnf_chain_ids, vnf_cpu_by_id, vnf_slice_by_id, vl_list_norm):
         expansions = []
 
-        # Choose next VNF in chain order (not sorting ids)
+        # Next VNF in chain order
         next_vnf_id = None
         for vid in vnf_chain_ids:
             if vid not in state.placed_vnfs:
@@ -161,19 +211,18 @@ def run_astar(G, slices, node_capacity_base, link_capacity_base, csv_path=None):
         slice_id = vnf_slice_by_id[next_vnf_id]
 
         # Prefer nodes with more remaining CPU
-        sorted_nodes = sorted(G.nodes, key=lambda n: state.node_capacity.get(n, 0.0), reverse=True)
+        sorted_nodes = sorted(sG.vertices(), key=lambda n: state.node_capacity.get(n, 0.0), reverse=True)
 
         for node in sorted_nodes:
             avail_cpu = state.node_capacity.get(node, 0.0)
             if avail_cpu < cpu_need:
                 continue
 
-            # Anti-affinity O(1): node cannot already host this slice
+            # Anti-affinity (slice cannot repeat in the same node)
             used = state.node_used_slices.get(node)
             if used is not None and slice_id in used:
                 continue
 
-            # Shallow copies are enough (flat dicts)
             new_placed = state.placed_vnfs.copy()
             new_routed = state.routed_vls.copy()
             new_node_capacity = state.node_capacity.copy()
@@ -182,7 +231,7 @@ def run_astar(G, slices, node_capacity_base, link_capacity_base, csv_path=None):
 
             new_cost = state.g_cost
 
-            # Place
+            # Place VNF
             new_node_capacity[node] = avail_cpu - cpu_need
             new_placed[next_vnf_id] = node
             new_node_used_slices.setdefault(node, set()).add(slice_id)
@@ -201,14 +250,14 @@ def run_astar(G, slices, node_capacity_base, link_capacity_base, csv_path=None):
                 if src_node == dst_node:
                     continue
 
-                path, lat = shortest_path_with_capacity(
-                    G, src_node, dst_node, new_link_capacity, bw, edge_latency=edge_latency
+                path, lat = shortest_path_with_capacity_sage(
+                    sG, src_node, dst_node, new_link_capacity, bw
                 )
                 if path is None:
                     routing_ok = False
                     break
 
-                # Apply BW
+                # Apply BW along the path
                 for u, v in zip(path[:-1], path[1:]):
                     ek = _edge_key(u, v)
                     new_link_capacity[ek] -= bw
@@ -237,12 +286,10 @@ def run_astar(G, slices, node_capacity_base, link_capacity_base, csv_path=None):
 
     # ---------- Solve one slice ----------
     def solve_one_slice(vnf_chain, vl_chain):
-        # Precompute per-slice structures to kill `next(...)` in hot loops
         vnf_chain_ids = [_as_vnf_id(v["id"]) for v in vnf_chain]
-        vnf_cpu_by_id = { _as_vnf_id(v["id"]): float(v["cpu"]) for v in vnf_chain }
-        vnf_slice_by_id = { _as_vnf_id(v["id"]): v["slice"] for v in vnf_chain }
+        vnf_cpu_by_id = {_as_vnf_id(v["id"]): float(v["cpu"]) for v in vnf_chain}
+        vnf_slice_by_id = {_as_vnf_id(v["id"]): v["slice"] for v in vnf_chain}
 
-        # Normalize VLs into a compact list [(from,to,bw), ...]
         vl_list_norm = []
         for vl in vl_chain:
             k = _vl_key(vl)
@@ -263,9 +310,8 @@ def run_astar(G, slices, node_capacity_base, link_capacity_base, csv_path=None):
         best_seen = {}
 
         while heap:
-            f, _, state = heappop(heap)
+            _f, _c, state = heappop(heap)
 
-            # Optional dominance pruning
             key = (len(state.placed_vnfs), len(state.routed_vls))
             prev = best_seen.get(key)
             if prev is not None and state.g_cost >= prev:
@@ -287,7 +333,7 @@ def run_astar(G, slices, node_capacity_base, link_capacity_base, csv_path=None):
         if len(slice_data) == 2:
             vnf_chain, vl_chain = slice_data
         elif len(slice_data) == 3:
-            vnf_chain, vl_chain, _entry = slice_data  # ignored in this baseline A*
+            vnf_chain, vl_chain, _entry = slice_data  # ignored here
         else:
             raise ValueError(f"Unexpected slice format: {slice_data}")
 
@@ -298,19 +344,12 @@ def run_astar(G, slices, node_capacity_base, link_capacity_base, csv_path=None):
             continue
 
         # Commit CPU
+        cpu_by_id = {_as_vnf_id(v["id"]): float(v["cpu"]) for v in vnf_chain}
         for vnf_id, node in result_state.placed_vnfs.items():
-            cpu = None
-            for v in vnf_chain:
-                if _as_vnf_id(v["id"]) == vnf_id:
-                    cpu = float(v["cpu"])
-                    break
-            if cpu is None:
-                raise KeyError(f"CPU not found for VNF {vnf_id}")
-            node_capacity_global[node] -= cpu
+            node_capacity_global[node] -= float(cpu_by_id[vnf_id])
 
-        # Commit bandwidth using canonical edges
-        bw_by_key = { _vl_key(vl): float(vl["bandwidth"]) for vl in vl_chain }
-
+        # Commit BW
+        bw_by_key = {_vl_key(vl): float(vl["bandwidth"]) for vl in vl_chain}
         for (v_from, v_to), path in result_state.routed_vls.items():
             bw = bw_by_key.get((v_from, v_to))
             if bw is None:

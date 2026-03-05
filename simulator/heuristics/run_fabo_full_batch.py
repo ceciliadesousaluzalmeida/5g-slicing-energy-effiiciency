@@ -1,22 +1,35 @@
-# All comments in English
-import heapq
-from copy import deepcopy  # kept for compatibility, but not used in hot path
-from itertools import count
+# run_fabo_full_batch.py
+# NOTE: Code comments are in English per your preference.
 
-import networkx as nx
+import heapq
+from typing import Any, Dict, List, Optional, Tuple
+
 import pandas as pd
 
+try:
+    from sage.all import Graph  # type: ignore
+except Exception:
+    Graph = None  # type: ignore
 
-def _as_vnf_id(v):
+
+# ------------------------- small helpers -------------------------
+def _as_vnf_id(v: Any) -> str:
+    #  Normalize VNF identifiers.
     return str(v).strip()
 
 
-def _vl_key(vl):
-    # Use a single, consistent key everywhere
-    return (_as_vnf_id(vl["from"]), _as_vnf_id(vl["to"]))
+def _vl_key_from_to(v_from: Any, v_to: Any) -> Tuple[str, str]:
+    #  Canonical VL key with normalized endpoints.
+    return (_as_vnf_id(v_from), _as_vnf_id(v_to))
 
 
-def _assert_path_endpoints(path, src_node, dst_node):
+def _vl_key(vl: Dict[str, Any]) -> Tuple[str, str]:
+    #  Use a single consistent key everywhere.
+    return _vl_key_from_to(vl["from"], vl["to"])
+
+
+def _assert_path_endpoints(path: List[Any], src_node: Any, dst_node: Any) -> None:
+    #  Strong validation to avoid silent bugs.
     if not path or len(path) < 2:
         raise ValueError("VL path is missing or trivial.")
     if path[0] != src_node or path[-1] != dst_node:
@@ -25,130 +38,210 @@ def _assert_path_endpoints(path, src_node, dst_node):
         )
 
 
+def _edge_key(u: Any, v: Any) -> Tuple[Any, Any]:
+    #  Canonical undirected edge key.
+    return (u, v) if u <= v else (v, u)
+
+
+def _canonize_edge_dict(dct: Dict[Tuple[Any, Any], float]) -> Dict[Tuple[Any, Any], float]:
+    #  Convert (u,v)/(v,u) keys to canonical (min,max) once.
+    out: Dict[Tuple[Any, Any], float] = {}
+    for (u, v), val in dct.items():
+        out[_edge_key(u, v)] = float(val)
+    return out
+
+
+# ------------------------- Sage adapter -------------------------
+class SageGraphAdapter:
+    """
+     Minimal adapter around a Sage graph.
+    We cache nodes and neighbors in Python to avoid Sage iterator overhead in hot loops.
+    """
+
+    def __init__(self, sage_graph: Any):
+        self.G = sage_graph
+
+    @classmethod
+    def from_networkx_like(cls, nx_graph: Any) -> "SageGraphAdapter":
+        if Graph is None:
+            raise RuntimeError("SageMath is not available (cannot import sage.all.Graph).")
+
+        g = Graph(multiedges=False, loops=False)
+        g.add_vertices(list(nx_graph.nodes))
+        for u, v in nx_graph.edges:
+            g.add_edge(u, v)
+        return cls(g)
+
+    def nodes(self) -> List[Any]:
+        return list(self.G.vertices())
+
+    def neighbors(self, u: Any) -> List[Any]:
+        return list(self.G.neighbors(u))
+
+
+# ------------------------- FABO state -------------------------
 class FABOState:
-    def __init__(self, placed_vnfs=None, routed_vls=None, g_cost=0.0,
-                 node_capacity=None, link_capacity=None):
-        # placed_vnfs: {vnf_id(str): node(int)}
+    __slots__ = ("placed_vnfs", "routed_vls", "g_cost", "node_capacity", "link_capacity")
+
+    def __init__(
+        self,
+        placed_vnfs: Optional[Dict[str, Any]] = None,
+        routed_vls: Optional[Dict[Tuple[str, str], List[Any]]] = None,
+        g_cost: float = 0.0,
+        node_capacity: Optional[Dict[Any, float]] = None,
+        link_capacity: Optional[Dict[Tuple[Any, Any], float]] = None,
+    ):
         self.placed_vnfs = placed_vnfs or {}
-        # routed_vls: {(from_id(str), to_id(str)): [path nodes]}
         self.routed_vls = routed_vls or {}
         self.g_cost = float(g_cost)
         self.node_capacity = node_capacity or {}
         self.link_capacity = link_capacity or {}
 
-    def is_goal(self, vnf_chain, vl_chain, entry=None):
-        # Strong goal: all VNFs placed AND every VL has a routed path with correct endpoints
-        if len(self.placed_vnfs) != len(vnf_chain):
+    def is_goal_chain(self, vnf_ids: List[str]) -> bool:
+        """
+         For a pure chain with VNFs [v0,v1,...], goal means all VNFs placed
+        and all chain VLs routed (v0->v1, v1->v2, ...).
+        """
+        if len(self.placed_vnfs) != len(vnf_ids):
             return False
-
-        for vl in vl_chain:
-            k = _vl_key(vl)
-            v_from, v_to = k
-            src_node = self.placed_vnfs.get(v_from)
-            dst_node = self.placed_vnfs.get(v_to)
-            if src_node is None or dst_node is None:
+        for i in range(1, len(vnf_ids)):
+            k = (vnf_ids[i - 1], vnf_ids[i])
+            n1 = self.placed_vnfs.get(k[0])
+            n2 = self.placed_vnfs.get(k[1])
+            if n1 is None or n2 is None:
                 return False
-
-            if src_node == dst_node:
-                # Co-located: no routing required
+            if n1 == n2:
                 continue
-
-            if k not in self.routed_vls:
+            p = self.routed_vls.get(k)
+            if not p or p[0] != n1 or p[-1] != n2:
                 return False
-
-            path = self.routed_vls[k]
-            if not path or len(path) < 2:
-                return False
-
-            if path[0] != src_node or path[-1] != dst_node:
-                return False
-
         return True
 
-    def __lt__(self, other):
+    def __lt__(self, other: "FABOState") -> bool:
         return self.g_cost < other.g_cost
 
 
-def run_fabo_full_batch(G, slices, node_capacity_base, link_latency, link_capacity_base, csv_path=None):
-    # --- Helper functions -------------------------------------------------
-    def get_edge_value(dct, a, b, default=0.0):
-        return dct.get((a, b), dct.get((b, a), default))
+# ------------------------- main FABO (Sage + FAST runtime knobs) -------------------------
+def run_fabo_full_batch(
+    G: Any,
+    slices: List[Any],
+    node_capacity_base: Dict[Any, float],
+    link_latency: Dict[Tuple[Any, Any], float],
+    link_capacity_base: Dict[Tuple[Any, Any], float],
+    csv_path: Optional[str] = None,
+    verbose: bool = False,
+    beam_width: int = 8,
+    max_states_per_slice: int = 600,
+    *args,
+    **kwargs,
+):
+    """
+    
+    FABO-SAGE (runtime-first):
+      - Uses Sage graph + Python-cached adjacency
+      - Widest-path with latency tie-break for routing
+      - CHAIN OPTIMIZATION: route only the last VL when placing the next VNF
+      - beam_width: limit candidate nodes per expansion (major runtime control)
+      - max_states_per_slice: hard cap expansions per slice (guarantees runtime)
 
-    def dec_edge_capacity(dct, a, b, bw):
-        # Keep undirected semantics consistent with your capacity dicts
-        if (a, b) in dct:
-            dct[(a, b)] -= bw
-        elif (b, a) in dct:
-            dct[(b, a)] -= bw
-        else:
-            raise KeyError(f"Edge ({a},{b}) not found in link capacities.")
+    Important:
+      - Assumes each slice is a VNF chain (v0->v1->...->vk).
+    """
 
-    # --- Widest path with latency tie-break ------------------------------
-    def best_bandwidth_path(u, v, link_capacity, bw):
+    # ---- Build Sage adapter (or reuse) ----
+    if isinstance(G, SageGraphAdapter):
+        SG = G
+    elif Graph is not None and isinstance(G, Graph):
+        SG = SageGraphAdapter(G)
+    else:
+        SG = SageGraphAdapter.from_networkx_like(G)
+
+    # ---- Canonicalize latency/capacity dicts once ----
+    lat_canon = _canonize_edge_dict(link_latency)
+    cap_global = _canonize_edge_dict(link_capacity_base)
+
+    # ---- Cache adjacency in Python once ----
+    nodes = SG.nodes()
+    adj2: Dict[Any, List[Tuple[Any, Tuple[Any, Any]]]] = {}
+    for u in nodes:
+        #  Precompute (neighbor, canonical_edge_key) to avoid _edge_key calls in hot loops.
+        neigh = SG.neighbors(u)
+        adj2[u] = [(v, _edge_key(u, v)) for v in neigh]
+
+    # ---- Helpers ----
+    def dec_edge_capacity(dct: Dict[Tuple[Any, Any], float], ek: Tuple[Any, Any], bw: float) -> None:
+        #  Decrease remaining bandwidth on a canonical edge with underflow check.
+        dct[ek] -= bw
+        if dct[ek] < -1e-9:
+            raise ValueError(f"Link capacity underflow on {ek}: remaining={dct[ek]}, dec={bw}")
+
+    def best_bandwidth_path(u: Any, v: Any, link_capacity: Dict[Tuple[Any, Any], float], bw: float):
         """
-        Returns a feasible path maximizing bottleneck bandwidth (maximin),
-        tie-breaking on minimum latency.
-
-        This replaces networkx.shortest_simple_paths (KSP), which is expensive.
-        Complexity: O(E log V) per call, usually much faster than KSP.
+        
+        Widest path (maximize bottleneck), tie-break by minimum latency.
+        Complexity ~ O(E log V) per call.
         """
         if u is None or v is None:
             return None, None
         if u == v:
             return [u], 0.0
 
-        # Best known bottleneck and latency to each node
-        best_bottleneck = {u: float("inf")}
-        best_lat = {u: 0.0}
+        bwf = float(bw)
+
+        _adj2 = adj2
+        _cap = link_capacity
+        _lat = lat_canon
+        heappush = heapq.heappush
+        heappop = heapq.heappop
+
+        best_bn = {u: float("inf")}
+        best_lt = {u: 0.0}
         parent = {u: None}
 
-        # Max-heap on bottleneck, min-heap on latency (tie-break)
-        # We push (-bottleneck, latency, node)
         heap = [(-float("inf"), 0.0, u)]
 
         while heap:
-            neg_bn, cur_lat, x = heapq.heappop(heap)
+            neg_bn, cur_lat, x = heappop(heap)
             cur_bn = -neg_bn
 
-            # Skip stale entries
-            if x in best_bottleneck:
-                if cur_bn < best_bottleneck[x]:
-                    continue
-                if cur_bn == best_bottleneck[x] and cur_lat > best_lat[x]:
-                    continue
+            old_bn = best_bn.get(x, -1.0)
+            if cur_bn < old_bn:
+                continue
+            if cur_bn == old_bn and cur_lat > best_lt.get(x, float("inf")):
+                continue
 
             if x == v:
                 break
 
-            # Iterate neighbors using networkx adjacency (cheap)
-            for y in G.adj[x]:
-                cap_xy = get_edge_value(link_capacity, x, y, 0.0)
+            for y, ek in _adj2[x]:
+                cap_xy = _cap.get(ek, 0.0)
                 if cap_xy <= 0.0:
                     continue
 
-                # Bottleneck update
-                new_bn = min(cur_bn, cap_xy)
-                if new_bn < bw:
+                #  new_bn = min(cur_bn, cap_xy) but avoiding min() overhead.
+                if cur_bn == float("inf"):
+                    new_bn = cap_xy
+                else:
+                    new_bn = cap_xy if cap_xy < cur_bn else cur_bn
+
+                if new_bn < bwf:
                     continue
 
-                # Latency update
-                lat_xy = get_edge_value(link_latency, x, y, 1.0)
-                new_lat = cur_lat + float(lat_xy)
+                new_lat = cur_lat + _lat.get(ek, 1.0)
 
-                # Relaxation with tie-break
-                old_bn = best_bottleneck.get(y, -1.0)
-                old_lat = best_lat.get(y, float("inf"))
+                ob = best_bn.get(y, -1.0)
+                ol = best_lt.get(y, float("inf"))
 
-                if (new_bn > old_bn) or (new_bn == old_bn and new_lat < old_lat):
-                    best_bottleneck[y] = new_bn
-                    best_lat[y] = new_lat
+                if (new_bn > ob) or (new_bn == ob and new_lat < ol):
+                    best_bn[y] = new_bn
+                    best_lt[y] = new_lat
                     parent[y] = x
-                    heapq.heappush(heap, (-new_bn, new_lat, y))
+                    heappush(heap, (-new_bn, new_lat, y))
 
-        if v not in best_bottleneck or best_bottleneck[v] < bw:
+        if v not in best_bn or best_bn[v] < bwf:
             return None, None
 
-        # Reconstruct path
+        #  Reconstruct path.
         path = []
         cur = v
         while cur is not None:
@@ -159,214 +252,208 @@ def run_fabo_full_batch(G, slices, node_capacity_base, link_latency, link_capaci
         if not path or path[0] != u or path[-1] != v:
             return None, None
 
-        return path, float(best_lat[v])
+        return path, float(best_lt[v])
 
-    # --- Global structures ------------------------------------------------
-    fabo_results = []
-
-    # Shallow copies are enough: values are numbers (immutable)
+    # ---- Global remaining resources ----
+    fabo_results: List[Optional[FABOState]] = []
     node_capacity_global = node_capacity_base.copy()
-    link_capacity_global = link_capacity_base.copy()
-    total_capacity = node_capacity_base.copy()
 
-    # Optional: cache shortest_path_length for heuristic to reduce repeated calls
-    dist_cache = {}
+    summary_rows = []
 
-    # --- Heuristic --------------------------------------------------------
-    def fabo_heuristic(state, vnf_chain, vl_chain, entry=None):
-        h = 0.0
-        for vl in vl_chain:
-            k = _vl_key(vl)
-            if k in state.routed_vls:
-                continue
-
-            v_from, v_to = k
-            s_node = state.placed_vnfs.get(v_from)
-            d_node = state.placed_vnfs.get(v_to)
-            if s_node is None or d_node is None or s_node == d_node:
-                continue
-
-            key = (s_node, d_node)
-            if key not in dist_cache:
-                try:
-                    dist_cache[key] = float(nx.shortest_path_length(G, s_node, d_node, weight="latency"))
-                except nx.NetworkXNoPath:
-                    dist_cache[key] = 10_000.0
-
-            h += dist_cache[key]
-
-        return float(h)
-
-    # --- Expand state -----------------------------------------------------
-    def expand_state(state, vnf_chain, vl_chain, entry=None):
-        expansions = []
-
-        # Pre-index VNFs by id for faster lookups
-        vnf_by_id = {_as_vnf_id(v["id"]): v for v in vnf_chain}
-
-        unplaced = [vid for vid in vnf_by_id.keys() if vid not in state.placed_vnfs]
-        if not unplaced:
-            return expansions
-
-        next_vnf_id = sorted(unplaced)[0]
-        vnf = vnf_by_id[next_vnf_id]
-
-        # Node ordering by load-balance (prefer less loaded nodes)
-        cpu_ratio = {
-            n: 1.0 - (state.node_capacity.get(n, 0.0) / total_capacity.get(n, 1.0))
-            for n in G.nodes
-        }
-        candidate_nodes = sorted(G.nodes, key=lambda n: cpu_ratio[n])
-
-        # Precompute slice id by placed vnf id (for anti-affinity)
-        slice_by_vnf_id = {vid: vnf_by_id[vid]["slice"] for vid in vnf_by_id}
-
-        for node in candidate_nodes:
-            avail = state.node_capacity.get(node, 0.0)
-            if avail < vnf["cpu"]:
-                continue
-
-            # Anti-affinity: no two VNFs of same slice on same node
-            target_slice = vnf["slice"]
-            same_slice_on_node = any(
-                node == placed_node and slice_by_vnf_id.get(pid) == target_slice
-                for pid, placed_node in state.placed_vnfs.items()
-            )
-            if same_slice_on_node:
-                continue
-
-            # Shallow copies are enough: numbers inside
-            new_state = FABOState(
-                placed_vnfs=state.placed_vnfs.copy(),
-                routed_vls=state.routed_vls.copy(),
-                g_cost=state.g_cost,
-                node_capacity=state.node_capacity.copy(),
-                link_capacity=state.link_capacity.copy(),
-            )
-
-            new_state.node_capacity[node] -= vnf["cpu"]
-            new_state.placed_vnfs[next_vnf_id] = node
-
-            routing_ok = True
-
-            # Route VLs (only those now fully determined by placements)
-            for vl in vl_chain:
-                k = _vl_key(vl)
-                if k in new_state.routed_vls:
-                    continue
-
-                v_from, v_to = k
-                s_node = new_state.placed_vnfs.get(v_from)
-                d_node = new_state.placed_vnfs.get(v_to)
-                if s_node is None or d_node is None:
-                    continue
-
-                if s_node == d_node:
-                    continue
-
-                path, lat = best_bandwidth_path(s_node, d_node, new_state.link_capacity, vl["bandwidth"])
-                if not path or len(path) < 2:
-                    routing_ok = False
-                    break
-
-                _assert_path_endpoints(path, s_node, d_node)
-
-                for a, b in zip(path[:-1], path[1:]):
-                    dec_edge_capacity(new_state.link_capacity, a, b, vl["bandwidth"])
-
-                new_state.routed_vls[k] = path
-                new_state.g_cost += float(lat)
-
-            if not routing_ok:
-                continue
-
-            expansions.append(new_state)
-
-        return expansions
-
-    # --- Main loop per slice ---------------------------------------------
-    summary = []
+    # ------------------------- solve each slice -------------------------
     for i, slice_data in enumerate(slices, start=1):
         if len(slice_data) == 2:
             vnf_chain, vl_chain = slice_data
-            entry = None
         elif len(slice_data) == 3:
-            vnf_chain, vl_chain, entry = slice_data
+            vnf_chain, vl_chain, _entry = slice_data  # ignored (chain only)
         else:
             raise ValueError(f"Unexpected slice format: {slice_data}")
 
-        print(f"\n[INFO][FABO] === Solving slice {i} ({len(vnf_chain)} VNFs, {len(vl_chain)} VLs) ===")
+        #  Precompute chain structures once per slice.
+        vnf_ids = [_as_vnf_id(v["id"]) for v in vnf_chain]
+        vnf_by_id = {vid: v for vid, v in zip(vnf_ids, vnf_chain)}
+        vnf_cpu = {vid: float(vnf_by_id[vid].get("cpu", 0.0)) for vid in vnf_ids}
+        vnf_slice = {vid: vnf_by_id[vid].get("slice") for vid in vnf_ids}
+
+        #  Chain VLs are exactly consecutive pairs.
+        chain_vls: List[Tuple[str, str, float]] = []
+        bw_by_chain: Dict[Tuple[str, str], float] = {}
+        for idx in range(1, len(vnf_ids)):
+            a, b = vnf_ids[idx - 1], vnf_ids[idx]
+            #  VL bandwidth is taken from vl_chain by matching keys if present, else 0.
+            # In your generator it's always present, so this is safe.
+            bw = None
+            for vl in vl_chain:
+                if _vl_key(vl) == (a, b):
+                    bw = float(vl.get("bandwidth", 0.0))
+                    break
+            if bw is None:
+                bw = 0.0
+            chain_vls.append((a, b, bw))
+            bw_by_chain[(a, b)] = bw
+
+        if verbose:
+            print(f"\n[INFO][FABO-SAGE-FAST] === Solving slice {i} ({len(vnf_ids)} VNFs, {len(chain_vls)} VLs) ===")
 
         init_state = FABOState(
             placed_vnfs={},
             routed_vls={},
             g_cost=0.0,
             node_capacity=node_capacity_global.copy(),
-            link_capacity=link_capacity_global.copy(),
+            link_capacity=cap_global.copy(),
         )
 
-        # heapq instead of PriorityQueue (no locks)
-        heap = []
+        heap: List[Tuple[float, int, FABOState]] = []
         tie = 0
         heapq.heappush(heap, (0.0, tie, init_state))
-        visited = 0
-        result = None
 
-        while heap:
+        visited = 0
+        result: Optional[FABOState] = None
+
+        #  dominance pruning by progress (placed_count, routed_count) -> best g_cost.
+        best_seen: Dict[Tuple[int, int], float] = {}
+
+        while heap and visited < int(max_states_per_slice):
             _, __, state = heapq.heappop(heap)
             visited += 1
 
-            if state.is_goal(vnf_chain, vl_chain, entry):
-                print(f"[INFO][FABO] Found feasible solution after {visited} states.")
+            prog_key = (len(state.placed_vnfs), len(state.routed_vls))
+            prev_best = best_seen.get(prog_key)
+            if prev_best is not None and state.g_cost >= prev_best:
+                continue
+            best_seen[prog_key] = state.g_cost
+
+            if state.is_goal_chain(vnf_ids):
                 result = state
                 break
 
-            for ns in expand_state(state, vnf_chain, vl_chain, entry):
-                f_score = ns.g_cost + fabo_heuristic(ns, vnf_chain, vl_chain, entry)
+            #  Choose next VNF in chain order.
+            next_idx = len(state.placed_vnfs)
+            if next_idx >= len(vnf_ids):
+                continue
+
+            next_vid = vnf_ids[next_idx]
+            cpu_need = vnf_cpu[next_vid]
+            slice_id = vnf_slice[next_vid]
+
+            #  Cheap node ordering for runtime:
+            # - prefer more available CPU (descending)
+            # This is intentionally simple & fast.
+            # We then take only beam_width candidates.
+            nc = state.node_capacity
+            candidate_nodes = sorted(nodes, key=lambda n: nc.get(n, 0.0), reverse=True)
+            if beam_width and beam_width > 0:
+                candidate_nodes = candidate_nodes[: int(beam_width)]
+
+            for node in candidate_nodes:
+                avail = float(nc.get(node, 0.0))
+                if avail < cpu_need:
+                    continue
+
+                #  Anti-affinity within the slice (no 2 VNFs of same slice on same node).
+                target_slice = slice_id
+                same_slice_on_node = any(
+                    placed_node == node and vnf_slice.get(pid) == target_slice
+                    for pid, placed_node in state.placed_vnfs.items()
+                )
+                if same_slice_on_node:
+                    continue
+
+                #  Shallow copies (fast).
+                new_placed = state.placed_vnfs.copy()
+                new_routed = state.routed_vls.copy()
+                new_node_cap = state.node_capacity.copy()
+                new_link_cap = state.link_capacity.copy()
+                new_cost = float(state.g_cost)
+
+                # Place VNF
+                new_node_cap[node] = avail - cpu_need
+                new_placed[next_vid] = node
+
+                # -------------------- CHAIN OPT: route only the last VL --------------------
+                #  When placing VNF at index next_idx, only VL (prev -> current) becomes newly determined.
+                routing_ok = True
+                if next_idx > 0:
+                    prev_vid = vnf_ids[next_idx - 1]
+                    a, b = prev_vid, next_vid
+                    k = (a, b)
+
+                    na = new_placed[a]
+                    nb = new_placed[b]
+
+                    if na != nb and k not in new_routed:
+                        bw = float(bw_by_chain.get(k, 0.0))
+                        path, lat = best_bandwidth_path(na, nb, new_link_cap, bw)
+                        if not path or len(path) < 2:
+                            routing_ok = False
+                        else:
+                            _assert_path_endpoints(path, na, nb)
+                            for u, v in zip(path[:-1], path[1:]):
+                                ek = _edge_key(u, v)
+                                #  double-check feasibility quickly (avoids hidden negative bw).
+                                if new_link_cap.get(ek, 0.0) < bw:
+                                    routing_ok = False
+                                    break
+                                dec_edge_capacity(new_link_cap, ek, bw)
+
+                            if routing_ok:
+                                new_routed[k] = path
+                                new_cost += float(lat)
+
+                if not routing_ok:
+                    continue
+
+                child = FABOState(
+                    placed_vnfs=new_placed,
+                    routed_vls=new_routed,
+                    g_cost=new_cost,
+                    node_capacity=new_node_cap,
+                    link_capacity=new_link_cap,
+                )
+
+                #  Heuristic is kept super cheap for runtime: 0.0
+                # This makes it closer to uniform-cost search on g_cost.
+                f_score = child.g_cost
+
                 tie += 1
-                heapq.heappush(heap, (f_score, tie, ns))
+                heapq.heappush(heap, (f_score, tie, child))
 
         fabo_results.append(result)
 
-        if result:
-            # Commit global resources
-            vnf_by_id = {_as_vnf_id(v["id"]): v for v in vnf_chain}
+        if verbose:
+            if result is not None:
+                print(f"[INFO][FABO-SAGE-FAST] Found solution after {visited} states.")
+            else:
+                print(f"[WARN][FABO-SAGE-FAST] No solution within max_states_per_slice={max_states_per_slice} (visited={visited}).")
 
+        # ---- Commit globals if accepted ----
+        if result is not None:
             for vnf_id, node in result.placed_vnfs.items():
-                cpu = vnf_by_id[vnf_id]["cpu"]
-                node_capacity_global[node] -= cpu
+                node_capacity_global[node] -= float(vnf_cpu[vnf_id])
+                if node_capacity_global[node] < -1e-9:
+                    raise ValueError(
+                        f"Node capacity underflow on {node} in slice {i}: remaining={node_capacity_global[node]}"
+                    )
 
-            # Commit bandwidth using routed paths (internal VLs only)
+            #  Commit BW along routed paths (chain VLs only).
             for (src, dst), path in result.routed_vls.items():
-                bw = next(vl["bandwidth"] for vl in vl_chain if _vl_key(vl) == (src, dst))
-
+                bw = float(bw_by_chain.get((src, dst), 0.0))
                 src_node = result.placed_vnfs[src]
                 dst_node = result.placed_vnfs[dst]
                 _assert_path_endpoints(path, src_node, dst_node)
 
                 for u, v in zip(path[:-1], path[1:]):
-                    dec_edge_capacity(link_capacity_global, u, v, bw)
+                    ek = _edge_key(u, v)
+                    dec_edge_capacity(cap_global, ek, bw)
 
-            print(
-                f"[SUMMARY][FABO] Slice {i} accepted. "
-                f"min_node_cpu={min(node_capacity_global.values())}, "
-                f"links_low_bw={sum(1 for v in link_capacity_global.values() if v <= 0)}"
-            )
-        else:
-            print(f"[SUMMARY][FABO] Slice {i} rejected.")
+        summary_rows.append(
+            {"slice": i, "accepted": result is not None, "g_cost": (result.g_cost if result else None)}
+        )
 
-        summary.append({
-            "slice": i,
-            "accepted": result is not None,
-            "g_cost": (result.g_cost if result else None),
-        })
-
-    df_results = pd.DataFrame(summary)
+    df_results = pd.DataFrame(summary_rows)
     if csv_path:
-        try:
-            df_results.to_csv(csv_path, index=False)
-            print(f"[INFO][FABO] Results written to {csv_path}")
-        except Exception as e:
-            print(f"[WARN][FABO] Could not write CSV: {e}")
+        df_results.to_csv(csv_path, index=False)
+        if verbose:
+            print(f"[INFO][FABO-SAGE-FAST] Results written to {csv_path}")
 
     return df_results, fabo_results

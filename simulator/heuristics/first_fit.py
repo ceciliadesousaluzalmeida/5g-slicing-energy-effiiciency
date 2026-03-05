@@ -1,47 +1,115 @@
-# All comments in English
-import networkx as nx
-import pandas as pd
 from copy import deepcopy
+import pandas as pd
+
+try:
+    from sage.all import Graph as SageGraph
+except Exception:
+    SageGraph = None
+
+import networkx as nx
+
+
+def _edge_key(u, v):
+    return (u, v) if u <= v else (v, u)
+
+
+def _as_vnf_id(v):
+    return str(v).strip()
+
+
+def _vl_key(vl):
+    return (_as_vnf_id(vl["from"]), _as_vnf_id(vl["to"]))
+
+
+def _to_sage_graph_if_needed(G):
+    """
+    Convert a NetworkX undirected graph to a Sage Graph once.
+    Edge label stores latency (float).
+    """
+    if SageGraph is None:
+        raise RuntimeError("Sage is not available (cannot import sage.all).")
+
+    if isinstance(G, SageGraph):
+        return G
+
+    if isinstance(G, nx.DiGraph):
+        raise ValueError("This First-Fit expects an undirected graph (nx.Graph).")
+
+    if not isinstance(G, nx.Graph):
+        raise TypeError("G must be a Sage Graph or a NetworkX undirected graph.")
+
+    sG = SageGraph()
+    sG.add_vertices(list(G.nodes))
+    for u, v, data in G.edges(data=True):
+        lat = float(data.get("latency", 1.0))
+        sG.add_edge(u, v, lat)
+
+    return sG
+
+
+def _canonicalize_link_capacity(link_capacity_base):
+    """
+    Canonicalize undirected capacities into (min,max) keys.
+    """
+    cap = {}
+    for (u, v), bw in link_capacity_base.items():
+        ek = _edge_key(u, v)
+        bw = float(bw)
+        if ek in cap and abs(cap[ek] - bw) > 1e-9:
+            raise ValueError(f"Conflicting capacities for edge {ek}.")
+        cap[ek] = bw
+    return cap
+
+
+def shortest_path_with_capacity_sage(sG, u, v, link_capacity_canon, bandwidth):
+    """
+    Sage weighted shortest path (edge label = latency) + capacity check.
+    """
+    if u == v:
+        return [u], 0.0
+
+    try:
+        path = sG.shortest_path(u, v, by_weight=True)
+    except Exception:
+        return None, None
+
+    if not path:
+        return None, None
+
+    for a, b in zip(path[:-1], path[1:]):
+        cap = link_capacity_canon.get(_edge_key(a, b))
+        if cap is None or cap < bandwidth:
+            return None, None
+
+    lat = 0.0
+    for a, b in zip(path[:-1], path[1:]):
+        lat += float(sG.edge_label(a, b))
+
+    return path, float(lat)
 
 
 class FFState:
     def __init__(self, placed_vnfs=None, routed_vls=None, g_cost=0.0):
         self.placed_vnfs = placed_vnfs or {}
         self.routed_vls = routed_vls or {}
-        self.g_cost = g_cost
-
-    def is_goal(self, vnf_chain, vl_chain, entry=None):
-        """Goal: all VNFs placed and all VLs routed."""
-        return (len(self.placed_vnfs) == len(vnf_chain)
-                and len(self.routed_vls) >= len(vl_chain))
+        self.g_cost = float(g_cost)
 
 
-def run_first_fit(G, slices, node_capacity_base, link_capacity_base, link_latency, csv_path=None):
+def run_first_fit(G, slices, node_capacity_base, link_capacity_base, *, csv_path=None):
+    """
+    True First-Fit.
+    For each VNF in chain order:
+      - scan nodes in a fixed order
+      - choose the first node that keeps placement + newly-routable VLs feasible
+    """
+    sG = _to_sage_graph_if_needed(G)
+
+    node_capacity_global = dict(node_capacity_base)
+    link_capacity_global = _canonicalize_link_capacity(link_capacity_base)
+
     results = []
     full_results = []
 
-    node_capacity_global = deepcopy(node_capacity_base)
-    link_capacity_global = deepcopy(link_capacity_base)
-
-    # --------------- helper: feasible shortest path ---------------
-    def shortest_path_with_capacity(G, u, v, link_capacity, bandwidth):
-        try:
-            path = nx.shortest_path(G, u, v, weight="latency")
-        except nx.NetworkXNoPath:
-            return None, None
-
-        for a, b in zip(path[:-1], path[1:]):
-            cap = link_capacity.get((a, b), link_capacity.get((b, a), 0))
-            if cap < bandwidth:
-                return None, None
-
-        latency = sum(
-            link_latency.get((a, b), link_latency.get((b, a), 1.0))
-            for a, b in zip(path[:-1], path[1:])
-        )
-        return path, latency
-
-    # --------------- main loop over slices ---------------
     for i, slice_data in enumerate(slices, start=1):
         if len(slice_data) == 2:
             vnf_chain, vl_chain = slice_data
@@ -51,141 +119,139 @@ def run_first_fit(G, slices, node_capacity_base, link_capacity_base, link_latenc
         else:
             raise ValueError(f"Unexpected slice format: {slice_data}")
 
-        print(f"\n[INFO][FF] === Solving slice {i} with {len(vnf_chain)} VNFs and {len(vl_chain)} VLs ===")
+        # Normalize for faster loops
+        vnf_ids = [_as_vnf_id(v["id"]) for v in vnf_chain]
+        vnf_cpu = {_as_vnf_id(v["id"]): float(v["cpu"]) for v in vnf_chain}
+        vnf_slice = {_as_vnf_id(v["id"]): v["slice"] for v in vnf_chain}
+
+        vl_list = []
+        for vl in vl_chain:
+            (v_from, v_to) = _vl_key(vl)
+            vl_list.append((v_from, v_to, float(vl["bandwidth"])))
 
         placed_vnfs = {}
         routed_vls = {}
         g_cost = 0.0
         success = True
 
-        local_node_capacity = deepcopy(node_capacity_global)
-        local_link_capacity = deepcopy(link_capacity_global)
+        local_node_capacity = node_capacity_global.copy()
+        local_link_capacity = link_capacity_global.copy()
 
-        # -------------------- iterate over VNFs --------------------
-        for vnf in vnf_chain:
-            vnf_id = vnf["id"]
-            cpu_needed = vnf["cpu"]
-            slice_id = vnf["slice"]
+        # Anti-affinity O(1)
+        node_used_slices = {n: set() for n in sG.vertices()}
+
+        # Fixed node order for determinism
+        node_order = sorted(sG.vertices())
+
+        for vnf_id in vnf_ids:
+            cpu_needed = vnf_cpu[vnf_id]
+            slice_id = vnf_slice[vnf_id]
 
             placed = False
 
-            # First-Fit: scan nodes in a fixed order and pick the first feasible one
-            for node in sorted(G.nodes):
-                avail_cpu = local_node_capacity.get(node, 0)
+            # First-Fit scan
+            for node in node_order:
+                avail_cpu = local_node_capacity.get(node, 0.0)
                 if avail_cpu < cpu_needed:
                     continue
-
-                # Anti-affinity: VNFs from the same slice cannot share the same node
-                if any(
-                    node == placed_node and
-                    slice_id == next(v["slice"] for v in vnf_chain if v["id"] == other_id)
-                    for other_id, placed_node in placed_vnfs.items()
-                ):
+                if slice_id in node_used_slices.get(node, set()):
                     continue
 
-                # Local copies to simulate placement and routing on this node
+                # Simulate placement in temporary copies
                 temp_placed = placed_vnfs.copy()
                 temp_routed = routed_vls.copy()
-                temp_node_capacity = deepcopy(local_node_capacity)
-                temp_link_capacity = deepcopy(local_link_capacity)
-                temp_g_cost = g_cost
-                routing_ok = True
+                temp_node_capacity = local_node_capacity.copy()
+                temp_link_capacity = local_link_capacity.copy()
 
-                # Place current VNF on this node
                 temp_node_capacity[node] -= cpu_needed
                 temp_placed[vnf_id] = node
 
-                # Route internal VLs whose endpoints are now both placed
-                for vl in vl_chain:
-                    src, dst = vl["from"], vl["to"]
-                    if src in temp_placed and dst in temp_placed and (src, dst) not in temp_routed:
-                        src_node = temp_placed[src]
-                        dst_node = temp_placed[dst]
-                        path, lat = shortest_path_with_capacity(
-                            G, src_node, dst_node,
-                            temp_link_capacity, vl["bandwidth"]
-                        )
-                        if path is None:
+                routing_ok = True
+                delta_lat = 0.0
+
+                # Route newly-routable internal VLs
+                for (v_from, v_to, bw) in vl_list:
+                    if (v_from, v_to) in temp_routed:
+                        continue
+
+                    src_node = temp_placed.get(v_from)
+                    dst_node = temp_placed.get(v_to)
+                    if src_node is None or dst_node is None or src_node == dst_node:
+                        continue
+
+                    path, lat = shortest_path_with_capacity_sage(
+                        sG, src_node, dst_node, temp_link_capacity, bw
+                    )
+                    if path is None:
+                        routing_ok = False
+                        break
+
+                    for a, b in zip(path[:-1], path[1:]):
+                        ek = _edge_key(a, b)
+                        temp_link_capacity[ek] -= bw
+                        if temp_link_capacity[ek] < -1e-9:
                             routing_ok = False
                             break
+                    if not routing_ok:
+                        break
 
-                        bw = vl["bandwidth"]
-                        for u, v in zip(path[:-1], path[1:]):
-                            if (u, v) in temp_link_capacity:
-                                temp_link_capacity[(u, v)] -= bw
-                            else:
-                                temp_link_capacity[(v, u)] -= bw
-
-                        temp_routed[(src, dst)] = path
-                        temp_g_cost += lat
+                    temp_routed[(v_from, v_to)] = path
+                    delta_lat += lat
 
                 if not routing_ok:
                     continue
 
-                # ENTRY → first VNF if defined and not yet routed
-                if entry is not None and vnf_chain:
-                    first_id = vnf_chain[0]["id"]
+                # Optional entry->first VNF routing (kept minimal)
+                if entry is not None and vnf_ids:
+                    first_id = vnf_ids[0]
                     if ("ENTRY", first_id) not in temp_routed and first_id in temp_placed:
-                        path, lat = shortest_path_with_capacity(
-                            G, entry, temp_placed[first_id],
-                            temp_link_capacity,
-                            vl_chain[0]["bandwidth"] if vl_chain else 0
+                        # If you have a specific bandwidth model for entry, plug it here.
+                        bw_entry = 0.0
+                        path, lat = shortest_path_with_capacity_sage(
+                            sG, entry, temp_placed[first_id], temp_link_capacity, bw_entry
                         )
                         if path is None:
                             routing_ok = False
                         else:
-                            bw_entry = vl_chain[0]["bandwidth"] if vl_chain else 0
-                            for u, v in zip(path[:-1], path[1:]):
-                                if (u, v) in temp_link_capacity:
-                                    temp_link_capacity[(u, v)] -= bw_entry
-                                else:
-                                    temp_link_capacity[(v, u)] -= bw_entry
-                            temp_routed[("ENTRY", first_id)] = path
-                            temp_g_cost += lat
+                            for a, b in zip(path[:-1], path[1:]):
+                                ek = _edge_key(a, b)
+                                temp_link_capacity[ek] -= bw_entry
+                                if temp_link_capacity[ek] < -1e-9:
+                                    routing_ok = False
+                                    break
+                            if routing_ok:
+                                temp_routed[("ENTRY", first_id)] = path
+                                delta_lat += lat
 
                 if not routing_ok:
                     continue
 
-                # Commit local placement: first feasible node wins (First-Fit)
+                # Commit immediately (First-Fit)
                 placed_vnfs = temp_placed
                 routed_vls = temp_routed
                 local_node_capacity = temp_node_capacity
                 local_link_capacity = temp_link_capacity
-                g_cost = temp_g_cost
+                g_cost += delta_lat
+
+                node_used_slices.setdefault(node, set()).add(slice_id)
                 placed = True
-                print(
-                    f"[INFO][FF] Placed {vnf_id} on node {node} "
-                    f"(use={cpu_needed}, remaining={local_node_capacity[node]})."
-                )
-                break  # do not try other nodes (First-Fit behavior)
+                break
 
             if not placed:
-                print(f"[WARN][FF] Failed to place VNF {vnf_id}, slice {i} rejected.")
                 success = False
                 break
 
-        # --------------------- slice summary ---------------------
         if success:
             node_capacity_global = local_node_capacity
             link_capacity_global = local_link_capacity
             results.append({"slice": i, "accepted": True, "g_cost": g_cost})
             full_results.append(FFState(placed_vnfs, routed_vls, g_cost))
-            print(
-                f"[SUMMARY][FF] Slice {i} accepted. "
-                f"Remaining min_node_cpu={min(node_capacity_global.values())}, "
-                f"links_low_bw={sum(1 for v in link_capacity_global.values() if v <= 0)}"
-            )
         else:
             results.append({"slice": i, "accepted": False, "g_cost": None})
             full_results.append(None)
-            print(f"[SUMMARY][FF] Slice {i} rejected.")
 
     df = pd.DataFrame(results)
-    if csv_path:
-        try:
-            df.to_csv(csv_path, index=False)
-            print(f"[INFO][FF] Results written to {csv_path}")
-        except Exception as e:
-            print(f"[WARN][FF] Could not write CSV: {e}")
+    if csv_path is not None:
+        df.to_csv(str(csv_path), index=False)
 
     return df, full_results

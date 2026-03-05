@@ -31,9 +31,9 @@ vnf_profiles = [
 
 def main():
     slices = generate_random_slices(G, num_slices=4, num_vnfs_per_slice=2, vnf_profiles=vnf_profiles)
-    run_fabo_full_batch(G, slices, node_capacity_base, link_latency, link_capacity_base)
+    #run_fabo_full_batch, (G, slices, node_capacity_base, link_latency, link_capacity_base, None, False, 8, 600)
     #run_abo_full_batch(G, slices, node_capacity_base, link_latency, link_capacity_base)
-    #energy_aware_astar(G, slices, node_capacity_base, link_capacity_base)
+    energy_aware_astar(G, slices, node_capacity_base, link_capacity_base)
     #run_astar(G, slices, node_capacity_base, link_capacity_base)
     
  # ajuste
