@@ -10,6 +10,9 @@ except Exception:
 import networkx as nx
 
 
+ENTRY_VNF_ID = "__ENTRY__"
+
+
 # ------------------------- helpers: normalization -------------------------
 def _as_vnf_id(v):
     return str(v).strip()
@@ -21,6 +24,51 @@ def _vl_key_from_to(v_from, v_to):
 
 def _vl_key(vl):
     return _vl_key_from_to(vl["from"], vl["to"])
+
+
+# ------------------------- helpers: entry handling -------------------------
+def _first_vnf_id(vnf_chain):
+    if not vnf_chain:
+        raise ValueError("vnf_chain is empty.")
+    return _as_vnf_id(vnf_chain[0]["id"])
+
+
+def _infer_entry_bandwidth(vnf_chain, vl_chain):
+    """
+    English: Infer the ingress bandwidth from the first outgoing VL of the first VNF.
+    If there is no outgoing VL, default to 0.0.
+    """
+    if not vnf_chain:
+        return 0.0
+
+    first_id = _first_vnf_id(vnf_chain)
+    for vl in vl_chain:
+        if _as_vnf_id(vl["from"]) == first_id:
+            return float(vl["bandwidth"])
+    return 0.0
+
+
+def _augment_vl_chain_with_entry(vnf_chain, vl_chain, entry):
+    """
+    English: Add a virtual ingress VL from ENTRY_VNF_ID to the first VNF
+    so the slice must effectively start at the given topology entry node.
+    """
+    if entry is None:
+        return list(vl_chain)
+
+    first_id = _first_vnf_id(vnf_chain)
+    ingress_bw = _infer_entry_bandwidth(vnf_chain, vl_chain)
+
+    augmented = list(vl_chain)
+    augmented.insert(
+        0,
+        {
+            "from": ENTRY_VNF_ID,
+            "to": first_id,
+            "bandwidth": ingress_bw,
+        },
+    )
+    return augmented
 
 
 # ------------------------- helpers: canonical undirected edges -------------------------
@@ -59,7 +107,6 @@ def _to_sage_graph_if_needed(G):
     sG = SageGraph()
     sG.add_vertices(list(G.nodes))
 
-    # Put latency as edge label (weight)
     for u, v, data in G.edges(data=True):
         lat = float(data.get("latency", 1.0))
         sG.add_edge(u, v, lat)
@@ -85,7 +132,6 @@ def shortest_path_with_capacity_sage(sG, u, v, link_capacity_canon, bandwidth):
     if u == v:
         return [u], 0.0
 
-    # Sage returns a list of vertices; raises if no path in some versions.
     try:
         path = sG.shortest_path(u, v, by_weight=True)
     except Exception:
@@ -94,13 +140,11 @@ def shortest_path_with_capacity_sage(sG, u, v, link_capacity_canon, bandwidth):
     if not path:
         return None, None
 
-    # Capacity check
     for a, b in zip(path[:-1], path[1:]):
         cap = link_capacity_canon.get(_edge_key(a, b))
         if cap is None or cap < bandwidth:
             return None, None
 
-    # Latency is sum of edge labels along the path
     latency = 0.0
     for a, b in zip(path[:-1], path[1:]):
         latency += float(sG.edge_label(a, b))
@@ -135,8 +179,9 @@ class AStarState:
         self.link_capacity = link_capacity or {}        # {(u,v) canon: remaining_bw}
         self.node_used_slices = node_used_slices or {}  # {node: set(slice_ids)}
 
-    def is_goal(self, vnf_chain_len, vl_list_norm):
-        if len(self.placed_vnfs) != vnf_chain_len:
+    def is_goal(self, real_vnf_ids, vl_list_norm):
+        placed_real = sum(1 for vid in real_vnf_ids if vid in self.placed_vnfs)
+        if placed_real != len(real_vnf_ids):
             return False
 
         for (v_from, v_to, _bw) in vl_list_norm:
@@ -158,14 +203,17 @@ def run_astar(G, slices, node_capacity_base, link_capacity_base, csv_path=None):
     """
     A* using Sage weighted shortest paths (latency as edge label).
     Accepts either a Sage Graph or a NetworkX undirected graph (converted once).
+
+    Entry-aware behavior:
+    - If a slice is given as (vnf_chain, vl_chain, entry),
+      a virtual ingress VL ENTRY_VNF_ID -> first_vnf is added.
+    - ENTRY_VNF_ID is pre-placed on the topology node 'entry'.
     """
     astar_results = []
 
-    # Prepare Sage graph + edge latency
     sG = _to_sage_graph_if_needed(G)
-    edge_latency = _build_edge_latency_from_sage(sG)
+    _build_edge_latency_from_sage(sG)
 
-    # Canonicalize global capacities once
     node_capacity_global = dict(node_capacity_base)
 
     link_capacity_global = {}
@@ -188,7 +236,6 @@ def run_astar(G, slices, node_capacity_base, link_capacity_base, csv_path=None):
             if src_node is None or dst_node is None or src_node == dst_node:
                 continue
             try:
-                # Sage shortest path length by weight
                 h += float(sG.shortest_path_length(src_node, dst_node, by_weight=True))
             except Exception:
                 h += 10_000.0
@@ -198,7 +245,6 @@ def run_astar(G, slices, node_capacity_base, link_capacity_base, csv_path=None):
     def expand_state(state, vnf_chain_ids, vnf_cpu_by_id, vnf_slice_by_id, vl_list_norm):
         expansions = []
 
-        # Next VNF in chain order
         next_vnf_id = None
         for vid in vnf_chain_ids:
             if vid not in state.placed_vnfs:
@@ -210,15 +256,17 @@ def run_astar(G, slices, node_capacity_base, link_capacity_base, csv_path=None):
         cpu_need = float(vnf_cpu_by_id[next_vnf_id])
         slice_id = vnf_slice_by_id[next_vnf_id]
 
-        # Prefer nodes with more remaining CPU
-        sorted_nodes = sorted(sG.vertices(), key=lambda n: state.node_capacity.get(n, 0.0), reverse=True)
+        sorted_nodes = sorted(
+            sG.vertices(),
+            key=lambda n: state.node_capacity.get(n, 0.0),
+            reverse=True,
+        )
 
         for node in sorted_nodes:
             avail_cpu = state.node_capacity.get(node, 0.0)
             if avail_cpu < cpu_need:
                 continue
 
-            # Anti-affinity (slice cannot repeat in the same node)
             used = state.node_used_slices.get(node)
             if used is not None and slice_id in used:
                 continue
@@ -231,12 +279,10 @@ def run_astar(G, slices, node_capacity_base, link_capacity_base, csv_path=None):
 
             new_cost = state.g_cost
 
-            # Place VNF
             new_node_capacity[node] = avail_cpu - cpu_need
             new_placed[next_vnf_id] = node
             new_node_used_slices.setdefault(node, set()).add(slice_id)
 
-            # Route what becomes routable
             routing_ok = True
 
             for (v_from, v_to, bw) in vl_list_norm:
@@ -257,7 +303,6 @@ def run_astar(G, slices, node_capacity_base, link_capacity_base, csv_path=None):
                     routing_ok = False
                     break
 
-                # Apply BW along the path
                 for u, v in zip(path[:-1], path[1:]):
                     ek = _edge_key(u, v)
                     new_link_capacity[ek] -= bw
@@ -285,18 +330,29 @@ def run_astar(G, slices, node_capacity_base, link_capacity_base, csv_path=None):
         return expansions
 
     # ---------- Solve one slice ----------
-    def solve_one_slice(vnf_chain, vl_chain):
+    def solve_one_slice(vnf_chain, vl_chain, entry):
+        if entry is not None and entry not in set(sG.vertices()):
+            raise ValueError(f"Entry node {entry!r} is not present in the topology.")
+
         vnf_chain_ids = [_as_vnf_id(v["id"]) for v in vnf_chain]
+        real_vnf_ids = set(vnf_chain_ids)
+
         vnf_cpu_by_id = {_as_vnf_id(v["id"]): float(v["cpu"]) for v in vnf_chain}
         vnf_slice_by_id = {_as_vnf_id(v["id"]): v["slice"] for v in vnf_chain}
 
+        effective_vl_chain = _augment_vl_chain_with_entry(vnf_chain, vl_chain, entry)
+
         vl_list_norm = []
-        for vl in vl_chain:
+        for vl in effective_vl_chain:
             k = _vl_key(vl)
             vl_list_norm.append((k[0], k[1], float(vl["bandwidth"])))
 
+        init_placed = {}
+        if entry is not None:
+            init_placed[ENTRY_VNF_ID] = entry
+
         init_state = AStarState(
-            placed_vnfs={},
+            placed_vnfs=init_placed,
             routed_vls={},
             g_cost=0.0,
             node_capacity=node_capacity_global.copy(),
@@ -312,44 +368,49 @@ def run_astar(G, slices, node_capacity_base, link_capacity_base, csv_path=None):
         while heap:
             _f, _c, state = heappop(heap)
 
-            key = (len(state.placed_vnfs), len(state.routed_vls))
+            placed_real = sum(1 for vid in real_vnf_ids if vid in state.placed_vnfs)
+            key = (placed_real, len(state.routed_vls))
             prev = best_seen.get(key)
             if prev is not None and state.g_cost >= prev:
                 continue
             best_seen[key] = state.g_cost
 
-            if state.is_goal(len(vnf_chain_ids), vl_list_norm):
-                return state
+            if state.is_goal(real_vnf_ids, vl_list_norm):
+                return state, effective_vl_chain
 
             for child in expand_state(state, vnf_chain_ids, vnf_cpu_by_id, vnf_slice_by_id, vl_list_norm):
                 h = heuristic_for_slice(child, vl_list_norm)
                 counter += 1
                 heappush(heap, (child.g_cost + h, counter, child))
 
-        return None
+        return None, effective_vl_chain
 
     # ---------- Main loop ----------
+    effective_vl_chains = []
+
     for slice_data in slices:
         if len(slice_data) == 2:
             vnf_chain, vl_chain = slice_data
+            entry = None
         elif len(slice_data) == 3:
-            vnf_chain, vl_chain, _entry = slice_data  # ignored here
+            vnf_chain, vl_chain, entry = slice_data
         else:
             raise ValueError(f"Unexpected slice format: {slice_data}")
 
-        result_state = solve_one_slice(vnf_chain, vl_chain)
+        result_state, effective_vl_chain = solve_one_slice(vnf_chain, vl_chain, entry)
         astar_results.append(result_state)
+        effective_vl_chains.append(effective_vl_chain)
 
         if result_state is None:
             continue
 
-        # Commit CPU
         cpu_by_id = {_as_vnf_id(v["id"]): float(v["cpu"]) for v in vnf_chain}
         for vnf_id, node in result_state.placed_vnfs.items():
+            if vnf_id == ENTRY_VNF_ID:
+                continue
             node_capacity_global[node] -= float(cpu_by_id[vnf_id])
 
-        # Commit BW
-        bw_by_key = {_vl_key(vl): float(vl["bandwidth"]) for vl in vl_chain}
+        bw_by_key = {_vl_key(vl): float(vl["bandwidth"]) for vl in effective_vl_chain}
         for (v_from, v_to), path in result_state.routed_vls.items():
             bw = bw_by_key.get((v_from, v_to))
             if bw is None:
@@ -366,9 +427,16 @@ def run_astar(G, slices, node_capacity_base, link_capacity_base, csv_path=None):
                     raise ValueError(f"Link capacity underflow on {ek}")
 
     df_results = pd.DataFrame(
-        [{"slice": i, "accepted": (r is not None), "g_cost": (r.g_cost if r else None)}
-         for i, r in enumerate(astar_results, start=1)]
+        [
+            {
+                "slice": i,
+                "accepted": (r is not None),
+                "g_cost": (r.g_cost if r else None),
+            }
+            for i, r in enumerate(astar_results, start=1)
+        ]
     )
+
     if csv_path:
         df_results.to_csv(csv_path, index=False)
 
