@@ -1,6 +1,6 @@
 # All comments in English
 
-from collections import defaultdict, deque
+from collections import defaultdict
 
 
 class MILPResultAdapterGurobi:
@@ -18,8 +18,8 @@ class MILPResultAdapterGurobi:
          - flow keys     : ("f", edge, s, (i, j)) and optional f_entry/f_exit
 
     Reconstructs:
-      - placed_vnfs: {vnf_id -> node}
-      - routed_vls : {(src, dst) -> path(list of nodes)}  (paths reconstructed from active edges)
+      - placed_vnfs: {(s, vnf_id) -> node}
+      - routed_vls : {(s, src, dst) -> path(list of nodes)}  (paths reconstructed from active edges)
     """
 
     def __init__(self, solve_result, instance):
@@ -46,9 +46,10 @@ class MILPResultAdapterGurobi:
                 continue
             if key[0] == "x" and len(key) == 4:
                 _, s, vnf_id, node = key
-                self.placed_vnfs[vnf_id] = node
+                self.placed_vnfs[(s, vnf_id)] = node
 
         # Legacy fallback: ("v", vnf_id, node)
+        # Note: legacy format has no slice id, so we keep the old behavior only as fallback.
         if not self.placed_vnfs:
             for key, val in vals.items():
                 if not key or val <= 0.5:
@@ -80,7 +81,8 @@ class MILPResultAdapterGurobi:
                 continue
             if key[0] == "f" and len(key) == 6:
                 _, s, i, j, u, v = key
-                edges_by_vl[(i, j)].append((u, v))
+                # IMPORTANT: keep slice id in the VL key
+                edges_by_vl[(s, i, j)].append((u, v))
 
         if edges_by_vl:
             for vl_key, edges in edges_by_vl.items():
@@ -98,23 +100,22 @@ class MILPResultAdapterGurobi:
                 _, e, s, ij = key
                 if isinstance(ij, tuple) and len(ij) == 2:
                     i, j = ij
-                    edges_by_vl_legacy[(i, j)].append(e)
+                    edges_by_vl_legacy[(s, i, j)].append(e)
 
         # Legacy entry/exit legs if present
-        # NOTE: these were previously stored as keys ("ENTRY", first_vnf) and (last_vnf, "EXIT")
         for key, val in vals.items():
             if not key or val <= 0.5:
                 continue
 
             if key[0] == "f_entry" and len(key) == 3:
                 _, e, s = key
-                first_vnf = inst.V_of_s[s][0]
-                edges_by_vl_legacy[("ENTRY", first_vnf)].append(e)
+                first_vnf = list(inst.V_of_s[s])[0]
+                edges_by_vl_legacy[(s, "ENTRY", first_vnf)].append(e)
 
             if key[0] == "f_exit" and len(key) == 3:
                 _, e, s = key
-                last_vnf = inst.V_of_s[s][-1]
-                edges_by_vl_legacy[(last_vnf, "EXIT")].append(e)
+                last_vnf = list(inst.V_of_s[s])[-1]
+                edges_by_vl_legacy[(s, last_vnf, "EXIT")].append(e)
 
         for vl_key, edges in edges_by_vl_legacy.items():
             path = self._reconstruct_path_from_edges(edges)
@@ -134,7 +135,6 @@ class MILPResultAdapterGurobi:
         if not edges:
             return None
 
-        # Build adjacency and indegree/outdegree
         out_adj = defaultdict(list)
         indeg = defaultdict(int)
         outdeg = defaultdict(int)
@@ -143,19 +143,15 @@ class MILPResultAdapterGurobi:
             out_adj[u].append(v)
             outdeg[u] += 1
             indeg[v] += 1
-            # ensure nodes exist in dicts
             indeg[u] += 0
             outdeg[v] += 0
 
-        # Find a start node: outdeg=1 and indeg=0 if possible
         start_candidates = [n for n in outdeg.keys() if outdeg[n] > 0 and indeg[n] == 0]
         start = start_candidates[0] if start_candidates else None
 
-        # Fallback: pick any node that has outgoing edges
         if start is None:
             start = next(iter(out_adj.keys()))
 
-        # Walk greedily (assumes a path)
         path = [start]
         visited_edges = set()
         current = start
@@ -165,18 +161,15 @@ class MILPResultAdapterGurobi:
             if not next_nodes:
                 break
 
-            # If branching happens, pick the first (should not happen in a well-formed path)
             nxt = next_nodes[0]
             edge = (current, nxt)
             if edge in visited_edges:
-                # cycle detected
                 break
             visited_edges.add(edge)
 
             path.append(nxt)
             current = nxt
 
-        # Basic sanity: path length should be at least 2
         if len(path) < 2:
             return None
         return path
@@ -184,9 +177,6 @@ class MILPResultAdapterGurobi:
     # ---------------------------------------------------------------------
     def __repr__(self):
         return f"<MILPResultAdapterGurobi | {len(self.placed_vnfs)} VNFs, {len(self.routed_vls)} VLs>"
-
-
-# All comments in English
 
 class MILPSequentialAdapter:
     """

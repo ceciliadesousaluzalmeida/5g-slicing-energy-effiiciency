@@ -20,7 +20,7 @@ class GurobiSolveResult:
     status_code: int
     status_str: str
     objective: float
-    values: Dict[Tuple, float]  # maps tuple keys -> float values
+    values: Dict[Tuple, float]
     solcount: int
     runtime: float
     mip_gap: Optional[float] = None
@@ -47,7 +47,8 @@ def _status_to_str(status_code: int) -> str:
 
 
 def _has_integer_vars(model: gp.Model) -> bool:
-    # English: MIPGap is only defined for MIP models (has integer/binary vars).
+    # All comments in English
+    # MIPGap is only defined for MIP models.
     for v in model.getVars():
         if v.VType != GRB.CONTINUOUS:
             return True
@@ -55,13 +56,13 @@ def _has_integer_vars(model: gp.Model) -> bool:
 
 
 def _safe_mip_gap(model: gp.Model) -> Optional[float]:
-    # English: Safe access to MIPGap; it may be unavailable depending on version/status/multiobj.
+    # All comments in English
+    # Safe access to MIPGap.
     if not _has_integer_vars(model):
         return None
     if getattr(model, "SolCount", 0) == 0:
         return None
 
-    # English: Only attempt to read gap for typical MIP statuses with an incumbent.
     if getattr(model, "Status", None) not in (
         GRB.OPTIMAL,
         GRB.SUBOPTIMAL,
@@ -77,7 +78,6 @@ def _safe_mip_gap(model: gp.Model) -> Optional[float]:
         return float(model.MIPGap)
     except Exception:
         return None
-
 
 
 def _apply_fast_params(
@@ -120,27 +120,86 @@ def _apply_fast_params(
 
 
 # ------------------------------
+# Graph helpers
+# ------------------------------
+def _edge_key(u: Any, v: Any) -> Tuple[Any, Any]:
+    """Return canonical undirected edge key."""
+    return (u, v) if u <= v else (v, u)
+
+
+def _build_physical_edges(instance: Any) -> List[Tuple[Any, Any]]:
+    """
+    Return undirected physical edges from instance.E.
+
+    If instance.E already contains both directions, collapse them into
+    a single canonical undirected edge.
+    """
+    seen = set()
+    edges: List[Tuple[Any, Any]] = []
+    for (u, v) in list(instance.E):
+        ek = _edge_key(u, v)
+        if ek not in seen:
+            seen.add(ek)
+            edges.append(ek)
+    return edges
+
+
+def _build_directed_arcs(E: List[Tuple[Any, Any]]) -> List[Tuple[Any, Any]]:
+    """Create both directed arcs from each undirected physical edge."""
+    A: List[Tuple[Any, Any]] = []
+    for (u, v) in E:
+        A.append((u, v))
+        A.append((v, u))
+    return A
+
+
+def _get_bw_cap(instance: Any, u: Any, v: Any) -> float:
+    """Return bandwidth capacity for the canonical physical edge."""
+    ek = _edge_key(u, v)
+    if ek in getattr(instance, "BW_cap", {}):
+        return float(instance.BW_cap[ek])
+    if (u, v) in getattr(instance, "BW_cap", {}):
+        return float(instance.BW_cap[(u, v)])
+    if (v, u) in getattr(instance, "BW_cap", {}):
+        return float(instance.BW_cap[(v, u)])
+    raise KeyError(f"Missing BW_cap for edge {ek}.")
+
+
+def _get_latency(instance: Any, u: Any, v: Any) -> float:
+    """Return latency for a directed arc using symmetric physical latency."""
+    if (u, v) in getattr(instance, "lat_e", {}):
+        return float(instance.lat_e[(u, v)])
+    if (v, u) in getattr(instance, "lat_e", {}):
+        return float(instance.lat_e[(v, u)])
+    raise KeyError(f"Missing latency for arc ({u}, {v}).")
+
+
+# ------------------------------
 # ENTRY helpers
 # ------------------------------
 def _get_entry_node(instance: Any, s: Any) -> Optional[Any]:
     """Return the physical ENTRY node for slice s, if available."""
-    # English: Support common attribute names to avoid breaking your pipeline.
+    if hasattr(instance, "entry_node_s"):
+        return instance.entry_node_s.get(s)
     if hasattr(instance, "entry_of_s"):
         return instance.entry_of_s.get(s)
     if hasattr(instance, "ENTRY_of_s"):
         return instance.ENTRY_of_s.get(s)
     if hasattr(instance, "entry_node_of_s"):
         return instance.entry_node_of_s.get(s)
+    if hasattr(instance, "entry_node"):
+        return getattr(instance, "entry_node")
     return None
 
 
 def _get_entry_bw(instance: Any, s: Any, first_vnf: Any) -> Optional[float]:
     """
     Return bandwidth demand for ENTRY->first_vnf.
+
     Priority:
       1) instance.BW_sij[(s,'ENTRY',first_vnf)] if exists
       2) instance.BW_entry_s[s] if exists
-      3) fallback to the bandwidth of the first logical VL in the slice (if any)
+      3) fallback to the bandwidth of the first logical VL in the slice
     """
     if (s, "ENTRY", first_vnf) in getattr(instance, "BW_sij", {}):
         return float(instance.BW_sij[(s, "ENTRY", first_vnf)])
@@ -148,7 +207,6 @@ def _get_entry_bw(instance: Any, s: Any, first_vnf: Any) -> Optional[float]:
     if hasattr(instance, "BW_entry_s") and s in instance.BW_entry_s:
         return float(instance.BW_entry_s[s])
 
-    # English: Fallback to "first" VL bandwidth if your dataset doesn't define entry BW explicitly.
     V_s = list(instance.V_of_s[s])
     for i in V_s:
         for j in V_s:
@@ -169,13 +227,11 @@ def _get_slice_vl_pairs(instance: Any, s: Any) -> List[Tuple[Any, Any]]:
     vl_pairs: List[Tuple[Any, Any]] = []
     V_s = list(instance.V_of_s[s])
 
-    # Standard VLs between VNFs
     for i in V_s:
         for j in V_s:
             if (s, i, j) in instance.BW_sij:
                 vl_pairs.append((i, j))
 
-    # Add ENTRY->first only if this slice requires ENTRY
     if _slice_requires_entry(instance, s):
         entry_node = _get_entry_node(instance, s)
         if entry_node is None:
@@ -189,14 +245,14 @@ def _get_slice_vl_pairs(instance: Any, s: Any) -> List[Tuple[Any, Any]]:
         if bw_entry is None:
             raise ValueError(
                 f"Missing bandwidth for ENTRY->first_vnf in slice {s}. "
-                f"Provide BW_sij[(s,'ENTRY',{first_vnf})] or BW_entry_s[{s}] (or at least one VL BW to fallback)."
+                f"Provide BW_sij[(s,'ENTRY',{first_vnf})] or BW_entry_s[{s}] "
+                f"(or at least one VL BW to fallback)."
             )
 
         instance.BW_sij[(s, "ENTRY", first_vnf)] = float(bw_entry)
         vl_pairs.append(("ENTRY", first_vnf))
 
     return vl_pairs
-
 
 
 def _collect_all_vl_pairs(instance: Any, slice_set: List[Any]) -> Dict[Any, List[Tuple[Any, Any]]]:
@@ -224,15 +280,14 @@ def build_multi_slice_model(
     """
     Multi-slice MILP with hard latency constraints.
 
-    Adds support for ENTRY->first_vnf routing:
-      - creates y[s,'ENTRY',first,u,v]
-      - enforces flow conservation with fixed supply at the physical entry node
-      - consumes BW and activates links consistently
+    This version:
+      - supports ENTRY->first_vnf routing
+      - uses one physical entry node per slice
+      - routes flows on directed arcs
+      - keeps capacities and activation on undirected physical edges
 
-    NEW:
-      - Adds acceptance variable z[s] to maximize number of accepted slices.
-      - Placement/flow/latency constraints are conditioned on z[s].
-      - Objective is lexicographic: maximize sum(z) then minimize energy.
+    Objective:
+      - lexicographic: maximize accepted slices, then minimize energy
     """
 
     model = gp.Model(f"multi_slice_{len(slice_set)}")
@@ -253,15 +308,14 @@ def build_multi_slice_model(
     )
 
     N = list(instance.N)
-    E = list(instance.E)
+    E = _build_physical_edges(instance)
+    A = _build_directed_arcs(E)
 
     vl_pairs_by_s = _collect_all_vl_pairs(instance, slice_set)
 
     # ==========================
     # Variables
     # ==========================
-
-    # English: z[s] = 1 if slice s is accepted, else 0.
     z = model.addVars(slice_set, vtype=GRB.BINARY, name="z")
 
     x_index: List[Tuple[Any, Any, Any]] = []
@@ -277,7 +331,7 @@ def build_multi_slice_model(
     y_index: List[Tuple[Any, Any, Any, Any, Any]] = []
     for s in slice_set:
         for (i, j) in vl_pairs_by_s[s]:
-            for (u, v) in E:
+            for (u, v) in A:
                 y_index.append((s, i, j, u, v))
     y = model.addVars(y_index, vtype=GRB.BINARY, name="y")
 
@@ -294,7 +348,7 @@ def build_multi_slice_model(
                 name=f"place_s{s}_i{i}",
             )
 
-    # 2) Anti-colocation per slice (active only if slice accepted)
+    # 2) Anti-colocation per slice
     for s in slice_set:
         V_s = list(instance.V_of_s[s])
         for n in N:
@@ -315,15 +369,15 @@ def build_multi_slice_model(
             name=f"cpu_cap_global_n{n}",
         )
 
-    # 4) Global BW capacity per edge tied to b[u,v] (includes ENTRY VL)
+    # 4) Global BW capacity per physical edge tied to b[u,v]
     for (u, v) in E:
         bw_usage = gp.quicksum(
-            instance.BW_sij[(s, i, j)] * y[s, i, j, u, v]
+            instance.BW_sij[(s, i, j)] * (y[s, i, j, u, v] + y[s, i, j, v, u])
             for s in slice_set
             for (i, j) in vl_pairs_by_s[s]
         )
         model.addConstr(
-            bw_usage <= instance.BW_cap[(u, v)] * b[u, v],
+            bw_usage <= _get_bw_cap(instance, u, v) * b[u, v],
             name=f"bw_cap_global_{u}_{v}",
         )
 
@@ -333,17 +387,15 @@ def build_multi_slice_model(
 
         for (i, j) in vl_pairs_by_s[s]:
             for n in N:
-                outflow = gp.quicksum(y[s, i, j, n, vv] for (uu, vv) in E if uu == n)
-                inflow = gp.quicksum(y[s, i, j, uu, n] for (uu, vv) in E if vv == n)
+                outflow = gp.quicksum(y[s, i, j, n, vv] for (uu, vv) in A if uu == n)
+                inflow = gp.quicksum(y[s, i, j, uu, n] for (uu, vv) in A if vv == n)
 
                 if i == "ENTRY":
-                    # English: ENTRY has a fixed physical location => supply = z[s] at entry_node.
                     if entry_node is None:
                         raise ValueError(f"Slice {s} has ENTRY VL but no entry node defined in instance.")
                     supply = 1.0 if n == entry_node else 0.0
                     rhs = (supply * z[s]) - x[s, j, n]
                 else:
-                    # English: standard VNF->VNF flow: source at x[s,i,n], sink at x[s,j,n]
                     rhs = x[s, i, n] - x[s, j, n]
 
                 model.addConstr(
@@ -357,11 +409,14 @@ def build_multi_slice_model(
             key = (s, i, j)
             if key not in instance.L_sij:
                 continue
-            L_ij = float(instance.L_sij[key])
-            lat_expr = gp.quicksum(instance.lat_e[(u, v)] * y[s, i, j, u, v] for (u, v) in E)
 
-            # English: Big-M relaxes latency when z[s]=0. Safe upper bound is sum of all edge latencies.
-            M_lat = float(sum(instance.lat_e[(u, v)] for (u, v) in E))
+            L_ij = float(instance.L_sij[key])
+            lat_expr = gp.quicksum(
+                _get_latency(instance, u, v) * y[s, i, j, u, v]
+                for (u, v) in A
+            )
+
+            M_lat = float(sum(_get_latency(instance, u, v) for (u, v) in A))
             model.addConstr(
                 lat_expr <= L_ij + M_lat * (1 - z[s]),
                 name=f"lat_hard_s{s}_ij{i}_{j}",
@@ -372,17 +427,19 @@ def build_multi_slice_model(
         placed_any = gp.quicksum(x[s, i, n] for s in slice_set for i in instance.V_of_s[s])
         model.addConstr(placed_any <= len(slice_set) * a[n], name=f"node_act_{n}")
 
-    # 8) Link activation (includes ENTRY VL)
+    # 8) Link activation
     for (u, v) in E:
         used_any = gp.quicksum(
-            y[s, i, j, u, v] for s in slice_set for (i, j) in vl_pairs_by_s[s]
+            y[s, i, j, u, v] + y[s, i, j, v, u]
+            for s in slice_set
+            for (i, j) in vl_pairs_by_s[s]
         )
         model.addConstr(used_any <= len(slice_set) * b[u, v], name=f"link_act_{u}_{v}")
 
-    # 9) Prevent routing if slice not accepted (tightening)
+    # 9) Prevent routing if slice not accepted
     for s in slice_set:
         for (i, j) in vl_pairs_by_s[s]:
-            for (u, v) in E:
+            for (u, v) in A:
                 model.addConstr(
                     y[s, i, j, u, v] <= z[s],
                     name=f"route_only_if_accept_s{s}_{i}_{j}_{u}_{v}",
@@ -391,7 +448,6 @@ def build_multi_slice_model(
     # ==========================
     # Objective (lexicographic)
     # ==========================
-
     node_cost = gp.quicksum(
         a[n]
         + (1.0 / instance.CPU_cap[n]) * gp.quicksum(
@@ -404,43 +460,39 @@ def build_multi_slice_model(
 
     link_cost = gp.quicksum(
         b[u, v]
-        + (1.0 / instance.BW_cap[(u, v)]) * gp.quicksum(
-            instance.BW_sij[(s, i, j)] * y[s, i, j, u, v]
+        + (1.0 / _get_bw_cap(instance, u, v)) * gp.quicksum(
+            instance.BW_sij[(s, i, j)] * (y[s, i, j, u, v] + y[s, i, j, v, u])
             for s in slice_set
             for (i, j) in vl_pairs_by_s[s]
         )
-        for (u, v) in E if instance.BW_cap[(u, v)] > 0
+        for (u, v) in E if _get_bw_cap(instance, u, v) > 0
     )
 
     total_energy = NODE_ENERGY_WEIGHT * node_cost + LINK_ENERGY_WEIGHT * link_cost
 
-    # English: Use a single global MINIMIZE sense for compatibility with older gurobipy.
     model.ModelSense = GRB.MINIMIZE
 
-    # English: Objective 0 (highest priority): maximize acceptance == minimize (-sum(z)).
     model.setObjectiveN(
         -gp.quicksum(z[s] for s in slice_set),
-        0,      # index
-        2,      # priority
-        1.0,    # weight
-        0.0,    # abstol
-        0.0,    # reltol
+        index=0,
+        priority=2,
+        weight=1.0,
+        abstol=0.0,
+        reltol=0.0,
     )
 
-    # English: Objective 1 (lower priority): minimize energy among max-accept solutions.
     model.setObjectiveN(
         total_energy,
-        1,      # index
-        1,      # priority
-        1.0,    # weight
-        0.0,    # abstol
-        0.0,    # reltol
+        index=1,
+        priority=1,
+        weight=1.0,
+        abstol=0.0,
+        reltol=0.0,
     )
 
     # ==========================
     # Solve + return
     # ==========================
-
     model.optimize()
 
     status = model.Status
@@ -571,7 +623,8 @@ def build_multi_slice_model_raw(
     )
 
     N = list(instance.N)
-    E = list(instance.E)
+    E = _build_physical_edges(instance)
+    A = _build_directed_arcs(E)
 
     vl_pairs_by_s = _collect_all_vl_pairs(instance, slice_set)
 
@@ -580,7 +633,12 @@ def build_multi_slice_model_raw(
     # ==========================
     z = model.addVars(slice_set, vtype=GRB.BINARY, name="z")
 
-    x_index: List[Tuple[Any, Any, Any]] = [(s, i, n) for s in slice_set for i in instance.V_of_s[s] for n in N]
+    x_index: List[Tuple[Any, Any, Any]] = [
+        (s, i, n)
+        for s in slice_set
+        for i in instance.V_of_s[s]
+        for n in N
+    ]
     x = model.addVars(x_index, vtype=GRB.BINARY, name="x")
 
     a = model.addVars(N, vtype=GRB.BINARY, name="a")
@@ -590,7 +648,7 @@ def build_multi_slice_model_raw(
         (s, i, j, u, v)
         for s in slice_set
         for (i, j) in vl_pairs_by_s[s]
-        for (u, v) in E
+        for (u, v) in A
     ]
     y = model.addVars(y_index, vtype=GRB.BINARY, name="y")
 
@@ -601,29 +659,43 @@ def build_multi_slice_model_raw(
     # 1) Placement conditioned on z[s]
     for s in slice_set:
         for i in list(instance.V_of_s[s]):
-            model.addConstr(gp.quicksum(x[s, i, n] for n in N) == z[s], name=f"place_s{s}_i{i}")
+            model.addConstr(
+                gp.quicksum(x[s, i, n] for n in N) == z[s],
+                name=f"place_s{s}_i{i}",
+            )
 
     # 2) Anti-colocation per slice
     for s in slice_set:
         V_s = list(instance.V_of_s[s])
         for n in N:
-            model.addConstr(gp.quicksum(x[s, i, n] for i in V_s) <= z[s], name=f"anti_coloc_s{s}_n{n}")
+            model.addConstr(
+                gp.quicksum(x[s, i, n] for i in V_s) <= z[s],
+                name=f"anti_coloc_s{s}_n{n}",
+            )
 
     # 3) CPU capacity tied to a[n]
     for n in N:
         cpu_usage = gp.quicksum(
-            instance.CPU_i[i] * x[s, i, n] for s in slice_set for i in instance.V_of_s[s]
+            instance.CPU_i[i] * x[s, i, n]
+            for s in slice_set
+            for i in instance.V_of_s[s]
         )
-        model.addConstr(cpu_usage <= instance.CPU_cap[n] * a[n], name=f"cpu_cap_global_n{n}")
+        model.addConstr(
+            cpu_usage <= instance.CPU_cap[n] * a[n],
+            name=f"cpu_cap_global_n{n}",
+        )
 
-    # 4) BW capacity tied to b[u,v]
+    # 4) BW capacity tied to b[u,v] on physical edges
     for (u, v) in E:
         bw_usage = gp.quicksum(
-            instance.BW_sij[(s, i, j)] * y[s, i, j, u, v]
+            instance.BW_sij[(s, i, j)] * (y[s, i, j, u, v] + y[s, i, j, v, u])
             for s in slice_set
             for (i, j) in vl_pairs_by_s[s]
         )
-        model.addConstr(bw_usage <= instance.BW_cap[(u, v)] * b[u, v], name=f"bw_cap_global_{u}_{v}")
+        model.addConstr(
+            bw_usage <= _get_bw_cap(instance, u, v) * b[u, v],
+            name=f"bw_cap_global_{u}_{v}",
+        )
 
     # 5) Flow conservation
     for s in slice_set:
@@ -631,8 +703,8 @@ def build_multi_slice_model_raw(
 
         for (i, j) in vl_pairs_by_s[s]:
             for n in N:
-                outflow = gp.quicksum(y[s, i, j, n, vv] for (uu, vv) in E if uu == n)
-                inflow  = gp.quicksum(y[s, i, j, uu, n] for (uu, vv) in E if vv == n)
+                outflow = gp.quicksum(y[s, i, j, n, vv] for (uu, vv) in A if uu == n)
+                inflow = gp.quicksum(y[s, i, j, uu, n] for (uu, vv) in A if vv == n)
 
                 if i == "ENTRY":
                     if entry_node is None:
@@ -642,7 +714,10 @@ def build_multi_slice_model_raw(
                 else:
                     rhs = x[s, i, n] - x[s, j, n]
 
-                model.addConstr(outflow - inflow == rhs, name=f"flow_cons_s{s}_ij{i}_{j}_n{n}")
+                model.addConstr(
+                    outflow - inflow == rhs,
+                    name=f"flow_cons_s{s}_ij{i}_{j}_n{n}",
+                )
 
     # 6) Hard latency (Big-M when z=0)
     for s in slice_set:
@@ -652,10 +727,16 @@ def build_multi_slice_model_raw(
                 continue
 
             L_ij = float(instance.L_sij[key])
-            lat_expr = gp.quicksum(instance.lat_e[(u, v)] * y[s, i, j, u, v] for (u, v) in E)
+            lat_expr = gp.quicksum(
+                _get_latency(instance, u, v) * y[s, i, j, u, v]
+                for (u, v) in A
+            )
 
-            M_lat = float(sum(instance.lat_e[(u, v)] for (u, v) in E))
-            model.addConstr(lat_expr <= L_ij + M_lat * (1 - z[s]), name=f"lat_hard_s{s}_ij{i}_{j}")
+            M_lat = float(sum(_get_latency(instance, u, v) for (u, v) in A))
+            model.addConstr(
+                lat_expr <= L_ij + M_lat * (1 - z[s]),
+                name=f"lat_hard_s{s}_ij{i}_{j}",
+            )
 
     # 7) Node activation
     for n in N:
@@ -664,14 +745,21 @@ def build_multi_slice_model_raw(
 
     # 8) Link activation
     for (u, v) in E:
-        used_any = gp.quicksum(y[s, i, j, u, v] for s in slice_set for (i, j) in vl_pairs_by_s[s])
+        used_any = gp.quicksum(
+            y[s, i, j, u, v] + y[s, i, j, v, u]
+            for s in slice_set
+            for (i, j) in vl_pairs_by_s[s]
+        )
         model.addConstr(used_any <= len(slice_set) * b[u, v], name=f"link_act_{u}_{v}")
 
     # 9) No routing if not accepted
     for s in slice_set:
         for (i, j) in vl_pairs_by_s[s]:
-            for (u, v) in E:
-                model.addConstr(y[s, i, j, u, v] <= z[s], name=f"route_only_if_accept_s{s}_{i}_{j}_{u}_{v}")
+            for (u, v) in A:
+                model.addConstr(
+                    y[s, i, j, u, v] <= z[s],
+                    name=f"route_only_if_accept_s{s}_{i}_{j}_{u}_{v}",
+                )
 
     # ==========================
     # Energy expression
@@ -679,17 +767,21 @@ def build_multi_slice_model_raw(
     node_cost = gp.quicksum(
         a[n]
         + (1.0 / instance.CPU_cap[n]) * gp.quicksum(
-            instance.CPU_i[i] * x[s, i, n] for s in slice_set for i in instance.V_of_s[s]
+            instance.CPU_i[i] * x[s, i, n]
+            for s in slice_set
+            for i in instance.V_of_s[s]
         )
         for n in N if instance.CPU_cap[n] > 0
     )
 
     link_cost = gp.quicksum(
         b[u, v]
-        + (1.0 / instance.BW_cap[(u, v)]) * gp.quicksum(
-            instance.BW_sij[(s, i, j)] * y[s, i, j, u, v] for s in slice_set for (i, j) in vl_pairs_by_s[s]
+        + (1.0 / _get_bw_cap(instance, u, v)) * gp.quicksum(
+            instance.BW_sij[(s, i, j)] * (y[s, i, j, u, v] + y[s, i, j, v, u])
+            for s in slice_set
+            for (i, j) in vl_pairs_by_s[s]
         )
-        for (u, v) in E if instance.BW_cap[(u, v)] > 0
+        for (u, v) in E if _get_bw_cap(instance, u, v) > 0
     )
 
     total_energy = NODE_ENERGY_WEIGHT * node_cost + LINK_ENERGY_WEIGHT * link_cost
@@ -697,6 +789,7 @@ def build_multi_slice_model_raw(
     vp = {
         "N": N,
         "E": E,
+        "A": A,
         "vl_pairs_by_s": vl_pairs_by_s,
         "z": z,
         "x": x,
@@ -725,7 +818,11 @@ def solve_two_phase_max_accept_then_min_energy(
     log_file_phase1=None,
     log_file_phase2=None,
 ):
-    # Build RAW model (no optimize yet)
+    """
+    Two-phase solve:
+      Phase 1 -> maximize accepted slices
+      Phase 2 -> fix max acceptance and minimize energy
+    """
     model, vp = build_multi_slice_model_raw(
         instance=instance,
         slice_set=slice_set,
@@ -766,7 +863,6 @@ def solve_two_phase_max_accept_then_min_energy(
     print("[PHASE1] SolCount:", model.SolCount)
     print("[PHASE1] ObjVal (accepted):", model.ObjVal if model.SolCount else None)
 
-
     # -----------------------
     # Phase 2: fix acceptance, minimize energy
     # -----------------------
@@ -793,7 +889,6 @@ def solve_two_phase_max_accept_then_min_energy(
             "last_result": None,
         }
 
-    # Extract values in the SAME format your adapters/exports expect
     values: Dict[Tuple, float] = {}
 
     for (s, i, n) in vp["x_index"]:

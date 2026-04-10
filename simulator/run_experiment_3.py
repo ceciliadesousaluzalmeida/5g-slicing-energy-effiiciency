@@ -1,13 +1,14 @@
-
 import os
 import time
 import random
 import re
 from copy import deepcopy
 from datetime import datetime
+from types import SimpleNamespace
 
 import numpy as np
 import pandas as pd
+
 
 # ============================
 # Helpers
@@ -21,22 +22,10 @@ def safe_filename(text: str) -> str:
     return text
 
 
-def _route_key_to_parts(vl_key):
+def _edge_key(u, v):
     # All comments in English
-    # Supports keys like (s, i, j) or (i, j)
-    if isinstance(vl_key, tuple) and len(vl_key) == 3:
-        s, i, j = vl_key
-        return s, i, j
-    if isinstance(vl_key, tuple) and len(vl_key) == 2:
-        i, j = vl_key
-        return None, i, j
-    return None, None, None
+    return (u, v) if u <= v else (v, u)
 
-import re
-import numpy as np
-
-import re
-import numpy as np
 
 def _normalize_token(x):
     # All comments in English
@@ -46,232 +35,398 @@ def _normalize_token(x):
     return s
 
 
-def build_vnf_cpu_alias_map(slices, num_vnfs_per_slice=None):
+def _route_key_to_parts(vl_key):
     # All comments in English
-    # Returns a dict: alias_key -> cpu
-    alias_map = {}
+    # Canonical route key format must be (s, i, j).
+    if isinstance(vl_key, tuple) and len(vl_key) == 3:
+        s, i, j = vl_key
+        return s, i, j
+    return None, None, None
 
-    def _set_alias(key, cpu):
-        if key is None or cpu is None:
-            return
-        try:
-            cpu_f = float(cpu)
-        except Exception:
-            return
-        alias_map[key] = cpu_f
-        alias_map[_normalize_token(key)] = cpu_f
 
-    def _maybe_cpu(obj):
-        # All comments in English
-        if obj is None:
-            return None
-        if isinstance(obj, (int, float)):
-            return float(obj)
-        if isinstance(obj, dict):
-            return obj.get("cpu") or obj.get("cpu_demand") or obj.get("demand_cpu") or obj.get("cpu_req")
-        # object attributes
-        for attr in ["cpu", "cpu_demand", "demand_cpu", "cpu_req"]:
-            if hasattr(obj, attr):
-                val = getattr(obj, attr)
-                if isinstance(val, (int, float)):
-                    return float(val)
-        return None
+# ============================
+# Slice parsing helpers
+# ============================
 
-    def _maybe_id(obj):
-        # All comments in English
-        if obj is None:
-            return None
-        if isinstance(obj, (int, str)):
-            return obj
-        if isinstance(obj, dict):
-            return obj.get("id") or obj.get("vnf_id") or obj.get("name") or obj.get("label")
-        for attr in ["id", "vnf_id", "name", "label"]:
-            if hasattr(obj, attr):
-                return getattr(obj, attr)
-        return None
+def set_entry_for_slice(slice_obj, entry_node):
+    # All comments in English
+    if isinstance(slice_obj, dict):
+        new_sl = deepcopy(slice_obj)
+        new_sl["entry"] = entry_node
+        return new_sl
 
-    def _extract_vnfs_from_slice(sl):
-        # All comments in English
-        # Case 1: dict slice
-        if isinstance(sl, dict):
-            for k in ["vnfs", "vnf_list", "functions", "chain", "vnf_chain", "vnf_sequence"]:
-                vnfs = sl.get(k)
-                if isinstance(vnfs, list) and vnfs:
-                    return vnfs
-            # mapping vnf->cpu
-            for k in ["vnf_cpu", "vnf_cpu_map", "cpu_by_vnf", "cpu_demands", "vnf_demands", "demands"]:
-                m = sl.get(k)
-                if isinstance(m, dict) and m:
-                    # Return dict items as pseudo-vnfs
-                    return [(vid, cpu) for vid, cpu in m.items()]
-            return []
+    if isinstance(slice_obj, tuple):
+        items = list(slice_obj)
+        if len(items) >= 3:
+            items[2] = entry_node
+            return tuple(items)
+        return tuple(list(items) + [entry_node])
 
-        # Case 2: tuple/list slice
-        if isinstance(sl, (tuple, list)):
-            # Heuristic: find the first element that looks like a list of VNFs
-            for item in sl:
-                if isinstance(item, list) and item:
-                    return item
-                if isinstance(item, tuple) and item and all(isinstance(x, (tuple, list, dict)) for x in item):
-                    return list(item)
-                if isinstance(item, dict) and item:
-                    # sometimes vnfs stored as dict
-                    if any(k in item for k in ["vnfs", "vnf_list", "functions", "chain"]):
-                        return _extract_vnfs_from_slice(item)
-            return []
+    if isinstance(slice_obj, list):
+        items = list(slice_obj)
+        if len(items) >= 3:
+            items[2] = entry_node
+            return items
+        return items + [entry_node]
 
+    return slice_obj
+
+
+def get_entry_from_slice(slice_obj):
+    # All comments in English
+    if isinstance(slice_obj, dict):
+        return slice_obj.get("entry")
+
+    if isinstance(slice_obj, (tuple, list)) and len(slice_obj) >= 3:
+        return slice_obj[2]
+
+    return None
+
+
+def assign_random_entry_per_slice(slices, G, seed):
+    # All comments in English
+    rng = random.Random(seed)
+    nodes = sorted(list(G.nodes))
+    new_slices = []
+
+    for sl in slices:
+        entry_node = rng.choice(nodes)
+        new_slices.append(set_entry_for_slice(sl, entry_node))
+
+    return new_slices
+
+
+def _get_slice_id(slice_obj, default_idx):
+    # All comments in English
+    if isinstance(slice_obj, dict):
+        return slice_obj.get("id", default_idx)
+    return default_idx
+
+
+def _extract_vnfs_from_slice(slice_obj):
+    # All comments in English
+    if isinstance(slice_obj, dict):
+        for k in ["vnfs", "vnf_list", "functions", "chain", "vnf_chain", "vnf_sequence"]:
+            vnfs = slice_obj.get(k)
+            if isinstance(vnfs, list):
+                return vnfs
         return []
 
-    def _slice_id(sl, default):
-        # All comments in English
-        if isinstance(sl, dict):
-            return sl.get("id", default)
-        if isinstance(sl, (tuple, list)):
-            # common pattern: (slice_id, ...)
-            if len(sl) >= 1 and isinstance(sl[0], (int, str)):
-                return sl[0]
-        return default
+    if isinstance(slice_obj, (tuple, list)):
+        if len(slice_obj) >= 1 and isinstance(slice_obj[0], list):
+            return slice_obj[0]
+        for item in slice_obj:
+            if isinstance(item, dict) and any(k in item for k in ["vnfs", "vnf_list", "functions", "chain", "vnf_chain"]):
+                return _extract_vnfs_from_slice(item)
+        return []
+
+    return []
+
+
+def _extract_vls_from_slice(slice_obj):
+    # All comments in English
+    if isinstance(slice_obj, dict):
+        for k in ["vls", "vl_chain", "virtual_links", "links", "edges"]:
+            vls = slice_obj.get(k)
+            if isinstance(vls, list):
+                return vls
+        return []
+
+    if isinstance(slice_obj, (tuple, list)):
+        if len(slice_obj) >= 2 and isinstance(slice_obj[1], list):
+            return slice_obj[1]
+        for item in slice_obj:
+            if isinstance(item, dict) and any(k in item for k in ["vls", "vl_chain", "virtual_links", "links", "edges"]):
+                return _extract_vls_from_slice(item)
+        return []
+
+    return []
+
+
+def _get_vnf_id(v):
+    # All comments in English
+    if isinstance(v, dict):
+        return v.get("id") or v.get("vnf_id") or v.get("name") or v.get("label")
+    if isinstance(v, (str, int)):
+        return v
+    for attr in ["id", "vnf_id", "name", "label"]:
+        if hasattr(v, attr):
+            return getattr(v, attr)
+    return None
+
+
+def _get_vnf_cpu(v):
+    # All comments in English
+    if isinstance(v, dict):
+        return (
+            v.get("cpu")
+            or v.get("cpu_demand")
+            or v.get("demand_cpu")
+            or v.get("cpu_req")
+        )
+    if isinstance(v, (int, float)):
+        return float(v)
+    for attr in ["cpu", "cpu_demand", "demand_cpu", "cpu_req"]:
+        if hasattr(v, attr):
+            return getattr(v, attr)
+    return None
+
+
+def _vl_from_to(vl):
+    # All comments in English
+    if isinstance(vl, dict):
+        return vl.get("from"), vl.get("to")
+    return None, None
+
+
+def _vl_bw(vl):
+    # All comments in English
+    if isinstance(vl, dict):
+        return vl.get("bandwidth")
+    return None
+
+
+def _get_first_vnf_id_from_slice(slice_obj):
+    # All comments in English
+    vnfs = _extract_vnfs_from_slice(slice_obj)
+    if not vnfs:
+        return None
+    return _get_vnf_id(vnfs[0])
+
+
+def _infer_entry_bandwidth_from_slice(slice_obj):
+    # All comments in English
+    entry = get_entry_from_slice(slice_obj)
+    if entry is None:
+        return None
+
+    first_vnf = _get_first_vnf_id_from_slice(slice_obj)
+    vls = _extract_vls_from_slice(slice_obj)
+
+    if first_vnf is None:
+        return None
+
+    for vl in vls:
+        src, dst = _vl_from_to(vl)
+        if str(src) == "ENTRY" and str(dst) == str(first_vnf):
+            bw = _vl_bw(vl)
+            return float(bw) if bw is not None else None
+
+    for vl in vls:
+        src, dst = _vl_from_to(vl)
+        if str(src) == str(first_vnf):
+            bw = _vl_bw(vl)
+            return float(bw) if bw is not None else None
+
+    if isinstance(slice_obj, dict) and "entry_bandwidth" in slice_obj:
+        try:
+            return float(slice_obj["entry_bandwidth"])
+        except Exception:
+            return None
+
+    return None
+
+
+def build_slice_metadata(slices):
+    # All comments in English
+    slice_cpu_map = {}
+    slice_vl_bw_map = {}
+    slice_vnf_ids = {}
+    slice_entries = {}
 
     for s_idx, sl in enumerate(slices):
-        s_id = _slice_id(sl, s_idx)
+        s_id = _get_slice_id(sl, s_idx)
         vnfs = _extract_vnfs_from_slice(sl)
+        vls = _extract_vls_from_slice(sl)
 
-        # vnfs can be list of dict/obj OR list of (id,cpu)
-        for k_idx, v in enumerate(vnfs):
-            # If v is (id,cpu)
-            if isinstance(v, (tuple, list)) and len(v) >= 2 and isinstance(v[0], (int, str)) and isinstance(v[1], (int, float)):
-                vid = v[0]
-                cpu = v[1]
-            else:
-                vid = _maybe_id(v)
-                cpu = _maybe_cpu(v)
+        slice_vnf_ids[s_id] = []
+        slice_entries[s_id] = get_entry_from_slice(sl)
 
-                # If still missing, try tuple/list v format like (id, profile, cpu)
-                if cpu is None and isinstance(v, (tuple, list)):
-                    # find first numeric as cpu
-                    for it in v:
-                        if isinstance(it, (int, float)):
-                            cpu = float(it)
-                            break
-                    if vid is None and len(v) >= 1:
-                        vid = _maybe_id(v[0])
-
-            # 1) direct id aliases
+        for v in vnfs:
+            vid = _get_vnf_id(v)
+            cpu = _get_vnf_cpu(v)
             if vid is not None:
-                _set_alias(vid, cpu)
-                _set_alias(str(vid), cpu)
-
-            # 2) (slice, position) aliases
-            for s_key in [s_idx, s_id]:
-                _set_alias((s_key, k_idx), cpu)
-                _set_alias(f"vnf{s_key}_{k_idx}", cpu)
-                _set_alias(f"{s_key}_{k_idx}", cpu)
-                _set_alias(f"({s_key},{k_idx})", cpu)
-
-            # 3) global integer aliases
-            if num_vnfs_per_slice is not None:
+                slice_vnf_ids[s_id].append(vid)
                 try:
-                    global_id = int(s_idx) * int(num_vnfs_per_slice) + int(k_idx)
-                    _set_alias(global_id, cpu)
-                    _set_alias(str(global_id), cpu)
+                    slice_cpu_map[(s_id, vid)] = float(cpu)
                 except Exception:
                     pass
 
-    return alias_map
+        for vl in vls:
+            src, dst = _vl_from_to(vl)
+            bw = _vl_bw(vl)
+            if src is None or dst is None or bw is None:
+                continue
+            try:
+                slice_vl_bw_map[(s_id, src, dst)] = float(bw)
+            except Exception:
+                continue
 
-def export_node_hosting_to_rows(
-    method_name,
-    result_list,
-    slices,
-    num_slices,
-    num_vnfs_per_slice,
-    seed,
-    timestamp_str,
-    node_capacity_base,
-    debug=False,
-):
+        entry_bw = _infer_entry_bandwidth_from_slice(sl)
+        first_vnf = _get_first_vnf_id_from_slice(sl)
+        if slice_entries[s_id] is not None and first_vnf is not None and entry_bw is not None:
+            slice_vl_bw_map[(s_id, "ENTRY", first_vnf)] = float(entry_bw)
+
+    return {
+        "slice_cpu_map": slice_cpu_map,
+        "slice_vl_bw_map": slice_vl_bw_map,
+        "slice_vnf_ids": slice_vnf_ids,
+        "slice_entries": slice_entries,
+    }
+
+
+# ============================
+# Result normalization
+# ============================
+
+class NormalizedResultView:
+    """
+    Lightweight normalized view used by metrics and exports.
+
+    Canonical format:
+      placed_vnfs: {(s, vnf_id) -> node}
+      routed_vls : {(s, i, j) -> [path_nodes]}
+    """
+
+    def __init__(self, placed_vnfs=None, routed_vls=None, g_cost=None, original=None):
+        self.placed_vnfs = placed_vnfs or {}
+        self.routed_vls = routed_vls or {}
+        self.g_cost = g_cost
+        self.original = original
+
+    def __repr__(self):
+        return (
+            f"<NormalizedResultView | "
+            f"{len(self.placed_vnfs)} placements, {len(self.routed_vls)} routed_vls>"
+        )
+
+
+def _normalize_single_result(result, default_slice_id, valid_slice_ids):
     # All comments in English
-    alias_map = build_vnf_cpu_alias_map(slices, num_vnfs_per_slice=num_vnfs_per_slice)
+    placed_norm = {}
+    routed_norm = {}
 
-    rows_hosting = []
-    rows_cpu = []
+    placed_raw = getattr(result, "placed_vnfs", {}) or {}
+    routed_raw = getattr(result, "routed_vls", {}) or {}
 
-    hosted = {}          # node -> set(vnf_id_str)
-    cpu_used = {}        # node -> float
-    unknown_cpu = {}     # node -> count
-    unknown_examples = []
+    for k, node in placed_raw.items():
+        if (
+            isinstance(k, tuple)
+            and len(k) == 2
+            and k[0] in valid_slice_ids
+        ):
+            placed_norm[(k[0], k[1])] = node
+        else:
+            if default_slice_id is None:
+                continue
+            placed_norm[(default_slice_id, k)] = node
 
-    for res in result_list:
-        if not hasattr(res, "placed_vnfs") or res.placed_vnfs is None:
-            continue
+    for k, path in routed_raw.items():
+        if (
+            isinstance(k, tuple)
+            and len(k) == 3
+            and k[0] in valid_slice_ids
+        ):
+            routed_norm[(k[0], k[1], k[2])] = path
+        elif isinstance(k, tuple) and len(k) == 2:
+            if default_slice_id is None:
+                continue
+            i, j = k
+            routed_norm[(default_slice_id, i, j)] = path
 
-        for vnf_id, node in res.placed_vnfs.items():
-            vnf_id_str = str(vnf_id)
-            hosted.setdefault(node, set()).add(vnf_id_str)
+    return NormalizedResultView(
+        placed_vnfs=placed_norm,
+        routed_vls=routed_norm,
+        g_cost=getattr(result, "g_cost", None),
+        original=result,
+    )
 
-            # Try a sequence of lookups (raw, normalized, tuple-normalized)
-            candidates = [vnf_id, vnf_id_str, _normalize_token(vnf_id_str)]
 
-            if isinstance(vnf_id, tuple):
-                candidates.append(vnf_id)
-                candidates.append(_normalize_token(vnf_id))
+def normalize_result_list(method_name, result_list, slices):
+    # All comments in English
+    valid_slice_ids = set(_get_slice_id(sl, idx) for idx, sl in enumerate(slices))
 
-            found = False
-            for c in candidates:
-                if c in alias_map:
-                    cpu_used[node] = cpu_used.get(node, 0.0) + float(alias_map[c])
-                    found = True
-                    break
+    if not result_list:
+        return []
 
-            if not found:
-                unknown_cpu[node] = unknown_cpu.get(node, 0) + 1
-                if debug and len(unknown_examples) < 12:
-                    unknown_examples.append((vnf_id, vnf_id_str, _normalize_token(vnf_id_str)))
+    normalized = []
 
-    if debug and unknown_examples:
-        print("[DEBUG] Unknown VNF IDs (sample):")
-        for ex in unknown_examples:
-            print("   ", ex)
-        print("[DEBUG] alias_map size:", len(alias_map))
-        print("[DEBUG] alias_map sample:", list(alias_map.items())[:8])
+    # Heuristics usually return one result per slice in order.
+    if len(result_list) == len(slices):
+        for idx, res in enumerate(result_list):
+            s_id = _get_slice_id(slices[idx], idx)
+            normalized.append(_normalize_single_result(res, s_id, valid_slice_ids))
+        return normalized
 
-    # Hosting rows
-    for node, vnf_set in hosted.items():
-        rows_hosting.append({
-            "timestamp": timestamp_str,
-            "method": method_name,
-            "num_slices": num_slices,
-            "num_vnfs_per_slice": num_vnfs_per_slice,
-            "seed": seed,
-            "node": node,
-            "hosted_vnfs": ",".join(sorted(vnf_set)),
-            "num_hosted_vnfs": len(vnf_set),
-        })
+    # Global solvers/adapters usually return a single object already carrying slice ids.
+    if len(result_list) == 1:
+        normalized.append(_normalize_single_result(result_list[0], None, valid_slice_ids))
+        return normalized
 
-    # CPU rows (include nodes with 0 VNFs)
-    for node in node_capacity_base.keys():
-        used = cpu_used.get(node, 0.0)
-        cap = float(node_capacity_base[node]) if node in node_capacity_base else np.nan
-    
-        rows_cpu.append({
-            "timestamp": timestamp_str,
-            "method": method_name,
-            "num_slices": num_slices,
-            "num_vnfs_per_slice": num_vnfs_per_slice,
-            "seed": seed,
-            "node": node,
-            "cpu_used": used,
-            "cpu_capacity": cap,
-            "cpu_utilization": used / cap if cap > 0 else np.nan,
-            "num_hosted_vnfs": len(hosted.get(node, set())),
-            "num_unknown_cpu_vnfs": int(unknown_cpu.get(node, 0)),
-        })
+    # Conservative fallback.
+    for idx, res in enumerate(result_list):
+        s_id = idx if idx < len(slices) else None
+        normalized.append(_normalize_single_result(res, s_id, valid_slice_ids))
 
-    return rows_hosting, rows_cpu
+    return normalized
 
-def export_routes_to_rows(
-    method_name,
-    result_list,
+
+# ============================
+# Fair metrics on normalized results
+# ============================
+
+def count_accepted_slices_fair(normalized_results):
+    # All comments in English
+    accepted = set()
+
+    for res in normalized_results:
+        for key in res.placed_vnfs.keys():
+            if isinstance(key, tuple) and len(key) == 2:
+                accepted.add(key[0])
+
+    return len(accepted)
+
+
+def compute_total_bandwidth_fair(normalized_results, slice_vl_bw_map):
+    # All comments in English
+    total_bw = 0.0
+
+    for res in normalized_results:
+        for vl_key in res.routed_vls.keys():
+            s, i, j = _route_key_to_parts(vl_key)
+            if s is None:
+                continue
+            bw = slice_vl_bw_map.get((s, i, j))
+            if bw is not None:
+                total_bw += float(bw)
+
+    return total_bw
+
+
+def compute_total_latency_fair(normalized_results, link_latency):
+    # All comments in English
+    total_lat = 0.0
+
+    for res in normalized_results:
+        for _, path_nodes in res.routed_vls.items():
+            if not path_nodes or len(path_nodes) < 2:
+                continue
+
+            for u, v in zip(path_nodes[:-1], path_nodes[1:]):
+                if (u, v) in link_latency:
+                    total_lat += float(link_latency[(u, v)])
+                elif (v, u) in link_latency:
+                    total_lat += float(link_latency[(v, u)])
+
+    return total_lat
+
+
+# ============================
+# Exports
+# ============================
+
+def export_slice_entries_to_rows(
+    slices,
     num_slices,
     num_vnfs_per_slice,
     seed,
@@ -279,10 +434,33 @@ def export_routes_to_rows(
 ):
     # All comments in English
     rows = []
-    for res_idx, res in enumerate(result_list):
-        if not hasattr(res, "routed_vls") or res.routed_vls is None:
-            continue
 
+    for s_idx, sl in enumerate(slices):
+        rows.append({
+            "timestamp": timestamp_str,
+            "num_slices": num_slices,
+            "num_vnfs_per_slice": num_vnfs_per_slice,
+            "seed": seed,
+            "slice_idx": s_idx,
+            "slice_id": _get_slice_id(sl, s_idx),
+            "entry_node": get_entry_from_slice(sl),
+        })
+
+    return rows
+
+
+def export_routes_to_rows(
+    method_name,
+    normalized_results,
+    num_slices,
+    num_vnfs_per_slice,
+    seed,
+    timestamp_str,
+):
+    # All comments in English
+    rows = []
+
+    for res_idx, res in enumerate(normalized_results):
         for vl_key, path_nodes in res.routed_vls.items():
             s_id, vnf_src, vnf_dst = _route_key_to_parts(vl_key)
 
@@ -309,9 +487,118 @@ def export_routes_to_rows(
     return rows
 
 
+def export_node_hosting_to_rows(
+    method_name,
+    normalized_results,
+    slice_cpu_map,
+    num_slices,
+    num_vnfs_per_slice,
+    seed,
+    timestamp_str,
+    node_capacity_base,
+):
+    # All comments in English
+    rows_hosting = []
+    rows_cpu = []
+
+    hosted = {}
+    cpu_used = {}
+    unknown_cpu = {}
+
+    for res in normalized_results:
+        for key, node in res.placed_vnfs.items():
+            if not (isinstance(key, tuple) and len(key) == 2):
+                continue
+
+            s_id, vnf_id = key
+            hosted.setdefault(node, set()).add(f"{s_id}:{vnf_id}")
+
+            if (s_id, vnf_id) in slice_cpu_map:
+                cpu_used[node] = cpu_used.get(node, 0.0) + float(slice_cpu_map[(s_id, vnf_id)])
+            else:
+                unknown_cpu[node] = unknown_cpu.get(node, 0) + 1
+
+    for node, vnf_set in hosted.items():
+        rows_hosting.append({
+            "timestamp": timestamp_str,
+            "method": method_name,
+            "num_slices": num_slices,
+            "num_vnfs_per_slice": num_vnfs_per_slice,
+            "seed": seed,
+            "node": node,
+            "hosted_vnfs": ",".join(sorted(vnf_set)),
+            "num_hosted_vnfs": len(vnf_set),
+        })
+
+    for node in node_capacity_base.keys():
+        used = cpu_used.get(node, 0.0)
+        cap = float(node_capacity_base[node]) if node in node_capacity_base else np.nan
+
+        rows_cpu.append({
+            "timestamp": timestamp_str,
+            "method": method_name,
+            "num_slices": num_slices,
+            "num_vnfs_per_slice": num_vnfs_per_slice,
+            "seed": seed,
+            "node": node,
+            "cpu_used": used,
+            "cpu_capacity": cap,
+            "cpu_utilization": used / cap if cap > 0 else np.nan,
+            "num_hosted_vnfs": len(hosted.get(node, set())),
+            "num_unknown_cpu_vnfs": int(unknown_cpu.get(node, 0)),
+        })
+
+    return rows_hosting, rows_cpu
+
+
+def export_link_bw_load_to_rows(
+    method_name,
+    normalized_results,
+    slice_vl_bw_map,
+    num_slices,
+    num_vnfs_per_slice,
+    seed,
+    timestamp_str,
+    link_capacity_base,
+):
+    # All comments in English
+    rows = []
+    bw_used = {}
+
+    for res in normalized_results:
+        for vl_key, path_nodes in res.routed_vls.items():
+            s_id, vnf_src, vnf_dst = _route_key_to_parts(vl_key)
+
+            if s_id is None or not path_nodes or len(path_nodes) < 2:
+                continue
+
+            bw = slice_vl_bw_map.get((s_id, vnf_src, vnf_dst))
+            if bw is None:
+                continue
+
+            for u, v in zip(path_nodes[:-1], path_nodes[1:]):
+                bw_used[(u, v)] = bw_used.get((u, v), 0.0) + float(bw)
+
+    for (u, v), used in bw_used.items():
+        cap = float(link_capacity_base.get((u, v), float("nan")))
+        rows.append({
+            "timestamp": timestamp_str,
+            "method": method_name,
+            "num_slices": num_slices,
+            "num_vnfs_per_slice": num_vnfs_per_slice,
+            "seed": seed,
+            "u": u,
+            "v": v,
+            "bw_used": used,
+            "bw_capacity": cap,
+            "bw_utilization": used / cap if cap and cap > 0 else float("nan"),
+        })
+
+    return rows
+
+
 def export_milp_solution_to_rows(
     out,
-    instance,
     method_name,
     num_slices,
     num_vnfs_per_slice,
@@ -326,7 +613,6 @@ def export_milp_solution_to_rows(
     vals = res.values
     rows = []
 
-    # Placements: ("x", s, vnf_id, node)
     for key, val in vals.items():
         if not key or val <= 0.5:
             continue
@@ -350,7 +636,6 @@ def export_milp_solution_to_rows(
                 "value": float(val),
             })
 
-    # Flows: ("f", s, i, j, u, v)
     for key, val in vals.items():
         if not key or val <= 1e-9:
             continue
@@ -374,7 +659,6 @@ def export_milp_solution_to_rows(
                 "value": float(val),
             })
 
-    # Slack: ("xi", s)
     for key, val in vals.items():
         if not key:
             continue
@@ -400,84 +684,6 @@ def export_milp_solution_to_rows(
 
     return rows
 
-def export_link_bw_load_to_rows(
-    method_name,
-    result_list,
-    slices,
-    num_slices,
-    num_vnfs_per_slice,
-    seed,
-    timestamp_str,
-    link_capacity_base,
-):
-    # All comments in English
-    rows = []
-
-    # Compute total BW used per directed physical link (u,v)
-    bw_used = {}  # (u,v) -> float
-
-    # Build a vlink bw alias map from slices, similar to CPU aliasing
-    # We try common patterns inside each slice/vlink object/dict
-    def _get_vlink_bw(sl, src, dst):
-        # All comments in English
-        if isinstance(sl, dict):
-            # Try explicit mapping if exists
-            for k in ["vlink_bw", "bw_by_vlink", "bw_demands", "link_demands", "demands_bw"]:
-                m = sl.get(k)
-                if isinstance(m, dict):
-                    if (src, dst) in m:
-                        return m[(src, dst)]
-                    if (str(src), str(dst)) in m:
-                        return m[(str(src), str(dst))]
-            # Fallback: if profiles are uniform, you may not have per-vlink BW here
-        return None
-
-    # Create a simple slice index -> slice object map
-    slice_map = {i: sl for i, sl in enumerate(slices)}
-    # Also allow direct id access if slice is dict with "id"
-    for i, sl in enumerate(slices):
-        if isinstance(sl, dict) and "id" in sl:
-            slice_map[sl["id"]] = sl
-
-    for res in result_list:
-        if not hasattr(res, "routed_vls") or res.routed_vls is None:
-            continue
-
-        for vl_key, path_nodes in res.routed_vls.items():
-            s_id, vnf_src, vnf_dst = _route_key_to_parts(vl_key)
-            if not path_nodes or len(path_nodes) < 2:
-                continue
-
-            # Try to recover BW demand for this vlink
-            bw = None
-            if s_id in slice_map:
-                bw = _get_vlink_bw(slice_map[s_id], vnf_src, vnf_dst)
-
-            # If BW is missing, skip (but you will see it in the report)
-            if bw is None:
-                continue
-
-            for u, v in zip(path_nodes[:-1], path_nodes[1:]):
-                bw_used[(u, v)] = bw_used.get((u, v), 0.0) + float(bw)
-
-    for (u, v), used in bw_used.items():
-        cap = float(link_capacity_base.get((u, v), float("nan")))
-        rows.append({
-            "timestamp": timestamp_str,
-            "method": method_name,
-            "num_slices": num_slices,
-            "num_vnfs_per_slice": num_vnfs_per_slice,
-            "seed": seed,
-            "u": u,
-            "v": v,
-            "bw_used": used,
-            "bw_capacity": cap,
-            "bw_utilization": used / cap if cap and cap > 0 else float("nan"),
-        })
-
-    return rows
-
-
 
 # ============================
 # Main
@@ -486,17 +692,14 @@ def export_link_bw_load_to_rows(
 def main():
     # All comments in English
 
-    # --- Global reproducibility seed ---
     GLOBAL_SEED = 42
     random.seed(GLOBAL_SEED)
     np.random.seed(GLOBAL_SEED)
     os.environ["PYTHONHASHSEED"] = str(GLOBAL_SEED)
 
-    # --- Imports that depend on your project structure ---
     from milp.create_instance import create_instance
     from milp.solve_gurobi_sequential import solve_two_phase_max_accept_then_min_energy
     from milp.adapter import MILPResultAdapterGurobi
-    from milp.milp_two_phase import build_multi_slice_model_with_accept
 
     from utils.topology import topologie_finlande
     from utils.generate_slices import generate_random_slices
@@ -508,27 +711,21 @@ def main():
     from heuristics.first_fit import run_first_fit
     from heuristics.a_star_energy_aware import energy_aware_astar
 
-    from utils.metrics import (
-        count_accepted_slices,
-        compute_energy_new,
-        compute_total_bandwidth,
-        compute_total_latency,
-    )
+    from utils.metrics import compute_energy_new
 
     # ============================
-    # Config (edit here)
+    # Fast test config
     # ============================
 
-    MILP_TIME_LIMIT = 1800  # seconds per phase
-    ENTRY = 6
+    MILP_TIME_LIMIT = 30
 
-    MAX_MILP_SLICES = 10**9
-    MAX_MILP_VNFS_TOTAL = 10**9
+    MAX_MILP_SLICES = 10000
+    MAX_MILP_VNFS_TOTAL = 36000
 
     param_grid = {
         "num_slices": [4, 8, 16, 32, 64],
         "num_vnfs_per_slice": [2, 3, 4, 5, 6],
-        "seed": [1, 2, 3, 4, 5],
+        "seed": [1, 2, 3],
     }
 
     vnf_profiles = [
@@ -540,21 +737,13 @@ def main():
         {"cpu": 6, "throughput": 50, "latency": 135},
     ]
 
-
-    # ============================
-    # Directories
-    # ============================
-
     timestamp = datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
     results_dir = os.path.join("./results", safe_filename(timestamp))
     os.makedirs(results_dir, exist_ok=True)
     print(f"[INFO] Results will be saved under: {results_dir}")
 
-    # ============================
-    # Topology and capacities
-    # ============================
-
     G = topologie_finlande()
+
     node_capacity_base = {n: G.nodes[n]["cpu"] for n in G.nodes}
     link_capacity_base = {(u, v): G[u][v]["bandwidth"] for u, v in G.edges}
     link_capacity_base.update({(v, u): G[u][v]["bandwidth"] for u, v in G.edges})
@@ -564,36 +753,41 @@ def main():
 
     max_slices = max(param_grid["num_slices"])
 
-    # Records
     records_metrics = []
     records_routes = []
     records_milp_raw = []
     records_node_hosting = []
     records_node_cpu = []
     records_link_bw = []
+    records_slice_entries = []
 
-
-
-    # ============================
-    # Experiment loop
-    # ============================
+    fixed_slice_pools = {}
 
     for num_vnfs in param_grid["num_vnfs_per_slice"]:
+        pool_seed = 1000 + num_vnfs
+        random.seed(pool_seed)
+        np.random.seed(pool_seed)
+
+        print(
+            f"[INFO] Pre-generating FIXED slice pool: max_slices={max_slices}, "
+            f"VNFs={num_vnfs}, pool_seed={pool_seed}"
+        )
+
+        fixed_slice_pools[num_vnfs] = generate_random_slices(
+            G,
+            vnf_profiles,
+            num_slices=max_slices,
+            num_vnfs_per_slice=num_vnfs,
+            entry=None,
+        )
+
+    for num_vnfs in param_grid["num_vnfs_per_slice"]:
+        base_slice_pool = fixed_slice_pools[num_vnfs]
+
         for seed in param_grid["seed"]:
-            random.seed(seed)
-            np.random.seed(seed)
-
             print(
-                f"\n[INFO] === Pre-generating slice pool: max_slices={max_slices}, "
-                f"VNFs={num_vnfs}, seed={seed} ==="
-            )
-
-            slice_pool = generate_random_slices(
-                G,
-                vnf_profiles,
-                num_slices=max_slices,
-                num_vnfs_per_slice=num_vnfs,
-                entry=ENTRY,
+                f"\n[INFO] === Seed={seed} | randomized entry per slice "
+                f"| VNFs per slice={num_vnfs} ==="
             )
 
             for num_slices in param_grid["num_slices"]:
@@ -602,25 +796,37 @@ def main():
 
                 print(
                     f"\n[INFO] === Running Load Test: {num_slices} slices × "
-                    f"{num_vnfs} VNFs (total={total_vnfs}), seed={seed} ==="
+                    f"{num_vnfs} VNFs (total={total_vnfs}), seed={seed}, "
+                    f"entry=random-per-slice ==="
                 )
 
-                slices = deepcopy(slice_pool[:num_slices])
-                method_results = {}
+                slices_fixed = deepcopy(base_slice_pool[:num_slices])
+                slices = assign_random_entry_per_slice(slices_fixed, G, seed)
+
+                metadata = build_slice_metadata(slices)
+                slice_cpu_map = metadata["slice_cpu_map"]
+                slice_vl_bw_map = metadata["slice_vl_bw_map"]
+                slice_entries = metadata["slice_entries"]
+
+                print(f"[DEBUG] seed={seed} | randomized entry per slice")
+                print(f"[DEBUG] first slice sample: {slices[0]}")
+                for idx, sl in enumerate(slices[:3]):
+                    print(f"[DEBUG] slice {idx} entry={get_entry_from_slice(sl)}")
+
+                records_slice_entries.extend(
+                    export_slice_entries_to_rows(
+                        slices=slices,
+                        num_slices=num_slices,
+                        num_vnfs_per_slice=num_vnfs,
+                        seed=seed,
+                        timestamp_str=ts_now,
+                    )
+                )
+
+                raw_method_results = {}
+                norm_method_results = {}
                 method_times = {}
 
-                print("\n[DEBUG] slices[0] type:", type(slices[0]))
-                if isinstance(slices[0], dict):
-                    print("[DEBUG] slices[0] keys:", list(slices[0].keys())[:MAX_MILP_SLICES])
-                    for k in ["vnfs", "vnf_list", "functions", "chain", "vnf_cpu", "cpu_demands", "vnf_demands"]:
-                        if k in slices[0]:
-                            print(f"[DEBUG] slices[0]['{k}'] type:", type(slices[0][k]))
-                            print(f"[DEBUG] slices[0]['{k}'] sample:", str(slices[0][k])[:MAX_MILP_VNFS_TOTAL])
-
-
-               
-
-                # --- Heuristics ---
                 for name, func, args in [
                     ("A*", run_astar, (G, slices, node_capacity_base, link_capacity_base)),
                     ("ABO", run_abo_full_batch, (G, slices, node_capacity_base, link_latency, link_capacity_base)),
@@ -632,36 +838,47 @@ def main():
                     start = time.time()
                     try:
                         _, res_list = func(*args)
-                        method_results[name] = res_list
+                        raw_method_results[name] = res_list
+                        norm_method_results[name] = normalize_result_list(name, res_list, slices)
                     except Exception as e:
                         print(f"[ERROR] {name} failed: {e}")
-                        method_results[name] = []
+                        raw_method_results[name] = []
+                        norm_method_results[name] = []
                     method_times[name] = time.time() - start
 
-                # --- MILP (max-accept with z[s]) ---
                 if num_slices <= MAX_MILP_SLICES and total_vnfs <= MAX_MILP_VNFS_TOTAL:
                     try:
-                        print("[INFO][MILP] Running Gurobi (max-accept)…")
+                        print("[INFO][MILP] Running Gurobi (max-accept)...")
                         start = time.time()
 
                         instance = create_instance(G, slices)
-                        instance.entry_node = ENTRY  # keep if your create_instance uses it
-                        instance.entry_required_s = {s: False for s in instance.S}
+
+                        # Runner-side entry preparation.
+                        instance.entry_node = None
+                        instance.entry_node_s = {
+                            s: get_entry_from_slice(slices[s]) for s in range(len(slices))
+                        }
+                        instance.entry_required_s = {
+                            s: get_entry_from_slice(slices[s]) is not None for s in range(len(slices))
+                        }
 
                         out = solve_two_phase_max_accept_then_min_energy(
                             instance=instance,
-                            slice_set=list(instance.S),  
+                            slice_set=list(instance.S),
                             msg=False,
                             time_limit_phase1=MILP_TIME_LIMIT,
                             time_limit_phase2=MILP_TIME_LIMIT,
                         )
 
-
                         if out.get("last_result") is not None:
                             adapter = MILPResultAdapterGurobi(out["last_result"], instance)
-                            method_results["MILP_Gurobi"] = [adapter]
+                            raw_method_results["MILP_Gurobi"] = [adapter]
+                            norm_method_results["MILP_Gurobi"] = normalize_result_list(
+                                "MILP_Gurobi",
+                                [adapter],
+                                slices,
+                            )
 
-                            # Optional: print acceptance summary
                             acc = len(out.get("accepted_slices", []))
                             rej = len(out.get("rejected_slices", []))
                             print(f"[INFO][MILP] Accepted={acc}/{len(slices)} (Rejected={rej})")
@@ -669,7 +886,6 @@ def main():
                             records_milp_raw.extend(
                                 export_milp_solution_to_rows(
                                     out=out,
-                                    instance=instance,
                                     method_name="MILP_Gurobi",
                                     num_slices=num_slices,
                                     num_vnfs_per_slice=num_vnfs,
@@ -678,39 +894,40 @@ def main():
                                 )
                             )
                         else:
-                            method_results["MILP_Gurobi"] = []
+                            raw_method_results["MILP_Gurobi"] = []
+                            norm_method_results["MILP_Gurobi"] = []
 
                         method_times["MILP_Gurobi"] = time.time() - start
 
                     except Exception as e:
                         print(f"[ERROR][MILP] Failed: {e}")
-                        method_results["MILP_Gurobi"] = []
+                        raw_method_results["MILP_Gurobi"] = []
+                        norm_method_results["MILP_Gurobi"] = []
                         method_times["MILP_Gurobi"] = None
 
-
-                # --- Export routes (ALL methods) ---
-                for method_name, result_list in method_results.items():
-                    if not result_list:
+                # ----------------------------
+                # Exports from normalized data
+                # ----------------------------
+                for method_name, normalized_results in norm_method_results.items():
+                    if not normalized_results:
                         continue
+
                     records_routes.extend(
                         export_routes_to_rows(
                             method_name=method_name,
-                            result_list=result_list,
+                            normalized_results=normalized_results,
                             num_slices=num_slices,
                             num_vnfs_per_slice=num_vnfs,
                             seed=seed,
                             timestamp_str=ts_now,
                         )
                     )
-                
-                for method_name, result_list in method_results.items():
-                    if not result_list:
-                        continue
+
                     records_link_bw.extend(
                         export_link_bw_load_to_rows(
                             method_name=method_name,
-                            result_list=result_list,
-                            slices=slices,
+                            normalized_results=normalized_results,
+                            slice_vl_bw_map=slice_vl_bw_map,
                             num_slices=num_slices,
                             num_vnfs_per_slice=num_vnfs,
                             seed=seed,
@@ -719,16 +936,10 @@ def main():
                         )
                     )
 
-                
-                # --- Export node hosting + cpu load (ALL methods) ---
-                for method_name, result_list in method_results.items():
-                    if not result_list:
-                        continue
-
                     hosting_rows, cpu_rows = export_node_hosting_to_rows(
                         method_name=method_name,
-                        result_list=result_list,
-                        slices=slices,
+                        normalized_results=normalized_results,
+                        slice_cpu_map=slice_cpu_map,
                         num_slices=num_slices,
                         num_vnfs_per_slice=num_vnfs,
                         seed=seed,
@@ -739,18 +950,36 @@ def main():
                     records_node_hosting.extend(hosting_rows)
                     records_node_cpu.extend(cpu_rows)
 
+                # ----------------------------
+                # Fair metrics
+                # ----------------------------
+                entry_nodes_used = [slice_entries[_get_slice_id(sl, idx)] for idx, sl in enumerate(slices)]
 
-                # --- Metrics ---
-                for method_name, result_list in method_results.items():
-                    if not result_list:
+                for method_name, normalized_results in norm_method_results.items():
+                    if not normalized_results:
                         continue
+
                     try:
-                        accepted = count_accepted_slices(result_list, slices)
+                        accepted = count_accepted_slices_fair(normalized_results)
+
+                        # Important:
+                        # compute_energy_new is kept, but now it receives normalized results.
                         total_energy = compute_energy_new(
-                            result_list, slices, node_capacity_base, link_capacity_base
+                            normalized_results,
+                            slices,
+                            node_capacity_base,
+                            link_capacity_base,
                         )
-                        total_bw = sum(b for b in compute_total_bandwidth(result_list, slices) if b)
-                        total_lat = sum(l for l in compute_total_latency(result_list, link_latency) if l)
+
+                        total_bw = compute_total_bandwidth_fair(
+                            normalized_results,
+                            slice_vl_bw_map,
+                        )
+
+                        total_lat = compute_total_latency_fair(
+                            normalized_results,
+                            link_latency,
+                        )
 
                         records_metrics.append({
                             "timestamp": ts_now,
@@ -758,6 +987,8 @@ def main():
                             "num_vnfs_per_slice": num_vnfs,
                             "total_vnfs": total_vnfs,
                             "seed": seed,
+                            "entry_node": None,
+                            "entry_nodes_used": ",".join(map(str, entry_nodes_used)),
                             "method": method_name,
                             "accepted": accepted,
                             "total_energy": total_energy,
@@ -765,50 +996,43 @@ def main():
                             "total_latency": total_lat,
                             "runtime_sec": method_times.get(method_name),
                         })
+
                     except Exception as e:
                         print(
-                            f"[ERROR] Metrics failed for {method_name}, "
+                            f"[ERROR] Fair metrics failed for {method_name}, "
                             f"slices={num_slices}, vnfs={num_vnfs}, seed={seed}: {e}"
                         )
-
-    # ============================
-    # Save CSVs
-    # ============================
 
     df_metrics = pd.DataFrame(records_metrics)
     df_routes = pd.DataFrame(records_routes)
     df_milp_raw = pd.DataFrame(records_milp_raw)
+    df_node_hosting = pd.DataFrame(records_node_hosting)
+    df_node_cpu = pd.DataFrame(records_node_cpu)
+    df_link_bw = pd.DataFrame(records_link_bw)
+    df_slice_entries = pd.DataFrame(records_slice_entries)
 
     metrics_path = os.path.join(results_dir, "scalability_results.csv")
     routes_path = os.path.join(results_dir, "routes_all_methods.csv")
     milp_raw_path = os.path.join(results_dir, "milp_raw_vars.csv")
+    node_hosting_path = os.path.join(results_dir, "node_vnfs_all_methods.csv")
+    node_cpu_path = os.path.join(results_dir, "node_cpu_load_all_methods.csv")
+    link_bw_path = os.path.join(results_dir, "link_bw_load_all_methods.csv")
+    slice_entries_path = os.path.join(results_dir, "slice_entries.csv")
 
     df_metrics.to_csv(metrics_path, index=False)
     df_routes.to_csv(routes_path, index=False)
     df_milp_raw.to_csv(milp_raw_path, index=False)
-
-
-    df_node_hosting = pd.DataFrame(records_node_hosting)
-    df_node_cpu = pd.DataFrame(records_node_cpu)
-
-    node_hosting_path = os.path.join(results_dir, "node_vnfs_all_methods.csv")
-    node_cpu_path = os.path.join(results_dir, "node_cpu_load_all_methods.csv")
-
     df_node_hosting.to_csv(node_hosting_path, index=False)
     df_node_cpu.to_csv(node_cpu_path, index=False)
-
-    df_link_bw = pd.DataFrame(records_link_bw)
-    link_bw_path = os.path.join(results_dir, "link_bw_load_all_methods.csv")
     df_link_bw.to_csv(link_bw_path, index=False)
+    df_slice_entries.to_csv(slice_entries_path, index=False)
+
+    print(f"[INFO] Slice entries CSV saved to: {slice_entries_path} (rows={len(df_slice_entries)})")
     print(f"[INFO] Link BW load CSV saved to: {link_bw_path} (rows={len(df_link_bw)})")
-
-
     print(f"[INFO] Node hosting CSV saved to: {node_hosting_path} (rows={len(df_node_hosting)})")
     print(f"[INFO] Node CPU load CSV saved to: {node_cpu_path} (rows={len(df_node_cpu)})")
-
-
     print(f"\n[INFO] Metrics CSV saved to: {metrics_path} (rows={len(df_metrics)})")
-    print(f"[INFO] Routes  CSV saved to: {routes_path} (rows={len(df_routes)})")
+    print(f"[INFO] Routes CSV saved to: {routes_path} (rows={len(df_routes)})")
     print(f"[INFO] MILP raw CSV saved to: {milp_raw_path} (rows={len(df_milp_raw)})")
     print(f"[INFO] Results dir: {results_dir}")
 
