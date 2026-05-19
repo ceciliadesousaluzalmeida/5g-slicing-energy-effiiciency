@@ -37,7 +37,6 @@ def _normalize_token(x):
 
 def _route_key_to_parts(vl_key):
     # All comments in English
-    # Canonical route key format must be (s, i, j).
     if isinstance(vl_key, tuple) and len(vl_key) == 3:
         s, i, j = vl_key
         return s, i, j
@@ -83,16 +82,11 @@ def get_entry_from_slice(slice_obj):
     return None
 
 
-def assign_random_entry_per_slice(slices, G, seed):
+def assign_fixed_entry_per_slice(slices, entry_node=6):
     # All comments in English
-    rng = random.Random(seed)
-    nodes = sorted(list(G.nodes))
     new_slices = []
-
     for sl in slices:
-        entry_node = rng.choice(nodes)
         new_slices.append(set_entry_for_slice(sl, entry_node))
-
     return new_slices
 
 
@@ -116,7 +110,9 @@ def _extract_vnfs_from_slice(slice_obj):
         if len(slice_obj) >= 1 and isinstance(slice_obj[0], list):
             return slice_obj[0]
         for item in slice_obj:
-            if isinstance(item, dict) and any(k in item for k in ["vnfs", "vnf_list", "functions", "chain", "vnf_chain"]):
+            if isinstance(item, dict) and any(
+                k in item for k in ["vnfs", "vnf_list", "functions", "chain", "vnf_chain"]
+            ):
                 return _extract_vnfs_from_slice(item)
         return []
 
@@ -136,7 +132,9 @@ def _extract_vls_from_slice(slice_obj):
         if len(slice_obj) >= 2 and isinstance(slice_obj[1], list):
             return slice_obj[1]
         for item in slice_obj:
-            if isinstance(item, dict) and any(k in item for k in ["vls", "vl_chain", "virtual_links", "links", "edges"]):
+            if isinstance(item, dict) and any(
+                k in item for k in ["vls", "vl_chain", "virtual_links", "links", "edges"]
+            ):
                 return _extract_vls_from_slice(item)
         return []
 
@@ -281,7 +279,9 @@ def build_slice_metadata(slices):
 
 class NormalizedResultView:
     """
-    Lightweight normalized view used by metrics and exports.
+    Canonical normalized view used only for:
+      - exports
+      - normalized energy model
 
     Canonical format:
       placed_vnfs: {(s, vnf_id) -> node}
@@ -310,11 +310,7 @@ def _normalize_single_result(result, default_slice_id, valid_slice_ids):
     routed_raw = getattr(result, "routed_vls", {}) or {}
 
     for k, node in placed_raw.items():
-        if (
-            isinstance(k, tuple)
-            and len(k) == 2
-            and k[0] in valid_slice_ids
-        ):
+        if isinstance(k, tuple) and len(k) == 2 and k[0] in valid_slice_ids:
             placed_norm[(k[0], k[1])] = node
         else:
             if default_slice_id is None:
@@ -322,11 +318,7 @@ def _normalize_single_result(result, default_slice_id, valid_slice_ids):
             placed_norm[(default_slice_id, k)] = node
 
     for k, path in routed_raw.items():
-        if (
-            isinstance(k, tuple)
-            and len(k) == 3
-            and k[0] in valid_slice_ids
-        ):
+        if isinstance(k, tuple) and len(k) == 3 and k[0] in valid_slice_ids:
             routed_norm[(k[0], k[1], k[2])] = path
         elif isinstance(k, tuple) and len(k) == 2:
             if default_slice_id is None:
@@ -351,19 +343,16 @@ def normalize_result_list(method_name, result_list, slices):
 
     normalized = []
 
-    # Heuristics usually return one result per slice in order.
     if len(result_list) == len(slices):
         for idx, res in enumerate(result_list):
             s_id = _get_slice_id(slices[idx], idx)
             normalized.append(_normalize_single_result(res, s_id, valid_slice_ids))
         return normalized
 
-    # Global solvers/adapters usually return a single object already carrying slice ids.
     if len(result_list) == 1:
         normalized.append(_normalize_single_result(result_list[0], None, valid_slice_ids))
         return normalized
 
-    # Conservative fallback.
     for idx, res in enumerate(result_list):
         s_id = idx if idx < len(slices) else None
         normalized.append(_normalize_single_result(res, s_id, valid_slice_ids))
@@ -371,54 +360,46 @@ def normalize_result_list(method_name, result_list, slices):
     return normalized
 
 
-# ============================
-# Fair metrics on normalized results
-# ============================
-
-def count_accepted_slices_fair(normalized_results):
+def build_per_slice_results_from_normalized(normalized_results, slices):
     # All comments in English
-    accepted = set()
+    """
+    Convert normalized results into one pseudo-raw result per slice.
 
-    for res in normalized_results:
-        for key in res.placed_vnfs.keys():
-            if isinstance(key, tuple) and len(key) == 2:
-                accepted.add(key[0])
+    Output format per slice:
+      result.placed_vnfs = {vnf_id -> node}
+      result.routed_vls  = {(src, dst) -> path_nodes}
+    """
+    per_slice = []
 
-    return len(accepted)
+    for s_idx, _slice in enumerate(slices):
+        placed_vnfs = {}
+        routed_vls = {}
 
+        for res in normalized_results:
+            for key, node in getattr(res, "placed_vnfs", {}).items():
+                if not (isinstance(key, tuple) and len(key) == 2):
+                    continue
 
-def compute_total_bandwidth_fair(normalized_results, slice_vl_bw_map):
-    # All comments in English
-    total_bw = 0.0
+                s_id, vnf_id = key
+                if s_id == s_idx:
+                    placed_vnfs[vnf_id] = node
 
-    for res in normalized_results:
-        for vl_key in res.routed_vls.keys():
-            s, i, j = _route_key_to_parts(vl_key)
-            if s is None:
-                continue
-            bw = slice_vl_bw_map.get((s, i, j))
-            if bw is not None:
-                total_bw += float(bw)
+            for key, path in getattr(res, "routed_vls", {}).items():
+                if not (isinstance(key, tuple) and len(key) == 3):
+                    continue
 
-    return total_bw
+                s_id, src, dst = key
+                if s_id == s_idx:
+                    routed_vls[(src, dst)] = path
 
+        per_slice.append(
+            SimpleNamespace(
+                placed_vnfs=placed_vnfs,
+                routed_vls=routed_vls,
+            )
+        )
 
-def compute_total_latency_fair(normalized_results, link_latency):
-    # All comments in English
-    total_lat = 0.0
-
-    for res in normalized_results:
-        for _, path_nodes in res.routed_vls.items():
-            if not path_nodes or len(path_nodes) < 2:
-                continue
-
-            for u, v in zip(path_nodes[:-1], path_nodes[1:]):
-                if (u, v) in link_latency:
-                    total_lat += float(link_latency[(u, v)])
-                elif (v, u) in link_latency:
-                    total_lat += float(link_latency[(v, u)])
-
-    return total_lat
+    return per_slice
 
 
 # ============================
@@ -686,6 +667,57 @@ def export_milp_solution_to_rows(
 
 
 # ============================
+# Method execution helpers
+# ============================
+
+def run_heuristic_method(method_name, func, args, slices):
+    # All comments in English
+    start = time.time()
+
+    try:
+        out = func(*args)
+
+        if not isinstance(out, (tuple, list)) or len(out) < 2:
+            raise TypeError(
+                f"{method_name} must return at least two values like (_, results), "
+                f"got {type(out).__name__}"
+            )
+
+        res_list = out[1]
+
+        if res_list is None:
+            res_list = []
+
+        if not isinstance(res_list, list):
+            res_list = [res_list]
+
+        if len(res_list) not in (1, len(slices)):
+            print(
+                f"[WARN] {method_name} returned {len(res_list)} results for {len(slices)} slices. "
+                f"Normalization will try a conservative fallback."
+            )
+
+        runtime = time.time() - start
+        return {
+            "ok": True,
+            "raw_results": res_list,
+            "normalized_results": normalize_result_list(method_name, res_list, slices),
+            "runtime_sec": runtime,
+            "error": None,
+        }
+
+    except Exception as e:
+        runtime = time.time() - start
+        return {
+            "ok": False,
+            "raw_results": [],
+            "normalized_results": [],
+            "runtime_sec": runtime,
+            "error": str(e),
+        }
+
+
+# ============================
 # Main
 # ============================
 
@@ -693,6 +725,8 @@ def main():
     # All comments in English
 
     GLOBAL_SEED = 42
+    FIXED_ENTRY_NODE = 6
+
     random.seed(GLOBAL_SEED)
     np.random.seed(GLOBAL_SEED)
     os.environ["PYTHONHASHSEED"] = str(GLOBAL_SEED)
@@ -711,20 +745,21 @@ def main():
     from heuristics.first_fit import run_first_fit
     from heuristics.a_star_energy_aware import energy_aware_astar
 
-    from utils.metrics import compute_energy_new
+    from utils.metrics import (
+        compute_energy_new,
+        compute_total_bandwidth,
+        compute_total_latency,
+        count_accepted_slices,
+    )
 
-    # ============================
-    # Fast test config
-    # ============================
-
-    MILP_TIME_LIMIT = 180
+    MILP_TIME_LIMIT = 30
 
     MAX_MILP_SLICES = 10000
     MAX_MILP_VNFS_TOTAL = 36000
 
     param_grid = {
-        "num_slices": [8, 16, 32, 64],
-        "num_vnfs_per_slice": [2, 3, 4],
+        "num_slices": [4, 8],
+        "num_vnfs_per_slice": [2, 3],
         "seed": [1],
     }
 
@@ -786,7 +821,7 @@ def main():
 
         for seed in param_grid["seed"]:
             print(
-                f"\n[INFO] === Seed={seed} | randomized entry per slice "
+                f"\n[INFO] === Seed={seed} | fixed entry per slice={FIXED_ENTRY_NODE} "
                 f"| VNFs per slice={num_vnfs} ==="
             )
 
@@ -797,18 +832,21 @@ def main():
                 print(
                     f"\n[INFO] === Running Load Test: {num_slices} slices × "
                     f"{num_vnfs} VNFs (total={total_vnfs}), seed={seed}, "
-                    f"entry=random-per-slice ==="
+                    f"fixed-entry-per-slice={FIXED_ENTRY_NODE} ==="
                 )
 
                 slices_fixed = deepcopy(base_slice_pool[:num_slices])
-                slices = assign_random_entry_per_slice(slices_fixed, G, seed)
+                slices = assign_fixed_entry_per_slice(
+                    slices_fixed,
+                    entry_node=FIXED_ENTRY_NODE,
+                )
 
                 metadata = build_slice_metadata(slices)
                 slice_cpu_map = metadata["slice_cpu_map"]
                 slice_vl_bw_map = metadata["slice_vl_bw_map"]
                 slice_entries = metadata["slice_entries"]
 
-                print(f"[DEBUG] seed={seed} | randomized entry per slice")
+                print(f"[DEBUG] seed={seed} | fixed entry per slice={FIXED_ENTRY_NODE}")
                 print(f"[DEBUG] first slice sample: {slices[0]}")
                 for idx, sl in enumerate(slices[:3]):
                     print(f"[DEBUG] slice {idx} entry={get_entry_from_slice(sl)}")
@@ -824,56 +862,62 @@ def main():
                 )
 
                 raw_method_results = {}
-                norm_method_results = {}
+                normalized_method_results = {}
                 method_times = {}
 
-                for name, func, args in [
+                heuristic_specs = [
                     ("A*", run_astar, (G, slices, node_capacity_base, link_capacity_base)),
                     ("ABO", run_abo_full_batch, (G, slices, node_capacity_base, link_latency, link_capacity_base)),
                     ("FABO", run_fabo_full_batch, (G, slices, node_capacity_base, link_latency, link_capacity_base)),
                     ("Best Fit", run_best_fit, (G, slices, node_capacity_base, link_capacity_base)),
                     ("First Fit", run_first_fit, (G, slices, node_capacity_base, link_capacity_base)),
                     ("Energy-Aware A*", energy_aware_astar, (G, slices, node_capacity_base, link_capacity_base)),
-                ]:
-                    start = time.time()
-                    try:
-                        _, res_list = func(*args)
-                        raw_method_results[name] = res_list
-                        norm_method_results[name] = normalize_result_list(name, res_list, slices)
-                    except Exception as e:
-                        print(f"[ERROR] {name} failed: {e}")
-                        raw_method_results[name] = []
-                        norm_method_results[name] = []
-                    method_times[name] = time.time() - start
+                ]
+
+                for method_name, func, args in heuristic_specs:
+                    out = run_heuristic_method(method_name, func, args, slices)
+
+                    if not out["ok"]:
+                        print(f"[ERROR] {method_name} failed: {out['error']}")
+                        raw_method_results[method_name] = []
+                        normalized_method_results[method_name] = []
+                        method_times[method_name] = out["runtime_sec"]
+                        continue
+
+                    raw_method_results[method_name] = out["raw_results"]
+                    normalized_method_results[method_name] = out["normalized_results"]
+                    method_times[method_name] = out["runtime_sec"]
+
+                milp_instance = None
 
                 if num_slices <= MAX_MILP_SLICES and total_vnfs <= MAX_MILP_VNFS_TOTAL:
                     try:
                         print("[INFO][MILP] Running Gurobi (max-accept)...")
                         start = time.time()
 
-                        instance = create_instance(G, slices)
+                        milp_instance = create_instance(G, slices)
 
-                        # Runner-side entry preparation.
-                        instance.entry_node = None
-                        instance.entry_node_s = {
+                        milp_instance.entry_node = None
+                        milp_instance.entry_node_s = {
                             s: get_entry_from_slice(slices[s]) for s in range(len(slices))
                         }
-                        instance.entry_required_s = {
+                        milp_instance.entry_required_s = {
                             s: get_entry_from_slice(slices[s]) is not None for s in range(len(slices))
                         }
 
                         out = solve_two_phase_max_accept_then_min_energy(
-                            instance=instance,
-                            slice_set=list(instance.S),
+                            instance=milp_instance,
+                            slice_set=list(milp_instance.S),
                             msg=False,
                             time_limit_phase1=MILP_TIME_LIMIT,
                             time_limit_phase2=MILP_TIME_LIMIT,
                         )
 
                         if out.get("last_result") is not None:
-                            adapter = MILPResultAdapterGurobi(out["last_result"], instance)
-                            raw_method_results["MILP_Gurobi"] = [adapter]
-                            norm_method_results["MILP_Gurobi"] = normalize_result_list(
+                            raw_method_results["MILP_Gurobi"] = [out["last_result"]]
+
+                            adapter = MILPResultAdapterGurobi(out["last_result"], milp_instance)
+                            normalized_method_results["MILP_Gurobi"] = normalize_result_list(
                                 "MILP_Gurobi",
                                 [adapter],
                                 slices,
@@ -895,20 +939,21 @@ def main():
                             )
                         else:
                             raw_method_results["MILP_Gurobi"] = []
-                            norm_method_results["MILP_Gurobi"] = []
+                            normalized_method_results["MILP_Gurobi"] = []
 
                         method_times["MILP_Gurobi"] = time.time() - start
 
                     except Exception as e:
                         print(f"[ERROR][MILP] Failed: {e}")
                         raw_method_results["MILP_Gurobi"] = []
-                        norm_method_results["MILP_Gurobi"] = []
+                        normalized_method_results["MILP_Gurobi"] = []
                         method_times["MILP_Gurobi"] = None
+                        milp_instance = None
 
                 # ----------------------------
                 # Exports from normalized data
                 # ----------------------------
-                for method_name, normalized_results in norm_method_results.items():
+                for method_name, normalized_results in normalized_method_results.items():
                     if not normalized_results:
                         continue
 
@@ -951,34 +996,91 @@ def main():
                     records_node_cpu.extend(cpu_rows)
 
                 # ----------------------------
-                # Fair metrics
+                # Metrics
                 # ----------------------------
-                entry_nodes_used = [slice_entries[_get_slice_id(sl, idx)] for idx, sl in enumerate(slices)]
+                entry_nodes_used = [
+                    slice_entries[_get_slice_id(sl, idx)]
+                    for idx, sl in enumerate(slices)
+                ]
 
-                for method_name, normalized_results in norm_method_results.items():
-                    if not normalized_results:
+                for method_name in raw_method_results.keys():
+                    raw_results = raw_method_results.get(method_name, [])
+                    normalized_results = normalized_method_results.get(method_name, [])
+
+                    if not raw_results and not normalized_results:
                         continue
 
                     try:
-                        accepted = count_accepted_slices_fair(normalized_results)
+                        if method_name == "MILP_Gurobi":
+                            metric_results = raw_results
 
-                        # Important:
-                        # compute_energy_new is kept, but now it receives normalized results.
-                        total_energy = compute_energy_new(
-                            normalized_results,
-                            slices,
-                            node_capacity_base,
-                            link_capacity_base,
-                        )
+                            accepted = count_accepted_slices(
+                                metric_results,
+                                slices,
+                                verbose=False,
+                            )
 
-                        total_bw = compute_total_bandwidth_fair(
-                            normalized_results,
-                            slice_vl_bw_map,
-                        )
+                            bw_list = compute_total_bandwidth(
+                                metric_results,
+                                slices,
+                                instance=milp_instance,
+                                link_capacity=link_capacity_base,
+                            )
+                            total_bw = sum(x for x in bw_list if x is not None)
 
-                        total_lat = compute_total_latency_fair(
-                            normalized_results,
-                            link_latency,
+                            lat_list = compute_total_latency(
+                                metric_results,
+                                link_latency,
+                                instance=milp_instance,
+                            )
+                            total_lat = sum(x for x in lat_list if x is not None)
+
+                        else:
+                            if len(raw_results) == len(slices):
+                                metric_results = raw_results
+                                print(
+                                    f"[DEBUG] {method_name}: using raw per-slice results for metrics"
+                                )
+                            else:
+                                metric_results = build_per_slice_results_from_normalized(
+                                    normalized_results,
+                                    slices,
+                                )
+                                print(
+                                    f"[DEBUG] {method_name}: raw output is not per-slice "
+                                    f"(len={len(raw_results)}), using normalized->per-slice adapter"
+                                )
+
+                            accepted = count_accepted_slices(
+                                metric_results,
+                                slices,
+                                verbose=False,
+                            )
+
+                            bw_list = compute_total_bandwidth(
+                                metric_results,
+                                slices,
+                                instance=None,
+                                link_capacity=link_capacity_base,
+                            )
+                            total_bw = sum(x for x in bw_list if x is not None)
+
+                            lat_list = compute_total_latency(
+                                metric_results,
+                                link_latency,
+                                instance=None,
+                            )
+                            total_lat = sum(x for x in lat_list if x is not None)
+
+                        total_energy = (
+                            compute_energy_new(
+                                normalized_results,
+                                slices,
+                                node_capacity_base,
+                                link_capacity_base,
+                            )
+                            if normalized_results
+                            else None
                         )
 
                         records_metrics.append({
@@ -987,7 +1089,7 @@ def main():
                             "num_vnfs_per_slice": num_vnfs,
                             "total_vnfs": total_vnfs,
                             "seed": seed,
-                            "entry_node": None,
+                            "entry_node": FIXED_ENTRY_NODE,
                             "entry_nodes_used": ",".join(map(str, entry_nodes_used)),
                             "method": method_name,
                             "accepted": accepted,
@@ -999,7 +1101,7 @@ def main():
 
                     except Exception as e:
                         print(
-                            f"[ERROR] Fair metrics failed for {method_name}, "
+                            f"[ERROR] Metrics failed for {method_name}, "
                             f"slices={num_slices}, vnfs={num_vnfs}, seed={seed}: {e}"
                         )
 

@@ -1,0 +1,5 @@
+timestamp          , num_slices, num_vnfs_per_slice, total_vnfs, seed, entry_node, entry_nodes_used , method     , accepted, total_energy, total_bandwidth, total_latency, runtime_sec
+2026-04-10 16:01:37,          4,                  2,          8,    1,          6, "6,6,6,6"        , MILP_Gurobi,        4,       3.4325,            60.0,           4.0, 0.1185617446899414
+2026-04-10 16:01:38,          8,                  2,         16,    1,          6, "6,6,6,6,6,6,6,6", MILP_Gurobi,        8,       3.865 ,           120.0,           8.0, 0.20499420166015625
+2026-04-10 16:01:38,          4,                  3,         12,    1,          6, "6,6,6,6"        , MILP_Gurobi,        4,       5.6375,           140.0,           8.0, 0.22542142868041992
+2026-04-10 16:01:39,          8,                  3,         24,    1,          6, "6,6,6,6,6,6,6,6", MILP_Gurobi,        8,       6.275 ,           280.0,          16.0, 0.48913097381591797

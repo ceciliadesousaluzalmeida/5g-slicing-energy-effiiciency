@@ -32,6 +32,37 @@ def _route_key_to_parts(vl_key):
         return None, i, j
     return None, None, None
 
+def set_entry_for_slice(sl, entry_node):
+    # All comments in English
+    new_sl = deepcopy(sl)
+
+    if isinstance(new_sl, dict):
+        # Try common entry field names
+        for k in ["entry", "entry_node", "ingress", "source", "start_node"]:
+            if k in new_sl:
+                new_sl[k] = entry_node
+                return new_sl
+
+        # If no known field exists, create one
+        new_sl["entry"] = entry_node
+        return new_sl
+
+    # If your slice is tuple/list, adapt here if needed
+    return new_sl
+
+
+def assign_random_entry_per_slice(slices, G, seed):
+    # All comments in English
+    rng = random.Random(seed)
+    nodes = sorted(list(G.nodes))
+    new_slices = []
+
+    for sl in slices:
+        entry_node = rng.choice(nodes)
+        new_slices.append(set_entry_for_slice(sl, entry_node))
+
+    return new_slices
+
 import re
 import numpy as np
 
@@ -520,7 +551,6 @@ def main():
     # ============================
 
     MILP_TIME_LIMIT = 3600  # seconds per phase
-    ENTRY = 12
 
     MAX_MILP_SLICES = 10**9
     MAX_MILP_VNFS_TOTAL = 10**9
@@ -593,8 +623,10 @@ def main():
                 vnf_profiles,
                 num_slices=max_slices,
                 num_vnfs_per_slice=num_vnfs,
-                entry=ENTRY,
+                entry=None,  # or keep ENTRY if the generator requires it
             )
+
+            slice_pool = assign_random_entry_per_slice(slice_pool, G, seed)
 
             for num_slices in param_grid["num_slices"]:
                 total_vnfs = num_slices * num_vnfs
@@ -645,7 +677,7 @@ def main():
                         start = time.time()
 
                         instance = create_instance(G, slices)
-                        instance.entry_node = ENTRY  # keep if your create_instance uses it
+                       # instance.entry_node = ENTRY  # keep if your create_instance uses it
                         instance.entry_required_s = {s: False for s in instance.S}
 
                         out = solve_two_phase_max_accept_then_min_energy(
@@ -741,6 +773,18 @@ def main():
 
 
                 # --- Metrics ---
+
+                from utils.metrics import (
+                    count_accepted_slices,
+                    compute_energy_new,
+                    compute_total_bandwidth,
+                    compute_total_latency,
+                )
+
+                import utils.metrics as metrics_module
+                
+                metrics_module.slices = slices
+
                 for method_name, result_list in method_results.items():
                     if not result_list:
                         continue
