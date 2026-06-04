@@ -1,0 +1,8 @@
+timestamp,num_slices,num_vnfs_per_slice,total_vnfs,seed,entry_node,method,accepted,total_energy,total_bandwidth,total_latency,runtime_sec
+2026-06-04 12:08:59,4,2,8,1,per_slice_random,A*,4,11.462499999999999,60.0,4.0,0.010831832885742188
+2026-06-04 12:08:59,4,2,8,1,per_slice_random,ABO,4,11.558125,75.0,5.0,0.001991748809814453
+2026-06-04 12:08:59,4,2,8,1,per_slice_random,FABO,4,13.464375,75.0,5.0,0.002566814422607422
+2026-06-04 12:08:59,4,2,8,1,per_slice_random,Best Fit,4,4.62,60.0,4.0,0.010800361633300781
+2026-06-04 12:08:59,4,2,8,1,per_slice_random,First Fit,4,3.3725,60.0,4.0,0.0014338493347167969
+2026-06-04 12:08:59,4,2,8,1,per_slice_random,Energy-Aware A*,4,10.4025,60.0,4.0,0.014417648315429688
+2026-06-04 12:08:59,4,2,8,1,per_slice_random,MILP_Gurobi,4,3.3274999999999997,60.0,4.0,0.08766341209411621

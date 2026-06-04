@@ -1,4 +1,6 @@
 from collections import defaultdict
+from turtle import pd
+from turtle import pd
 from typing import Dict, Tuple, List, Any, Optional
 
 
@@ -126,7 +128,14 @@ def _is_milp_result(res: Any) -> bool:
 def _canon_edge(u, v):
     return (u, v) if (u, v) <= (v, u) else (v, u)
 
+def _get_vlink_bw(sl, src, dst):
 
+    for vl in _effective_vls_for_metrics(sl):
+
+        if vl["from"] == src and vl["to"] == dst:
+            return float(vl["bandwidth"])
+
+    return None
 # =========================================================
 # MILP metrics
 # =========================================================
@@ -214,6 +223,7 @@ def compute_total_bandwidth(
 
 def compute_total_latency(
     results: List,
+    slices: List,
     link_latency: Dict[Tuple[int, int], float],
     instance=None,
 ) -> List[Optional[float]]:
@@ -230,12 +240,18 @@ def compute_total_latency(
 
     if len(results) == 1 and _is_milp_result(results[0]) and instance is not None:
         _, per_slice_lat, _, _ = compute_milp_bandwidth_latency(results[0], instance)
+
         for s_idx in range(len(instance.S)):
             totals.append(per_slice_lat.get(s_idx, None))
+
         return totals
 
     for slice_idx, result in enumerate(results):
         if not result:
+            totals.append(None)
+            continue
+
+        if slice_idx >= len(slices):
             totals.append(None)
             continue
 
@@ -245,6 +261,7 @@ def compute_total_latency(
         for vl in effective_vls:
             src, dst = vl["from"], vl["to"]
             path = _get_routed_path(result, slice_idx, src, dst)
+
             if not path:
                 continue
 
@@ -430,104 +447,66 @@ def compute_total_energy_with_routing(
 # Normalized energy model
 # =========================================================
 def compute_energy_new(result_list, slices, node_capacity_base, link_capacity_base):
-    """
-    Generic normalized energy model for normalized results:
-      - Node energy = 1 (if active) + utilization fraction
-      - Link energy = 1 (if active) + utilization fraction
-
-    Expected normalized result format:
-      placed_vnfs: {(s, vnf_id) -> node}
-      routed_vls : {(s, i, j) -> [path_nodes]}
-    """
     node_usage = {n: 0.0 for n in node_capacity_base}
     link_usage = {e: 0.0 for e in link_capacity_base}
 
-    # -------------------------
-    # Build slice metadata
-    # -------------------------
-    slice_cpu_map = {}
-    slice_vl_bw_map = {}
+    cpu_map = _build_vnf_cpu_map(slices)
 
-    for s_idx, slice_data in enumerate(slices):
-        if len(slice_data) == 2:
-            vnfs, vls = slice_data
-            entry = None
-        elif len(slice_data) >= 3:
-            vnfs, vls, entry = slice_data[0], slice_data[1], slice_data[2]
-        else:
-            continue
-
-        for v in vnfs:
-            slice_cpu_map[(s_idx, v["id"])] = float(v["cpu"])
-
-        for vl in vls:
-            slice_vl_bw_map[(s_idx, vl["from"], vl["to"])] = float(vl["bandwidth"])
-
-        # Add synthetic ENTRY VL if needed
-        if entry is not None and vnfs:
-            first_vnf = vnfs[0]["id"]
-
-            entry_bw = None
-            for vl in vls:
-                if vl["from"] == first_vnf:
-                    entry_bw = float(vl["bandwidth"])
-                    break
-
-            if entry_bw is None:
-                entry_bw = 0.0
-
-            slice_vl_bw_map[(s_idx, "ENTRY", first_vnf)] = entry_bw
-
-    # -------------------------
-    # Accumulate usage
-    # -------------------------
-    for state in result_list:
+    for s_idx, state in enumerate(result_list):
         if state is None:
             continue
 
-        # Node usage
-        for key, node in getattr(state, "placed_vnfs", {}).items():
-            if not (isinstance(key, tuple) and len(key) == 2):
+        for vnf_id, node in getattr(state, "placed_vnfs", {}).items():
+            if vnf_id == ENTRY_VNF_ID:
                 continue
 
-            s_id, vnf_id = key
-            cpu = slice_cpu_map.get((s_id, vnf_id))
+            cpu = None
+
+            if isinstance(vnf_id, tuple) and len(vnf_id) == 2:
+                cpu = cpu_map.get(vnf_id[1])
+
+            if cpu is None:
+                cpu = cpu_map.get(vnf_id)
+
             if cpu is not None:
-                node_usage[node] += cpu
+                node_usage[node] += float(cpu)
 
-        # Link usage
-        for key, path in getattr(state, "routed_vls", {}).items():
-            if not (isinstance(key, tuple) and len(key) == 3):
-                continue
+        effective_vls = _effective_vls_for_metrics(slices[s_idx]) if s_idx < len(slices) else []
+
+        bw_by_vl = {
+            (vl["from"], vl["to"]): float(vl.get("bandwidth", 0.0))
+            for vl in effective_vls
+        }
+
+        for vl_key, path in getattr(state, "routed_vls", {}).items():
             if not path or len(path) < 2:
                 continue
 
-            s_id, i, j = key
-            bw_req = slice_vl_bw_map.get((s_id, i, j))
-            if bw_req is None:
+            if isinstance(vl_key, tuple) and len(vl_key) == 3:
+                _, src, dst = vl_key
+            elif isinstance(vl_key, tuple) and len(vl_key) == 2:
+                src, dst = vl_key
+            else:
                 continue
+
+            bw = bw_by_vl.get((src, dst), bw_by_vl.get((dst, src), 0.0))
 
             for u, v in zip(path[:-1], path[1:]):
                 e = (u, v) if (u, v) in link_usage else (v, u)
                 if e in link_usage:
-                    link_usage[e] += bw_req
+                    link_usage[e] += bw
 
-    # -------------------------
-    # Compute normalized energy
-    # -------------------------
     total_energy = 0.0
 
     for n, used in node_usage.items():
         cap = float(node_capacity_base[n])
         if used > 0 and cap > 0:
-            total_energy += 1.0
-            total_energy += used / cap
+            total_energy += 1.0 + used / cap
 
     for e, used in link_usage.items():
         cap = float(link_capacity_base[e])
         if used > 0 and cap > 0:
-            total_energy += 1.0
-            total_energy += used / cap
+            total_energy += 1.0 + used / cap
 
     return total_energy
 
@@ -658,3 +637,47 @@ def count_accepted_slices(results, slices, eps=1e-6, verbose=False):
         print(f"Total slices accepted (heuristics): {accepted}/{len(slices)}")
 
     return accepted
+
+
+def compute_latency_margin(results, slices, link_latency):
+    rows = []
+
+    for s_idx, slice_data in enumerate(slices):
+        result = results[s_idx] if s_idx < len(results) else None
+        if not result:
+            continue
+
+        effective_vls = _effective_vls_for_metrics(slice_data)
+
+        for vl in effective_vls:
+            src, dst = vl["from"], vl["to"]
+            sla = float(vl.get("latency", 0.0))
+
+            path = _get_routed_path(result, s_idx, src, dst)
+            if not path:
+                continue
+
+            observed = 0.0
+            for u, v in zip(path[:-1], path[1:]):
+                key = (u, v) if (u, v) in link_latency else (v, u)
+                observed += float(link_latency.get(key, 0.0))
+
+            margin = None
+            violation = None
+
+            if sla > 0:
+                margin = (sla - observed) / sla
+                violation = observed > sla
+
+            rows.append({
+                "slice": s_idx,
+                "src": src,
+                "dst": dst,
+                "latency_sla": sla,
+                "latency_observed": observed,
+                "latency_margin": margin,
+                "latency_violation": violation,
+                "path_hops": max(0, len(path) - 1),
+            })
+
+    return pd.DataFrame(rows)

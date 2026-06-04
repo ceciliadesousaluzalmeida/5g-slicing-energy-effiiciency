@@ -396,4 +396,5 @@ def solve_gurobi_multiobj(
         status_str=status_str,
         objective=objective_value,
         values=values,
+        instance=instance
     )
