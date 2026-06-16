@@ -251,8 +251,66 @@ def estimate_remaining_energy_admissible(
     link_capacity_total: Dict[Tuple[Any, Any], float],
     energy_params: EnergyParams,
 ) -> float:
-    # Keep h(n)=0 while debugging energy alignment.
-    return 0.0
+    # Estimate a lower bound for the remaining energy cost.
+    placed_count = len(state.placed_vnfs)
+    remaining_vnfs = vnf_ids[placed_count:]
+
+    if not remaining_vnfs:
+        return 0.0
+
+    h = 0.0
+
+    valid_node_caps = [
+        float(cap)
+        for cap in node_capacity_total.values()
+        if float(cap) > 0.0
+    ]
+
+    valid_link_caps = [
+        float(cap)
+        for cap in link_capacity_total.values()
+        if float(cap) > 0.0
+    ]
+
+    if valid_node_caps:
+        min_node_dynamic_unit = (
+            float(energy_params.node_dynamic_w) / max(valid_node_caps)
+        )
+    else:
+        min_node_dynamic_unit = 0.0
+
+    if valid_link_caps:
+        min_link_dynamic_unit = (
+            float(energy_params.link_dynamic_w) / max(valid_link_caps)
+        )
+    else:
+        min_link_dynamic_unit = 0.0
+
+    # Lower bound for remaining CPU dynamic energy.
+    for vid in remaining_vnfs:
+        h += float(vnf_cpu.get(vid, 0.0)) * min_node_dynamic_unit
+
+    # Lower bound for remaining bandwidth dynamic energy.
+    for idx in range(max(1, placed_count), len(vnf_ids)):
+        src = vnf_ids[idx - 1]
+        dst = vnf_ids[idx]
+
+        if (src, dst) not in state.routed_vls:
+            h += float(bw_by_chain.get((src, dst), 0.0)) * min_link_dynamic_unit
+
+    # Lower bound for ENTRY routing if needed.
+    if entry is not None and vnf_ids:
+        first_vnf = vnf_ids[0]
+        first_node = state.placed_vnfs.get(first_vnf)
+
+        if (
+            first_node is not None
+            and first_node != entry
+            and (ENTRY_VNF_ID, first_vnf) not in state.routed_vls
+        ):
+            h += float(entry_bw) * min_link_dynamic_unit
+
+    return float(h)
 
 
 # ------------------------- incremental energy -------------------------
@@ -393,6 +451,7 @@ def _find_min_energy_path_dijkstra(
     vl_key: Optional[Tuple[Any, Any]] = None,
     max_hops: Optional[int] = None,
     bw_load_penalty: float = 0.0,
+    link_reuse_bonus: float = 0.0,
 ) -> Optional[List[Any]]:
     # Find a feasible path minimizing incremental energy plus optional bandwidth-load penalty.
     if src == dst:
@@ -444,9 +503,8 @@ def _find_min_energy_path_dijkstra(
 
             step_cost = 0.0
 
-            if ek not in state.active_links:
-                step_cost += float(energy_params.link_baseline_w)
-            
+            if ek in state.active_links:
+                step_cost -= float(link_reuse_bonus)
 
             old_dynamic = float(energy_params.link_dynamic_w) * (old_bw / total_bw)
             new_dynamic = float(energy_params.link_dynamic_w) * (new_bw / total_bw)
@@ -499,6 +557,7 @@ def _candidate_nodes(
     energy_params: EnergyParams,
     nodes_sorted: List[Any],
     cpu_load_penalty: float = 0.0,
+    node_reuse_bonus: float = 0.0,
 ) -> List[Any]:
     # Return feasible candidate nodes sorted by incremental energy and CPU utilization.
     candidates = []
@@ -540,7 +599,8 @@ def _candidate_nodes(
         )
 
         cpu_util_after = new_cpu / cap_total
-        score = inc_energy + float(cpu_load_penalty) * cpu_util_after
+        reuse_bonus = float(node_reuse_bonus) if node in state.active_nodes else 0.0
+        score = inc_energy + float(cpu_load_penalty) * cpu_util_after - reuse_bonus
 
         candidates.append(
             (
@@ -568,10 +628,12 @@ def energy_aware_astar(
     csv_path: Optional[str] = None,
     max_hops: Optional[int] = None,
     verbose: bool = False,
-    beam_width: int = 0,
-    max_states_per_slice: int = 1200,
-    cpu_load_penalty: float = 0.0,
-    bw_load_penalty: float = 0.02,
+    beam_width: int = 2,
+    max_states_per_slice: int = 500,
+    cpu_load_penalty: float = 0.05,
+    bw_load_penalty: float = 0.1,
+    node_reuse_bonus: float = 0.1,
+    link_reuse_bonus: float = 0.1,
 ):
     if latency_info is not None and not isinstance(latency_info, LatencyInfo):
         raise TypeError(
@@ -727,6 +789,7 @@ def energy_aware_astar(
                 energy_params=energy_params,
                 nodes_sorted=nodes_sorted,
                 cpu_load_penalty=cpu_load_penalty,
+                node_reuse_bonus=node_reuse_bonus,
             )
 
             if beam_width and beam_width > 0:
@@ -809,6 +872,7 @@ def energy_aware_astar(
                             vl_key=k,
                             max_hops=max_hops,
                             bw_load_penalty=bw_load_penalty,
+                            link_reuse_bonus=link_reuse_bonus,
                         )
 
                         if path is None:
